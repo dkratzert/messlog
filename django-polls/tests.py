@@ -57,6 +57,7 @@ class QuestionIndexViewTests(TestCase):
             []  # questions list remains empty, because only questions with choices are published
         )
 
+
     def test_future_question(self):
         """
         Questions with a pub_date in the future aren't displayed on
