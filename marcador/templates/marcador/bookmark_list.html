@@ -9,7 +9,7 @@
 {% block content %}
   <ul class="list-unstyled">
   {% for bookmark in bookmarks %}
-    <li class="card">{% include "marcador/bookmark.html" %}</li>
+       <li class="well well-sm">{% include "marcador/bookmark.html" %}</li>
   {% empty %}
     <li>No bookmarks. :(</li>
   {% endfor %}
