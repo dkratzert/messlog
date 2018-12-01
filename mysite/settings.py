@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '.pythonanywhere.com']
 INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'blog',
+    'marcador',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

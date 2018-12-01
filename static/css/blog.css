@@ -2,7 +2,7 @@
 
 h1 a, h2 a {
     color: #268d34;
-    font-family: 'Lobster', serif;
+    font-family: 'Calibri', sans-serif;
 }
 
 body {
@@ -26,7 +26,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Lobster', cursive;
+    font-family: 'Calibri', sans-serif;
 }
 
 .date {
