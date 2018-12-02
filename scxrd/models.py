@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -25,6 +26,7 @@ class Solvent(models.Model):
 #SOLVENT_NAMES = [(x.pk, x.__str__()) for x in Solvent.objects.all()]
 MACHINE_NAMES = [(x.pk, x.__str__()) for x in Machine.objects.all()]
 
+cif_fs = FileSystemStorage(location='/cif_files')
 
 class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
