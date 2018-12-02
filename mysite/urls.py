@@ -17,11 +17,11 @@ from django.contrib import admin, auth
 from django.urls import path, include, reverse_lazy
 
 urlpatterns = [
-    path('polls/', include('polls.urls')),
+    path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls')),
-    path('marcador/', include('marcador.urls')),
-    path('login/', auth.login, {'template_name': 'login.html'}, name='mysite_login'),
-    path('logout/', auth.logout,
-        {'next_page': 'marcador/bookmark_list'}, name='mysite_logout'),
+    #path('blog/', include('blog.urls')),
+    #path('marcador/', include('marcador.urls')),
+    #path('login/', auth.login, {'template_name': 'login.html'}, name='mysite_login'),
+    #path('logout/', auth.logout,
+    #    {'next_page': 'marcador/bookmark_list'}, name='mysite_logout'),
 ]

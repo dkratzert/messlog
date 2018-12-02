@@ -1,10 +1,10 @@
 from django.forms import ModelForm
 
-from polls.models import Machine, Measurement
+from scxrd.models import Experiment
 
 
 class MyModelForm(ModelForm):
     class Meta:
-        model = Measurement
-        fields = ['used_machine']
+        model = Experiment
+        fields = ['machine']
 

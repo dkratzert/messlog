@@ -31,9 +31,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
-    'blog',
-    'marcador',
+    #'polls.apps.PollsConfig',
+    'scxrd.apps.ScxrdConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

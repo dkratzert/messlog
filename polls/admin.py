@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from polls.models import Measurement, Machine
 from .models import Question, Choice
 
 
@@ -25,5 +24,3 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Measurement)
-admin.site.register(Machine)
