@@ -1,2 +1,16 @@
 
-Hello
+{% extends 'scxrd/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    {% if experiment_list %}
+        <ul>
+        {% for exp in experiment_list %}
+            <li><a href="{% url 'scxrd:detail' exp.id %}">{{ exp.experiment }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No experiments are available.</p>
+    {% endif %}
+{% endblock %}

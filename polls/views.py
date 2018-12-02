@@ -5,8 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 
-from polls.forms import MyModelForm
-from polls.models import Choice, Question, Measurement, Machine
+from polls.models import Choice, Question
 from django.utils import timezone
 
 
@@ -35,15 +34,6 @@ class DetailView(generic.DetailView):
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
-
-
-class MachineChoiceView(generic.CreateView):
-    model = Machine
-    form_class = MyModelForm
-    template_name = 'polls/machine.html'
-
-    #def get_queryset(self):
-    #    return Measurement.objects.all()
 
 
 def vote(request, question_id):

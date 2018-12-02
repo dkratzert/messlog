@@ -19,6 +19,7 @@ from django.urls import path, include, reverse_lazy
 urlpatterns = [
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
+    #path('', include('scxrd.urls')),
     #path('blog/', include('blog.urls')),
     #path('marcador/', include('marcador.urls')),
     #path('login/', auth.login, {'template_name': 'login.html'}, name='mysite_login'),

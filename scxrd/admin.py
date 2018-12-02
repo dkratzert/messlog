@@ -6,8 +6,8 @@ from .models import Experiment, Machine, Solvent
 
 
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('experiment', 'number', 'date', 'machine', 'sum_formula')
-    list_filter = ['date']
+    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula')
+    list_filter = ['measure_date']
     search_fields = ['experiment', 'number', 'sum_formula']
     ordering = ['number']
 
