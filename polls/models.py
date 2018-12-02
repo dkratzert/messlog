@@ -42,7 +42,7 @@ class Machine(models.Model):
 class Measurement(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False)
     date = models.DateTimeField(verbose_name='time of measurement', default=timezone.now)
-    MACHINE_NAMES = [(x.pk, x) for x in Machine.objects.all()]
+    MACHINE_NAMES = [(x.pk, x) for x in Machine.objects.all() if Machine]
     #MACHINE_NAMES = [(1, 'Foo'),(2, 'Bar'),(3, 'APEX')]
     used_machine = models.IntegerField(choices=MACHINE_NAMES)
 
