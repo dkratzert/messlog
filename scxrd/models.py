@@ -18,6 +18,9 @@ class Machine(models.Model):
 class Solvent(models.Model):
     name = models.CharField(verbose_name="solvents name", max_length=200, unique=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
