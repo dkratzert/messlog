@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-
 from .models import Experiment, Machine, Solvent
 
 
@@ -15,3 +14,4 @@ class ExperimentAdmin(admin.ModelAdmin):
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
+

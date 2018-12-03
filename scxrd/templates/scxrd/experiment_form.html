@@ -1,0 +1,29 @@
+
+{% extends 'scxrd/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-6">
+                {{ form.experiment|as_crispy_field }}
+            </div>
+            <div class="col-6">
+                {{ form.number|as_crispy_field }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                {{ form.measure_date|as_crispy_field }}
+            </div>
+            <div class="col-6">
+                {{ form.machine|as_crispy_field }}
+            </div>
+        </div>
+        {{ form.sum_formula|as_crispy_field }}
+        {{ form.owner|as_crispy_field }}
+    <button type="submit" class="btn btn-success">Save Experiment</button>
+</form>
+{% endblock %}

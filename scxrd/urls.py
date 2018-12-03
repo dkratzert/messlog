@@ -6,5 +6,7 @@ app_name = 'scxrd'
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
+    path('new/', views.ExperimentCreateView.as_view(), name='new'),
+    path('update/<int:pk>/', views.ExperimentUpdateView.as_view(), name='update'),
     path('<int:pk>/', views.detail, name='detail'),
 ]

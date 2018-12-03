@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
-from django.db import models
+from django.db import models, utils
 
 # Create your models here.
 from django.utils import timezone
@@ -26,11 +26,14 @@ class Solvent(models.Model):
         return self.name
 
 
-# Editable lists of solvents and machines for the experiment:
-#SOLVENT_NAMES = [(x.pk, x.__str__()) for x in Solvent.objects.all()]
-MACHINE_NAMES = [(x.pk, x.__str__()) for x in Machine.objects.all()]
+# TODO: Improve this crude hack:
+try:
+    MACHINE_NAMES = [(x.pk, x.__str__()) for x in Machine.objects.all()]
+except utils.OperationalError:
+    MACHINE_NAMES = ((1, 'APEX'), (2, 'VeNTURE'))
 
 cif_fs = FileSystemStorage(location='/cif_files')
+
 
 
 class Experiment(models.Model):
