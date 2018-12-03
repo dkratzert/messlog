@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin, auth
 from django.urls import path, include, reverse_lazy
 
+from mysite.mysite.views import HomePageView
+
 urlpatterns = [
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
-    #path('', include('scxrd.urls')),
+    path('', HomePageView.as_view(), name='index'),
     #path('blog/', include('blog.urls')),
     #path('marcador/', include('marcador.urls')),
     #path('login/', auth.login, {'template_name': 'login.html'}, name='mysite_login'),

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Latest compiled and minified CSS -->
@@ -9,18 +9,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-      <title>IAAC Messlog</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="row justify-content-center">
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker();
+        });
+    </script>
+
+    <title>IAAC Messlog</title>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
         <div class="col-6">
-          <h1 class="mt-2">IAAC Measurements</h1>
-          <hr class="mt-0 mb-4">
-          {% block content %}
-          {% endblock %}
+            <h1 class="mt-2">IAAC Measurements</h1>
+            <hr class="mt-0 mb-4">
+            {% block content %}
+            {% endblock %}
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>
