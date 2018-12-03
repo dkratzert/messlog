@@ -4,10 +4,10 @@
 {% block content %}
     <form method="POST" class="post-form">
         {% csrf_token %}
-        <table>
+        <table>  
             {{ form.as_table }}
         </table>
-
-        <button type="submit" class="btn btn-success">Save Experiment</button>
+    
+        <button type="submit" class="save btn btn-primary" role="button">Save</button>
     </form>
 {% endblock %}

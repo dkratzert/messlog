@@ -2,18 +2,17 @@
 {% extends 'scxrd/base.html' %}
 
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block content %}
     {% if experiment_list %}
         <ul>
         {% for exp in experiment_list %}
-            <li><a href="{% url 'scxrd:edit' exp.id %}">{{ exp.experiment }}</a></li>
+            <li><a href="{% url 'scxrd:view' exp.id %}">{{ exp.experiment }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
         <p>No experiments are available.</p>
     {% endif %}
     
-    <a role="button" class="btn btn-primary" href="new">New Experiment</a>
+    <a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a>
 {% endblock %}

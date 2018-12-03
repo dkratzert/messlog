@@ -1,0 +1,42 @@
+
+
+
+{% extends 'scxrd/base.html' %}
+
+{% block content %}
+    {% if object.experiment %}
+        <h3>{{ object.experiment }}</h3>
+        <div id="myresidualtable" class="col-sm-6">
+            <table class="table table-bordered" style="white-space: pre">
+                
+            <tbody>
+                <tr>
+                    <td> Machine </td><td> {{ object.get_machine_display }} </td>
+                </tr>
+                <tr>
+                    <td> Experiment Number </td><td> {{ object.number }} </td>
+                </tr>
+                <tr>
+                    <td> Solvents </td> <td> {{ object.solvents_used.all |join:", " }}</td>
+                </tr>
+                <tr>
+                    <td>Sum Formula</td> <td>{{ object.sum_formula}}</td>
+                </tr>
+                <tr>
+                    <td>Results sent</td> <td> {{ object.result_date|date:'d.m.Y, H:i' }}</td>
+                </tr>
+                <tr>
+                    <td>owner</td> <td> {{ object.owner.get_username }} </td>
+                </tr>
+                </tbody>
+            </table>
+       
+
+    {% else %}
+        <p>No experiments are available.</p>
+    {% endif %}
+            <a href="{% url 'scxrd:index' %}" role="button" class="btn btn-success">Back to Start</a>
+            <a href="{% url 'scxrd:edit' object.id %}" role="button" class="btn btn-info">Edit Experiment</a>
+        </div>
+{% endblock %}
+
