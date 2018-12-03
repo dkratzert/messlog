@@ -8,7 +8,7 @@
     {% if experiment_list %}
         <ul>
         {% for exp in experiment_list %}
-            <li><a href="{% url 'scxrd:update' exp.id %}">{{ exp.experiment }}</a></li>
+            <li><a href="{% url 'scxrd:edit' exp.id %}">{{ exp.experiment }}</a></li>
         {% endfor %}
         </ul>
     {% else %}
