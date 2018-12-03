@@ -8,6 +8,9 @@
             {{ form.as_table }}
         </table>
     
+        <div class="row">
         <button type="submit" class="save btn btn-primary" role="button">Save</button>
+        <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
+        </div>
     </form>
 {% endblock %}

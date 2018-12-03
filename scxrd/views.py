@@ -12,6 +12,7 @@ from scxrd.models import Experiment
 
 class ExperimentCreateView(CreateView):
     model = Experiment
+    template_name = 'scxrd/new_experiment.html'
     fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'owner')
     success_url = reverse_lazy('scxrd:index')
 
