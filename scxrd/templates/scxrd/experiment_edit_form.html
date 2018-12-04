@@ -2,15 +2,38 @@
 {% extends 'scxrd/base.html' %}
 
 {% block content %}
-    <form method="POST" class="post-form">
-        {% csrf_token %}
-        <table>  
-            {{ form.as_table }}
-        </table>
-    
-        <div class="row">
-        <button type="submit" class="save btn btn-primary" role="button">Save</button>
-        <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
+
+    <form class="form-horizontal" role="form" action="." method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if field.errors %}
+            <div class="form-group has-error">
+                <label class="col-md-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                <div class="col-md-6">
+                    {{ field }} <!--|attr:"class:form-control" -->
+                    <span class="help-block">
+                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                    </span>
+                </div>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                <div class="col-md-6">
+                    {{ field }}  <!--|attr:"class:form-control" -->
+                    {% if field.help_text %}
+                        <p class="help-block"><small>{{ field.help_text }}</small></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-6">
+            <button type="submit" class="save btn btn-primary" role="button">Save</button>
+            <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
         </div>
+    </div>
     </form>
+
 {% endblock %}
