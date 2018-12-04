@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrapform',
     'bootstrap_datepicker_plus',
+    "django_tables2",
 ]
 
 #CRISPY_TEMPLATE_PACK = 'bootstrap3'

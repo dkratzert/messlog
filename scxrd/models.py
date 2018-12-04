@@ -1,5 +1,7 @@
 import datetime
 
+from django_tables2 import tables
+
 """
 TODO:
 
@@ -45,7 +47,6 @@ except utils.OperationalError:
 cif_fs = FileSystemStorage(location='/cif_files')
 
 
-
 class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
@@ -62,7 +63,7 @@ class Experiment(models.Model):
 
     def was_measured_recently(self) -> bool:
         now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.measure_date <= now
+        return now - datetime.timedelta(days=2) <= self.measure_date <= now
 
     was_measured_recently.admin_order_field = 'measure_date'
     was_measured_recently.boolean = True
@@ -70,3 +71,8 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
+
+
+class SimpleTable(tables.Table):
+    class Meta:
+        model = Experiment

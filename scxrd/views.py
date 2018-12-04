@@ -1,14 +1,16 @@
 from django.http import HttpResponse
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404
 from bootstrap_datepicker_plus import DatePickerInput
+from django_tables2 import SingleTableView
+
 from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 
 # Create your views here.
 from django.views import generic
 
-from scxrd.models import Experiment
+from scxrd.models import Experiment, SimpleTable
 
 
 class ExperimentCreateView(CreateView):
@@ -39,6 +41,14 @@ class ExperimentShowView(DetailView):
 
 class IndexView(generic.ListView):
     template_name = 'scxrd/index.html'
+    # defines the context object name to be used with {% if experiment_list %} etc.
     context_object_name = 'experiment_list'
     queryset = Experiment.objects.all()
+
+    # add other contexts if needed
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['table'] = Experiment.objects.all()
+        return context
+
 
