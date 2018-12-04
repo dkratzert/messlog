@@ -1,11 +1,21 @@
 import datetime
 
+"""
+TODO:
+
+- addd delete experiment
+- improve details page
+- add upload results dropdown
+
+"""
+
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
 from django.db import models, utils
 
 # Create your models here.
+from django.forms import widgets
 from django.utils import timezone
 
 
@@ -54,7 +64,7 @@ class Experiment(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.measure_date <= now
 
-    was_measured_recently.admin_order_field = 'date'
+    was_measured_recently.admin_order_field = 'measure_date'
     was_measured_recently.boolean = True
     was_measured_recently.short_description = 'Measured recently?'
 

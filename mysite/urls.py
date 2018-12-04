@@ -22,9 +22,4 @@ urlpatterns = [
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
     path('', HomePageView.as_view(), name='index'),
-    #path('blog/', include('blog.urls')),
-    #path('marcador/', include('marcador.urls')),
-    #path('login/', auth.login, {'template_name': 'login.html'}, name='mysite_login'),
-    #path('logout/', auth.logout,
-    #    {'next_page': 'marcador/bookmark_list'}, name='mysite_logout'),
 ]
