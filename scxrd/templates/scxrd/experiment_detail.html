@@ -1,8 +1,7 @@
 
-
-
 {% extends 'scxrd/base.html' %}
 
+{% load bootstrap %}
 {% block content %}
     {% if object.experiment %}
         <h3>{{ object.experiment }}</h3>
@@ -23,7 +22,12 @@
                     <td>Sum Formula</td> <td>{{ object.sum_formula}}</td>
                 </tr>
                 <tr>
-                    <td>Results sent</td> <td> {{ object.result_date|date:'d.m.Y, H:i' }}</td>
+                    {# |date:'d.m.Y, H:i' #}
+                    <td>Measurement Date</td> <td> {{ object.measure_date|date:'Y-m-d' }}</td>
+                </tr>
+                <tr>
+                    {# |date:'d.m.Y, H:i' #}
+                    <td>Results sent</td> <td> {{ object.result_date|date:'Y-m-d' }}</td>
                 </tr>
                 <tr>
                     <td>owner</td> <td> {{ object.owner.get_username }} </td>

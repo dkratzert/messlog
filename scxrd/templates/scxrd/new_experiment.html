@@ -1,13 +1,18 @@
 
 {% extends 'scxrd/base.html' %}
+{% load bootstrap %}
+{{ form.media }}
 
 {% block content %}
-    <form method="POST" class="post-form">
+    <form class="form-horizontal col-md-7" method="POST">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
+        {{ form |bootstrap_horizontal}}
 
-        <button type="submit" class="btn btn-success">Save Experiment</button>
+        <div class="form-group">
+        <div class="col-sm-7 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Save Experiment</button>
+            <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
+        </div>
+    </div>
     </form>
 {% endblock %}

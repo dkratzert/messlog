@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.views.generic import CreateView, UpdateView, DetailView
 from django.shortcuts import render, get_object_or_404
+from bootstrap_datepicker_plus import DatePickerInput
 from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 
@@ -22,6 +23,13 @@ class ExperimentEditView(UpdateView):
     form_class = ExperimentForm
     template_name = 'scxrd/experiment_edit_form.html'
     success_url = reverse_lazy('scxrd:index')
+
+    def get_form(self,  form_class=None):
+        form = super().get_form()
+        form.fields['measure_date'].widget = DatePickerInput(format='%Y-%m-%d')
+        form.fields['submit_date'].widget = DatePickerInput(format='%Y-%m-%d')
+        form.fields['result_date'].widget = DatePickerInput(format='%Y-%m-%d')
+        return form
 
 
 class ExperimentShowView(DetailView):
