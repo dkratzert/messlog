@@ -13,6 +13,10 @@
                     var settings = {{ grid.get_settings }};
                     $('#experiments').w2grid(settings);
                 });
+                
+                w2ui.grid.on('select', function(event) {
+                    console.log(event);
+                });
             </script>
         </div>
         
