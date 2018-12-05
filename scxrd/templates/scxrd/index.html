@@ -4,15 +4,10 @@
 {% load static %}
 
 {% block content %}
-    {% render_table experiment_list %}
     {% if experiment_list %}
-        <ul>
-        {% for exp in experiment_list %}
-            <li><a href="{% url 'scxrd:view' exp.id %}">{{ exp.experiment }}</a></li>
-        {% endfor %}
-        </ul>
+        {% render_table table %}
     {% else %}
-        <p>No experiments are available.</p>
+        <div class="alert alert-warning" role="alert">No experiments are available.</div>
     {% endif %}
     
     <a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a>

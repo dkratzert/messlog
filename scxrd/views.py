@@ -4,13 +4,13 @@ from django.shortcuts import render, get_object_or_404
 from bootstrap_datepicker_plus import DatePickerInput
 from django_tables2 import SingleTableView
 
-from scxrd.forms import ExperimentForm
+from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
 
 # Create your views here.
 from django.views import generic
 
-from scxrd.models import Experiment, SimpleTable
+from scxrd.models import Experiment
 
 
 class ExperimentCreateView(CreateView):

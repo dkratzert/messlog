@@ -15,3 +15,13 @@ class ExperimentForm(forms.ModelForm):
                 "locale": "de",
             }),
         }
+
+
+
+class ExperimentTableForm(forms.ModelForm):
+
+    class Meta:
+        model = Experiment
+        fields = ('experiment', 'number', 'measure_date')
+
+
