@@ -71,10 +71,13 @@ class ExperimentView(W2UIGridView):
     template_name = 'scxrd/scxrd_index.html'
 
     class W2UI:
+        name = 'grid'
         show__header = False
         show__toolbar = False
         show__footer = False
-        show__lineNumbers = False
+        show__lineNumbers = True
+        show__selectColumn = False
+        show__selectRow = True
     
     
     
