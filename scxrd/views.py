@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404
 from bootstrap_datepicker_plus import DatePickerInput
-from django_tables2 import SingleTableView
+from django_tables2 import SingleTableView, Table
 
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from scxrd.models import Experiment
+from scxrd.tables import ExperimentTable
 
 
 class ExperimentCreateView(CreateView):
@@ -39,16 +40,21 @@ class ExperimentShowView(DetailView):
     template_name = 'scxrd/experiment_detail.html'
 
 
-class IndexView(generic.ListView):
-    template_name = 'scxrd/index.html'
-    # defines the context object name to be used with {% if experiment_list %} etc.
-    context_object_name = 'experiment_list'
-    queryset = Experiment.objects.all()
+class IndexView(SingleTableView):
+    SingleTableView.table_pagination = False
+    template_name = 'scxrd/scxrd_index.html'
+    #fields = ('experiment', 'number', 'measure_date')
+    model = Experiment
+    table_class = ExperimentTable
 
-    # add other contexts if needed
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['table'] = Experiment.objects.all()
-        return context
+    # defines the context object name to be used with {% if experiment_list %} etc.
+    #context_object_name = 'experiment_table'
+
+
+   # # add other contexts if needed
+   # def get_context_data(self, **kwargs):
+   #     context = super().get_context_data(**kwargs)
+   #     context['table'] = Experiment.objects.all() # .filer() for example
+   #     return context
 
 

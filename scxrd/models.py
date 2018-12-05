@@ -73,6 +73,3 @@ class Experiment(models.Model):
         return self.experiment
 
 
-class SimpleTable(tables.Table):
-    class Meta:
-        model = Experiment
