@@ -43,9 +43,8 @@ INSTALLED_APPS = [
     'bootstrapform',
     'bootstrap_datepicker_plus',
     "django_tables2",
+    "djangow2ui",
 ]
-
-DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap.html'
 
 #CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -135,3 +134,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
  #   '/var/www/static/',
 ]
+
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap-responsive.html'

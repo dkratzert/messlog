@@ -38,19 +38,13 @@ class Solvent(models.Model):
         return self.name
 
 
-# TODO: Improve this crude hack:
-try:
-    MACHINE_NAMES = [(x.pk, x.__str__()) for x in Machine.objects.all()]
-except utils.OperationalError:
-    MACHINE_NAMES = ((1, 'APEX'), (2, 'VeNTURE'))
-
 cif_fs = FileSystemStorage(location='/cif_files')
 
 
 class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    machine = models.IntegerField(verbose_name='diffractometer', choices=MACHINE_NAMES)
+    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateField(verbose_name='measurement date', default=timezone.now)

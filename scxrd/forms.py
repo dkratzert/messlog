@@ -17,7 +17,6 @@ class ExperimentForm(forms.ModelForm):
         }
 
 
-
 class ExperimentTableForm(forms.ModelForm):
 
     class Meta:

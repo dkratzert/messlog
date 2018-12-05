@@ -3,6 +3,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from django.shortcuts import render, get_object_or_404
 from bootstrap_datepicker_plus import DatePickerInput
 from django_tables2 import SingleTableView, Table
+from djangow2ui.grid import W2UIGridView
 
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
@@ -39,22 +40,54 @@ class ExperimentShowView(DetailView):
     model = Experiment
     template_name = 'scxrd/experiment_detail.html'
 
-
+"""
 class IndexView(SingleTableView):
     SingleTableView.table_pagination = False
-    template_name = 'scxrd/scxrd_index.html'
-    #fields = ('experiment', 'number', 'measure_date')
     model = Experiment
     table_class = ExperimentTable
+    template_name = 'scxrd/scxrd_index.html'
 
     # defines the context object name to be used with {% if experiment_list %} etc.
     #context_object_name = 'experiment_table'
-
 
    # # add other contexts if needed
    # def get_context_data(self, **kwargs):
    #     context = super().get_context_data(**kwargs)
    #     context['table'] = Experiment.objects.all() # .filer() for example
    #     return context
+"""
 
 
+class ExperimentView(W2UIGridView):
+    model = Experiment
+    fields = ('experiment', 
+              'measure_date',
+              'sum_formula',
+              'machine',
+              #'machine_name',
+              #'owner'
+              )
+    editable = False
+    template_name = 'scxrd/scxrd_index.html'
+
+    class W2UI:
+        show__header = False
+        show__toolbar = False
+        show__footer = False
+        show__lineNumbers = False
+    
+    
+    
+    """
+    def getQueryset(self, request, *args, **kwargs):
+        qs = super().getQueryset(request, *args, **kwargs)
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            qs = qs.filter(pk=pk)
+        return qs
+    
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    context['grid'] = Experiment.objects.all() # .filer() for example
+    #    return context
+    """
