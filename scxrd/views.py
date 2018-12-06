@@ -77,7 +77,7 @@ class ExperimentView(W2UIGridView):
 class OrderListJson(BaseDatatableView):
     # The model we're going to show
     model = Experiment
-
+    template_name = "scxrd/grid.html"
     # define the columns that will be returned
     columns = ('number', 'experiment', 'measure_date', 'machine', 'sum_formula', 'owner')
 
@@ -91,10 +91,10 @@ class OrderListJson(BaseDatatableView):
     # and make it return huge amount of data
     max_display_length = 500
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['index'] = Experiment.objects.all()  # .filer() for example
-        return context
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    context['index'] = Experiment.objects.all()  # .filer() for example
+    #    return context
 
     """
     def getQueryset(self, request, *args, **kwargs):
