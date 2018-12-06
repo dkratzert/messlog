@@ -1,0 +1,54 @@
+
+{% block grid %}
+    {% csrf_token %}
+    <script type="text/javascript">
+    
+    $(document).ready(function() {
+        var dtable = $('#exptable').DataTable( {
+            processing: true,
+            serverSide: true,
+            select:     true,
+            ajax: {
+                url: "{% url 'scxrd:order_list_json' %}",
+                type: "POST",
+                headers: { "X-CSRFToken": '{{csrf_token}}', 
+                            'CSRFToken': '{{csrf_token}}'
+                        },
+            },
+            stateSave: false,
+            paging: false,
+            scrollY: 300,
+            columns: [
+                { title: "Number" },
+                { title: "Experiment" },
+                { title: "Date", 
+                  render: function(d) {
+                  return moment(d).format("DD:MM:YYYY, HH:mm");
+                  }
+                },
+                { title: "Machine" }, ],
+            //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
+            // No extra menus:
+            //dom: '<"top"i><"clear">',
+        });
+     
+        var data;
+        var urldata;
+        dtable.on('click', 'tr', function () {
+            data = dtable.row( this ).data();
+            //alert( 'You clicked on '+ data[0]+'\'s row' );
+            //console.log(data);
+            urldata = 'table/'+data[0];
+            //console.log(urldata);
+            $.get(url = urldata, function (result) {
+                console.log(result);
+                document.getElementById("ttable").innerHTML = result;
+            });
+        } );
+    
+    
+    
+    });
+        
+    </script>
+{% endblock grid %}

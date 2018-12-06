@@ -47,7 +47,7 @@ class Experiment(models.Model):
     machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
-    measure_date = models.DateField(verbose_name='measurement date', default=timezone.now)
+    measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
     owner = models.ForeignKey(User, verbose_name='owner', related_name='experiment', on_delete=models.CASCADE)

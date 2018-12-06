@@ -1,42 +1,44 @@
-
-{% extends 'scxrd/base.html' %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/fh-3.1.4/sc-1.5.0/sl-1.2.6/datatables.min.css"/>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/fh-3.1.4/sc-1.5.0/sl-1.2.6/datatables.min.js"></script>
+{% extends "scxrd/base.html" %}
 {% load static %}
 
 
 {% block content %}
-    {% if order_list_json %}
-    <div class="col col-md-6">
-        <div class="row">
-            <div id="experiments" style="width: 100%; height: 400px;"></div>
-            {% block order_list_json %}
-            {% endblock %}
-        </div>
-        
-    {% else %}
-                <div class="alert alert-warning" role="alert">No experiments are available.</div>
-    {% endif %}
-        <div class="row">
+
+    <div class="row">
+
+        <div class="col col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table id="exptable" class="table table-condensed table-striped " width="100%"></table>
+                    {% include 'scxrd/experiment_grid.html' %}
+                </div>
+            </div>
+
             <a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a>
         </div>
-    </div>
-    <div class="col-md-1">
-    
-    </div>
-    <div class="col-md-5">
-        <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">Structure View</div>
-                <div class="panel-body" style="height: 300px">
+
+        <div class="col-md-6">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Structure View</div>
+                    <div class="panel-body">
                     Basic panel example
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Details</div>
+                    <div class="panel-body">
+                        <div id="ttable"></div>
+                        {% include 'scxrd/details_table.html' %}
 
-
-
-
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
 
-{% endblock %}
+    
+{% endblock content %}
