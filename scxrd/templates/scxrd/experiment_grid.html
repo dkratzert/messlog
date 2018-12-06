@@ -19,6 +19,7 @@
             paging: false,
             scrollY: 300,
             columns: [
+                { visible: false},
                 { title: "Number" },
                 { title: "Experiment" },
                 { title: "Date", 
@@ -26,20 +27,28 @@
                   return moment(d).format("DD:MM:YYYY, HH:mm");
                   }
                 },
-                { title: "Machine" }, ],
+                { title: "Machine" },
+                {
+                mRender: function(data, type, full) {
+                return '<a class="btn btn-danger btn-xs" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
+                    }
+                },
+            ],
+
             //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
             // No extra menus:
             //dom: '<"top"i><"clear">',
         });
      
         var data;
-        var urldata;
+        urldata = '';
         dtable.on('click', 'tr', function () {
             data = dtable.row( this ).data();
             //alert( 'You clicked on '+ data[0]+'\'s row' );
             //console.log(data);
             urldata = 'table/'+data[0];
             //console.log(urldata);
+            //get_ttable(urldata);
             $.get(url = urldata, function (result) {
                 console.log(result);
                 document.getElementById("ttable").innerHTML = result;

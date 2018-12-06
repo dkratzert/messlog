@@ -8,35 +8,43 @@
 <table class="table table-condensed table-hover table-borderless tab">
     <tbody>
     <tr>
-        <td> Machine</td>
-        <td id="t_machine"> {{ object.machine }}</td>
+        <td> Experiment Number</td>
+        <td id="t_exp">  {{ object.number }} </td>
     </tr>
     <tr>
-        <td> Experiment Number</td>
-        <td id="t_exp">  </td>
+        <td> Machine</td>
+        <td id="t_machine"> {{ object.machine }} </td>
     </tr>
     <tr>
         <td> Solvents</td>
-        <td id="t_solents">  </td>
+        <td id="t_solents"> {{ object.solvents_used.all |join:", " }} </td>
     </tr>
     <tr>
         <td>Sum Formula</td>
-        <td id="t_sumform">  </td>
+        <td id="t_sumform"> {{ object.sum_formula}} </td>
     </tr>
     <tr>
-        <td>Measurement Date</td>
-        <td id="t_mesuredate">  </td>
+        <td>Measured by</td>
+        <td id="t_mesuredate"> {{ object.owner.get_username }} </td>
     </tr>
     <tr>
         {# |date:'d.m.Y, H:i' #}
         <td>Results sent</td>
-        <td id="t_">  </td>
+        <td id="t_results"> {{ object.result_date }} </td>
     </tr>
     <tr>
-        <td>owner</td>
-        <td>  </td>
+        <td>wR2</td>
+        <td> 23.4 </td>
+    </tr>
+    <tr>
+        <td>Rint</td>
+        <td> 3.4 </td>
+    </tr>
+    <tr>
+        <td>Completeness</td>
+        <td> 99 % </td>
     </tr>
     </tbody>
 </table>
-    
+
     
