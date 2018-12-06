@@ -1,18 +1,12 @@
-from django.http import HttpResponse
-from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import CreateView, UpdateView, DetailView
 from bootstrap_datepicker_plus import DatePickerInput
-from django_tables2 import SingleTableView, Table
 from djangow2ui.grid import W2UIGridView
 
-from scxrd.forms import ExperimentForm, ExperimentTableForm
+from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 
-# Create your views here.
-from django.views import generic
-
 from scxrd.models import Experiment
-from scxrd.tables import ExperimentTable
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
 class ExperimentCreateView(CreateView):
@@ -78,9 +72,30 @@ class ExperimentView(W2UIGridView):
         show__lineNumbers = True
         show__selectColumn = False
         show__selectRow = True
-    
-    
-    
+
+
+class OrderListJson(BaseDatatableView):
+    # The model we're going to show
+    model = Experiment
+
+    # define the columns that will be returned
+    columns = ('number', 'experiment', 'measure_date', 'machine', 'sum_formula', 'owner')
+
+    # define column names that will be used in sorting
+    # order is important and should be same as order of columns
+    # displayed by datatables. For non sortable columns use empty
+    # value like ''
+    order_columns = ['number', 'experiment', 'measure_date', 'machine', 'sum_formula', 'owner']
+
+    # set max limit of records returned, this is used to protect our site if someone tries to attack our site
+    # and make it return huge amount of data
+    max_display_length = 500
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['index'] = Experiment.objects.all()  # .filer() for example
+        return context
+
     """
     def getQueryset(self, request, *args, **kwargs):
         qs = super().getQueryset(request, *args, **kwargs)
@@ -89,8 +104,9 @@ class ExperimentView(W2UIGridView):
             qs = qs.filter(pk=pk)
         return qs
     
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['grid'] = Experiment.objects.all() # .filer() for example
-    #    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['grid'] = Experiment.objects.all() # .filer() for example
+        return context
     """
+
