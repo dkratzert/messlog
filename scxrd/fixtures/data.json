@@ -1,144 +1,248 @@
 [
   {
+    "model": "scxrd.machine",
+    "pk": 1,
     "fields": {
       "name": "APEX"
-    },
-    "model": "scxrd.machine",
-    "pk": 1
+    }
   },
   {
+    "model": "scxrd.machine",
+    "pk": 2,
     "fields": {
       "name": "Spider"
-    },
-    "model": "scxrd.machine",
-    "pk": 2
+    }
   },
   {
+    "model": "scxrd.machine",
+    "pk": 3,
     "fields": {
       "name": "Venture"
-    },
-    "model": "scxrd.machine",
-    "pk": 3
+    }
   },
   {
+    "model": "scxrd.machine",
+    "pk": 4,
     "fields": {
       "name": "Foobar"
-    },
-    "model": "scxrd.machine",
-    "pk": 4
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 1,
     "fields": {
       "name": "THF"
-    },
-    "model": "scxrd.solvent",
-    "pk": 1
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 2,
     "fields": {
       "name": "Toluene"
-    },
-    "model": "scxrd.solvent",
-    "pk": 2
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 3,
     "fields": {
       "name": "n-Hexane"
-    },
-    "model": "scxrd.solvent",
-    "pk": 3
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 4,
     "fields": {
       "name": "1,2-Difluorbenzene"
-    },
-    "model": "scxrd.solvent",
-    "pk": 4
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 5,
     "fields": {
       "name": "n-Pentane"
-    },
-    "model": "scxrd.solvent",
-    "pk": 5
+    }
   },
   {
+    "model": "scxrd.solvent",
+    "pk": 6,
     "fields": {
       "name": "Benzene"
-    },
-    "model": "scxrd.solvent",
-    "pk": 6
+    }
   },
   {
+    "model": "scxrd.experiment",
+    "pk": 1,
     "fields": {
       "experiment": "OC_FG-123",
-      "machine": 3,
-      "measure_date": "2018-12-12T17:11:00Z",
       "number": 1,
-      "operator": 1,
+      "machine": 3,
+      "sum_formula": "C5H5O4",
+      "measure_date": "2018-12-12T17:11:00Z",
+      "submit_date": "2018-12-02",
       "result_date": "2018-12-03",
+      "operator": 1,
       "solvents_used": [
         6,
         2,
         5
-      ],
-      "submit_date": "2018-12-02",
-      "sum_formula": "C5H5O4"
-    },
-    "model": "scxrd.experiment",
-    "pk": 1
+      ]
+    }
   },
   {
+    "model": "scxrd.experiment",
+    "pk": 2,
     "fields": {
       "experiment": "DL_ML_746",
-      "machine": 2,
-      "measure_date": "2018-12-06T17:11:00Z",
       "number": 2,
-      "operator": 1,
+      "machine": 2,
+      "sum_formula": "CHNO",
+      "measure_date": "2018-12-06T17:11:00Z",
+      "submit_date": "2018-12-02",
       "result_date": "2018-12-02",
+      "operator": 1,
       "solvents_used": [
         1,
         3
-      ],
-      "submit_date": "2018-12-02",
-      "sum_formula": "CHNO"
-    },
-    "model": "scxrd.experiment",
-    "pk": 2
+      ]
+    }
   },
   {
+    "model": "scxrd.experiment",
+    "pk": 3,
     "fields": {
       "experiment": "Foobarexp",
-      "machine": 4,
-      "measure_date": "2018-12-27T17:19:00Z",
       "number": 4,
-      "operator": 1,
+      "machine": 4,
+      "sum_formula": "CaF",
+      "measure_date": "2018-12-27T17:19:00Z",
+      "submit_date": "2018-12-02",
       "result_date": "2018-12-02",
+      "operator": 1,
       "solvents_used": [
         6,
         5
-      ],
-      "submit_date": "2018-12-02",
-      "sum_formula": "CaF"
-    },
-    "model": "scxrd.experiment",
-    "pk": 3
+      ]
+    }
   },
   {
+    "model": "scxrd.experiment",
+    "pk": 4,
     "fields": {
       "experiment": "DK_1047",
-      "machine": 1,
-      "measure_date": "2018-10-01T16:12:00Z",
       "number": 3,
-      "operator": 1,
+      "machine": 1,
+      "sum_formula": "C40H12O4F36Ge",
+      "measure_date": "2018-10-01T16:12:00Z",
+      "submit_date": "2018-12-02",
       "result_date": "2018-12-02",
+      "operator": 1,
       "solvents_used": [
         1
-      ],
-      "submit_date": "2018-12-02",
-      "sum_formula": "C40H12O4F36Ge"
-    },
+      ]
+    }
+  },
+  {
     "model": "scxrd.experiment",
-    "pk": 4
+    "pk": 5,
+    "fields": {
+      "experiment": "HKL_3000",
+      "number": 11,
+      "machine": 1,
+      "sum_formula": "CHO",
+      "measure_date": "2018-12-07T20:48:00Z",
+      "submit_date": "2018-12-07",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        4,
+        6,
+        1
+      ]
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 6,
+    "fields": {
+      "experiment": "GP_ins_123",
+      "number": 10,
+      "machine": 3,
+      "sum_formula": "C H Al F O",
+      "measure_date": "2018-12-07T21:03:00Z",
+      "submit_date": "2018-12-02",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 7,
+    "fields": {
+      "experiment": "GP_ins_123a",
+      "number": 13,
+      "machine": 3,
+      "sum_formula": "C H Al F O",
+      "measure_date": "2018-12-07T21:03:00Z",
+      "submit_date": "2018-12-02",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 8,
+    "fields": {
+      "experiment": "GP_ins_123s",
+      "number": 14,
+      "machine": 3,
+      "sum_formula": "C H Al F O",
+      "measure_date": "2018-12-07T21:03:00Z",
+      "submit_date": "2018-12-02",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 9,
+    "fields": {
+      "experiment": "GP_ins_123d",
+      "number": 15,
+      "machine": 1,
+      "sum_formula": "C H Al F O",
+      "measure_date": "2018-12-07T21:03:00Z",
+      "submit_date": "2018-12-02",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 10,
+    "fields": {
+      "experiment": "GP_ins_123f",
+      "number": 16,
+      "machine": 2,
+      "sum_formula": "C H Al F O",
+      "measure_date": "2018-12-07T21:03:00Z",
+      "submit_date": "2018-12-02",
+      "result_date": "2018-12-02",
+      "operator": 1,
+      "solvents_used": [
+        2
+      ]
+    }
   }
 ]
