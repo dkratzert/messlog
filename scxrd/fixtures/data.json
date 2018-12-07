@@ -1,0 +1,144 @@
+[
+  {
+    "fields": {
+      "name": "APEX"
+    },
+    "model": "scxrd.machine",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "name": "Spider"
+    },
+    "model": "scxrd.machine",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "name": "Venture"
+    },
+    "model": "scxrd.machine",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "name": "Foobar"
+    },
+    "model": "scxrd.machine",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "name": "THF"
+    },
+    "model": "scxrd.solvent",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "name": "Toluene"
+    },
+    "model": "scxrd.solvent",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "name": "n-Hexane"
+    },
+    "model": "scxrd.solvent",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "name": "1,2-Difluorbenzene"
+    },
+    "model": "scxrd.solvent",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "name": "n-Pentane"
+    },
+    "model": "scxrd.solvent",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "name": "Benzene"
+    },
+    "model": "scxrd.solvent",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "experiment": "OC_FG-123",
+      "machine": 3,
+      "measure_date": "2018-12-12T17:11:00Z",
+      "number": 1,
+      "operator": 1,
+      "result_date": "2018-12-03",
+      "solvents_used": [
+        6,
+        2,
+        5
+      ],
+      "submit_date": "2018-12-02",
+      "sum_formula": "C5H5O4"
+    },
+    "model": "scxrd.experiment",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "experiment": "DL_ML_746",
+      "machine": 2,
+      "measure_date": "2018-12-06T17:11:00Z",
+      "number": 2,
+      "operator": 1,
+      "result_date": "2018-12-02",
+      "solvents_used": [
+        1,
+        3
+      ],
+      "submit_date": "2018-12-02",
+      "sum_formula": "CHNO"
+    },
+    "model": "scxrd.experiment",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "experiment": "Foobarexp",
+      "machine": 4,
+      "measure_date": "2018-12-27T17:19:00Z",
+      "number": 4,
+      "operator": 1,
+      "result_date": "2018-12-02",
+      "solvents_used": [
+        6,
+        5
+      ],
+      "submit_date": "2018-12-02",
+      "sum_formula": "CaF"
+    },
+    "model": "scxrd.experiment",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "experiment": "DK_1047",
+      "machine": 1,
+      "measure_date": "2018-10-01T16:12:00Z",
+      "number": 3,
+      "operator": 1,
+      "result_date": "2018-12-02",
+      "solvents_used": [
+        1
+      ],
+      "submit_date": "2018-12-02",
+      "sum_formula": "C40H12O4F36Ge"
+    },
+    "model": "scxrd.experiment",
+    "pk": 4
+  }
+]

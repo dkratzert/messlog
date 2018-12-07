@@ -11,13 +11,21 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
 class ExperimentCreateView(CreateView):
+    """
+    A new experimen
+    """
     model = Experiment
+    form_class = ExperimentForm
     template_name = 'scxrd/new_experiment.html'
-    fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
+    # Fields are defined in form_class:
+    #fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
 
 class ExperimentEditView(UpdateView):
+    """
+    Edit an experiment
+    """
     model = Experiment
     form_class = ExperimentForm
     template_name = 'scxrd/experiment_edit_form.html'
@@ -25,6 +33,9 @@ class ExperimentEditView(UpdateView):
 
 
 class ExperimentDetailView(DetailView):
+    """
+    Show details of an experiment
+    """
     model = Experiment
     template_name = 'scxrd/experiment_detail.html'
 
@@ -47,13 +58,13 @@ class OrderListJson(BaseDatatableView):
     # template_name = 'scxrd/experiment_grid.html'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'solvent']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
+    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'solvent']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
