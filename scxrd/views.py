@@ -23,13 +23,6 @@ class ExperimentEditView(UpdateView):
     template_name = 'scxrd/experiment_edit_form.html'
     success_url = reverse_lazy('scxrd:index')
 
-    def get_form(self, form_class=None):
-        form = super().get_form()
-        form.fields['measure_date'].widget = DateTimePickerInput(format='%Y-%m-%d %H:%M')
-        form.fields['submit_date'].widget = DatePickerInput(format='%Y-%m-%d')
-        form.fields['result_date'].widget = DatePickerInput(format='%Y-%m-%d')
-        return form
-
 
 class ExperimentDetailView(DetailView):
     model = Experiment
@@ -64,6 +57,6 @@ class OrderListJson(BaseDatatableView):
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
-    # max_display_length = 500
+    max_display_length = 5000000
 
 

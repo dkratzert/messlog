@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     "djangow2ui",
 ]
 
-#CRISPY_TEMPLATE_PACK = 'bootstrap3'
-#CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 MIDDLEWARE = [
