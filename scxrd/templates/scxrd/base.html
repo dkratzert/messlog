@@ -3,30 +3,56 @@
 <head>
     {% load static %}
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" >
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/fh-3.1.4/sc-1.5.0/sl-1.2.6/datatables.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'bootstrap-4.1.3-dist/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/fh-3.1.4/sl-1.2.6/datatables.min.css"/>
     <script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/fh-3.1.4/sc-1.5.0/sl-1.2.6/datatables.min.js"></script>
+    <script src="{% static 'bootstrap-4.1.3-dist/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/fh-3.1.4/sl-1.2.6/datatables.min.js"></script>
     <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
-    <script src="{% static 'myjs/messlog_js.js' %}"></script>
-    <title>IAAC Messlog</title>
+    <script src="{% static 'myjs/messlog.js' %}"></script>
+    
+    <title>Messlog</title>
+    
 </head>
 <body>
 {% load bootstrap %}
 
 <!-- The navigation bar -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <ul class="nav nav-pills ">
-      <li role="presentation" class="active"><a href="{% url 'scxrd:index' %}">Experiments</a></li>
-      <li role="presentation"><a href="#">Customers</a></li>
-      <li role="presentation"><a href="{% url 'admin:index' %}">Administration</a></li>
-    </ul>
-  </div>
-</nav>
 
+<nav id="topNav" class="navbar navbar-expand-xs navbar-dark bg-dark">
+    
+    <a class="navbar-brand" href="#">Logo</a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'scxrd:index' %}">Experiments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Customers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
+            </li>
+            {% comment %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Services
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#">Engage</a>
+                        <a class="dropdown-item" href="#">Pontificate</a>
+                        <a class="dropdown-item" href="#">Synergize</a>
+                    </div>
+                </li>
+                {% endcomment %}
+        </ul>
+        <!-- login -->
+        <form class="form-inline pull-xs-right">
+            <input class="form-control" type="text" placeholder="user">
+            <input class="form-control" type="text" placeholder="password">
+            <button class="btn btn-secondary" type="submit">Login</button>
+        </form>
+</nav>
 
 
 <div class="container">
