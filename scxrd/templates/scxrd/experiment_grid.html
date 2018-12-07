@@ -6,7 +6,7 @@
     $(document).ready(function() {
         var dtable = $('#exptable').DataTable( {
             processing: true,
-            serverSide: true,
+            serverSide: false,
             select:     true,
             ajax: {
                 url: "{% url 'scxrd:order_list_json' %}",
@@ -19,10 +19,13 @@
             paging: false,
             scrollY: 300,
             columns: [
-                { visible: false},
-                { title: "Number" },
+                { visible: false, 
+                  searchable: false,},
+                { title: "Number", 
+                  searchable: false,},
                 { title: "Experiment" },
                 { title: "Date", 
+                  searchable: false,
                   render: function(d) {
                   return moment(d).format("DD:MM:YYYY, HH:mm");
                   }
