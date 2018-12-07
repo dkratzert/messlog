@@ -20,10 +20,11 @@
 
 <!-- The navigation bar -->
 
-<nav id="topNav" class="navbar navbar-expand-xs navbar-dark bg-dark">
+<nav id="topNav" class="navbar navbar-expand-sm bg-dark navbar-dark">
     
     <a class="navbar-brand" href="#">Logo</a>
-        <ul class="nav nav-pills">
+    <div class="clearfix">
+        <ul class="nav nav-pills float-lg-left">
             <li class="nav-item">
                 <a class="nav-link active" href="{% url 'scxrd:index' %}">Experiments</a>
             </li>
@@ -47,11 +48,12 @@
                 {% endcomment %}
         </ul>
         <!-- login -->
-        <form class="form-inline pull-xs-right">
-            <input class="form-control" type="text" placeholder="user">
-            <input class="form-control" type="text" placeholder="password">
+        <form class="form-inline">
+            <input class="form-control mr-sm-1" type="text" placeholder="user">
+            <input class="form-control mr-sm-1" type="text" placeholder="password">
             <button class="btn btn-secondary" type="submit">Login</button>
         </form>
+    </div>
 </nav>
 
 

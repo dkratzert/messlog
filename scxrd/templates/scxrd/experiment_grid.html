@@ -30,7 +30,7 @@
                 { title: "Machine" },
                 {
                 mRender: function(data, type, full) {
-                return '<a class="btn btn-danger btn-xs" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
+                return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
                     }
                 },
             ],
@@ -41,7 +41,7 @@
         });
      
         var data;
-        urldata = '';
+        var urldata;
         dtable.on('click', 'tr', function () {
             data = dtable.row( this ).data();
             //alert( 'You clicked on '+ data[0]+'\'s row' );

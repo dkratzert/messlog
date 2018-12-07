@@ -7,7 +7,7 @@
     <div class="row">
         <!-- Left column with experiment table -->
         <div class="col col-md-8">
-            <div class="card">
+            <div class="card mt-3">
                 <table id="exptable" class="table table-condensed table-sm" width="100%"></table>
                 {% include 'scxrd/experiment_grid.html' %}
             </div>
@@ -18,7 +18,7 @@
         <!-- Right column with tetails -->
         <div class="col-md-4">
             <div class="row">
-                <div class="card">
+                <div class="card mt-3" style="height: 300px; width: 300px">
                     <div class="card-header">Structure View</div>
                     <div class="card-body">
                         No atomic data for this structure.
@@ -26,25 +26,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="card">
+                <div class="card  mt-2" style="width: 300px">
                     <div class="card-header">Details</div>
                     <div class="card-body">
+                        <!-- insert details_table.html -->
                         <div id="ttable"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-<script>
-/*
-function get_ttable() {
-    $.get(url = urldata, function (result) {
-        console.log(result);
-        document.getElementById("ttable").innerHTML = result;
-    });
-}
-*/
-</script>
-    
+
+    <script>
+        /*
+        function get_ttable() {
+            $.get(url = urldata, function (result) {
+                console.log(result);
+                document.getElementById("ttable").innerHTML = result;
+            });
+        }
+        */
+    </script>
+
 {% endblock content %}

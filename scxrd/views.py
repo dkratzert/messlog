@@ -13,7 +13,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 class ExperimentCreateView(CreateView):
     model = Experiment
     template_name = 'scxrd/new_experiment.html'
-    fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'owner')
+    fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
 

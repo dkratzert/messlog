@@ -50,7 +50,7 @@ class Experiment(models.Model):
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
-    owner = models.ForeignKey(User, verbose_name='owner', related_name='experiment', on_delete=models.CASCADE)
+    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment', on_delete=models.CASCADE, default=1)
 
     class Meta:
         ordering = ["number"]
