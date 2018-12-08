@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     "django_tables2",
     "djangow2ui",
+    'uploadman',
 ]
 
 

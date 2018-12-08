@@ -70,4 +70,3 @@ class OrderListJson(BaseDatatableView):
     # and make it return huge amount of data
     max_display_length = 5000000
 
-
