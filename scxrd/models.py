@@ -8,7 +8,9 @@ TODO:
 - addd delete experiment
 - improve details page
 - add upload results dropdown
-
+- A good file upload handler: https://github.com/divio/django-filer
+- A really simple file upload handler: https://github.com/ipartola/django-upman
+- https://github.com/sibtc/form-rendering-examples
 """
 
 from django.contrib.auth.models import User
