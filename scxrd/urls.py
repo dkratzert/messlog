@@ -1,4 +1,3 @@
-import django_upman
 from django.conf.urls.static import static
 from django.urls import path, reverse_lazy
 from uploadman.views import uploads
@@ -16,9 +15,7 @@ urlpatterns = [
     path('view/<int:pk>/', views.ExperimentDetailView.as_view(), name='view'),
     path('table/<int:pk>/', views.experiment_test, name='table'),
     path('order_list_json/', views.OrderListJson.as_view(), name='order_list_json'),
-    path('upload_cif', uploads, name='file_upload')
+    path('edit/<int:pk>/upload_cif', uploads, name='cif_upload'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

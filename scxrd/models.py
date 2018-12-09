@@ -16,12 +16,10 @@ TODO:
 """
 
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
 from django.db import models, utils
 
 # Create your models here.
-from django.forms import widgets
 from django.utils import timezone
 
 
@@ -42,9 +40,6 @@ class Solvent(models.Model):
         return self.name
 
 
-cif_fs = FileSystemStorage(location='/cif_files')
-
-
 class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
@@ -55,6 +50,7 @@ class Experiment(models.Model):
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment', on_delete=models.CASCADE, default=1)
+    cif = models.FileField(upload_to='scxrd/cifs', null=True, blank=True, verbose_name='cif file')
 
     class Meta:
         ordering = ["number"]

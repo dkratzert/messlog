@@ -1,5 +1,6 @@
 from django import forms
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+from django.forms import FileField
 
 from scxrd.models import Experiment, Machine
 
@@ -12,7 +13,8 @@ class ExperimentForm(forms.ModelForm):
         widgets = {
             'submit_date' : DateTimePickerInput(format='%Y-%m-%d'),
             'result_date' : DateTimePickerInput(format='%Y-%m-%d'),
-            'measure_date': DateTimePickerInput(format="%Y-%m-%d %H:%M",),
+            'measure_date': DateTimePickerInput(format="%Y-%m-%d %H:%M"),
+            'upload': FileField,
         }
 
 

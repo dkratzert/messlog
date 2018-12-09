@@ -13,7 +13,7 @@ This table is used to edit all details of a structure.
 {{ form.media }}
 
 
-<form class="form" method="post">
+<form class="form" method="post" enctype="multipart/form-data">
      {# <legend>Form Title</legend> #}
     {% csrf_token %}
     {{ form| bootstrap_horizontal }}
@@ -24,12 +24,5 @@ This table is used to edit all details of a structure.
         </div>
     </div>
 </form>
-<form class="form-group" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="document">
-    <button type="submit">Upload file</button>
-
-</form>
-
 
 {% endblock %}
