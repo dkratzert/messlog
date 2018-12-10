@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
+from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from djangow2ui.grid import W2UIGridView
 
@@ -6,7 +6,7 @@ from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
-from scxrd.models import Experiment
+from scxrd.models import Experiment, Customer
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
@@ -51,6 +51,10 @@ class ExperimentView(TemplateView):
     model = Experiment
     template_name = 'scxrd/scxrd_index.html'
 
+
+class Customers(ListView):
+    model = Customer
+    template_name = 'scxrd/customers.html'
 
 class OrderListJson(BaseDatatableView):
     # The model we're going to show

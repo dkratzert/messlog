@@ -16,7 +16,7 @@ TODO:
 """
 
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, utils
 
 # Create your models here.
@@ -41,10 +41,29 @@ class Solvent(models.Model):
         return self.name
 
 
+class Customer(models.Model):
+    """
+    Persons where samples belong to.
+    """
+    name = models.CharField(verbose_name='first name', max_length=250, blank=True, null=True)
+    last_name = models.CharField(verbose_name='last name', max_length=250, blank=False, null=False)
+    workgroup = models.CharField(verbose_name='work group', max_length=250, blank=True, null=True)
+    company = models.CharField(verbose_name='company', max_length=250, blank=True, null=True)
+    mail_adress = models.EmailField(null=True, blank=True)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                 message="Phone number must be entered in the format: "
+                                         "'+999999999'. Up to 15 digits allowed.")
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # validators should be a list
+
+    def __str__(self):
+        return '{} {}'.format(self.name, self.last_name)
+
+
 class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
+    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True, blank=True)
     machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE, null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)

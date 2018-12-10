@@ -15,7 +15,8 @@ urlpatterns = [
     path('view/<int:pk>/', views.ExperimentDetailView.as_view(), name='view'),
     path('table/<int:pk>/', views.experiment_test, name='table'),
     path('order_list_json/', views.OrderListJson.as_view(), name='order_list_json'),
-    path('edit/<int:pk>/upload', include('uploadman.urls')),
+    path('customers/', views.Customers.as_view(), name='customers'),
+    #path('edit/<int:pk>/upload', include('uploadman.urls')),
 ]
 
 

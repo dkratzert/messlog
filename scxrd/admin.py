@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
+from scxrd.models import Customer
 from .models import Experiment, Machine, Solvent
 
 
@@ -11,7 +12,10 @@ class ExperimentAdmin(admin.ModelAdmin):
     ordering = ['number']
 
 
+
+
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
+admin.site.register(Customer)
 

@@ -1,0 +1,16 @@
+{% extends 'scxrd/base.html' %}
+
+{% load bootstrap %}
+
+
+{% block content %}
+
+    <ul>
+    {% if object_list %}
+        {% for cust in object_list %}
+            <li>{{ cust }} </li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+    
+{% endblock content %}

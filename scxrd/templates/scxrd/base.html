@@ -13,9 +13,9 @@
     <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
     <script src="{% static 'flatpickr/flatpickr-4.5.2.js' %}"></script>
     <script src="{% static 'myjs/messlog.js' %}"></script>
-    
-    <title>Messlog</title>
-    
+    {% block head %}
+    <title>Messlog Main Page</title>
+    {% endblock head %}
 </head>
 <body>
 {% load bootstrap %}
@@ -30,7 +30,7 @@
                 <a class="nav-link active" href="{% url 'scxrd:index' %}">Experiments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Customers</a>
+                <a class="nav-link" href="customers">Customers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
