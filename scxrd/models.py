@@ -24,6 +24,7 @@ from django.utils import timezone
 
 
 class Machine(models.Model):
+    fixtures = ['machines']
     name = models.CharField(verbose_name="machines name", max_length=200)
 
     def __str__(self):
@@ -41,9 +42,10 @@ class Solvent(models.Model):
 
 
 class Experiment(models.Model):
+    fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE)
+    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE, null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)

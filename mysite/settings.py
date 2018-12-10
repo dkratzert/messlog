@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -138,6 +137,9 @@ STATICFILES_DIRS = [
 
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# hast to be (BASE_DIR, 'media') without slashes, otherwise SuspiciousFileOperation exceptions occour:
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
+

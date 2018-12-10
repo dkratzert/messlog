@@ -1,5 +1,5 @@
 from django.conf.urls.static import static
-from django.urls import path, reverse_lazy
+from django.urls import path, reverse_lazy, include
 from uploadman.views import uploads
 
 from mysite import settings
@@ -15,7 +15,7 @@ urlpatterns = [
     path('view/<int:pk>/', views.ExperimentDetailView.as_view(), name='view'),
     path('table/<int:pk>/', views.experiment_test, name='table'),
     path('order_list_json/', views.OrderListJson.as_view(), name='order_list_json'),
-    path('edit/<int:pk>/upload_cif', uploads, name='cif_upload'),
+    path('edit/<int:pk>/upload', include('uploadman.urls')),
 ]
 
 

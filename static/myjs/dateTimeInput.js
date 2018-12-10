@@ -1,0 +1,3 @@
+
+/* global $ */
+$('.flatpickr').flatpickr();
