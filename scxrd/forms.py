@@ -1,10 +1,9 @@
 from django import forms
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
-from django.forms import FileField
+from django.forms import FileInput
 
-from scxrd.models import Experiment, Machine
+from scxrd.models import Experiment, Machine, Upload
 from scxrd.widgets import DateTimeInput, DateInput
-from uploadman.models import Upload
 
 
 class ExperimentForm(forms.ModelForm):
@@ -16,7 +15,6 @@ class ExperimentForm(forms.ModelForm):
             'submit_date' : DatePickerInput(format='%Y-%m-%d'),
             'result_date' : DatePickerInput(format='%Y-%m-%d'),
             'measure_date': DateTimePickerInput(format="%Y-%m-%d %H:%M"),
-            'upload': FileField(),
         }
 
 
@@ -24,3 +22,13 @@ class ExperimentTableForm(forms.ModelForm):
     class Meta:
         model = Experiment
         fields = ('experiment', 'number', 'measure_date')
+
+
+class UploadForm(forms.ModelForm):
+    class Meta:
+        model = Upload
+        fields = ('upload',)
+        widgets = {'upload': FileInput()}
+
+
+

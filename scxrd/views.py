@@ -2,11 +2,12 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from djangow2ui.grid import W2UIGridView
 
-from scxrd.forms import ExperimentForm
+from scxrd import widgets
+from scxrd.forms import ExperimentForm, UploadForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
-from scxrd.models import Experiment, Customer
+from scxrd.models import Experiment, Customer, Upload
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
@@ -31,6 +32,11 @@ class ExperimentEditView(UpdateView):
     template_name = 'scxrd/experiment_edit_form.html'
     success_url = reverse_lazy('scxrd:index')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['upload'] = Experiment.objects.get(pk=self.kwargs['pk'])
+        return context
+
 
 class ExperimentDetailView(DetailView):
     """
@@ -40,11 +46,24 @@ class ExperimentDetailView(DetailView):
     template_name = 'scxrd/experiment_detail.html'
 
 
-def experiment_test(request, pk):
-    #print(pk)
-    object = Experiment.objects.get(pk=pk)
-    template = 'scxrd/details_table.html'
-    return render(request, template, {'object': object})
+class DetailsTable(DetailView):
+    model = Experiment
+    template_name = 'scxrd/details_table.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['details_table'] = Experiment.objects.get(pk=self.kwargs['pk'])
+        return context
+
+
+class UploadView(CreateView):
+    model = Upload
+    form_class = UploadForm
+    template_name = "scxrd/upload.html"
+    #success_url = reverse_lazy('scxrd:upload')
+
+    def get_success_url(self):
+        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
 class ExperimentView(TemplateView):
@@ -55,6 +74,7 @@ class ExperimentView(TemplateView):
 class Customers(ListView):
     model = Customer
     template_name = 'scxrd/customers.html'
+
 
 class OrderListJson(BaseDatatableView):
     # The model we're going to show

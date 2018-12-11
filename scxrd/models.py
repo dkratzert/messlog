@@ -25,6 +25,68 @@ from django.db import models, utils
 from django.utils import timezone
 
 
+class UploadManager(models.Manager):
+
+    def upload_file(self, uploaded_file, category=''):
+        sha256 = hashlib.sha256()
+        for c in uploaded_file.chunks():
+            sha256.update(c)
+        checksum = sha256.hexdigest()
+        inst = self.get_queryset().filter(checksum=checksum).first()
+
+        if inst:
+            return inst
+
+        inst = self.model(
+            checksum=checksum,
+            category=category,
+            name=uploaded_file.name,
+            size=uploaded_file.size,
+            content_type=uploaded_file.content_type,
+        )
+
+        filename = '{}.{}'.format(checksum, uploaded_file.content_type.split('/')[1])
+        inst.upload.save(filename, File(uploaded_file))
+
+        return inst
+
+
+class AbstractUpload(models.Model):
+    checksum = models.CharField(max_length=64, primary_key=True)
+    category = models.CharField(max_length=255, db_index=True, default='')
+    name = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=255, default='applicaiton/binary')
+    size = models.BigIntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    def get_url(self):
+        return self.upload.url
+
+    def to_dict(self):
+        return {
+            'checksum': self.checksum,
+            'url': self.get_url(),
+            'content_type': self.content_type,
+            'size': self.size,
+            'name': self.name,
+            'created_on': self.created_on.isoformat(),
+        }
+
+
+class Upload(AbstractUpload):
+    upload = models.FileField(upload_to='scxrd/cifs', null=True, blank=True)
+    objects = UploadManager()
+
+
 class Machine(models.Model):
     fixtures = ['machines']
     name = models.CharField(verbose_name="machines name", max_length=200)
@@ -73,7 +135,7 @@ class Experiment(models.Model):
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment', on_delete=models.CASCADE, default=1)
-    cif = models.FileField(upload_to='scxrd/cifs', null=True, blank=True, verbose_name='cif file')
+    cif = Upload()
 
     class Meta:
         ordering = ["number"]
@@ -88,6 +150,8 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
+
+
 
 
 #class Structure(models.Model):
