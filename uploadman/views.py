@@ -17,7 +17,7 @@ def _uploads(request, Model, Form):
             upload = Model.objects.upload_file(form.cleaned_data['file'], category=category)
             return HttpResponse(json.dumps(upload.to_dict()), content_type='application/json')
         else:
-            errors = dict((key, unicode(val[0])) for key, val in form.errors.items())
+            errors = dict((key, val[0]) for key, val in form.errors.items())
             return HttpResponse(json.dumps(errors), content_type='application/json', status=400)
 
     results = []

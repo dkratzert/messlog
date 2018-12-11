@@ -46,7 +46,7 @@ class AbstractUpload(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_url(self):
@@ -66,7 +66,7 @@ class AbstractUpload(models.Model):
 def _upload_to(instance, filename):
     if instance.category:
         filename = '{}/{}'.format(instance.category.strip().replace(' ', '-'), filename)
-    return '{}/{}'.format(getattr(settings, 'UPMAN_UPLOAD_PATH', 'uploads/upman'), filename)
+    return '{}/{}'.format(getattr(settings, 'UPMAN_UPLOAD_PATH', 'media/upman'), filename)
 
 
 class Upload(AbstractUpload):

@@ -13,6 +13,8 @@ TODO:
 - https://github.com/sibtc/form-rendering-examples
 - upload all needed files from work dir (foo.abs, foo.raw, foo_0m._ls, foo.prp, foo.lst, foo.res, foo.cif) and 
   have a button "generate report and final cif files"
+- for charts: https://www.chartjs.org/docs/latest/
+- http://ccbv.co.uk/projects/Django/2.0
 """
 
 from django.contrib.auth.models import User
