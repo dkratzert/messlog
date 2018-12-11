@@ -1,29 +1,13 @@
 {% extends 'scxrd/base.html' %}
 
-
-
-<!-- Initialize Bootstrap functionality -->
-<script>
-    // Initialize tooltip component
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-
-    // Initialize popover component
-    $(function () {
-        $('[data-toggle="popover"]').popover()
-    });
-</script>
-
-{% load bootstrap %}
-
 {% block content %}
-    {% load static %}
-    <form class="form" method="post" enctype="multipart/form-data">
-        {# <legend>Form Title</legend> #}
-        {% csrf_token %}
-        {{ form| bootstrap_horizontal }}
-        <button type="submit" class="btn btn-primary" >Save</button>
-    </form>
-
+  <h2>Upload .cif file</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name=".cif file">
+    <button class="btn btn-danger file" type="submit">Upload file</button>
+  </form>
+  {% if url %}
+    <p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
+  {% endif %}
 {% endblock %}
