@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from scxrd.models import Customer
-from .models import Experiment, Machine, Solvent
+from .models import Experiment, Machine, Solvent, Upload
 
 
 class ExperimentAdmin(admin.ModelAdmin):
@@ -18,4 +18,5 @@ admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
 admin.site.register(Customer)
+admin.site.register(Upload)
 
