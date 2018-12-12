@@ -20,71 +20,17 @@ TODO:
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, utils
+from filer.fields import file, multistorage_file
 
 # Create your models here.
 from django.utils import timezone
 
 
-class UploadManager(models.Manager):
-
-    def upload_file(self, uploaded_file, category=''):
-        sha256 = hashlib.sha256()
-        for c in uploaded_file.chunks():
-            sha256.update(c)
-        checksum = sha256.hexdigest()
-        inst = self.get_queryset().filter(checksum=checksum).first()
-
-        if inst:
-            return inst
-
-        inst = self.model(
-            checksum=checksum,
-            category=category,
-            name=uploaded_file.name,
-            size=uploaded_file.size,
-            content_type=uploaded_file.content_type,
-        )
-
-        filename = '{}.{}'.format(checksum, uploaded_file.content_type.split('/')[1])
-        inst.upload.save(filename, File(uploaded_file))
-
-        return inst
-
-
-class AbstractUpload(models.Model):
-    checksum = models.CharField(max_length=64, primary_key=True)
-    category = models.CharField(max_length=255, db_index=True, default='')
-    name = models.CharField(max_length=255)
-    content_type = models.CharField(max_length=255, default='applicaiton/binary')
-    size = models.BigIntegerField(default=0)
-    created_on = models.DateTimeField(auto_now_add=True, null=True)
-
-    class Meta:
-        abstract = True
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+"""class Upload(models.Model):
+    cif = file.FilerFileField(null=True, blank=True, related_name="cif_file_up", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
-
-    def get_url(self):
-        return self.upload.url
-
-    def to_dict(self):
-        return {
-            'checksum': self.checksum,
-            'url': self.get_url(),
-            'content_type': self.content_type,
-            'size': self.size,
-            'name': self.name,
-            'created_on': self.created_on.isoformat(),
-        }
-
-
-class Upload(AbstractUpload):
-    upload = models.FileField(upload_to='scxrd/cifs', null=True, blank=True)
-    objects = UploadManager()
+        return self.cif.url"""
 
 
 class Machine(models.Model):
@@ -128,14 +74,18 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True, blank=True)
-    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True, on_delete=models.CASCADE, null=True, blank=True)
+    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True,
+                                on_delete=models.CASCADE, null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
-    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment', on_delete=models.CASCADE, default=1)
-    cif = Upload()
+    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment',
+                                 on_delete=models.CASCADE, null=True, blank=True)
+    #cif = models.ForeignKey(Upload, verbose_name="cif file", related_name='cif_file',
+    #                        on_delete=models.CASCADE, null=True, blank=True)
+    cif = file.FilerFileField(null=True, blank=True, related_name="cif_file_up", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["number"]

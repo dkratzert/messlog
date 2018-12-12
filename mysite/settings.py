@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 # Application definition
 
 INSTALLED_APPS = [
-    #'polls.apps.PollsConfig',
     'scxrd.apps.ScxrdConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,7 +42,9 @@ INSTALLED_APPS = [
     'bootstrapform',
     'bootstrap_datepicker_plus',
     "django_tables2",
-    "djangow2ui",
+    'easy_thumbnails',
+    'filer',
+    'mptt',
 ]
 
 
@@ -136,9 +137,13 @@ STATICFILES_DIRS = [
 
 DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 
-# hast to be (BASE_DIR, 'media') without slashes, otherwise SuspiciousFileOperation exceptions occour:
+# has to be (BASE_DIR, 'media') without slashes, otherwise SuspiciousFileOperation exceptions occour:
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
 UPMAN_UPLOAD_PATH = '/'
+
+
+THUMBNAIL_HIGH_RESOLUTION = True
+

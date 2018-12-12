@@ -1,13 +1,12 @@
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
-from djangow2ui.grid import W2UIGridView
 
 from scxrd import widgets
-from scxrd.forms import ExperimentForm, UploadForm
+from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
-from scxrd.models import Experiment, Customer, Upload
+from scxrd.models import Experiment, Customer#, Upload
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
@@ -32,11 +31,6 @@ class ExperimentEditView(UpdateView):
     template_name = 'scxrd/experiment_edit_form.html'
     success_url = reverse_lazy('scxrd:index')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['upload'] = Experiment.objects.get(pk=self.kwargs['pk'])
-        return context
-
 
 class ExperimentDetailView(DetailView):
     """
@@ -56,14 +50,13 @@ class DetailsTable(DetailView):
         return context
 
 
-class UploadView(CreateView):
+"""class UploadView(CreateView):
     model = Upload
-    form_class = UploadForm
     template_name = "scxrd/upload.html"
     #success_url = reverse_lazy('scxrd:upload')
 
     def get_success_url(self):
-        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
+        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))"""
 
 
 class ExperimentView(TemplateView):
@@ -82,13 +75,13 @@ class OrderListJson(BaseDatatableView):
     # template_name = 'scxrd/experiment_grid.html'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'solvent']
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'solvent']
+    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
