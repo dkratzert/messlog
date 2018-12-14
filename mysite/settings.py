@@ -41,10 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrapform',
     'bootstrap_datepicker_plus',
-    "django_tables2",
-    'easy_thumbnails',
-    'filer',
-    'mptt',
 ]
 
 

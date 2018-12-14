@@ -1,6 +1,6 @@
 import datetime
+import hashlib
 
-from django_tables2 import tables
 
 """
 TODO:
@@ -19,18 +19,47 @@ TODO:
 
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, RegexValidator
-from django.db import models, utils
-from filer.fields import file, multistorage_file
+from django.db import models
 
 # Create your models here.
 from django.utils import timezone
 
 
-"""class Upload(models.Model):
-    cif = file.FilerFileField(null=True, blank=True, related_name="cif_file_up", on_delete=models.CASCADE)
+def generate_sha1(file):
+    f = file.open('rb')
+    hash = hashlib.sha1()
+    if f.multiple_chunks():
+        for chunk in f.chunks(chunk_size=64 * 2 ** 10):
+            hash.update(chunk)
+    else:
+        hash.update(f.read())
+    f.close()
+    sha1 = hash.hexdigest()
+    return sha1
+
+
+class CifFile(models.Model):
+    cif = models.FileField(upload_to='cifs', null=True, blank=True)
+    sha1 = models.CharField(max_length=256, blank=True, null=True)
+    filesize = models.PositiveIntegerField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super(CifFile, self).save(*args, **kwargs)
+        # f = self.cif.open('rb')
+        checksum = generate_sha1(self.cif.file)
+        self.filesize = self.cif.size
+        #inst = self.objects.get().filter(sha1=checksum).first()
+        #if inst:
+        #    return inst
+        self.sha1 = checksum
+        super(CifFile, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.cif.url"""
+        return self.cif.url
+
+    def delete(self, *args, **kwargs):
+        self.cif.delete()
+        super().delete(*args, **kwargs)
 
 
 class Machine(models.Model):
@@ -83,9 +112,8 @@ class Experiment(models.Model):
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment',
                                  on_delete=models.CASCADE, null=True, blank=True)
-    #cif = models.ForeignKey(Upload, verbose_name="cif file", related_name='cif_file',
-    #                        on_delete=models.CASCADE, null=True, blank=True)
-    cif = file.FilerFileField(null=True, blank=True, related_name="cif_file_up", on_delete=models.CASCADE)
+    cif = models.ForeignKey(CifFile, null=True, blank=True, related_name="cif_file",
+                            verbose_name='cif file', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["number"]

@@ -2,7 +2,7 @@ from django import forms
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.forms import FileInput
 
-from scxrd.models import Experiment, Machine#, Upload
+from scxrd.models import Experiment, Machine
 from scxrd.widgets import DateTimeInput, DateInput
 
 

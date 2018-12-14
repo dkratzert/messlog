@@ -6,7 +6,7 @@ from scxrd.forms import ExperimentForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
-from scxrd.models import Experiment, Customer#, Upload
+from scxrd.models import Experiment, Customer, CifFile
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 

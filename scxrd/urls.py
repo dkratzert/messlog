@@ -15,7 +15,6 @@ urlpatterns = [
     path('table/<int:pk>/', views.DetailsTable.as_view(), name='details_table'),
     path('order_list_json/', views.OrderListJson.as_view(), name='order_list_json'),
     path('customers/', views.Customers.as_view(), name='customers'),
-    path('filer/', include('filer.urls')),
 ]
 
 
