@@ -88,13 +88,12 @@ class CifFile(models.Model):
 
     #################################
 
-    def save_base(self, raw=False, force_insert=False,
-                  force_update=False, using=None, update_fields=None):
+    def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
+        checksum = generate_sha256(self.cif.file)
+        self.sha256 = checksum
         with open(self.cif.file.name, encoding='ascii', errors='ignore') as cf:
             self.fill_residuals_table(cf.readlines())
-        checksum = generate_sha256(self.cif.file)
-        print(checksum)
         self.filesize = self.cif.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()
@@ -102,11 +101,11 @@ class CifFile(models.Model):
         #    self.cif = inst
         #    return
         # https://timonweb.com/posts/cleanup-files-and-images-on-model-delete-in-django/
-        self.sha1 = checksum
         if not self.date_created:
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
         super(CifFile, self).save(*args, **kwargs)
+        print(checksum)
 
     def __str__(self):
         return self.cif.url
