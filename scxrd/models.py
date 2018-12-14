@@ -38,6 +38,14 @@ def generate_sha1(file):
     return sha1
 
 
+class Machine(models.Model):
+    fixtures = ['machines']
+    name = models.CharField(verbose_name="machines name", max_length=200)
+
+    def __str__(self):
+        return self.name
+
+
 class CifFile(models.Model):
     cif = models.FileField(upload_to='cifs', null=True, blank=True)
     sha1 = models.CharField(max_length=256, blank=True, null=True)
@@ -45,12 +53,13 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
-        # f = self.cif.open('rb')
         checksum = generate_sha1(self.cif.file)
         self.filesize = self.cif.size
-        #inst = self.objects.get().filter(sha1=checksum).first()
+        # TODO: Make check if file exists work:
+        #inst = CifFile.objects.filter(sha1=checksum).first()
         #if inst:
-        #    return inst
+        #    self.cif = inst
+        #    return
         self.sha1 = checksum
         super(CifFile, self).save(*args, **kwargs)
 
@@ -60,14 +69,6 @@ class CifFile(models.Model):
     def delete(self, *args, **kwargs):
         self.cif.delete()
         super().delete(*args, **kwargs)
-
-
-class Machine(models.Model):
-    fixtures = ['machines']
-    name = models.CharField(verbose_name="machines name", max_length=200)
-
-    def __str__(self):
-        return self.name
 
 
 class Solvent(models.Model):
