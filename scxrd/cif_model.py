@@ -1,15 +1,23 @@
 from django.db import models
 from django.utils import timezone
 
+from scxrd.cif.atoms import sorted_atoms
 from scxrd.cif.cifparser import Cif
 from .utils import generate_sha256
 
 
-def get_float(line: str) -> float:
-    return float(line.split('(')[0].split(' ')[0])
+def get_float(line: str) -> (int, None):
+    try:
+        return float(line.split('(')[0].split(' ')[0])
+    except ValueError:
+        return None
 
-def get_int(line: str) -> int:
-    return int(line.split('(')[0].split(' ')[0])
+
+def get_int(line: str) -> (int, None):
+    try:
+        return int(line.split('(')[0].split(' ')[0])
+    except ValueError:
+        return None
 
 
 class CifFile(models.Model):
@@ -36,7 +44,7 @@ class CifFile(models.Model):
     _space_group_centring_type = models.CharField(max_length=255, null=True, blank=True)
     _space_group_IT_number = models.PositiveIntegerField(null=True, blank=True)
     _space_group_crystal_system = models.CharField(max_length=255, null=True, blank=True)
-    _space_group_symop_operation_xyz = models.TextField(max_length=255, null=True, blank=True)
+    _space_group_symop_operation_xyz = models.TextField(null=True, blank=True)
     _audit_creation_method = models.CharField(max_length=255, null=True, blank=True)
     _chemical_formula_sum = models.CharField(max_length=255, null=True, blank=True)
     _chemical_formula_weight = models.CharField(max_length=255, null=True, blank=True)
@@ -84,7 +92,7 @@ class CifFile(models.Model):
     _refine_diff_density_min = models.FloatField(null=True, blank=True)
     _diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
     _database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True)
-    _shelx_res_file = models.TextField(max_length=255, null=True, blank=True)
+    _shelx_res_file = models.TextField(null=True, blank=True)
 
     #################################
 
@@ -114,22 +122,18 @@ class CifFile(models.Model):
         self.cif.delete()
         super().delete(*args, **kwargs)
 
-    def __getitem__(self, item):
-        return self.item
-
-    def __setitem__(self, key, value):
-        self.key = value
-
-    def fill_residuals_table(self, fullpath):
+    def fill_residuals_table(self, ciflist):
         """
         Fill the table with residuals of the refinement.
         """
-        # if cif.cif_data['calculated_formula_sum']:
-        #    self.fill_formula(structure_id, cif.cif_data['calculated_formula_sum'])
         cif = Cif()
-        cifok = cif.parsefile(fullpath)
-        print('file parsed')
-
+        cifok = cif.parsefile(ciflist)
+        if cifok:
+            print('file parsed')
+        else:
+            return None
+        if cif.cif_data['calculated_formula_sum']:
+            self.fill_formula(cif.cif_data['calculated_formula_sum'])
         self.data = cif.cif_data["data"]
         self._cell_length_a = get_float(cif.cif_data["_cell_length_a"])
         self._cell_length_b = get_float(cif.cif_data['_cell_length_b'])
@@ -150,49 +154,65 @@ class CifFile(models.Model):
         self._chemical_formula_weight = cif.cif_data["_chemical_formula_weight"]
         self._exptl_crystal_description = cif.cif_data["_exptl_crystal_description"]
         self._exptl_crystal_colour = cif.cif_data["_exptl_crystal_colour"]
-        """
-        self._exptl_crystal_size_max = cif.cif_data["_exptl_crystal_size_max"]
-        self._exptl_crystal_size_mid = cif.cif_data["_exptl_crystal_size_mid"]
-        self._exptl_crystal_size_min = cif.cif_data["_exptl_crystal_size_min"]
-        self._exptl_absorpt_coefficient_mu = cif.cif_data["_exptl_absorpt_coefficient_mu"]
+        self._exptl_crystal_size_max = get_float(cif.cif_data["_exptl_crystal_size_max"])
+        self._exptl_crystal_size_mid = get_float(cif.cif_data["_exptl_crystal_size_mid"])
+        self._exptl_crystal_size_min = get_float(cif.cif_data["_exptl_crystal_size_min"])
+        self._exptl_absorpt_coefficient_mu = get_float(cif.cif_data["_exptl_absorpt_coefficient_mu"])
         self._exptl_absorpt_correction_type = cif.cif_data["_exptl_absorpt_correction_type"]
-        self._diffrn_ambient_temperature = cif.cif_data["_diffrn_ambient_temperature"]
-        self._diffrn_radiation_wavelength = cif.cif_data["_diffrn_radiation_wavelength"]
+        self._diffrn_ambient_temperature = get_float(cif.cif_data["_diffrn_ambient_temperature"])
+        self._diffrn_radiation_wavelength = get_float(cif.cif_data["_diffrn_radiation_wavelength"])
         self._diffrn_radiation_type = cif.cif_data["_diffrn_radiation_type"]
         self._diffrn_source = cif.cif_data["_diffrn_source"]
         self._diffrn_measurement_device_type = cif.cif_data["_diffrn_measurement_device_type"]
-        self._diffrn_reflns_number = cif.cif_data["_diffrn_reflns_number"]
-        self._diffrn_reflns_av_R_equivalents = cif.cif_data["_diffrn_reflns_av_R_equivalents"]
-        self._diffrn_reflns_theta_min = cif.cif_data["_diffrn_reflns_theta_min"]
-        self._diffrn_reflns_theta_max = cif.cif_data["_diffrn_reflns_theta_max"]
-        self._diffrn_reflns_theta_full = cif.cif_data["_diffrn_reflns_theta_full"]
-        self._diffrn_measured_fraction_theta_max = cif.cif_data["_diffrn_measured_fraction_theta_max"]
-        self._diffrn_measured_fraction_theta_full = cif.cif_data["_diffrn_measured_fraction_theta_full"]
-        self._reflns_number_total = cif.cif_data["_reflns_number_total"]
-        self._reflns_number_gt = cif.cif_data["_reflns_number_gt"]
+        self._diffrn_reflns_number = get_int(cif.cif_data["_diffrn_reflns_number"])
+        self._diffrn_reflns_av_R_equivalents = get_int(cif.cif_data["_diffrn_reflns_av_R_equivalents"])
+        self._diffrn_reflns_theta_min = get_float(cif.cif_data["_diffrn_reflns_theta_min"])
+        self._diffrn_reflns_theta_max = get_float(cif.cif_data["_diffrn_reflns_theta_max"])
+        self._diffrn_reflns_theta_full = get_float(cif.cif_data["_diffrn_reflns_theta_full"])
+        self._diffrn_measured_fraction_theta_max = get_float(cif.cif_data["_diffrn_measured_fraction_theta_max"])
+        self._diffrn_measured_fraction_theta_full = get_float(cif.cif_data["_diffrn_measured_fraction_theta_full"])
+        self._reflns_number_total = get_int(cif.cif_data["_reflns_number_total"])
+        self._reflns_number_gt = get_int(cif.cif_data["_reflns_number_gt"])
         self._reflns_threshold_expression = cif.cif_data["_reflns_threshold_expression"]
-        self._reflns_Friedel_coverage = cif.cif_data["_reflns_Friedel_coverage"]
+        self._reflns_Friedel_coverage = get_float(cif.cif_data["_reflns_Friedel_coverage"])
         self._computing_structure_solution = cif.cif_data["_computing_structure_solution"]
         self._computing_structure_refinement = cif.cif_data["_computing_structure_refinement"]
         self._refine_special_details = cif.cif_data["_refine_special_details"]
         self._refine_ls_abs_structure_Flack = cif.cif_data["_refine_ls_abs_structure_Flack"]
         self._refine_ls_structure_factor_coef = cif.cif_data["_refine_ls_structure_factor_coef"]
         self._refine_ls_weighting_details = cif.cif_data["_refine_ls_weighting_details"]
-        self._refine_ls_number_reflns = cif.cif_data["_refine_ls_number_reflns"]
-        self._refine_ls_number_parameters = cif.cif_data["_refine_ls_number_parameters"]
-        self._refine_ls_number_restraints = cif.cif_data["_refine_ls_number_restraints"]
-        self._refine_ls_R_factor_all = cif.cif_data["_refine_ls_R_factor_all"]
-        self._refine_ls_R_factor_gt = cif.cif_data["_refine_ls_R_factor_gt"]
-        self._refine_ls_wR_factor_ref = cif.cif_data["_refine_ls_wR_factor_ref"]
-        self._refine_ls_wR_factor_gt = cif.cif_data["_refine_ls_wR_factor_gt"]
-        self._refine_ls_goodness_of_fit_ref = cif.cif_data["_refine_ls_goodness_of_fit_ref"]
-        self._refine_ls_restrained_S_all = cif.cif_data["_refine_ls_restrained_S_all"]
-        self._refine_ls_shift_su_max = cif.cif_data["_refine_ls_shift/su_max"]
-        self._refine_ls_shift_su_mean = cif.cif_data["_refine_ls_shift/su_mean"]
-        self._refine_diff_density_max = cif.cif_data["_refine_diff_density_max"]
-        self._refine_diff_density_min = cif.cif_data["_refine_diff_density_min"]
-        self._diffrn_reflns_av_unetI_netI = cif.cif_data["_diffrn_reflns_av_unetI/netI"]
+        self._refine_ls_number_reflns = get_int(cif.cif_data["_refine_ls_number_reflns"])
+        self._refine_ls_number_parameters = get_int(cif.cif_data["_refine_ls_number_parameters"])
+        self._refine_ls_number_restraints = get_int(cif.cif_data["_refine_ls_number_restraints"])
+        self._refine_ls_R_factor_all = get_float(cif.cif_data["_refine_ls_R_factor_all"])
+        self._refine_ls_R_factor_gt = get_float(cif.cif_data["_refine_ls_R_factor_gt"])
+        self._refine_ls_wR_factor_ref = get_float(cif.cif_data["_refine_ls_wR_factor_ref"])
+        self._refine_ls_wR_factor_gt = get_float(cif.cif_data["_refine_ls_wR_factor_gt"])
+        self._refine_ls_goodness_of_fit_ref = get_float(cif.cif_data["_refine_ls_goodness_of_fit_ref"])
+        self._refine_ls_restrained_S_all = get_float(cif.cif_data["_refine_ls_restrained_S_all"])
+        self._refine_ls_shift_su_max = get_float(cif.cif_data["_refine_ls_shift/su_max"])
+        self._refine_ls_shift_su_mean = get_float(cif.cif_data["_refine_ls_shift/su_mean"])
+        self._refine_diff_density_max = get_float(cif.cif_data["_refine_diff_density_max"])
+        self._refine_diff_density_min = get_float(cif.cif_data["_refine_diff_density_min"])
+        self._diffrn_reflns_av_unetI_netI = get_float(cif.cif_data["_diffrn_reflns_av_unetI/netI"])
         self._database_code_depnum_ccdc_archive = cif.cif_data["_database_code_depnum_ccdc_archive"]
-        self._shelx_res_file = cif.cif_data["_shelx_res_file"]"""
+        self._shelx_res_file = cif.cif_data["_shelx_res_file"]
 
-
+    def fill_formula(self, formula: dict):
+        """
+        Fills data into the sum formula table.
+        """
+        out = []
+        for x in formula:
+            if not x.capitalize() in sorted_atoms:
+                out.append(x)
+        # Delete non-existing atoms from formula:
+        for x in out:
+            del formula[x]
+        if not formula:
+            return []
+        columns = ', '.join(['Elem_' + x.capitalize() for x in formula.keys()])
+        placeholders = ', '.join('?' * (len(formula) + 1))
+        #req = '''INSERT INTO sum_formula (StructureId, {}) VALUES ({});'''.format(columns, placeholders)
+        #result = self.database.db_request(req, [structure_id] + list(formula.values()))
+        #return result

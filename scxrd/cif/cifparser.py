@@ -249,6 +249,29 @@ class Cif(object):
             self.handle_deprecates()
             return True
 
+    def sumform(self):
+        sum_from_dict = {}
+        for x in self.atoms:
+            #  0     1   2 3 4    5       6
+            # [Name type x y z occupancy part]
+            try:
+                try:
+                    occu = x[5]
+                except (KeyError, ValueError, IndexError):
+                    occu = 1.0
+                try:
+                    atom_type_symbol = x[1]
+                except (KeyError, IndexError):
+                    continue
+                elem = atom_type_symbol.capitalize()
+                if elem in sum_from_dict:
+                    sum_from_dict[elem] += occu
+                else:
+                    sum_from_dict[elem] = occu
+            except KeyError as e:
+                pass
+        self.cif_data['calculated_formula_sum'] = sum_from_dict
+
     def handle_deprecates(self):
         """
         Makes the old and new cif values equal.
