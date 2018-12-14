@@ -1,5 +1,5 @@
 import datetime
-import hashlib
+from .cif_model import CifFile
 
 
 """
@@ -25,50 +25,12 @@ from django.db import models
 from django.utils import timezone
 
 
-def generate_sha1(file):
-    f = file.open('rb')
-    hash = hashlib.sha1()
-    if f.multiple_chunks():
-        for chunk in f.chunks(chunk_size=64 * 2 ** 10):
-            hash.update(chunk)
-    else:
-        hash.update(f.read())
-    f.close()
-    sha1 = hash.hexdigest()
-    return sha1
-
-
 class Machine(models.Model):
     fixtures = ['machines']
     name = models.CharField(verbose_name="machines name", max_length=200)
 
     def __str__(self):
         return self.name
-
-
-class CifFile(models.Model):
-    cif = models.FileField(upload_to='cifs', null=True, blank=True)
-    sha1 = models.CharField(max_length=256, blank=True, null=True)
-    filesize = models.PositiveIntegerField(null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        super(CifFile, self).save(*args, **kwargs)
-        checksum = generate_sha1(self.cif.file)
-        self.filesize = self.cif.size
-        # TODO: Make check if file exists work:
-        #inst = CifFile.objects.filter(sha1=checksum).first()
-        #if inst:
-        #    self.cif = inst
-        #    return
-        self.sha1 = checksum
-        super(CifFile, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self.cif.url
-
-    def delete(self, *args, **kwargs):
-        self.cif.delete()
-        super().delete(*args, **kwargs)
 
 
 class Solvent(models.Model):
@@ -103,18 +65,18 @@ class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    customer = models.ForeignKey(to=Customer, on_delete=models.CASCADE, null=True, blank=True)
+    customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
     machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True,
-                                on_delete=models.CASCADE, null=True, blank=True)
+                                on_delete=models.SET_NULL, null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment',
-                                 on_delete=models.CASCADE, null=True, blank=True)
+                                 on_delete=models.SET_NULL, null=True, blank=True)
     cif = models.ForeignKey(CifFile, null=True, blank=True, related_name="cif_file",
-                            verbose_name='cif file', on_delete=models.CASCADE)
+                            verbose_name='cif file', on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ["number"]
