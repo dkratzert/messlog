@@ -213,6 +213,7 @@ class CifFile(models.Model):
             return []
         columns = ', '.join(['Elem_' + x.capitalize() for x in formula.keys()])
         placeholders = ', '.join('?' * (len(formula) + 1))
+        # TODO: Store formula in a table
         #req = '''INSERT INTO sum_formula (StructureId, {}) VALUES ({});'''.format(columns, placeholders)
         #result = self.database.db_request(req, [structure_id] + list(formula.values()))
         #return result

@@ -11,8 +11,7 @@ def generate_sha256(file):
     else:
         hash.update(f.read())
     f.close()
-    sha1 = hash.hexdigest()
-    return sha1
+    return hash.hexdigest()
 
 
 
