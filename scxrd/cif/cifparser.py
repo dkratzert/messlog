@@ -242,14 +242,13 @@ class Cif(object):
         # TODO: implement detection of self.cif_data["_space_group_centring_type"] by symmcards.
         if not data:
             return False
-        # if not atoms:
-        #    self.cif_data.clear()
-        #    return False
         else:
             self.handle_deprecates()
+            if self.atoms:
+                self.calc_sumform()
             return True
 
-    def sumform(self):
+    def calc_sumform(self):
         sum_from_dict = {}
         for x in self.atoms:
             #  0     1   2 3 4    5       6
