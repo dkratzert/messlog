@@ -1,6 +1,6 @@
 import datetime
-from .cif_model import CifFile
 
+from .cif_model import CifFile
 
 """
 TODO:
@@ -23,6 +23,7 @@ from django.db import models
 
 # Create your models here.
 from django.utils import timezone
+
 
 
 class Machine(models.Model):
@@ -92,10 +93,7 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-
-
-
-#class Structure(models.Model):
+# class Structure(models.Model):
 #    x = models.FloatField()
 #    y = models.FloatField()
 #    z = models.FloatField()
