@@ -25,7 +25,6 @@ from django.db import models
 from django.utils import timezone
 
 
-
 class Machine(models.Model):
     fixtures = ['machines']
     name = models.CharField(verbose_name="machines name", max_length=200)
@@ -64,7 +63,7 @@ class Customer(models.Model):
 
 class Experiment(models.Model):
     fixtures = ['experiment']
-    experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default=None)
+    experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='')
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
     machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True,
