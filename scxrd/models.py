@@ -92,9 +92,4 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-# class Structure(models.Model):
-#    x = models.FloatField()
-#    y = models.FloatField()
-#    z = models.FloatField()
-#    element = models.CharField(max_length=2)
 

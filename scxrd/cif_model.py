@@ -22,6 +22,23 @@ def get_int(line: str) -> (int, None):
         return None
 
 
+class Atom(models.Model):
+    name = models.CharField(max_length=16)
+    element = models.CharField(max_length=2)
+    x = models.FloatField()
+    y = models.FloatField()
+    z = models.FloatField()
+    occupancy = models.FloatField()
+    part = models.IntegerField()
+
+    def __str__(self):
+        print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
+        #"{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
+        return ' atom '
+        "{} {} {} {} {} {} {}".format(self.name, self.element,
+                                                             self.x, self.y, self.z, self.occupancy, self.part)
+
+
 class SumFormula(models.Model):
     C = models.FloatField(default=0)
     D = models.FloatField(default=0)
@@ -125,7 +142,7 @@ class SumFormula(models.Model):
 
     def __str__(self):
         # TODO: return correct formula
-        return 'foo'
+        return 'A sum formula'
 
 
 class CifFile(models.Model):
@@ -137,6 +154,7 @@ class CifFile(models.Model):
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
+    atoms = models.ForeignKey(Atom, null=True, blank=True, on_delete=models.DO_NOTHING)
     # TODO: Find a better solution:
     sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
     #########################################
@@ -249,6 +267,10 @@ class CifFile(models.Model):
         if cif.cif_data['calculated_formula_sum']:
             self.sumform_exact = self.fill_formula(cif.cif_data['calculated_formula_sum'])
             self.sumform_exact.save()
+        if cif.atoms:
+            for at in cif.atoms:
+                self.atoms = Atom(**at)
+            self.atoms.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
         self.cell_length_b = get_float(cif.cif_data['_cell_length_b'])
@@ -327,6 +349,8 @@ class CifFile(models.Model):
         if not formula:
             return
         return SumFormula(**formula)
+
+
 
 
 
