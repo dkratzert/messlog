@@ -211,6 +211,7 @@ class CifFile(models.Model):
         checksum = generate_sha256(self.cif.file)
         self.sha256 = checksum
         with open(self.cif.file.name, encoding='ascii', errors='ignore') as cf:
+            # save cif content to db table
             self.fill_residuals_table(cf.readlines())
         self.filesize = self.cif.size
         # TODO: Make check if file exists work:
@@ -223,7 +224,7 @@ class CifFile(models.Model):
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
         super(CifFile, self).save(*args, **kwargs)
-        #print(checksum)
+
 
     def __str__(self):
         #return self.cif.url
@@ -242,7 +243,7 @@ class CifFile(models.Model):
         cif = Cif()
         cifok = cif.parsefile(ciflist)
         if cifok:
-            print('file parsed')
+            print('cif file parsed')
         else:
             return None
         if cif.cif_data['calculated_formula_sum']:
