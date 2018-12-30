@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from scxrd.cif.cifparser import Cif
+from scxrd.cif_model import CifFile
 from scxrd.models import Experiment, Customer, Machine
 
 """
@@ -75,6 +76,11 @@ class ExperimentCreateCif(TestCase):
         self.cif.parsefile(Path('scxrd/testfiles/p21c.cif').read_text(encoding='ascii').splitlines(keepends=True))
         self.assertEqual(self.cif.cif_data['_diffrn_reflns_number'], '42245')
 
+
+class CifFileTest(TestCase):
+
+    def test_readCif(self):
+        c = CifFile('')
 
 
 

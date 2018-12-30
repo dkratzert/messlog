@@ -33,10 +33,10 @@ class Atom(models.Model):
 
     def __str__(self):
         print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
-        #"{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
+        # "{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
         return ' atom '
         "{} {} {} {} {} {} {}".format(self.name, self.element,
-                                                             self.x, self.y, self.z, self.occupancy, self.part)
+                                      self.x, self.y, self.z, self.occupancy, self.part)
 
 
 class SumFormula(models.Model):
@@ -243,9 +243,8 @@ class CifFile(models.Model):
         self.date_updated = timezone.now()
         super(CifFile, self).save(*args, **kwargs)
 
-
     def __str__(self):
-        #return self.cif.url
+        # return self.cif.url
         return self.data
 
     def delete(self, *args, **kwargs):
@@ -349,12 +348,3 @@ class CifFile(models.Model):
         if not formula:
             return
         return SumFormula(**formula)
-
-
-
-
-
-
-
-
-
