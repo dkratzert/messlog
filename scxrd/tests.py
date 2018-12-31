@@ -79,8 +79,12 @@ class ExperimentCreateCif(TestCase):
 
 class CifFileTest(TestCase):
 
+    def setUp(self):
+        self.cfile = CifFile()
+
     def test_readCif(self):
-        c = CifFile('')
+        pass
+        #self.cfile.cif =
 
 
 

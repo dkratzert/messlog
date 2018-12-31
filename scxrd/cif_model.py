@@ -226,8 +226,7 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
-        checksum = generate_sha256(self.cif.file)
-        self.sha256 = checksum
+        self.sha256 = generate_sha256(self.cif.file)
         with open(self.cif.file.name, encoding='ascii', errors='ignore') as cf:
             # save cif content to db table
             self.fill_residuals_table(cf.readlines())
@@ -269,7 +268,7 @@ class CifFile(models.Model):
         if cif.atoms:
             for at in cif.atoms:
                 self.atoms = Atom(**at)
-            self.atoms.save()
+                self.atoms.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
         self.cell_length_b = get_float(cif.cif_data['_cell_length_b'])
