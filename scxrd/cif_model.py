@@ -227,7 +227,7 @@ class CifFile(models.Model):
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
         self.sha256 = generate_sha256(self.cif.file)
-        with open(self.cif.file.name, encoding='ascii', errors='ignore') as cf:
+        with open(self.cif.file.name, errors='ignore') as cf:
             # save cif content to db table
             self.fill_residuals_table(cf.readlines())
         self.filesize = self.cif.size
@@ -266,9 +266,10 @@ class CifFile(models.Model):
             self.sumform_exact = self.fill_formula(cif.cif_data['calculated_formula_sum'])
             self.sumform_exact.save()
         if cif.atoms:
-            for at in cif.atoms:
-                self.atoms = Atom(**at)
-                self.atoms.save()
+            pass
+            #for at in cif.atoms:
+            #    self.atoms = Atom(**at)
+            #    self.atoms.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
         self.cell_length_b = get_float(cif.cif_data['_cell_length_b'])
