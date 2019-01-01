@@ -84,7 +84,7 @@ class CifFileTest(TestCase):
 
     def test_uploadCif(self):
         with open('scxrd/testfiles/p21c.cif') as fp:
-            response = self.client.post('/scxrd/upload/999/', {'name': 'p21c.cif', 'attachment': fp.readlines()})
+            response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp})
             print(response)
 
 
