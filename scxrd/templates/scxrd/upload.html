@@ -7,7 +7,7 @@
     <input type="file" name=".cif file">
     <button class="btn btn-danger file" type="submit">Upload file</button>
   </form>
-  {% if url %}
-    <p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
+  {% if form %}
+    <p>Uploaded file: <a >{{ form.cif }}</a></p>
   {% endif %}
 {% endblock %}
