@@ -2,7 +2,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 from scxrd import widgets
-from scxrd.forms import ExperimentForm
+from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
@@ -50,13 +50,14 @@ class DetailsTable(DetailView):
         return context
 
 
-"""class UploadView(CreateView):
-    model = Upload
+class UploadView(CreateView):
+    model = Experiment
     template_name = "scxrd/upload.html"
-    #success_url = reverse_lazy('scxrd:upload')
+    #success_url = reverse_lazy('scxrd:index')
+    form_class = ExperimentForm
 
     def get_success_url(self):
-        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))"""
+        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
 class ExperimentView(TemplateView):

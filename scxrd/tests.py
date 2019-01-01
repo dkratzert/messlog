@@ -5,7 +5,7 @@ from pprint import pprint
 
 import pytz
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from scxrd.cif.cifparser import Cif
@@ -80,11 +80,13 @@ class ExperimentCreateCif(TestCase):
 class CifFileTest(TestCase):
 
     def setUp(self):
-        self.cfile = CifFile()
+        self.client = Client()
 
-    def test_readCif(self):
-        pass
-        #self.cfile.cif =
+    def test_uploadCif(self):
+        with open('scxrd/testfiles/p21c.cif') as fp:
+            response = self.client.post('/scxrd/upload/999/', {'name': 'p21c.cif', 'attachment': fp.readlines()})
+            print(response)
+
 
 
 

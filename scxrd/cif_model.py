@@ -243,8 +243,9 @@ class CifFile(models.Model):
         super(CifFile, self).save(*args, **kwargs)
 
     def __str__(self):
-        # return self.cif.url
-        return self.data
+        return self.cif.url
+        # Why have I had data here?
+        # return self.data
 
     def delete(self, *args, **kwargs):
         cf = Path(self.cif.path)
