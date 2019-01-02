@@ -5,6 +5,7 @@ from pprint import pprint
 
 import pytz
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -86,6 +87,16 @@ class CifFileTest(TestCase):
         with open('scxrd/testfiles/p21c.cif') as fp:
             response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp})
             print(response)
+
+    def test_saveCif(self):
+        #with open('scxrd/testfiles/p21c.cif') as fp:
+        #    file = SimpleUploadedFile('p21c.cif', bytes(fp.read(), encoding='ascii'))
+        #    cif = CifFile.objects.create(cif=file, pk=199)
+        #    print(cif.objects.all())
+        file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
+        c = CifFile()#.objects.create(cif=file)
+        ex = create_experiment(99, cif=c)
+
 
 
 
