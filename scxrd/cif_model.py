@@ -243,7 +243,10 @@ class CifFile(models.Model):
         super(CifFile, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.cif.url
+        try:
+            return self.cif.url
+        except ValueError:
+            return 'no file'
         # Why have I had data here?
         # return self.data
 
