@@ -94,7 +94,9 @@ class CifFileTest(TestCase):
         #    cif = CifFile.objects.create(cif=file, pk=199)
         #    print(cif.objects.all())
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFile()#.objects.create(cif=file)
+        c = CifFile.objects.create(cif=file)
+        #c.cif = file
+        #c.save()
         ex = create_experiment(99, cif=c)
 
 
