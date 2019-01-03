@@ -32,11 +32,11 @@ class Atom(models.Model):
     part = models.IntegerField()
 
     def __str__(self):
-        print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
+        #print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
         # "{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
         return ' atom '
-        "{} {} {} {} {} {} {}".format(self.name, self.element,
-                                      self.x, self.y, self.z, self.occupancy, self.part)
+        #"{} {} {} {} {} {} {}".format(self.name, self.element,
+        #                              self.x, self.y, self.z, self.occupancy, self.part)
 
 
 class SumFormula(models.Model):
@@ -154,7 +154,7 @@ class CifFile(models.Model):
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
-    atoms = models.ForeignKey(Atom, null=True, blank=True, on_delete=models.DO_NOTHING)
+    atom = models.ForeignKey(Atom, null=True, blank=True, on_delete=models.CASCADE)
     # TODO: Find a better solution:
     sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
     #########################################
@@ -271,9 +271,10 @@ class CifFile(models.Model):
             self.sumform_exact.save()
         if cif.atoms:
             pass
-            #for at in cif.atoms:
-            #    self.atoms = Atom(**at)
-            #    self.atoms.save()
+            for at in cif.atoms:
+                # ['F9_4', 'F', -0.194, 0.2425, 0.347, 0.445, 2]
+                self.atom = Atom(name=at[0], element=at[1], x=at[2], y=at[3], z=at[4], occupancy=at[5], part=at[6])
+                self.atom.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
         self.cell_length_b = get_float(cif.cif_data['_cell_length_b'])

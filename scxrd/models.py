@@ -1,6 +1,6 @@
 import datetime
 
-from .cif_model import CifFile
+from .cif_model import CifFile, Atom
 
 """
 TODO:
