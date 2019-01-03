@@ -52,13 +52,6 @@ def create_experiment(number, cif=None, save_related=False):
 
 class ExperimentIndexViewTests(TestCase):
 
-    def setUp(self):
-        settings.MEDIA_ROOT = tempfile.mkdtemp()
-
-    def tearDown(self):
-        import shutil
-        shutil.rmtree(settings.MEDIA_ROOT)
-
     def test_no_experiements(self):
         response = self.client.get(reverse('scxrd:index'))
         # print('response:', response)
@@ -67,6 +60,7 @@ class ExperimentIndexViewTests(TestCase):
 
 
 class ExperimentCreateTest(TestCase):
+    
     def test_makeexp(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
         c = CifFile(cif=file)
@@ -82,6 +76,7 @@ class ExperimentCreateTest(TestCase):
         self.assertEqual(str(ex.operator), 'foouser')
         self.assertEqual(str(ex.customer.name), 'Horst')
         self.assertEqual(str(ex.customer.last_name), 'Meyerhof')
+        ex.cif.delete()
 
 
 class ExperimentCreateCif(TestCase):
