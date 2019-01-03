@@ -58,9 +58,8 @@ class ExperimentIndexViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['request']), "<WSGIRequest: GET '/scxrd/'>")
 
-
 class ExperimentCreateTest(TestCase):
-    
+
     def test_makeexp(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
         c = CifFile(cif=file)
@@ -112,9 +111,9 @@ class CifFileTest(TestCase):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
         c = CifFile(cif=file)
         ex = create_experiment(99, cif=c)
-        # ex.customer.save()
-        # ex.machine.save()
-        # ex.operator.save()
+        ex.customer.save()
+        ex.machine.save()
+        ex.operator.save()
         self.assertEqual(ex.customer.name, 'Horst')
         self.assertEqual(ex.customer.last_name, 'Meyerhof')
         self.assertEqual(ex.operator.username, 'foouser')
@@ -122,7 +121,10 @@ class CifFileTest(TestCase):
         ex.cif.save()
         # Cif dictionary is populated during save():
         self.assertEqual(ex.cif.data, 'p21c')
-        print(ex.cif.data)
+        # ex.save() would delete the cif handle:
+        ex.save_base()
+        response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
         # delete file afterwards:
         ex.cif.delete()
 
