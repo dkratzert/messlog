@@ -1,12 +1,13 @@
 # Create your tests here.
+import tempfile
 from datetime import datetime
 from pathlib import Path
-from pprint import pprint
 
 import pytz
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, Client
+from django.conf import settings
+from django.test import TestCase
 from django.urls import reverse
 
 from scxrd.cif.cifparser import Cif
@@ -23,16 +24,20 @@ is critical. By default, its position in the migration is faulty.
 """
 
 
-def create_experiment(number, cif=None):
+def create_experiment(number, cif=None, save_related=False):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
-    cust = Customer.objects.create(name='Horst', last_name='Meyerhof')
-    mach = Machine.objects.create(name='FobarMachine')
-    op = User.objects.create(username='foouser')
-    exp = Experiment.objects.create(
+    cust = Customer(name='Horst', last_name='Meyerhof')
+    mach = Machine(name='FobarMachine')
+    op = User(username='foouser')
+    if save_related:
+        cust.save()
+        mach.save()
+        op.save()
+    exp = Experiment(
         experiment='test1',
         machine=mach,
         number=number,
@@ -47,18 +52,27 @@ def create_experiment(number, cif=None):
 
 class ExperimentIndexViewTests(TestCase):
 
+    def setUp(self):
+        settings.MEDIA_ROOT = tempfile.mkdtemp()
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(settings.MEDIA_ROOT)
+
     def test_no_experiements(self):
         response = self.client.get(reverse('scxrd:index'))
         # print('response:', response)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['request']), "<WSGIRequest: GET '/scxrd/'>")
-        # pprint(response.context)
-        # pprint(response.content)
 
 
 class ExperimentCreateTest(TestCase):
     def test_makeexp(self):
-        ex = create_experiment(100)
+        file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
+        c = CifFile(cif=file)
+        c.save()
+        ex = create_experiment(100, cif=c, save_related=True)
+        ex.save()
         self.assertEqual(str(ex), 'test1')
         self.assertEqual(ex.sum_formula, 'C5H10O2')
         self.assertEqual(ex.pk, 1)
@@ -78,29 +92,44 @@ class ExperimentCreateCif(TestCase):
         self.assertEqual(self.cif.cif_data['_diffrn_reflns_number'], '42245')
 
 
-class CifFileTest(TestCase):
+class UploadTest(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        # setting MEDIA_ROOT to a temporary directory
+        settings.MEDIA_ROOT = tempfile.mkdtemp()
+        self.tmp = settings.MEDIA_ROOT
+
+    def tearDown(self):
+        # removing temporary directory after tests
+        import shutil
+        shutil.rmtree(settings.MEDIA_ROOT)
+        self.assertEqual(settings.MEDIA_ROOT, self.tmp)
 
     def test_uploadCif(self):
         with open('scxrd/testfiles/p21c.cif') as fp:
             response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp})
-            print(response)
+            self.assertEqual(response.status_code, 200)
+
+
+class CifFileTest(TestCase):
 
     def test_saveCif(self):
-        #with open('scxrd/testfiles/p21c.cif') as fp:
-        #    file = SimpleUploadedFile('p21c.cif', bytes(fp.read(), encoding='ascii'))
-        #    cif = CifFile.objects.create(cif=file, pk=199)
-        #    print(cif.objects.all())
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFile.objects.create(cif=file)
-        #c.cif = file
-        #c.save()
+        c = CifFile(cif=file)
         ex = create_experiment(99, cif=c)
-
-
-
+        # ex.customer.save()
+        # ex.machine.save()
+        # ex.operator.save()
+        self.assertEqual(ex.customer.name, 'Horst')
+        self.assertEqual(ex.customer.last_name, 'Meyerhof')
+        self.assertEqual(ex.operator.username, 'foouser')
+        self.assertEqual(ex.cif.data, None)
+        ex.cif.save()
+        # Cif dictionary is populated during save():
+        self.assertEqual(ex.cif.data, 'p21c')
+        print(ex.cif.data)
+        # delete file afterwards:
+        ex.cif.delete()
 
 
 if __name__ == '__main':

@@ -247,12 +247,12 @@ class CifFile(models.Model):
             return self.cif.url
         except ValueError:
             return 'no file'
-        # Why have I had data here?
+        # data is the cif _data value
         # return self.data
 
     def delete(self, *args, **kwargs):
         cf = Path(self.cif.path)
-        print('deleting', cf.name)
+        print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)
 
