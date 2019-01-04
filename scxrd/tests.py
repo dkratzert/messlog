@@ -20,7 +20,9 @@ The position of
 migrations.CreateModel(
     name='Machine',
     [...]
-is critical. By default, its position in the migration is faulty.         
+is critical. By default, its position in the migration is faulty.      
+
+- Test atoms   
 """
 
 

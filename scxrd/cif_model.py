@@ -22,23 +22,6 @@ def get_int(line: str) -> (int, None):
         return None
 
 
-class Atom(models.Model):
-    name = models.CharField(max_length=16)
-    element = models.CharField(max_length=2)
-    x = models.FloatField()
-    y = models.FloatField()
-    z = models.FloatField()
-    occupancy = models.FloatField()
-    part = models.IntegerField()
-
-    def __str__(self):
-        #print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
-        # "{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
-        return ' atom '
-        #"{} {} {} {} {} {} {}".format(self.name, self.element,
-        #                              self.x, self.y, self.z, self.occupancy, self.part)
-
-
 class SumFormula(models.Model):
     C = models.FloatField(default=0)
     D = models.FloatField(default=0)
@@ -154,7 +137,6 @@ class CifFile(models.Model):
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
-    atoms = models.ForeignKey(Atom, null=True, blank=True, on_delete=models.DO_NOTHING)
     # TODO: Find a better solution:
     sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
     #########################################
@@ -270,10 +252,11 @@ class CifFile(models.Model):
             self.sumform_exact = self.fill_formula(cif.cif_data['calculated_formula_sum'])
             self.sumform_exact.save()
         if cif.atoms:
-            pass
             for at in cif.atoms:
                 # ['F9_4', 'F', -0.194, 0.2425, 0.347, 0.445, 2]
-                self.atoms = Atom(name=at[0], element=at[1], x=at[2], y=at[3], z=at[4], occupancy=at[5], part=at[6])
+                self.atoms = Atom(cif=self, name=at[0], element=at[1],
+                                  x=at[2], y=at[3], z=at[4],
+                                  occupancy=at[5], part=at[6])
                 self.atoms.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
@@ -353,3 +336,27 @@ class CifFile(models.Model):
         if not formula:
             return
         return SumFormula(**formula)
+
+    def atoms_in_cif(self):
+        # TODO: does this work?
+        at = self.atoms.objects.get(pk=self.pk)
+        return at
+
+
+class Atom(models.Model):
+    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=16)
+    element = models.CharField(max_length=2)
+    x = models.FloatField()
+    y = models.FloatField()
+    z = models.FloatField()
+    occupancy = models.FloatField()
+    part = models.IntegerField()
+
+    def __str__(self):
+        # print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
+        # "{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
+        """if all([self.name, self.element, self.x, self.y, self.z]):
+            return "{} {} {:8.6f}{:8.6f}{:8.6f} {} {}".format(self.name, self.element, self.x, self.y, self.z,
+                                                              self.occupancy, self.part)"""
+        return self.name
