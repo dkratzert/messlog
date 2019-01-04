@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from scxrd.cif_model import Atom
+from scxrd.cif_model import Atom, SumFormula
 from scxrd.models import Customer, CifFile
 from .models import Experiment, Machine, Solvent
 
@@ -17,19 +17,25 @@ class AtomsInline(admin.TabularInline):
     model = Atom
     extra = 0
     readonly_fields = ('name', 'element', 'x', 'y', 'z', 'part', 'occupancy')
-    #list_display = ('__str__',)
     fieldsets = (
         ('Atoms in cif file', {
             'fields': ('name', 'element', 'x', 'y', 'z'),
-            #'fields': ('__str__',),
             'classes': ('collapse',),
         }),
-
     )
 
 
+class SumFormInline(admin.TabularInline):
+    model = SumFormula
+    extra = 0
+    can_delete = False
+
+    def get_sumf(self, obj):
+        return obj.__str__
+
+
 class CifAdmin(admin.ModelAdmin):
-    inlines = [AtomsInline]
+    inlines = [SumFormInline, AtomsInline]
 
 
 admin.site.register(Experiment, ExperimentAdmin)

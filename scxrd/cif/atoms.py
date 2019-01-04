@@ -12,6 +12,41 @@
 
 import re
 
+
+def format_sum_formula(sumform: dict, break_after: int = 99) -> str:
+    """
+    Makes html formated sum formula from dictionary.
+    >>> format_sum_formula({'C': 12, 'H': 6, 'O': 3, 'Mn': 7})
+    '<html><body>C<sub>12 </sub>H<sub>6 </sub>O<sub>3 </sub>Mn<sub>7 </sub></body></html>'
+    """
+    # atlist = formula_str_to_dict(sumform)
+    if not sumform:
+        return ''
+    l = ['<html><body>']
+    num = 0
+    for i in sumform:
+        if i == 'Id' or i == 'StructureId':
+            continue
+        if sumform[i] == 0 or sumform[i] == None:
+            continue
+        try:
+            times = round(sumform[i], 1)
+        except TypeError:
+            times = 1
+        if num > 3 and num % break_after == 0:
+            l.append("<br>")
+        try:
+            el = i.split('_')[1]  # split here, because database returns 'Elem_C' for example
+        except IndexError:
+            el = i
+        l.append("{}<sub>{:g} </sub>".format(el, times))
+        num += 1
+    l.append('</body></html>')
+    formula = "".join(l)
+    # print(formula)
+    return formula
+
+
 num2element = {
     0: 'n',
     1: 'H',
@@ -250,7 +285,6 @@ sorted_atoms = ['C', 'D', 'H', 'N', 'O', 'Cl', 'Br', 'I', 'F', 'S', 'P', 'Ac', '
                 'Si', 'Sm', 'Sn', 'Sr', 'Ta', 'Tb', 'Tc', 'Te', 'Th', 'Ti', 'Tl', 'Tm', 'U',
                 'V', 'W', 'Xe', 'Y', 'Yb', 'Zn', 'Zr']
 
-
 num2covradius = {
     0: 0.74,
     1: 0.50,
@@ -354,7 +388,6 @@ num2covradius = {
     99: 0.5
 }
 
-
 element2cov = {
     'H': 0.50,
     'He': 1.23,
@@ -370,15 +403,15 @@ element2cov = {
     'Mg': 1.18,
     'Al': 1.11,
     'Si': 1.06,
-    'P':  1.02,
-    'S':  0.99,
+    'P': 1.02,
+    'S': 0.99,
     'Cl': 0.98,
     'Ar': 2.03,
-    'K':  1.74,
+    'K': 1.74,
     'Ca': 1.44,
     'Sc': 1.32,
     'Ti': 1.22,
-    'V':  1.18,
+    'V': 1.18,
     'Cr': 1.17,
     'Mn': 1.17,
     'Fe': 1.16,
@@ -394,7 +427,7 @@ element2cov = {
     'Kr': 2.16,
     'Rb': 1.91,
     'Sr': 1.62,
-    'Y':  1.45,
+    'Y': 1.45,
     'Zr': 1.34,
     'Nb': 1.3,
     'Mo': 1.27,
@@ -408,7 +441,7 @@ element2cov = {
     'Sn': 1.4,
     'Sb': 1.36,
     'Te': 1.33,
-    'I':  1.31,
+    'I': 1.31,
     'Xe': 2.35,
     'Cs': 1.98,
     'Ba': 1.69,
@@ -429,7 +462,7 @@ element2cov = {
     'Lu': 1.44,
     'Hf': 1.34,
     'Ta': 1.3,
-    'W':  1.28,
+    'W': 1.28,
     'Re': 1.26,
     'Os': 1.27,
     'Ir': 1.3,
@@ -447,15 +480,16 @@ element2cov = {
     'Ac': 1.65,
     'Th': 1.61,
     'Pa': 1.42,
-    'U':  1.30,
+    'U': 1.30,
     'Np': 1.51,
     'Pu': 1.82,
     'Am': 1.20,
     'Cm': 1.20,
     'Bk': 1.20,
     'Cf': 1.20,
-    'D':  0.5
+    'D': 0.5
 }
+
 
 def get_radius(atomic_number: int) -> float:
     """
@@ -518,10 +552,10 @@ def get_atomlabel(input_atom: str) -> str:
         elif atom[0].upper() in atoms:
             return atom[0]  # then for all one-letter atoms
         else:
-            #print('*** {} is not a valid atom!! ***'.format(atom))
+            # print('*** {} is not a valid atom!! ***'.format(atom))
             raise KeyError
     except(IndexError):
-        #print('*** {} is not a valid atom! ***'.format(atom))
+        # print('*** {} is not a valid atom! ***'.format(atom))
         raise KeyError
 
 

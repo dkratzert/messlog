@@ -22,112 +22,6 @@ def get_int(line: str) -> (int, None):
         return None
 
 
-class SumFormula(models.Model):
-    C = models.FloatField(default=0)
-    D = models.FloatField(default=0)
-    H = models.FloatField(default=0)
-    N = models.FloatField(default=0)
-    O = models.FloatField(default=0)
-    Cl = models.FloatField(default=0)
-    Br = models.FloatField(default=0)
-    I = models.FloatField(default=0)
-    F = models.FloatField(default=0)
-    S = models.FloatField(default=0)
-    P = models.FloatField(default=0)
-    Ac = models.FloatField(default=0)
-    Ag = models.FloatField(default=0)
-    Al = models.FloatField(default=0)
-    Am = models.FloatField(default=0)
-    Ar = models.FloatField(default=0)
-    As = models.FloatField(default=0)
-    At = models.FloatField(default=0)
-    Au = models.FloatField(default=0)
-    B = models.FloatField(default=0)
-    Ba = models.FloatField(default=0)
-    Be = models.FloatField(default=0)
-    Bi = models.FloatField(default=0)
-    Bk = models.FloatField(default=0)
-    Ca = models.FloatField(default=0)
-    Cd = models.FloatField(default=0)
-    Ce = models.FloatField(default=0)
-    Cf = models.FloatField(default=0)
-    Cm = models.FloatField(default=0)
-    Co = models.FloatField(default=0)
-    Cr = models.FloatField(default=0)
-    Cs = models.FloatField(default=0)
-    Cu = models.FloatField(default=0)
-    Dy = models.FloatField(default=0)
-    Er = models.FloatField(default=0)
-    Eu = models.FloatField(default=0)
-    Fe = models.FloatField(default=0)
-    Fr = models.FloatField(default=0)
-    Ga = models.FloatField(default=0)
-    Gd = models.FloatField(default=0)
-    Ge = models.FloatField(default=0)
-    He = models.FloatField(default=0)
-    Hf = models.FloatField(default=0)
-    Hg = models.FloatField(default=0)
-    Ho = models.FloatField(default=0)
-    In = models.FloatField(default=0)
-    Ir = models.FloatField(default=0)
-    K = models.FloatField(default=0)
-    Kr = models.FloatField(default=0)
-    La = models.FloatField(default=0)
-    Li = models.FloatField(default=0)
-    Lu = models.FloatField(default=0)
-    Mg = models.FloatField(default=0)
-    Mn = models.FloatField(default=0)
-    Mo = models.FloatField(default=0)
-    Na = models.FloatField(default=0)
-    Nb = models.FloatField(default=0)
-    Nd = models.FloatField(default=0)
-    Ne = models.FloatField(default=0)
-    Ni = models.FloatField(default=0)
-    Np = models.FloatField(default=0)
-    Os = models.FloatField(default=0)
-    Pa = models.FloatField(default=0)
-    Pb = models.FloatField(default=0)
-    Pd = models.FloatField(default=0)
-    Pm = models.FloatField(default=0)
-    Po = models.FloatField(default=0)
-    Pr = models.FloatField(default=0)
-    Pt = models.FloatField(default=0)
-    Pu = models.FloatField(default=0)
-    Ra = models.FloatField(default=0)
-    Rb = models.FloatField(default=0)
-    Re = models.FloatField(default=0)
-    Rh = models.FloatField(default=0)
-    Rn = models.FloatField(default=0)
-    Ru = models.FloatField(default=0)
-    Sb = models.FloatField(default=0)
-    Sc = models.FloatField(default=0)
-    Se = models.FloatField(default=0)
-    Si = models.FloatField(default=0)
-    Sm = models.FloatField(default=0)
-    Sn = models.FloatField(default=0)
-    Sr = models.FloatField(default=0)
-    Ta = models.FloatField(default=0)
-    Tb = models.FloatField(default=0)
-    Tc = models.FloatField(default=0)
-    Te = models.FloatField(default=0)
-    Th = models.FloatField(default=0)
-    Ti = models.FloatField(default=0)
-    Tl = models.FloatField(default=0)
-    Tm = models.FloatField(default=0)
-    U = models.FloatField(default=0)
-    V = models.FloatField(default=0)
-    W = models.FloatField(default=0)
-    Xe = models.FloatField(default=0)
-    Y = models.FloatField(default=0)
-    Yb = models.FloatField(default=0)
-    Zn = models.FloatField(default=0)
-    Zr = models.FloatField(default=0)
-
-    def __str__(self):
-        # TODO: return correct formula
-        return 'A sum formula'
-
-
 class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
@@ -138,7 +32,7 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
+    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
     cell_length_a = models.FloatField(null=True, blank=True)
@@ -249,7 +143,7 @@ class CifFile(models.Model):
         else:
             return None
         if cif.cif_data['calculated_formula_sum']:
-            self.sumform_exact = self.fill_formula(cif.cif_data['calculated_formula_sum'])
+            self.sumform_exact = self.fill_formula(self, cif.cif_data['calculated_formula_sum'])
             self.sumform_exact.save()
         if cif.atoms:
             for at in cif.atoms:
@@ -322,7 +216,7 @@ class CifFile(models.Model):
         self.database_code_depnum_ccdc_archive = cif.cif_data["_database_code_depnum_ccdc_archive"]
         self.shelx_res_file = cif.cif_data["_shelx_res_file"]
 
-    def fill_formula(self, formula: dict):
+    def fill_formula(self, cif, formula: dict):
         """
         Fills formula data into the sum formula table.
         """
@@ -335,12 +229,127 @@ class CifFile(models.Model):
             del formula[x]
         if not formula:
             return
-        return SumFormula(**formula)
+        return SumFormula(cif=cif, **formula)
 
     def atoms_in_cif(self):
         # TODO: does this work?
         at = self.atoms.objects.get(pk=self.pk)
         return at
+
+
+class SumFormula(models.Model):
+    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
+    C = models.FloatField(default=0)
+    D = models.FloatField(default=0)
+    H = models.FloatField(default=0)
+    N = models.FloatField(default=0)
+    O = models.FloatField(default=0)
+    Cl = models.FloatField(default=0)
+    Br = models.FloatField(default=0)
+    I = models.FloatField(default=0)
+    F = models.FloatField(default=0)
+    S = models.FloatField(default=0)
+    P = models.FloatField(default=0)
+    Ac = models.FloatField(default=0)
+    Ag = models.FloatField(default=0)
+    Al = models.FloatField(default=0)
+    Am = models.FloatField(default=0)
+    Ar = models.FloatField(default=0)
+    As = models.FloatField(default=0)
+    At = models.FloatField(default=0)
+    Au = models.FloatField(default=0)
+    B = models.FloatField(default=0)
+    Ba = models.FloatField(default=0)
+    Be = models.FloatField(default=0)
+    Bi = models.FloatField(default=0)
+    Bk = models.FloatField(default=0)
+    Ca = models.FloatField(default=0)
+    Cd = models.FloatField(default=0)
+    Ce = models.FloatField(default=0)
+    Cf = models.FloatField(default=0)
+    Cm = models.FloatField(default=0)
+    Co = models.FloatField(default=0)
+    Cr = models.FloatField(default=0)
+    Cs = models.FloatField(default=0)
+    Cu = models.FloatField(default=0)
+    Dy = models.FloatField(default=0)
+    Er = models.FloatField(default=0)
+    Eu = models.FloatField(default=0)
+    Fe = models.FloatField(default=0)
+    Fr = models.FloatField(default=0)
+    Ga = models.FloatField(default=0)
+    Gd = models.FloatField(default=0)
+    Ge = models.FloatField(default=0)
+    He = models.FloatField(default=0)
+    Hf = models.FloatField(default=0)
+    Hg = models.FloatField(default=0)
+    Ho = models.FloatField(default=0)
+    In = models.FloatField(default=0)
+    Ir = models.FloatField(default=0)
+    K = models.FloatField(default=0)
+    Kr = models.FloatField(default=0)
+    La = models.FloatField(default=0)
+    Li = models.FloatField(default=0)
+    Lu = models.FloatField(default=0)
+    Mg = models.FloatField(default=0)
+    Mn = models.FloatField(default=0)
+    Mo = models.FloatField(default=0)
+    Na = models.FloatField(default=0)
+    Nb = models.FloatField(default=0)
+    Nd = models.FloatField(default=0)
+    Ne = models.FloatField(default=0)
+    Ni = models.FloatField(default=0)
+    Np = models.FloatField(default=0)
+    Os = models.FloatField(default=0)
+    Pa = models.FloatField(default=0)
+    Pb = models.FloatField(default=0)
+    Pd = models.FloatField(default=0)
+    Pm = models.FloatField(default=0)
+    Po = models.FloatField(default=0)
+    Pr = models.FloatField(default=0)
+    Pt = models.FloatField(default=0)
+    Pu = models.FloatField(default=0)
+    Ra = models.FloatField(default=0)
+    Rb = models.FloatField(default=0)
+    Re = models.FloatField(default=0)
+    Rh = models.FloatField(default=0)
+    Rn = models.FloatField(default=0)
+    Ru = models.FloatField(default=0)
+    Sb = models.FloatField(default=0)
+    Sc = models.FloatField(default=0)
+    Se = models.FloatField(default=0)
+    Si = models.FloatField(default=0)
+    Sm = models.FloatField(default=0)
+    Sn = models.FloatField(default=0)
+    Sr = models.FloatField(default=0)
+    Ta = models.FloatField(default=0)
+    Tb = models.FloatField(default=0)
+    Tc = models.FloatField(default=0)
+    Te = models.FloatField(default=0)
+    Th = models.FloatField(default=0)
+    Ti = models.FloatField(default=0)
+    Tl = models.FloatField(default=0)
+    Tm = models.FloatField(default=0)
+    U = models.FloatField(default=0)
+    V = models.FloatField(default=0)
+    W = models.FloatField(default=0)
+    Xe = models.FloatField(default=0)
+    Y = models.FloatField(default=0)
+    Yb = models.FloatField(default=0)
+    Zn = models.FloatField(default=0)
+    Zr = models.FloatField(default=0)
+
+    def __str__(self):
+        atomsdict ={'C': self.C, 'D': self.D, 'H': self.H, 'N': self.N, 'O': self.O, 'Cl': self.Cl, 'Br': self.Br,
+                    'I':self.I, 'F': self.F, 'S': self.S, 'P': self.P, 'Ac':self.Ac, 'Ag': self.Ag, 'Al':self.Al}
+                #'Am', 'Ar', 'As', 'At', 'Au', 'B', 'Ba', 'Be', 'Bi', 'Bk', 'Ca', 'Cd', 'Ce',
+                #'Cf', 'Cm', 'Co', 'Cr', 'Cs', 'Cu', 'Dy', 'Er', 'Eu', 'Fe', 'Fr', 'Ga', 'Gd',
+                #'Ge', 'He', 'Hf', 'Hg', 'Ho', 'In', 'Ir', 'K', 'Kr', 'La', 'Li', 'Lu', 'Mg',
+                #'Mn', 'Mo', 'Na', 'Nb', 'Nd', 'Ne', 'Ni', 'Np', 'Os', 'Pa', 'Pb', 'Pd', 'Pm',
+                #'Po', 'Pr', 'Pt', 'Pu', 'Ra', 'Rb', 'Re', 'Rh', 'Rn', 'Ru', 'Sb', 'Sc', 'Se',
+                #'Si', 'Sm', 'Sn', 'Sr', 'Ta', 'Tb', 'Tc', 'Te', 'Th', 'Ti', 'Tl', 'Tm', 'U',
+                #'V', 'W', 'Xe', 'Y', 'Yb', 'Zn', 'Zr'}
+        return ' '.join([str(x) for x in [self.C, self.D, self.H, self.N] if x]) + 'foo'
 
 
 class Atom(models.Model):
