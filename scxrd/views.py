@@ -47,7 +47,7 @@ class DetailsTable(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['details_table'] = Experiment.objects.get(pk=self.kwargs['pk'])
+        #context['details_table'] = Experiment.objects.get(pk=self.kwargs['pk'])
         try:
             context['sumform'] = SumFormula.objects.get(pk=self.kwargs['pk'])
         except SumFormula.DoesNotExist:

@@ -14,15 +14,15 @@ a certain structure is selected in the experiment table.
     <tbody>
     <tr>
         <td> Experiment Number</td>
-        <td id="t_exp">  {{ object.number }} </td>
+        <td id="t_exp">  {{ experiment.number }} </td>
     </tr>
     <tr>
         <td> Machine</td>
-        <td id="t_machine"> {{ object.machine }} </td>
+        <td id="t_machine"> {{ experiment.machine }} </td>
     </tr>
     <tr>
         <td> Solvents</td>
-        <td id="t_solents"> {{ object.solvents_used.all |join:",<br>" }} </td>
+        <td id="t_solents"> {{ experiment.solvents_used.all |join:",<br>" }} </td>
     </tr>
     {% if sumform %}
     <tr>
@@ -32,16 +32,16 @@ a certain structure is selected in the experiment table.
     {% endif %}
     <tr>
         <td>Measured by</td>
-        <td id="t_mesuredate"> {{ object.operator.get_username }} </td>
+        <td id="t_mesuredate"> {{ experiment.operator.get_username }} </td>
     </tr>
     <tr>
         {# |date:'d.m.Y, H:i' #}
         <td>Results sent</td>
-        <td id="t_results"> {{ object.result_date }} </td>
+        <td id="t_results"> {{ experiment.result_date }} </td>
     </tr>
     <tr>
         <td>Cif file</td>
-        <td id="t_cif"> {{ object.cif.label }} </td>
+        <td id="t_cif"> {{ experiment.cif.label }} </td>
     </tr>
     <tr>
         <td><i>wR</i><sub>2</sub></td>
