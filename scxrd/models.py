@@ -78,7 +78,7 @@ class Experiment(models.Model):
                             verbose_name='cif file', on_delete=models.SET_NULL)
 
     class Meta:
-        ordering = ["number"]
+        ordering = ["-number"]
 
     def was_measured_recently(self) -> bool:
         now = timezone.now()
