@@ -25,17 +25,17 @@ class AtomsInline(admin.TabularInline):
     )
 
 
-class SumFormInline(admin.TabularInline):
+"""class SumFormInline(admin.TabularInline):
     model = SumFormula
     extra = 0
     can_delete = False
 
     def get_sumf(self, obj):
-        return obj.__str__
+        return obj.__str__"""
 
 
 class CifAdmin(admin.ModelAdmin):
-    inlines = [SumFormInline, AtomsInline]
+    inlines = [AtomsInline]
 
 
 admin.site.register(Experiment, ExperimentAdmin)

@@ -2,6 +2,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 from scxrd import widgets
+from scxrd.cif_model import SumFormula
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -47,6 +48,10 @@ class DetailsTable(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['details_table'] = Experiment.objects.get(pk=self.kwargs['pk'])
+        try:
+            context['sumform'] = SumFormula.objects.get(pk=self.kwargs['pk'])
+        except SumFormula.DoesNotExist:
+            pass
         return context
 
 

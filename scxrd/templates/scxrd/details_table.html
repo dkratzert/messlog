@@ -24,10 +24,12 @@ a certain structure is selected in the experiment table.
         <td> Solvents</td>
         <td id="t_solents"> {{ object.solvents_used.all |join:",<br>" }} </td>
     </tr>
+    {% if sumform %}
     <tr>
         <td>Sum Formula</td>
-        <td id="t_sumform"> {{ object.sum_formula}} </td>
+        <td id="t_sumform"> {{ sumform|safe }} </td>
     </tr>
+    {% endif %}
     <tr>
         <td>Measured by</td>
         <td id="t_mesuredate"> {{ object.operator.get_username }} </td>

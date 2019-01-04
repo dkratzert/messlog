@@ -22,26 +22,23 @@ def format_sum_formula(sumform: dict, break_after: int = 99) -> str:
     # atlist = formula_str_to_dict(sumform)
     if not sumform:
         return ''
-    l = ['<html><body>']
+    l = ['']
     num = 0
-    for i in sumform:
-        if i == 'Id' or i == 'StructureId':
+    for el in sumform:
+        if el == 'Id' or el == 'StructureId':
             continue
-        if sumform[i] == 0 or sumform[i] == None:
+        if sumform[el] == 0 or sumform[el] == None:
             continue
         try:
-            times = round(sumform[i], 1)
+            times = round(sumform[el], 1)
         except TypeError:
             times = 1
         if num > 3 and num % break_after == 0:
-            l.append("<br>")
-        try:
-            el = i.split('_')[1]  # split here, because database returns 'Elem_C' for example
-        except IndexError:
-            el = i
-        l.append("{}<sub>{:g} </sub>".format(el, times))
+            pass
+            #l.append("<br>")
+        l.append("{}<sub>{:g}</sub><wbr>".format(el, times))
         num += 1
-    l.append('</body></html>')
+    l.append('')
     formula = "".join(l)
     # print(formula)
     return formula

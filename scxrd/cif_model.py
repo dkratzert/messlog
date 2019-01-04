@@ -3,7 +3,7 @@ from pathlib import Path
 from django.db import models
 from django.utils import timezone
 
-from scxrd.cif.atoms import sorted_atoms
+from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.cif.cifparser import Cif
 from .utils import generate_sha256
 
@@ -32,7 +32,7 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
+    # sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
     cell_length_a = models.FloatField(null=True, blank=True)
@@ -340,16 +340,24 @@ class SumFormula(models.Model):
     Zr = models.FloatField(default=0)
 
     def __str__(self):
-        atomsdict ={'C': self.C, 'D': self.D, 'H': self.H, 'N': self.N, 'O': self.O, 'Cl': self.Cl, 'Br': self.Br,
-                    'I':self.I, 'F': self.F, 'S': self.S, 'P': self.P, 'Ac':self.Ac, 'Ag': self.Ag, 'Al':self.Al}
-                #'Am', 'Ar', 'As', 'At', 'Au', 'B', 'Ba', 'Be', 'Bi', 'Bk', 'Ca', 'Cd', 'Ce',
-                #'Cf', 'Cm', 'Co', 'Cr', 'Cs', 'Cu', 'Dy', 'Er', 'Eu', 'Fe', 'Fr', 'Ga', 'Gd',
-                #'Ge', 'He', 'Hf', 'Hg', 'Ho', 'In', 'Ir', 'K', 'Kr', 'La', 'Li', 'Lu', 'Mg',
-                #'Mn', 'Mo', 'Na', 'Nb', 'Nd', 'Ne', 'Ni', 'Np', 'Os', 'Pa', 'Pb', 'Pd', 'Pm',
-                #'Po', 'Pr', 'Pt', 'Pu', 'Ra', 'Rb', 'Re', 'Rh', 'Rn', 'Ru', 'Sb', 'Sc', 'Se',
-                #'Si', 'Sm', 'Sn', 'Sr', 'Ta', 'Tb', 'Tc', 'Te', 'Th', 'Ti', 'Tl', 'Tm', 'U',
-                #'V', 'W', 'Xe', 'Y', 'Yb', 'Zn', 'Zr'}
-        return ' '.join([str(x) for x in [self.C, self.D, self.H, self.N] if x]) + 'foo'
+        atomsdict = {'C': self.C, 'D': self.D, 'H': self.H, 'N': self.N, 'O': self.O, 'Cl': self.Cl, 'Br': self.Br,
+                     'I': self.I, 'F': self.F, 'S': self.S, 'P': self.P, 'Ac': self.Ac, 'Ag': self.Ag, 'Al': self.Al,
+                     'Am': self.Am, 'Ar': self.Ar, 'As': self.As, 'At': self.At, 'Au': self.Au, 'B': self.B,
+                     'Ba': self.Ba, 'Be': self.Be, 'Bi': self.Bi, 'Bk': self.Bk, 'Ca': self.Ca, 'Cd': self.Cd,
+                     'Ce': self.Ce, 'Cf': self.Cf, 'Cm': self.Cm, 'Co': self.Co, 'Cr': self.Cr, 'Cs': self.Cs,
+                     'Cu': self.Cu, 'Dy': self.Dy, 'Er': self.Er, 'Eu': self.Eu, 'Fe': self.Fe, 'Fr': self.Fr,
+                     'Ga': self.Ga, 'Gd': self.Gd, 'Ge': self.Ge, 'He': self.He, 'Hf': self.Hf, 'Hg': self.Hg,
+                     'Ho': self.Ho, 'In': self.In, 'Ir': self.Ir, 'K': self.K,   'Kr': self.Kr, 'La': self.La,
+                     'Li': self.Li, 'Lu': self.Lu, 'Mg': self.Mg, 'Mn': self.Mn, 'Mo': self.Mo, 'Na': self.Na,
+                     'Nb': self.Nb, 'Nd': self.Nd, 'Ne': self.Ne, 'Ni': self.Ni, 'Np': self.Np, 'Os': self.Os,
+                     'Pa': self.Pa, 'Pb': self.Pb, 'Pd': self.Pd, 'Pm': self.Pm, 'Po': self.Po, 'Pr': self.Pr,
+                     'Pt': self.Pt, 'Pu': self.Pu, 'Ra': self.Ra, 'Rb': self.Rb, 'Re': self.Re, 'Rh': self.Rh,
+                     'Rn': self.Rn, 'Ru': self.Ru, 'Sb': self.Sb, 'Sc': self.Sc, 'Se': self.Se, 'Si': self.Si,
+                     'Sm': self.Sm, 'Sn': self.Sn, 'Sr': self.Sr, 'Ta': self.Ta, 'Tb': self.Tb, 'Tc': self.Tc,
+                     'Te': self.Te, 'Th': self.Th, 'Ti': self.Ti, 'Tl': self.Tl, 'Tm': self.Tm,
+                     'U': self.U, 'V': self.V, 'W': self.W, 'Xe': self.Xe, 'Y': self.Y, 'Yb': self.Yb, 'Zn': self.Zn,
+                     'Zr': self.Zr}
+        return format_sum_formula(atomsdict)
 
 
 class Atom(models.Model):
