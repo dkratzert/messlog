@@ -233,7 +233,7 @@ class CifFile(models.Model):
 
     def atoms_in_cif(self):
         # TODO: does this work?
-        at = self.atoms.objects.get(pk=self.pk)
+        at = self.cif_file.get()
         return at
 
 

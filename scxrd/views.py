@@ -3,7 +3,7 @@ from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 from scxrd import widgets
 from scxrd.cif.mol_file_writer import MolFile
-from scxrd.cif_model import SumFormula
+from scxrd.cif_model import SumFormula, Atom
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -84,7 +84,8 @@ class AtomsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        atoms = Experiment.cif.atoms.get(pk=self.kwargs['pk'])
+        #atoms = Experiment.cif.atoms.get(pk=self.kwargs['pk'])
+        atoms = Atom.objects.all().filter(cif_id=2)
         try:
             # TODO: adapt to this atom format
             m = MolFile(atoms)
