@@ -12,6 +12,7 @@ Created on 09.02.2015
 @author: daniel
 """
 import os
+from math import radians, cos, sin, sqrt
 from pprint import pprint
 
 from .atoms import sorted_atoms
@@ -371,46 +372,67 @@ class Cif(object):
         """
         return [x[item] for x in self.loops if item in x]
 
+    def _frac_to_cart(self, frac_coord):
+        """
+        Converts fractional coordinates to cartesian coodinates
+        :param frac_coord: [float, float, float]
+        :param cell:       [float, float, float, float, float, float]
+        """
+        a, b, c, alpha, beta, gamma = self.cell
+        x, y, z = frac_coord
+        alpha = radians(alpha)
+        beta = radians(beta)
+        gamma = radians(gamma)
+        cosastar = (cos(beta) * cos(gamma) - cos(alpha)) / (sin(beta) * sin(gamma))
+        sinastar = sqrt(1 - cosastar ** 2)
+        Xc = a * x + (b * cos(gamma)) * y + (c * cos(beta)) * z
+        Yc = 0 + (b * sin(gamma)) * y + (-c * sin(beta) * cosastar) * z
+        Zc = 0 + 0 + (c * sin(beta) * sinastar) * z
+        return [Xc, Yc, Zc]
+
     @property
     def atoms(self) -> list:
         """
         A convenient way of getting atoms from the cif file
         [Name type x y z occupancy part]
         """
-        for x in self._loop:
+        for at in self._loop:
             try:
-                name = x['_atom_site_label']
+                name = at['_atom_site_label']
             except KeyError:
                 continue
             try:
                 try:
-                    part = x['_atom_site_disorder_group']
+                    part = at['_atom_site_disorder_group']
                 except KeyError:
                     part = 0
                 try:
                     # The atom type
-                    type_symbol = x['_atom_site_type_symbol']
+                    type_symbol = at['_atom_site_type_symbol']
                     if not type_symbol in sorted_atoms:
                         type_symbol = self._atom_from_symbol(type_symbol)
                 except KeyError:
-                    type_symbol = x['_atom_site_label'].split('(')[0].capitalize()
+                    type_symbol = at['_atom_site_label'].split('(')[0].capitalize()
                     # As last resort: cut out the atom type from the label
                     type_symbol = self._atom_from_symbol(type_symbol)
                 try:
                     # The occupancy:
-                    occu = float(x['_atom_site_occupancy'].split('(')[0])
+                    occu = float(at['_atom_site_occupancy'].split('(')[0])
                 except (KeyError, ValueError):
                     # Better a wrong one than nothing:
                     occu = 1.0
                 # The atom has at least a label and coordinates. Otherwise, no atom.
-                xc = x['_atom_site_fract_x']
-                yc = x['_atom_site_fract_y']
-                zc = x['_atom_site_fract_z']
+                x = at['_atom_site_fract_x']
+                y = at['_atom_site_fract_y']
+                z = at['_atom_site_fract_z']
+                x = float(0 if x == '.' else x.split('(')[0])
+                y = float(0 if y == '.' else y.split('(')[0])
+                z = float(0 if z == '.' else z.split('(')[0])
+                xc, yc, zc = self._frac_to_cart([x, y, z])
                 yield [name,
                        type_symbol,
-                       float(0 if xc == '.' else xc.split('(')[0]),
-                       float(0 if yc == '.' else yc.split('(')[0]),
-                       float(0 if zc == '.' else zc.split('(')[0]),
+                       x, y, z,
+                       xc, yc, zc,
                        occu,
                        0 if part == '.' or part == '?' else int(part)]
             except (KeyError, ValueError) as e:

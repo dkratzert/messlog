@@ -147,10 +147,10 @@ class CifFile(models.Model):
             self.sumform_exact.save()
         if cif.atoms:
             for at in cif.atoms:
-                # ['F9_4', 'F', -0.194, 0.2425, 0.347, 0.445, 2]
                 self.atoms = Atom(cif=self, name=at[0], element=at[1],
                                   x=at[2], y=at[3], z=at[4],
-                                  occupancy=at[5], part=at[6])
+                                  xc=at[5], yc=at[6], zc=at[7],
+                                  occupancy=at[8], part=at[9])
                 self.atoms.save()
         self.data = cif.cif_data["data"]
         self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
@@ -347,10 +347,16 @@ class SumFormula(models.Model):
 class Atom(models.Model):
     cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=16)
+    # Element as element symbol:
     element = models.CharField(max_length=2)
+    # Fractional coordinates:
     x = models.FloatField()
     y = models.FloatField()
     z = models.FloatField()
+    # Cartesian coordinates:
+    xc = models.FloatField(default=0)
+    yc = models.FloatField(default=0)
+    zc = models.FloatField(default=0)
     occupancy = models.FloatField()
     part = models.IntegerField()
 

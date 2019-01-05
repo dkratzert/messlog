@@ -2,6 +2,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 from scxrd import widgets
+from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
@@ -47,7 +48,6 @@ class DetailsTable(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #context['details_table'] = Experiment.objects.get(pk=self.kwargs['pk'])
         try:
             context['sumform'] = SumFormula.objects.get(pk=self.kwargs['pk'])
         except SumFormula.DoesNotExist:
@@ -73,6 +73,25 @@ class ExperimentView(TemplateView):
 class Customers(ListView):
     model = Customer
     template_name = 'scxrd/customers.html'
+
+
+class AtomsView(DetailView):
+    """
+    View to get atom data as .mol file.
+    """
+    model = Experiment
+    template_name = 'scxrd/molecule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        atoms = Experiment.cif.atoms.get(pk=self.kwargs['pk'])
+        try:
+            # TODO: adapt to this atom format
+            m = MolFile(atoms)
+            return m.make_mol()
+        except(KeyError, TypeError) as e:
+            print('Exception in jsmol_request: {}'.format(e))
+        return context
 
 
 class OrderListJson(BaseDatatableView):
