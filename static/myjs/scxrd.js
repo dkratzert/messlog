@@ -43,19 +43,37 @@ $(document).ready(function() {
         stateSave: false,
         paging: false,
         scrollY: 350,    // This defines the height of the table!
+        order: [[ 2, "desc" ]],
         columns: [
-            { visible: false,
-              searchable: false,},
+            { title: 'id',
+              visible: false,
+              searchable: false,
+              orderable: true,
+            },
+            { title: 'cif_id',
+              visible: false,
+              searchable: false,
+              orderable: true,
+            },
             { title: "Number",
-              searchable: false,},
-            { title: "Experiment" },
+              searchable: false,
+              orderable: true,
+            },
+            { title: "Experiment",
+              searchable: true,
+              orderable: true,
+            },
             { title: "Date",
               searchable: false,
+              orderable: true,
               render: function(d) {
               return moment(d).format("DD:MM:YYYY, HH:mm");
-              }
+              },
             },
-            { title: "Machine" },
+            { title: "Machine",
+              searchable: true,
+              orderable: true,
+            },
             //{ title: "cif"},
             {
             mRender: function(data, type, full) {
@@ -71,8 +89,9 @@ $(document).ready(function() {
 
 
     dtable.on('click', 'tr', function () {
-        var data = dtable.row( this ).data();
-        var tab_url = 'table/'+data[0];
+        var tdata = dtable.row( this ).data();
+        //console.log(tdata);
+        var tab_url = 'table/'+tdata[0];
 
         $.get(url = tab_url, function (result) {
             //console.log(result);
@@ -81,7 +100,7 @@ $(document).ready(function() {
 
         $.post(
             url = 'molecule/',
-            data = {id: data[0],
+            data = {cif_id: tdata[1],
                     grow: false,
                     'csrfmiddlewaretoken': csrftoken
                     },

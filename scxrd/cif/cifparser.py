@@ -252,11 +252,11 @@ class Cif(object):
     def calc_sumform(self):
         sum_from_dict = {}
         for x in self.atoms:
-            #  0     1   2 3 4    5       6
-            # [Name type x y z occupancy part]
+            #  0     1   2 3 4   5  6  7   8       9
+            # [Name type x y z  xc xc zc occupancy part]
             try:
                 try:
-                    occu = x[5]
+                    occu = x[8]
                 except (KeyError, ValueError, IndexError):
                     occu = 1.0
                 try:

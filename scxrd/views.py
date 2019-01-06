@@ -52,7 +52,8 @@ class DetailsTable(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['sumform'] = SumFormula.objects.get(pk=self.kwargs['pk'])
+            exp_id = self.kwargs['pk']
+            context['sumform'] = SumFormula.objects.get(pk=Experiment.objects.get(pk=exp_id).cif_id)
         except SumFormula.DoesNotExist:
             pass
         return context
@@ -85,16 +86,20 @@ class MoleculeView(View):
 
     def post(self, request, *args, **kwargs):
         molfile = ''
-        atoms = Atom.objects.all().filter(cif_id=request.POST.get('id'))
-        grow = request.POST.get('grow')
-        if grow:
-            # Grow atoms here
-            pass
-        try:
-            m = MolFile(atoms)
-            molfile = m.make_mol()
-        except(KeyError, TypeError) as e:
-            print('Exception in jsmol_request: {}'.format(e))
+        atoms = None
+        cif_id = request.POST.get('cif_id')
+        if cif_id:
+            atoms = Atom.objects.all().filter(cif_id=cif_id)
+        if atoms:
+            grow = request.POST.get('grow')
+            if grow:
+                # Grow atoms here
+                pass
+            try:
+                m = MolFile(atoms)
+                molfile = m.make_mol()
+            except(KeyError, TypeError) as e:
+                print('Exception in jsmol_request: {}'.format(e))
         return HttpResponse(molfile)
 
     # alsways reload complete molecule:
@@ -104,18 +109,21 @@ class MoleculeView(View):
 
 
 class OrderListJson(BaseDatatableView):
+    """
+    https://datatables.net/
+    """
     # The model we're going to show
     model = Experiment
     template_name = 'scxrd/experiment_grid.html'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
+    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
+    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data

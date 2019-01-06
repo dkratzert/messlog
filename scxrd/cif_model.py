@@ -136,92 +136,93 @@ class CifFile(models.Model):
         """
         Fill the table with residuals of the refinement.
         """
-        cif = Cif()
-        cifok = cif.parsefile(ciflist)
+        cif_parsed = Cif()
+        cifok = cif_parsed.parsefile(ciflist)
         if cifok:
             print('cif file parsed')
         else:
             return None
-        if cif.cif_data['calculated_formula_sum']:
+        if cif_parsed.cif_data['calculated_formula_sum']:
             # TODO: Sum formula calculation is wrong
-            self.sumform_exact = self.fill_formula(self, cif.cif_data['calculated_formula_sum'])
+            self.sumform_exact = self.fill_formula(cif_parsed)
             self.sumform_exact.save()
-        if cif.atoms:
-            for at in cif.atoms:
+        if cif_parsed.atoms:
+            for at in cif_parsed.atoms:
                 self.atoms = Atom(cif=self, name=at[0], element=at[1],
                                   x=at[2], y=at[3], z=at[4],
                                   xc=at[5], yc=at[6], zc=at[7],
                                   occupancy=at[8], part=at[9])
                 self.atoms.save()
-        self.data = cif.cif_data["data"]
-        self.cell_length_a = get_float(cif.cif_data["_cell_length_a"])
-        self.cell_length_b = get_float(cif.cif_data['_cell_length_b'])
-        self.cell_length_c = get_float(cif.cif_data['_cell_length_c'])
-        self.cell_angle_alpha = get_float(cif.cif_data['_cell_angle_alpha'])
-        self.cell_angle_beta = get_float(cif.cif_data['_cell_angle_beta'])
-        self.cell_angle_gamma = get_float(cif.cif_data['_cell_angle_gamma'])
-        self.cell_volume = get_float(cif.cif_data["_cell_volume"])
-        self.cell_formula_units_Z = get_int(cif.cif_data["_cell_formula_units_Z"])
-        self.space_group_name_H_M_alt = cif.cif_data["_space_group_name_H-M_alt"]
-        self.space_group_name_Hall = cif.cif_data["_space_group_name_Hall"]
-        self.space_group_centring_type = cif.cif_data["_space_group_centring_type"]
-        self.space_group_IT_number = get_int(cif.cif_data["_space_group_IT_number"])
-        self.space_group_crystal_system = cif.cif_data["_space_group_crystal_system"]
-        self.space_group_symop_operation_xyz = cif.cif_data["_space_group_symop_operation_xyz"]
-        self.audit_creation_method = cif.cif_data["_audit_creation_method"]
-        self.chemical_formula_sum = cif.cif_data["_chemical_formula_sum"]
-        self.chemical_formula_weight = cif.cif_data["_chemical_formula_weight"]
-        self.exptl_crystal_description = cif.cif_data["_exptl_crystal_description"]
-        self.exptl_crystal_colour = cif.cif_data["_exptl_crystal_colour"]
-        self.exptl_crystal_size_max = get_float(cif.cif_data["_exptl_crystal_size_max"])
-        self.exptl_crystal_size_mid = get_float(cif.cif_data["_exptl_crystal_size_mid"])
-        self.exptl_crystal_size_min = get_float(cif.cif_data["_exptl_crystal_size_min"])
-        self.exptl_absorpt_coefficient_mu = get_float(cif.cif_data["_exptl_absorpt_coefficient_mu"])
-        self.exptl_absorpt_correction_type = cif.cif_data["_exptl_absorpt_correction_type"]
-        self.diffrn_ambient_temperature = get_float(cif.cif_data["_diffrn_ambient_temperature"])
-        self.diffrn_radiation_wavelength = get_float(cif.cif_data["_diffrn_radiation_wavelength"])
-        self.diffrn_radiation_type = cif.cif_data["_diffrn_radiation_type"]
-        self.diffrn_source = cif.cif_data["_diffrn_source"]
-        self.diffrn_measurement_device_type = cif.cif_data["_diffrn_measurement_device_type"]
-        self.diffrn_reflns_number = get_int(cif.cif_data["_diffrn_reflns_number"])
-        self.diffrn_reflns_av_R_equivalents = get_int(cif.cif_data["_diffrn_reflns_av_R_equivalents"])
-        self.diffrn_reflns_theta_min = get_float(cif.cif_data["_diffrn_reflns_theta_min"])
-        self.diffrn_reflns_theta_max = get_float(cif.cif_data["_diffrn_reflns_theta_max"])
-        self.diffrn_reflns_theta_full = get_float(cif.cif_data["_diffrn_reflns_theta_full"])
-        self.diffrn_measured_fraction_theta_max = get_float(cif.cif_data["_diffrn_measured_fraction_theta_max"])
-        self.diffrn_measured_fraction_theta_full = get_float(cif.cif_data["_diffrn_measured_fraction_theta_full"])
-        self.reflns_number_total = get_int(cif.cif_data["_reflns_number_total"])
-        self.reflns_number_gt = get_int(cif.cif_data["_reflns_number_gt"])
-        self.reflns_threshold_expression = cif.cif_data["_reflns_threshold_expression"]
-        self.reflns_Friedel_coverage = get_float(cif.cif_data["_reflns_Friedel_coverage"])
-        self.computing_structure_solution = cif.cif_data["_computing_structure_solution"]
-        self.computing_structure_refinement = cif.cif_data["_computing_structure_refinement"]
-        self.refine_special_details = cif.cif_data["_refine_special_details"]
-        self.refine_ls_abs_structure_Flack = cif.cif_data["_refine_ls_abs_structure_Flack"]
-        self.refine_ls_structure_factor_coef = cif.cif_data["_refine_ls_structure_factor_coef"]
-        self.refine_ls_weighting_details = cif.cif_data["_refine_ls_weighting_details"]
-        self.refine_ls_number_reflns = get_int(cif.cif_data["_refine_ls_number_reflns"])
-        self.refine_ls_number_parameters = get_int(cif.cif_data["_refine_ls_number_parameters"])
-        self.refine_ls_number_restraints = get_int(cif.cif_data["_refine_ls_number_restraints"])
-        self.refine_ls_R_factor_all = get_float(cif.cif_data["_refine_ls_R_factor_all"])
-        self.refine_ls_R_factor_gt = get_float(cif.cif_data["_refine_ls_R_factor_gt"])
-        self.refine_ls_wR_factor_ref = get_float(cif.cif_data["_refine_ls_wR_factor_ref"])
-        self.refine_ls_wR_factor_gt = get_float(cif.cif_data["_refine_ls_wR_factor_gt"])
-        self.refine_ls_goodness_of_fit_ref = get_float(cif.cif_data["_refine_ls_goodness_of_fit_ref"])
-        self.refine_ls_restrained_S_all = get_float(cif.cif_data["_refine_ls_restrained_S_all"])
-        self.refine_ls_shift_su_max = get_float(cif.cif_data["_refine_ls_shift/su_max"])
-        self.refine_ls_shift_su_mean = get_float(cif.cif_data["_refine_ls_shift/su_mean"])
-        self.refine_diff_density_max = get_float(cif.cif_data["_refine_diff_density_max"])
-        self.refine_diff_density_min = get_float(cif.cif_data["_refine_diff_density_min"])
-        self.diffrn_reflns_av_unetI_netI = get_float(cif.cif_data["_diffrn_reflns_av_unetI/netI"])
-        self.database_code_depnum_ccdc_archive = cif.cif_data["_database_code_depnum_ccdc_archive"]
-        self.shelx_res_file = cif.cif_data["_shelx_res_file"]
+        self.data = cif_parsed.cif_data["data"]
+        self.cell_length_a = get_float(cif_parsed.cif_data["_cell_length_a"])
+        self.cell_length_b = get_float(cif_parsed.cif_data['_cell_length_b'])
+        self.cell_length_c = get_float(cif_parsed.cif_data['_cell_length_c'])
+        self.cell_angle_alpha = get_float(cif_parsed.cif_data['_cell_angle_alpha'])
+        self.cell_angle_beta = get_float(cif_parsed.cif_data['_cell_angle_beta'])
+        self.cell_angle_gamma = get_float(cif_parsed.cif_data['_cell_angle_gamma'])
+        self.cell_volume = get_float(cif_parsed.cif_data["_cell_volume"])
+        self.cell_formula_units_Z = get_int(cif_parsed.cif_data["_cell_formula_units_Z"])
+        self.space_group_name_H_M_alt = cif_parsed.cif_data["_space_group_name_H-M_alt"]
+        self.space_group_name_Hall = cif_parsed.cif_data["_space_group_name_Hall"]
+        self.space_group_centring_type = cif_parsed.cif_data["_space_group_centring_type"]
+        self.space_group_IT_number = get_int(cif_parsed.cif_data["_space_group_IT_number"])
+        self.space_group_crystal_system = cif_parsed.cif_data["_space_group_crystal_system"]
+        self.space_group_symop_operation_xyz = cif_parsed.cif_data["_space_group_symop_operation_xyz"]
+        self.audit_creation_method = cif_parsed.cif_data["_audit_creation_method"]
+        self.chemical_formula_sum = cif_parsed.cif_data["_chemical_formula_sum"]
+        self.chemical_formula_weight = cif_parsed.cif_data["_chemical_formula_weight"]
+        self.exptl_crystal_description = cif_parsed.cif_data["_exptl_crystal_description"]
+        self.exptl_crystal_colour = cif_parsed.cif_data["_exptl_crystal_colour"]
+        self.exptl_crystal_size_max = get_float(cif_parsed.cif_data["_exptl_crystal_size_max"])
+        self.exptl_crystal_size_mid = get_float(cif_parsed.cif_data["_exptl_crystal_size_mid"])
+        self.exptl_crystal_size_min = get_float(cif_parsed.cif_data["_exptl_crystal_size_min"])
+        self.exptl_absorpt_coefficient_mu = get_float(cif_parsed.cif_data["_exptl_absorpt_coefficient_mu"])
+        self.exptl_absorpt_correction_type = cif_parsed.cif_data["_exptl_absorpt_correction_type"]
+        self.diffrn_ambient_temperature = get_float(cif_parsed.cif_data["_diffrn_ambient_temperature"])
+        self.diffrn_radiation_wavelength = get_float(cif_parsed.cif_data["_diffrn_radiation_wavelength"])
+        self.diffrn_radiation_type = cif_parsed.cif_data["_diffrn_radiation_type"]
+        self.diffrn_source = cif_parsed.cif_data["_diffrn_source"]
+        self.diffrn_measurement_device_type = cif_parsed.cif_data["_diffrn_measurement_device_type"]
+        self.diffrn_reflns_number = get_int(cif_parsed.cif_data["_diffrn_reflns_number"])
+        self.diffrn_reflns_av_R_equivalents = get_int(cif_parsed.cif_data["_diffrn_reflns_av_R_equivalents"])
+        self.diffrn_reflns_theta_min = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_min"])
+        self.diffrn_reflns_theta_max = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_max"])
+        self.diffrn_reflns_theta_full = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_full"])
+        self.diffrn_measured_fraction_theta_max = get_float(cif_parsed.cif_data["_diffrn_measured_fraction_theta_max"])
+        self.diffrn_measured_fraction_theta_full = get_float(cif_parsed.cif_data["_diffrn_measured_fraction_theta_full"])
+        self.reflns_number_total = get_int(cif_parsed.cif_data["_reflns_number_total"])
+        self.reflns_number_gt = get_int(cif_parsed.cif_data["_reflns_number_gt"])
+        self.reflns_threshold_expression = cif_parsed.cif_data["_reflns_threshold_expression"]
+        self.reflns_Friedel_coverage = get_float(cif_parsed.cif_data["_reflns_Friedel_coverage"])
+        self.computing_structure_solution = cif_parsed.cif_data["_computing_structure_solution"]
+        self.computing_structure_refinement = cif_parsed.cif_data["_computing_structure_refinement"]
+        self.refine_special_details = cif_parsed.cif_data["_refine_special_details"]
+        self.refine_ls_abs_structure_Flack = cif_parsed.cif_data["_refine_ls_abs_structure_Flack"]
+        self.refine_ls_structure_factor_coef = cif_parsed.cif_data["_refine_ls_structure_factor_coef"]
+        self.refine_ls_weighting_details = cif_parsed.cif_data["_refine_ls_weighting_details"]
+        self.refine_ls_number_reflns = get_int(cif_parsed.cif_data["_refine_ls_number_reflns"])
+        self.refine_ls_number_parameters = get_int(cif_parsed.cif_data["_refine_ls_number_parameters"])
+        self.refine_ls_number_restraints = get_int(cif_parsed.cif_data["_refine_ls_number_restraints"])
+        self.refine_ls_R_factor_all = get_float(cif_parsed.cif_data["_refine_ls_R_factor_all"])
+        self.refine_ls_R_factor_gt = get_float(cif_parsed.cif_data["_refine_ls_R_factor_gt"])
+        self.refine_ls_wR_factor_ref = get_float(cif_parsed.cif_data["_refine_ls_wR_factor_ref"])
+        self.refine_ls_wR_factor_gt = get_float(cif_parsed.cif_data["_refine_ls_wR_factor_gt"])
+        self.refine_ls_goodness_of_fit_ref = get_float(cif_parsed.cif_data["_refine_ls_goodness_of_fit_ref"])
+        self.refine_ls_restrained_S_all = get_float(cif_parsed.cif_data["_refine_ls_restrained_S_all"])
+        self.refine_ls_shift_su_max = get_float(cif_parsed.cif_data["_refine_ls_shift/su_max"])
+        self.refine_ls_shift_su_mean = get_float(cif_parsed.cif_data["_refine_ls_shift/su_mean"])
+        self.refine_diff_density_max = get_float(cif_parsed.cif_data["_refine_diff_density_max"])
+        self.refine_diff_density_min = get_float(cif_parsed.cif_data["_refine_diff_density_min"])
+        self.diffrn_reflns_av_unetI_netI = get_float(cif_parsed.cif_data["_diffrn_reflns_av_unetI/netI"])
+        self.database_code_depnum_ccdc_archive = cif_parsed.cif_data["_database_code_depnum_ccdc_archive"]
+        self.shelx_res_file = cif_parsed.cif_data["_shelx_res_file"]
 
-    def fill_formula(self, cif, formula: dict):
+    def fill_formula(self, cif):
         """
         Fills formula data into the sum formula table.
         """
         out = []
+        formula = cif.cif_data['calculated_formula_sum']
         for x in formula:
             if not x.capitalize() in sorted_atoms:
                 out.append(x)
@@ -230,12 +231,7 @@ class CifFile(models.Model):
             del formula[x]
         if not formula:
             return
-        return SumFormula(cif=cif, **formula)
-
-    def atoms_in_cif(self):
-        # TODO: does this work?
-        at = self.cif_file.get()
-        return at
+        return SumFormula(cif=self, **formula)
 
 
 class SumFormula(models.Model):
