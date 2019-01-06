@@ -72,7 +72,7 @@ $(document).ready(function() {
 
     dtable.on('click', 'tr', function () {
         var data = dtable.row( this ).data();
-        var tab_url = 'table/'+data[1];
+        var tab_url = 'table/'+data[0];
 
         $.get(url = tab_url, function (result) {
             //console.log(result);
