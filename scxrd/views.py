@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.views import View
+from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
@@ -95,6 +96,11 @@ class MoleculeView(View):
         except(KeyError, TypeError) as e:
             print('Exception in jsmol_request: {}'.format(e))
         return HttpResponse(molfile)
+
+    # alsways reload complete molecule:
+    @never_cache
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 class OrderListJson(BaseDatatableView):
