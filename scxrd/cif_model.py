@@ -143,6 +143,7 @@ class CifFile(models.Model):
         else:
             return None
         if cif.cif_data['calculated_formula_sum']:
+            # TODO: Sum formula calculation is wrong
             self.sumform_exact = self.fill_formula(self, cif.cif_data['calculated_formula_sum'])
             self.sumform_exact.save()
         if cif.atoms:
