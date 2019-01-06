@@ -1,0 +1,14 @@
+
+- Fix login form on top bar
+- Make a customer administration page
+- Make experiment administration page
+- Make "new experiment" page
+- Make drag&drop file upload (after new experiment page)
+- decide which properties of a cif should be on index page
+- make a "show all properties of measurement" page
+
+- handle other companys formats
+
+Later:
+- handle .abs, ._ls, etc. files from work dir
+- render reports

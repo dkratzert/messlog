@@ -16,7 +16,7 @@
     <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/scxrd.js' %}"></script>
     {% block head %}
-    <title>Messlog Main Page</title>
+        <title>Messlog Main Page</title>
     {% endblock head %}
 </head>
 <body>
@@ -26,7 +26,7 @@
 
 <nav id="topNav" class="navbar navbar-expand bg-dark navbar-dark">
     
-    <a class="navbar-brand" href="#">SCXRD</a>
+    <a class="navbar-brand" href="{% url 'index' %}">SCXRD</a>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'scxrd:index' %}">Experiments</a>
