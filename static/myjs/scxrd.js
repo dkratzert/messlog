@@ -32,6 +32,7 @@ $(document).ready(function() {
 
 
     var dtable = $('#exptable').DataTable( {
+        searching: true,
         processing: true,
         serverSide: false,
         select:     true,
@@ -74,11 +75,12 @@ $(document).ready(function() {
               searchable: true,
               orderable: true,
             },
-            //{ title: "cif"},
             {
-            mRender: function(data, type, full) {
-            return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
-                }
+              title: '',
+              mRender: function(data, type, full) {
+              return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
+              searchable: false,
+              orderable: false,
             },
         ],
 

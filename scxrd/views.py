@@ -129,3 +129,7 @@ class OrderListJson(BaseDatatableView):
     # and make it return huge amount of data
     max_display_length = 5000000
 
+    #def get_filter_method(self):
+    #    return self.FILTER_ICONTAINS
+
+

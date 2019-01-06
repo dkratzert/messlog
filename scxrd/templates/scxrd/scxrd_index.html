@@ -6,19 +6,19 @@
 
     <div class="row">
         <!-- Left column with experiment table -->
-        <div class="col-sm-8">
-            <div class="card mt-3 mb-2">
+        <div class="col-sm-8  mt-3">
+            <div class="card mb-2">
                 <div class="flex-column m-1">
                     <table id="exptable" class="table table-condensed" width="100%"></table>
                     {% include 'scxrd/experiment_grid.html' %}
                 </div>
             </div>
-            <a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a>
         </div>
 
         <!-- Right column with details -->
         <div class="col-sm-4">
             <div class="row">
+                <a role="button" class="btn btn-primary mt-3" href="{% url 'scxrd:new' %}">New Experiment</a>
                 <div class="card mt-3 w-100 mr-3 p-0">
                     <div class="card-header">Structure View</div>
                     <div class="card-body p-1">
