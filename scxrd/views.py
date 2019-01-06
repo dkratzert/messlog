@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
@@ -76,26 +77,24 @@ class Customers(ListView):
     template_name = 'scxrd/customers.html'
 
 
-class MoleculeView(DetailView):
+class MoleculeView(View):
     """
     View to get atom data as .mol file.
     """
-    model = Experiment
-    template_name = 'scxrd/molecule.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #atoms = Experiment.cif.atoms.get(pk=self.kwargs['pk'])
-        atoms = Atom.objects.all().filter(cif_id=2)
-        try:
-            m = MolFile(atoms)
-            context['molfile'] = m.make_mol()
-        except(KeyError, TypeError) as e:
-            print('Exception in jsmol_request: {}'.format(e))
-        return context
 
     def post(self, request, *args, **kwargs):
-        return self.get(request, *args, **kwargs)
+        molfile = ''
+        atoms = Atom.objects.all().filter(cif_id=request.POST.get('id'))
+        grow = request.POST.get('grow')
+        if grow:
+            # Grow atoms here
+            pass
+        try:
+            m = MolFile(atoms)
+            molfile = m.make_mol()
+        except(KeyError, TypeError) as e:
+            print('Exception in jsmol_request: {}'.format(e))
+        return HttpResponse(molfile)
 
 
 class OrderListJson(BaseDatatableView):

@@ -32,12 +32,12 @@ class MolFile(object):
 
     def __init__(self, atoms: QuerySet(Atom), bonds = None):
         self.atoms = atoms
+        self.atomscount = 0
         if bonds:
             self.bonds = bonds
         else:
             self.bonds = self.get_conntable_from_atoms()
         self.bondscount = len(self.bonds)
-        self.atomscount = 0
 
     def header(self) -> str:
         """
@@ -82,8 +82,8 @@ class MolFile(object):
         :type extra_param: float
         """
         conlist = []
-        num1 = 0
         for num1, at1 in enumerate(self.atoms, 1):
+            self.atomscount += 1
             at1_part = at1.part
             rad1 = get_radius_from_element(at1.element)
             for num2, at2 in enumerate(self.atoms, 1):
@@ -103,7 +103,6 @@ class MolFile(object):
                     if [num2, num1] in conlist:
                         continue
                     conlist.append([num1, num2])
-        self.atomscount = num1
         return conlist
 
     def footer(self) -> str:
