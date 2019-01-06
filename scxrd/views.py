@@ -1,3 +1,4 @@
+from django.views import View
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
@@ -75,7 +76,7 @@ class Customers(ListView):
     template_name = 'scxrd/customers.html'
 
 
-class AtomsView(DetailView):
+class MoleculeView(DetailView):
     """
     View to get atom data as .mol file.
     """
@@ -87,27 +88,29 @@ class AtomsView(DetailView):
         #atoms = Experiment.cif.atoms.get(pk=self.kwargs['pk'])
         atoms = Atom.objects.all().filter(cif_id=2)
         try:
-            # TODO: adapt to this atom format
             m = MolFile(atoms)
-            return m.make_mol()
+            context['molfile'] = m.make_mol()
         except(KeyError, TypeError) as e:
             print('Exception in jsmol_request: {}'.format(e))
         return context
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
 
 
 class OrderListJson(BaseDatatableView):
     # The model we're going to show
     model = Experiment
-    # template_name = 'scxrd/experiment_grid.html'
+    template_name = 'scxrd/experiment_grid.html'
 
     # define the columns that will be returned
-    columns = ['-id', 'number', 'experiment', 'measure_date', 'machine']
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine']
+    order_columns = ['id', 'number', 'experiment', 'measure_date', 'machine']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data

@@ -3,7 +3,10 @@ MOl V3000 format
 """
 import os
 
+from django.db.models import QuerySet
+
 from scxrd.cif.atoms import get_radius_from_element
+from scxrd.cif_model import Atom
 
 
 def distance(x1, y1, z1, x2, y2, z2, round_out=False):
@@ -27,14 +30,14 @@ class MolFile(object):
     This mol file writer is only to use the file with JSmol, not to implement the standard exactly!
     """
 
-    def __init__(self, atoms: list, bonds = None):
+    def __init__(self, atoms: QuerySet(Atom), bonds = None):
         self.atoms = atoms
         if bonds:
             self.bonds = bonds
         else:
             self.bonds = self.get_conntable_from_atoms()
         self.bondscount = len(self.bonds)
-        self.atomscount = len(self.atoms)
+        self.atomscount = 0
 
     def header(self) -> str:
         """
@@ -56,7 +59,7 @@ class MolFile(object):
         """
         atoms = []
         for num, at in enumerate(self.atoms):
-            atoms.append("{:>10.4f}{:>10.4f}{:>10.4f} {:<2s}".format(at[5], at[6], at[7], at[1]))
+            atoms.append("{:>10.4f}{:>10.4f}{:>10.4f} {:<2s}".format(at.xc, at.yc, at.zc, at.element))
         return '\n'.join(atoms)
 
     def get_bonds_string(self) -> str:
@@ -79,26 +82,28 @@ class MolFile(object):
         :type extra_param: float
         """
         conlist = []
+        num1 = 0
         for num1, at1 in enumerate(self.atoms, 1):
-            at1_part = at1[8]
-            rad1 = get_radius_from_element(at1[1])
+            at1_part = at1.part
+            rad1 = get_radius_from_element(at1.element)
             for num2, at2 in enumerate(self.atoms, 1):
-                at2_part = at2[8]
+                at2_part = at2.part
                 if at1_part * at2_part != 0 and at1_part != at2_part:
                     continue
-                if at1[0] == at2[0]:  # name1 = name2
+                if at1.name == at2.name:  # name1 = name2
                     continue
-                d = distance(at1[5], at1[6], at1[7], at2[5], at2[6], at2[7])
+                d = distance(at1.xc, at1.yc, at1.zc, at2.xc, at2.yc, at2.zc)
                 if d > 4.0:  # makes bonding faster (longer bonds do not exist)
                     continue
-                rad2 = get_radius_from_element(at2[1])
+                rad2 = get_radius_from_element(at2.element)
                 if (rad1 + rad2) + extra_param > d:
-                    if at1[1] == 'H' and at2[1] == 'H':
+                    if at1.element == 'H' and at2.element == 'H':
                         continue
                     # The extra time for this is not too much:
                     if [num2, num1] in conlist:
                         continue
                     conlist.append([num1, num2])
+        self.atomscount = num1
         return conlist
 
     def footer(self) -> str:

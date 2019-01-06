@@ -12,6 +12,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/fh-3.1.4/sl-1.2.6/datatables.min.js"></script>
     <script type="text/javascript" src="https://momentjs.com/downloads/moment.js"></script>
     <script src="{% static 'flatpickr/flatpickr-4.5.2.js' %}"></script>
+    <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/messlog.js' %}"></script>
     {% block head %}
     <title>Messlog Main Page</title>
@@ -30,7 +31,7 @@
                 <a class="nav-link active" href="{% url 'scxrd:index' %}">Experiments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="customers">Customers</a>
+                <a class="nav-link" href="{% url 'scxrd:customers' %}">Customers</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
