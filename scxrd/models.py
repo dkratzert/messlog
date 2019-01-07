@@ -33,6 +33,7 @@ class Machine(models.Model):
 
 
 class Solvent(models.Model):
+    fixtures = ['solvents.json']
     name = models.CharField(verbose_name="solvents name", max_length=200, unique=True)
 
     class Meta:

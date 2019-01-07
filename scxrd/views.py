@@ -111,6 +111,7 @@ class MoleculeView(View):
 class OrderListJson(BaseDatatableView):
     """
     https://datatables.net/
+    https://bitbucket.org/pigletto/django-datatables-view-example/
     """
     # The model we're going to show
     model = Experiment

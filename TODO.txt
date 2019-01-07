@@ -1,4 +1,5 @@
 
+- Add operator to experiment list
 - Fix login form on top bar
 - Make a customer administration page
 - Make experiment administration page
@@ -12,3 +13,10 @@
 Later:
 - handle .abs, ._ls, etc. files from work dir
 - render reports
+- Send mail with order to person in charge when new experiment starts 
+- Add some explaining text on the main page
+- Add links to pages with help texts about measurements
+- Add machine service logbook
+
+- For accounts:
+  - add matrix with permissions like (new exp, admin page, change exp, service logbook, etc.) for each account
