@@ -1,5 +1,10 @@
 <!doctype html>
 <html lang="en">
+
+{% comment %}
+TODO: move base template to mysite
+{% endcomment %}
+
 <head>
     {% load static %}
     <meta charset="utf-8">
@@ -50,11 +55,17 @@
                 </li>
                 {% endcomment %}
         </ul>
-        <!-- login -->
-        <form class="form-inline my-2 my-lg-0">
+        <!-- login TODO: only show login if not logged in. Only show log off if logged in. -->
+        <form class="form-inline my-2 my-lg-0" method="post" novalidate>
+            {% csrf_token %}
             <input class="form-control mr-sm-1 form-control-sm" type="text" placeholder="user">
             <input class="form-control mr-sm-1 form-control-sm" type="password" placeholder="password">
             <button class="btn btn-secondary btn-sm" type="submit">Login</button>
+        </form>
+        <!-- logoff -->
+        <form class="form-inline my-2 my-lg-0 ml-2">
+            {% csrf_token %}
+            <button class="btn btn-danger btn-sm" type="submit">Log Off</button>
         </form>
 </nav>
 

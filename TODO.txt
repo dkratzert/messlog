@@ -20,3 +20,16 @@ Later:
 
 - For accounts:
   - add matrix with permissions like (new exp, admin page, change exp, service logbook, etc.) for each account
+  
+  Users: List of users, Each user must be in one or more work groups. 
+         Users with no group are in the no_group group. 
+  
+  Workgroups: List of work groups. The groups are an organizational ordering, not for authorization.
+  
+  Do I need permission groups?
+  
+  User_roles: Admin (can do everyhing)
+              Operator (can create measurements)
+              Student (can view measurements)
+  
+  - have selv-signup for users as students. An Admin can higher the level to more acesss.
