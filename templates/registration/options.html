@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <h2>Options</h2>
+
+    {% if user.is_athenticated %}
+
+        <div class="row">
+            <div class="col-3">
+                {% url 'password_change' %}
+            </div>
+        </div>
+
+    {% else %}
+
+        <h2>You must login to change options</h2>
+
+    {% endif %}
+
+{% endblock content %}

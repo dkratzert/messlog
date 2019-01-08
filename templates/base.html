@@ -31,7 +31,7 @@ TODO: move base template to mysite
 
 <nav id="topNav" class="navbar navbar-expand bg-dark navbar-dark">
     
-    <a class="navbar-brand" href="{% url 'index' %}">SCXRD</a>
+    <a class="navbar-brand" href="{% url 'index' %}">MESSLOG</a>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'scxrd:index' %}">Experiments</a>
@@ -56,17 +56,15 @@ TODO: move base template to mysite
                 {% endcomment %}
         </ul>
         <!-- login TODO: only show login if not logged in. Only show log off if logged in. -->
-        <form class="form-inline my-2 my-lg-0" method="post" novalidate>
-            {% csrf_token %}
-            <input class="form-control mr-sm-1 form-control-sm" type="text" placeholder="user">
-            <input class="form-control mr-sm-1 form-control-sm" type="password" placeholder="password">
-            <button class="btn btn-secondary btn-sm" type="submit">Login</button>
-        </form>
-        <!-- logoff -->
-        <form class="form-inline my-2 my-lg-0 ml-2">
-            {% csrf_token %}
-            <button class="btn btn-danger btn-sm" type="submit">Log Off</button>
-        </form>
+        {% if user.is_authenticated %}
+            <button class="btn btn-outline-secondary mr-3"> User: {{ user.username }} </button>
+        {% endif %}
+        {% if not user.is_authenticated %}
+            <a class="btn btn-secondary btn-sm" role="button" href="{% url 'login' %}">Login</a>
+        {% else %}
+            <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Log Off</a>
+        {% endif %}
+        <a class="btn btn-sm ml-2" role="button" href="{% url 'signup' %}">New User</a>
 </nav>
 
 

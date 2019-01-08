@@ -18,6 +18,8 @@ from django.contrib import admin, auth
 from django.urls import path, include, reverse_lazy
 from django.views.generic.base import RedirectView
 
+from mysite.core import views
+
 favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 from mysite import settings
 from mysite.mysite.views import HomePageView
@@ -27,6 +29,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('favicon.ico', favicon_view),
     path('', HomePageView.as_view(), name='index'),
+    path('signup/', views.signup, name='signup'),
+    #path('options/', views.OptionsView.as_view(), name='options'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 

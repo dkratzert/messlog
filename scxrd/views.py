@@ -1,3 +1,4 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -9,7 +10,7 @@ from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
 from scxrd.forms import ExperimentForm, ExperimentTableForm
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from scxrd.models import Experiment, Customer, CifFile
 from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -71,7 +72,7 @@ class UploadView(CreateView):
 
 class ExperimentView(TemplateView):
     model = Experiment
-    template_name = 'scxrd/scxrd_index.html'
+    template_name = 'scxrd/index.html'
 
 
 class Customers(ListView):
@@ -132,5 +133,4 @@ class OrderListJson(BaseDatatableView):
 
     #def get_filter_method(self):
     #    return self.FILTER_ICONTAINS
-
 
