@@ -33,3 +33,5 @@ Later:
               Student (can view measurements)
   
   - have selv-signup for users as students. An Admin can higher the level to more acesss.
+  
+  - for group leaders: "[x] I want to get informed about the experiments of my subordinates" option

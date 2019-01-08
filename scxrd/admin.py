@@ -10,7 +10,7 @@ class ExperimentAdmin(admin.ModelAdmin):
     list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'cif')
     list_filter = ['measure_date']
     search_fields = ['experiment', 'number', 'sum_formula']
-    ordering = ['number']
+    ordering = ['-number']
 
 
 class AtomsInline(admin.TabularInline):

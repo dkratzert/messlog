@@ -9,10 +9,19 @@
         <div class="col-sm-8  mt-3">
             <div class="card mb-2">
                 <div class="flex-column m-1">
-                    {% include 'scxrd/experiment_grid.html' %}
+                    {% include 'scxrd/experiment_table.html' %}
                     <table id="exptable" class="table table-condensed table-hover" width="100%"></table>
                 </div>
             </div>
+            <div class="card w-100">
+                <div class="card-header">
+                    Current Experiments
+                </div>
+                <div class="card-body">
+                    Here comes the list of current experiments.
+                </div>
+            </div>            
+        
         </div>
 
         <!-- Right column with details -->
@@ -23,7 +32,7 @@
                     <div class="card-header">Structure View</div>
                     <div class="card-body p-1">
                         <div id="molcard" class="card border-0">
-
+                            {# This card inside the card is a hack to overcome the too large molecule view #}
                         </div>
                     </div>
                     <div class="card-footer">

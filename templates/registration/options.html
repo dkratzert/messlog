@@ -6,11 +6,14 @@
 {% block content %}
     <h2>Options</h2>
 
-    {% if user.is_athenticated %}
-
+    {% if user.is_authenticated %}
         <div class="row">
             <div class="col-3">
-                {% url 'password_change' %}
+                <ul>
+                    <li>
+                        <a class="btn btn-outline-secondary" role="button" href="{% url 'password_change' %}">Change Password</a>
+                    </li>
+                </ul>
             </div>
         </div>
 

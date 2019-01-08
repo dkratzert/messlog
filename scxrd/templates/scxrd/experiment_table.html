@@ -1,9 +1,11 @@
 
+{# This file displays the main table with the list of experiments #}
+
 {% block grid %}
     {% load static %}
     {% csrf_token %}
     <script type="text/javascript">
-
+    
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     var table_url = "{% url 'scxrd:order_list_json' %}";
 

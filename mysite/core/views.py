@@ -1,8 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
-from django.views import View
-from django.views.generic import CreateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic import TemplateView
+
 
 from scxrd.models import Experiment
 
@@ -18,12 +17,12 @@ def signup(request):
     return render(request, 'registration/new_user.html', {'form': form})
 
 
-class OptionsView(BaseFormView):
+class OptionsView(TemplateView):
     """
     Show details of an experiment
 
     TODO: Make real options page
     """
-    #model = Foo
     template_name = 'registration/options.html'
+    success_url = '/'
 

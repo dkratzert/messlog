@@ -65,7 +65,7 @@ class CifFile(models.Model):
     diffrn_source = models.CharField(max_length=255, null=True, blank=True)
     diffrn_measurement_device_type = models.CharField(max_length=255, null=True, blank=True)
     diffrn_reflns_number = models.IntegerField(null=True, blank=True)
-    diffrn_reflns_av_R_equivalents = models.PositiveIntegerField(null=True, blank=True)
+    diffrn_reflns_av_R_equivalents = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_max = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_full = models.FloatField(null=True, blank=True)
@@ -185,7 +185,7 @@ class CifFile(models.Model):
         self.diffrn_source = cif_parsed.cif_data["_diffrn_source"]
         self.diffrn_measurement_device_type = cif_parsed.cif_data["_diffrn_measurement_device_type"]
         self.diffrn_reflns_number = get_int(cif_parsed.cif_data["_diffrn_reflns_number"])
-        self.diffrn_reflns_av_R_equivalents = get_int(cif_parsed.cif_data["_diffrn_reflns_av_R_equivalents"])
+        self.diffrn_reflns_av_R_equivalents = get_float(cif_parsed.cif_data["_diffrn_reflns_av_R_equivalents"])
         self.diffrn_reflns_theta_min = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_min"])
         self.diffrn_reflns_theta_max = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_max"])
         self.diffrn_reflns_theta_full = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_full"])
@@ -217,6 +217,22 @@ class CifFile(models.Model):
         self.diffrn_reflns_av_unetI_netI = get_float(cif_parsed.cif_data["_diffrn_reflns_av_unetI/netI"])
         self.database_code_depnum_ccdc_archive = cif_parsed.cif_data["_database_code_depnum_ccdc_archive"]
         self.shelx_res_file = cif_parsed.cif_data["_shelx_res_file"]
+
+    def wr2_in_percent(self):
+        if self.refine_ls_wR_factor_ref:
+            return round(self.refine_ls_wR_factor_ref * 100, 1)
+        else:
+            return '---'
+
+    def rint_in_percent(self):
+        if self.diffrn_reflns_av_R_equivalents:
+            return round(self.diffrn_reflns_av_R_equivalents * 100, 1)
+        else:
+            return '---'
+
+    def completeness_in_percent(self):
+        if self.diffrn_measured_fraction_theta_max:
+            return round(self.diffrn_measured_fraction_theta_max * 100, 1)
 
     def fill_formula(self, cif):
         """

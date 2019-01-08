@@ -116,7 +116,7 @@ class OrderListJson(BaseDatatableView):
     """
     # The model we're going to show
     model = Experiment
-    template_name = 'scxrd/experiment_grid.html'
+    template_name = 'scxrd/experiment_table.html'
 
     # define the columns that will be returned
     columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine']
