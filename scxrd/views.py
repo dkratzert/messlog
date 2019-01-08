@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -28,13 +29,13 @@ class ExperimentCreateView(CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentEditView(UpdateView):
+class ExperimentEditView(LoginRequiredMixin, UpdateView):
     """
     Edit an experiment
     """
     model = Experiment
     form_class = ExperimentForm
-    template_name = 'scxrd/experiment_edit_form.html'
+    template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
 
@@ -48,7 +49,7 @@ class ExperimentDetailView(DetailView):
 
 class DetailsTable(DetailView):
     model = Experiment
-    template_name = 'scxrd/details_table.html'
+    template_name = 'scxrd/residuals_table.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
