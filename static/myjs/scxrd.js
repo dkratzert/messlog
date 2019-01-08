@@ -29,8 +29,7 @@ $(document).ready(function() {
         j2sPath: ".",
         _serverUrl: ''
     };
-
-
+    
     var dtable = $('#exptable').DataTable( {
         searching: true,
         processing: true,
@@ -119,5 +118,8 @@ $(document).ready(function() {
         jmol.__loadModel(molfile);
         //jsmolcol.removeClass('invisible');
     }
+    
+    // just to have it initialized:
+    display_molecule('');
 
 });
