@@ -1,20 +1,14 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect, render
-from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 
-from scxrd.models import Experiment
-
-
-def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/new_user.html', {'form': form})
+class SignUp(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('scxrd:index')
+    template_name = 'registration/new_user.html'
 
 
 class OptionsView(TemplateView):
@@ -25,4 +19,3 @@ class OptionsView(TemplateView):
     """
     template_name = 'registration/options.html'
     success_url = '/'
-

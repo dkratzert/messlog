@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('favicon.ico', favicon_view),
     path('', HomePageView.as_view(), name='index'),
-    path('signup/', views.signup, name='signup'),
+    path('signup/', views.SignUp.as_view(), name='signup'),
     path('options/', views.OptionsView.as_view(), name='options'),
     path('accounts/', include('django.contrib.auth.urls')),
     #path('password_change/', 
