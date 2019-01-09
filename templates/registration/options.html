@@ -1,26 +1,25 @@
-
-{% extends 'base.html' %}
+{% extends 'registration/registration_base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
+{% block inner_content %}
 
-{% block content %}
-    <h2>Options</h2>
+    <div class="card-header">
+        <h3>Options</h3>
+    </div>
 
-    {% if user.is_authenticated %}
-        <div class="row">
-            <div class="col-3">
-                <ul>
-                    <li>
-                        <a class="btn btn-outline-secondary" role="button" href="{% url 'password_change' %}">Change Password</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="card-body">
+        {% if user.is_authenticated %}
+            <ul>
+                <li>
+                    <a href="{% url 'password_change' %}">Change Password</a>
+                </li>
+            </ul>
+        {% else %}
 
-    {% else %}
+            <h3>You must login to change options</h3>
 
-        <h2>You must login to change options</h2>
+        {% endif %}
+    </div>
 
-    {% endif %}
-
-{% endblock content %}
+{% endblock inner_content %}

@@ -1,10 +1,18 @@
 
 html {
     /* make font a bit smaller in general: */
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 a div, a:hover {
     text-decoration: none;
     color: #007bff;
+}
+
+.asteriskField {
+    display: none;
+}
+
+form .alert ul li {
+    list-style: none;
 }

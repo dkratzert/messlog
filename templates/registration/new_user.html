@@ -1,17 +1,18 @@
+{% extends 'registration/registration_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
-{% extends 'base.html' %}
+{% block inner_content %}
 
-{% block content %}
-
-    <div class="row">
-        <h3>New user</h3>
-        <div class="col-3">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
+    <div class="card-header">
+        <h3>New User</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form |crispy }}
+            <button class="btn btn-primary mr-2" type="submit"> Sign Up </button>
+        </form>
     </div>
 
-{% endblock content %}
+{% endblock inner_content %}
