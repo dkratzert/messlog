@@ -1,31 +1,34 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
-from scxrd import widgets
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentForm, ExperimentTableForm
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
+from scxrd.forms import ExperimentForm
+from scxrd.models import Experiment, Customer
 
-from scxrd.models import Experiment, Customer, CifFile
-from django_datatables_view.base_datatable_view import BaseDatatableView
+
+class ExperimentView(TemplateView):
+    """
+    The view for the main scxrd page.
+    """
+    model = Experiment
+    template_name = 'scxrd/index.html'
 
 
 class ExperimentCreateView(CreateView):
     """
-    A new experimen
+    Start a new experiment
     """
     model = Experiment
     form_class = ExperimentForm
     template_name = 'scxrd/new_experiment.html'
     # Fields are defined in form_class:
-    #fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
+    # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
 
@@ -48,6 +51,9 @@ class ExperimentDetailView(DetailView):
 
 
 class DetailsTable(DetailView):
+    """
+    Show rediduals of the in-table selected experiment by ajax request.
+    """
     model = Experiment
     template_name = 'scxrd/residuals_table.html'
 
@@ -62,21 +68,22 @@ class DetailsTable(DetailView):
 
 
 class UploadView(CreateView):
+    """
+    An file upload view.
+    """
     model = Experiment
     template_name = "scxrd/upload.html"
-    #success_url = reverse_lazy('scxrd:index')
+    # success_url = reverse_lazy('scxrd:index')
     form_class = ExperimentForm
 
     def get_success_url(self):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
-class ExperimentView(TemplateView):
-    model = Experiment
-    template_name = 'scxrd/index.html'
-
-
 class Customers(ListView):
+    """
+    The customers list view.
+    """
     model = Customer
     template_name = 'scxrd/customers.html'
 
@@ -112,6 +119,8 @@ class MoleculeView(View):
 
 class OrderListJson(BaseDatatableView):
     """
+    The view to show the datatabes table for the list of experiments.
+
     https://datatables.net/
     https://bitbucket.org/pigletto/django-datatables-view-example/
     """
@@ -132,6 +141,5 @@ class OrderListJson(BaseDatatableView):
     # and make it return huge amount of data
     max_display_length = 5000000
 
-    #def get_filter_method(self):
+    # def get_filter_method(self):
     #    return self.FILTER_ICONTAINS
-

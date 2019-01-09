@@ -7,30 +7,38 @@
     <div class="row justify-content-center">
         <!-- Left column with experiment table -->
         <div class="col-sm-4 col-md-4 col-lg-4 mt-3">
-            <div class="card mb-2">
-                <h1 class="display-3 font-weight-bold">
-                    <a href="{% url 'scxrd:index' %}">SC-XRD</a>
-                </h1>
-            </div>
-            <div class="card mb-2">
-                <h1 class="display-3 font-weight-bold">
-                    <a href="{% url 'scxrd:index' %}">Foo</a>
-                </h1>
-            </div>
+            <a href="{% url 'scxrd:index' %}">
+                <div class="card mb-2 text-center" style="background:lightgray;">
+                    <h1 class="display-3 font-weight-bold">
+                        SC-XRD
+                    </h1>
+                </div>
+            </a>
+            <a href="{% url 'scxrd:index' %}">
+                <div class="card mb-2 text-center" style="background:lightgray;">
+                    <h1 class="display-3 font-weight-bold">
+                        Foo
+                    </h1>
+                </div>
+            </a>
         </div>
 
 
         <div class="col-sm-4 col-md-4 col-lg-4 mt-3">
-            <div class="card mb-2">
-                <h1 class="display-3 font-weight-bold">
-                    <a href="{% url 'scxrd:index' %}">NMR</a>
-                </h1>
-            </div>
-            <div class="card mb-2">
-                <h1 class="display-3 font-weight-bold">
-                    <a href="{% url 'scxrd:index' %}">Bar</a>
-                </h1>
-            </div>
+            <a href="{% url 'scxrd:index' %}">
+                <div class="card mb-2 text-center" style="background:lightgray;">
+                    <h1 class="display-3 font-weight-bold">
+                        NMR
+                    </h1>
+                </div>
+            </a>
+            <a href="{% url 'scxrd:index' %}">
+                <div class="card mb-2 text-center" style="background: lightgray">
+                    <h1 class="display-3 font-weight-bold">
+                        Bar
+                    </h1>
+                </div>
+            </a>
         </div>
     </div>
 

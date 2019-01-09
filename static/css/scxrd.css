@@ -3,3 +3,8 @@ html {
     /* make font a bit smaller in general: */
     font-size: 0.9rem;
 }
+
+a div, a:hover {
+    text-decoration: none;
+    color: #007bff;
+}
