@@ -20,9 +20,9 @@ TODO: move base template to mysite
     <script src="{% static 'flatpickr/flatpickr-4.5.2.js' %}"></script>
     <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/scxrd.js' %}"></script>
-    {% block head %}
-        <title>Messlog Main Page</title>
-    {% endblock head %}
+    <title>
+        {% block title %}Messlog Main Page{% endblock title %}
+    </title>
 </head>
 <body>
 {% load bootstrap %}
