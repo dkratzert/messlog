@@ -26,7 +26,7 @@ class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
-    cif = models.FileField(upload_to='cifs', null=True, blank=True)
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True)
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -103,11 +103,11 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
-        self.sha256 = generate_sha256(self.cif.file)
-        with open(self.cif.file.name, errors='ignore') as cf:
+        self.sha256 = generate_sha256(self.cif_file_on_disk.file)
+        with open(self.cif_file_on_disk.file.name, errors='ignore') as cf:
             # save cif content to db table
             self.fill_residuals_table(cf.readlines())
-        self.filesize = self.cif.size
+        self.filesize = self.cif_file_on_disk.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()
         # if inst:
@@ -121,14 +121,14 @@ class CifFile(models.Model):
 
     def __str__(self):
         try:
-            return self.cif.url
+            return os.path.basename(self.cif_file_on_disk.url)
         except ValueError:
             return 'no file'
         # data is the cif _data value
         # return self.data
 
     def delete(self, *args, **kwargs):
-        cf = Path(self.cif.path)
+        cf = Path(self.cif_file_on_disk.path)
         print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)

@@ -2,8 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from scxrd.cif_model import Atom, SumFormula
-from scxrd.models import Customer, CifFile
-from .models import Experiment, Machine, Solvent
+from scxrd.models import Customer, CifFile, Machine, Solvent, Experiment
 
 
 class ExperimentAdmin(admin.ModelAdmin):
