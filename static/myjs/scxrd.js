@@ -82,7 +82,13 @@ $(document).ready(function() {
               orderable: false,
             },
         ],
-
+        "initComplete": function(settings, json) {
+            // Do stuff after table init:
+            //var row = dtable.row(':first'); 
+            //$(row).addClass('selected');
+            //console.log(row.data());
+        }
+        
         //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
         // No extra menus:
         //dom: '<"top"i><"clear">',
@@ -108,7 +114,13 @@ $(document).ready(function() {
             function (result) {
                 display_molecule(result)
         });
-    } );
+    });
+    
+    dtable.ajax.reload( function (json) {
+        var row = $('#exptable tbody tr:eq(0)');
+        row.click();
+        row.addClass("selected");
+    });
 
     function display_molecule(molfile) {
         Jmol._document = null;
