@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.db import models
 from django.utils import timezone
-
+import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.cif.cifparser import Cif
 from .utils import generate_sha256

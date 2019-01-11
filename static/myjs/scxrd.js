@@ -96,10 +96,13 @@ $(document).ready(function() {
 
 
     dtable.on('click', 'tr', function () {
-        var tdata = dtable.row( this ).data();
+        var row = dtable.row( this );
+        //var row0 = $('#exptable tbody tr:eq(0)');
+        var tdata = row.data();
         //console.log(tdata);
         var tab_url = 'table/'+tdata[0];
 
+        // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
             //console.log(result);
             document.getElementById("ttable").innerHTML = result;
@@ -112,22 +115,25 @@ $(document).ready(function() {
                     'csrfmiddlewaretoken': csrftoken
                     },
             function (result) {
-                display_molecule(result)
+                display_molecule(result);
         });
+        //row0.removeClass('selected');
     });
     
     dtable.ajax.reload( function (json) {
         var row = $('#exptable tbody tr:eq(0)');
+        //row.addClass("selected");
         row.click();
-        row.addClass("selected");
     });
 
     function display_molecule(molfile) {
         Jmol._document = null;
+        delete Jmol._tracker;
         Jmol.getTMApplet("jmol", jsmol_options);
         var jsmolcol = $("#molcard");
         jsmolcol.html(jmol._code);
         jmol.__loadModel(molfile);
+        
         //jsmolcol.removeClass('invisible');
     }
     

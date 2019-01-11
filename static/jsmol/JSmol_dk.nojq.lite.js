@@ -3182,7 +3182,15 @@ Jmol.getTMApplet = Jmol._TMApplet._getApplet;
 
     tm.M3.prototype.mul = function (m) {
         var m2 = this;
-        this.set(m.m00 * m2.m00 + m.m01 * m2.m10 + m.m02 * m2.m20, m.m00 * m2.m01 + m.m01 * m2.m11 + m.m02 * m2.m21, m.m00 * m2.m02 + m.m01 * m2.m12 + m.m02 * m2.m22, m.m10 * m2.m00 + m.m11 * m2.m10 + m.m12 * m2.m20, m.m10 * m2.m01 + m.m11 * m2.m11 + m.m12 * m2.m21, m.m10 * m2.m02 + m.m11 * m2.m12 + m.m12 * m2.m22, m.m20 * m2.m00 + m.m21 * m2.m10 + m.m22 * m2.m20, m.m20 * m2.m01 + m.m21 * m2.m11 + m.m22 * m2.m21, m.m20 * m2.m02 + m.m21 * m2.m12 + m.m22 * m2.m22);
+        this.set(m.m00 * m2.m00 + m.m01 * m2.m10 + m.m02 * m2.m20, 
+                 m.m00 * m2.m01 + m.m01 * m2.m11 + m.m02 * m2.m21, 
+                 m.m00 * m2.m02 + m.m01 * m2.m12 + m.m02 * m2.m22, 
+                 m.m10 * m2.m00 + m.m11 * m2.m10 + m.m12 * m2.m20, 
+                 m.m10 * m2.m01 + m.m11 * m2.m11 + m.m12 * m2.m21, 
+                 m.m10 * m2.m02 + m.m11 * m2.m12 + m.m12 * m2.m22, 
+                 m.m20 * m2.m00 + m.m21 * m2.m10 + m.m22 * m2.m20, 
+                 m.m20 * m2.m01 + m.m21 * m2.m11 + m.m22 * m2.m21, 
+                 m.m20 * m2.m02 + m.m21 * m2.m12 + m.m22 * m2.m22);
     };
 
     tm._pi2 = 2 * Math.PI;
