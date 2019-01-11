@@ -1,6 +1,15 @@
 import datetime
 
+from django.core.validators import MinValueValidator, RegexValidator
+from django.db import models
+# Create your models here.
+from django.utils import timezone
+from django.contrib.auth.models import User
+
 from .cif_model import CifFile, Atom
+
+# from django.contrib.auth.models import AbstractUser, UserManager
+
 
 """
 TODO:
@@ -16,12 +25,24 @@ TODO:
 - http://ccbv.co.uk/projects/Django/2.0
 """
 
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, RegexValidator
-from django.db import models
+'''
+settings.AUTH_USER_MODEL = 'scxrd.CustomUser'
 
-# Create your models here.
-from django.utils import timezone
+
+class CustomUserManager(UserManager):
+    def get_by_natural_key(self, username):
+        """
+        Replaces USERNAME_FIELD = 'username' with 'username__iexact'.
+        """
+        case_insensitive_username_field = '{}__iexact'.format(self.model.USERNAME_FIELD)
+        return self.get(**{case_insensitive_username_field: username})
+
+
+class CustomUser(AbstractUser):
+    """
+    Extend user model here:
+    """
+    objects = CustomUserManager()'''
 
 
 class Machine(models.Model):
@@ -91,5 +112,3 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
-
-

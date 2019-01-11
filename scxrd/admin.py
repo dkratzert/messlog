@@ -36,9 +36,26 @@ class AtomsInline(admin.TabularInline):
 class CifAdmin(admin.ModelAdmin):
     inlines = [AtomsInline]
 
+"""
+admin.site.register(MyUser, UserAdmin)
+
+class MyUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = CustomUser
+
+
+class MyUserAdmin(UserAdmin):
+    form = MyUserChangeForm
+
+    #fieldsets = UserAdmin.fieldsets + (
+    #        (None, {'fields': ('some_extra_data',)}),
+    #)
+
+"""
 
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
 admin.site.register(Customer)
 admin.site.register(CifFile, CifAdmin)
+
