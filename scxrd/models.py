@@ -25,25 +25,6 @@ TODO:
 - http://ccbv.co.uk/projects/Django/2.0
 """
 
-'''
-settings.AUTH_USER_MODEL = 'scxrd.CustomUser'
-
-
-class CustomUserManager(UserManager):
-    def get_by_natural_key(self, username):
-        """
-        Replaces USERNAME_FIELD = 'username' with 'username__iexact'.
-        """
-        case_insensitive_username_field = '{}__iexact'.format(self.model.USERNAME_FIELD)
-        return self.get(**{case_insensitive_username_field: username})
-
-
-class CustomUser(AbstractUser):
-    """
-    Extend user model here:
-    """
-    objects = CustomUserManager()'''
-
 
 class Machine(models.Model):
     fixtures = ['machines']
@@ -94,6 +75,7 @@ class Experiment(models.Model):
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
+    # TODO: Change to MyUser for case insensitive usernames:
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment',
                                  on_delete=models.SET_NULL, null=True, blank=True)
     cif = models.ForeignKey(CifFile, null=True, blank=True, related_name="cif_file",
