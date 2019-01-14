@@ -1,11 +1,12 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 # Create your models here.
 from django.utils import timezone
 
-from myuser.models import Person, MyUser
+from myuser.models import Person
 from utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 from .cif_model import CifFile, Atom
 
@@ -82,7 +83,7 @@ class Experiment(models.Model):
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
     # TODO: Change to MyUser for case insensitive usernames:
-    operator = models.ForeignKey(MyUser, verbose_name='operator', related_name='experiments',
+    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
                                  on_delete=models.SET_NULL, null=True, blank=True)
     machine = models.OneToOneField(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                    related_name='experiments', null=True, blank=True)

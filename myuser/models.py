@@ -9,7 +9,7 @@ phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: "
                                          "'+999999999'. Up to 15 digits allowed.")
 
-
+'''
 class MyUserManager(UserManager):
     def get_by_natural_key(self, username):
         """
@@ -31,6 +31,7 @@ class MyUser(AbstractUser):
     Extend user model here:
     """
     objects = MyUserManager()
+'''
 
 
 class Person(models.Model):
@@ -50,7 +51,10 @@ class Person(models.Model):
                                     max_length=17, blank=True)
     comment = models.TextField(blank=True)
 
+    def __str__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
 
 class WorkGroup(models.Model):
-    work_group = models.ForeignKey(Person, related_name='group', on_delete=models.CASCADE)
+    group_head = models.ForeignKey(Person, related_name='group', on_delete=models.CASCADE)
 

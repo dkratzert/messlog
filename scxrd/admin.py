@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from scxrd.cif_model import Atom, SumFormula
 from scxrd.models import Customer, CifFile, Machine, Solvent, Experiment
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserChangeForm
-from myuser.models import MyUser
+#from myuser.models import MyUser
 
 
 class ExperimentAdmin(admin.ModelAdmin):
@@ -41,9 +41,9 @@ class CifAdmin(admin.ModelAdmin):
     inlines = [AtomsInline]
 
 
-class MyUserChangeForm(UserChangeForm):
+"""class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
-        model = MyUser
+        model = MyUser"""
 
 
 #class MyUserAdmin(UserAdmin):
@@ -54,8 +54,7 @@ class MyUserChangeForm(UserChangeForm):
     #)
 
 
-#admin.site.unregister(User)
-admin.site.register(MyUser)
+#admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)

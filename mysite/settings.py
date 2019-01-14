@@ -144,6 +144,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-AUTH_USER_MODEL = 'myuser.MyUser'
+#AUTH_USER_MODEL = 'myuser.MyUser'
 
 
