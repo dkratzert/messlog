@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'bootstrap_datepicker_plus',
     'crispy_forms',
+    'myuser',
     # 'debug_toolbar',
 ]
 
@@ -143,5 +144,6 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+AUTH_USER_MODEL = 'myuser.MyUser'
 
 

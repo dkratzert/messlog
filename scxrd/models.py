@@ -4,12 +4,10 @@ from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 # Create your models here.
 from django.utils import timezone
-from django.contrib.auth.models import User
 
+from myuser.models import Person, MyUser
 from utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 from .cif_model import CifFile, Atom
-
-# from django.contrib.auth.models import AbstractUser, UserManager
 
 
 """
@@ -72,18 +70,10 @@ class Customer(models.Model):
     """
     Persons where samples belong to.
     """
-    name = models.CharField(verbose_name='first name', max_length=250, blank=True, null=True)
-    last_name = models.CharField(verbose_name='last name', max_length=250, blank=False, null=False)
-    workgroup = models.CharField(verbose_name='work group', max_length=250, blank=True, null=True)
-    company = models.CharField(verbose_name='company', max_length=250, blank=True, null=True)
-    mail_adress = models.EmailField(null=True, blank=True)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                 message="Phone number must be entered in the format: "
-                                         "'+999999999'. Up to 15 digits allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # validators should be a list
+    person = models.ForeignKey(Person, related_name='customer', on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
-        return '{} {}'.format(self.name, self.last_name)
+        return '{} {}'.format(self.person.first_name, self.person.last_name)
 
 
 class Experiment(models.Model):
@@ -92,7 +82,7 @@ class Experiment(models.Model):
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
     # TODO: Change to MyUser for case insensitive usernames:
-    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
+    operator = models.ForeignKey(MyUser, verbose_name='operator', related_name='experiments',
                                  on_delete=models.SET_NULL, null=True, blank=True)
     machine = models.OneToOneField(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                    related_name='experiments', null=True, blank=True)
