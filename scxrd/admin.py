@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.contrib.auth.models import User
+
 from scxrd.cif_model import Atom, SumFormula
 from scxrd.models import Customer, CifFile, Machine, Solvent, Experiment
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserChangeForm
@@ -44,16 +46,16 @@ class MyUserChangeForm(UserChangeForm):
         model = MyUser
 
 
-class MyUserAdmin(UserAdmin):
-    form = MyUserChangeForm
-
+#class MyUserAdmin(UserAdmin):
+#    form = MyUserChangeForm
+#
     #fieldsets = UserAdmin.fieldsets + (
     #        (None, {'fields': ('some_extra_data',)}),
     #)
 
 
-admin.site.unregister(User)
-admin.site.register(MyUser, UserAdmin)
+#admin.site.unregister(User)
+admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
