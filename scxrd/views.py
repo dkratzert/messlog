@@ -6,10 +6,11 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
+from scxrd.models import Person
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
 from scxrd.forms import ExperimentForm
-from scxrd.models import Experiment, Customer
+from scxrd.models import Experiment
 
 
 class ExperimentView(TemplateView):
@@ -84,7 +85,7 @@ class Customers(ListView):
     """
     The customers list view.
     """
-    model = Customer
+    model = Person
     template_name = 'scxrd/customers.html'
 
 

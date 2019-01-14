@@ -1,0 +1,1471 @@
+[
+  {
+    "model": "scxrd.ciffile",
+    "pk": 1,
+    "fields": {
+      "cif_file_on_disk": "cifs/Esser_JW283_0m_a_djKVItH.cif",
+      "sha256": "e4b81cfc1e63722e0d1dc312098472d995f917bca44762b87b593719d889361c",
+      "date_created": "2019-01-14T16:50:30.775Z",
+      "date_updated": "2019-01-14T16:50:30.775Z",
+      "filesize": 1078260,
+      "data": "esser_jw283_0m_a",
+      "cell_length_a": 5.3479,
+      "cell_length_b": 17.257,
+      "cell_length_c": 28.107,
+      "cell_angle_alpha": 90.0,
+      "cell_angle_beta": 90.0,
+      "cell_angle_gamma": 90.0,
+      "cell_volume": 2593.9,
+      "cell_formula_units_Z": 4,
+      "space_group_name_H_M_alt": "P 21 21 21",
+      "space_group_name_Hall": "P 2ac 2ab",
+      "space_group_centring_type": "P",
+      "space_group_IT_number": 19,
+      "space_group_crystal_system": "orthorhombic",
+      "space_group_symop_operation_xyz": "x, y, z\n-x+1/2, -y, z+1/2\n-x, y+1/2, -z+1/2\nx+1/2, -y+1/2, -z",
+      "audit_creation_method": "Olex2 1.2\r\n(compiled 2018.05.29 svn.r3508 for OlexSys, GUI svn.r5506)",
+      "chemical_formula_sum": "C34 H20 Cl2 O4",
+      "chemical_formula_weight": "563.40",
+      "exptl_crystal_description": "block",
+      "exptl_crystal_colour": "colourless",
+      "exptl_crystal_size_max": 0.25,
+      "exptl_crystal_size_mid": 0.14,
+      "exptl_crystal_size_min": 0.08,
+      "exptl_absorpt_coefficient_mu": 0.291,
+      "exptl_absorpt_correction_type": "multi-scan",
+      "diffrn_ambient_temperature": 100.01,
+      "diffrn_radiation_wavelength": 0.71073,
+      "diffrn_radiation_type": "MoK\\a",
+      "diffrn_source": "microfocus sealed X-ray tube",
+      "diffrn_measurement_device_type": "fixed-chi two circle goniometer",
+      "diffrn_reflns_number": 34844,
+      "diffrn_reflns_av_R_equivalents": 0.0333,
+      "diffrn_reflns_theta_min": 1.385,
+      "diffrn_reflns_theta_max": 33.185,
+      "diffrn_reflns_theta_full": 25.242,
+      "diffrn_measured_fraction_theta_max": 0.931,
+      "diffrn_measured_fraction_theta_full": 1.0,
+      "reflns_number_total": 8789,
+      "reflns_number_gt": 7572,
+      "reflns_threshold_expression": "I > 2\\s(I)",
+      "reflns_Friedel_coverage": 0.679,
+      "computing_structure_solution": "SHELXT 2018/2 (Sheldrick, 2018)",
+      "computing_structure_refinement": "ShelXL (Sheldrick, 2015)",
+      "refine_special_details": "?",
+      "refine_ls_abs_structure_Flack": "0.025(17)",
+      "refine_ls_structure_factor_coef": "Fsqd",
+      "refine_ls_weighting_details": "w=1/[\\s^2^(Fo^2^)+(0.0649P)^2^+1.4038P] where P=(Fo^2^+2Fc^2^)/3",
+      "refine_ls_number_reflns": 8789,
+      "refine_ls_number_parameters": 361,
+      "refine_ls_number_restraints": 0,
+      "refine_ls_R_factor_all": 0.0612,
+      "refine_ls_R_factor_gt": 0.0496,
+      "refine_ls_wR_factor_ref": 0.1312,
+      "refine_ls_wR_factor_gt": 0.1251,
+      "refine_ls_goodness_of_fit_ref": 1.039,
+      "refine_ls_restrained_S_all": 1.039,
+      "refine_ls_shift_su_max": 0.001,
+      "refine_ls_shift_su_mean": 0.0,
+      "refine_diff_density_max": 0.412,
+      "refine_diff_density_min": -0.715,
+      "diffrn_reflns_av_unetI_netI": 0.047,
+      "database_code_depnum_ccdc_archive": "1886536",
+      "shelx_res_file": ""
+    }
+  },
+  {
+    "model": "scxrd.sumformula",
+    "pk": 1,
+    "fields": {
+      "cif": 1,
+      "C": 34.0,
+      "D": 0.0,
+      "H": 20.0,
+      "N": 0.0,
+      "O": 4.0,
+      "Cl": 2.0,
+      "Br": 0.0,
+      "I": 0.0,
+      "F": 0.0,
+      "S": 0.0,
+      "P": 0.0,
+      "Ac": 0.0,
+      "Ag": 0.0,
+      "Al": 0.0,
+      "Am": 0.0,
+      "Ar": 0.0,
+      "As": 0.0,
+      "At": 0.0,
+      "Au": 0.0,
+      "B": 0.0,
+      "Ba": 0.0,
+      "Be": 0.0,
+      "Bi": 0.0,
+      "Bk": 0.0,
+      "Ca": 0.0,
+      "Cd": 0.0,
+      "Ce": 0.0,
+      "Cf": 0.0,
+      "Cm": 0.0,
+      "Co": 0.0,
+      "Cr": 0.0,
+      "Cs": 0.0,
+      "Cu": 0.0,
+      "Dy": 0.0,
+      "Er": 0.0,
+      "Eu": 0.0,
+      "Fe": 0.0,
+      "Fr": 0.0,
+      "Ga": 0.0,
+      "Gd": 0.0,
+      "Ge": 0.0,
+      "He": 0.0,
+      "Hf": 0.0,
+      "Hg": 0.0,
+      "Ho": 0.0,
+      "In": 0.0,
+      "Ir": 0.0,
+      "K": 0.0,
+      "Kr": 0.0,
+      "La": 0.0,
+      "Li": 0.0,
+      "Lu": 0.0,
+      "Mg": 0.0,
+      "Mn": 0.0,
+      "Mo": 0.0,
+      "Na": 0.0,
+      "Nb": 0.0,
+      "Nd": 0.0,
+      "Ne": 0.0,
+      "Ni": 0.0,
+      "Np": 0.0,
+      "Os": 0.0,
+      "Pa": 0.0,
+      "Pb": 0.0,
+      "Pd": 0.0,
+      "Pm": 0.0,
+      "Po": 0.0,
+      "Pr": 0.0,
+      "Pt": 0.0,
+      "Pu": 0.0,
+      "Ra": 0.0,
+      "Rb": 0.0,
+      "Re": 0.0,
+      "Rh": 0.0,
+      "Rn": 0.0,
+      "Ru": 0.0,
+      "Sb": 0.0,
+      "Sc": 0.0,
+      "Se": 0.0,
+      "Si": 0.0,
+      "Sm": 0.0,
+      "Sn": 0.0,
+      "Sr": 0.0,
+      "Ta": 0.0,
+      "Tb": 0.0,
+      "Tc": 0.0,
+      "Te": 0.0,
+      "Th": 0.0,
+      "Ti": 0.0,
+      "Tl": 0.0,
+      "Tm": 0.0,
+      "U": 0.0,
+      "V": 0.0,
+      "W": 0.0,
+      "Xe": 0.0,
+      "Y": 0.0,
+      "Yb": 0.0,
+      "Zn": 0.0,
+      "Zr": 0.0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 1,
+    "fields": {
+      "cif": 1,
+      "name": "Cl1",
+      "element": "Cl",
+      "x": -0.0067,
+      "y": 0.18485,
+      "z": 0.62813,
+      "xc": -0.03583092999999873,
+      "yc": 3.189956450000001,
+      "zc": 17.65484991,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 2,
+    "fields": {
+      "cif": 1,
+      "name": "O1",
+      "element": "O",
+      "x": 0.3672,
+      "y": 0.52642,
+      "z": 0.67324,
+      "xc": 1.963748880000002,
+      "yc": 9.084429940000003,
+      "zc": 18.92275668,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 3,
+    "fields": {
+      "cif": 1,
+      "name": "C1",
+      "element": "C",
+      "x": 0.0346,
+      "y": 0.60738,
+      "z": 0.6168,
+      "xc": 0.1850373400000017,
+      "yc": 10.481556660000003,
+      "zc": 17.3363976,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 4,
+    "fields": {
+      "cif": 1,
+      "name": "Cl2",
+      "element": "Cl",
+      "x": 0.3208,
+      "y": 0.22757,
+      "z": 0.54811,
+      "xc": 1.715606320000001,
+      "yc": 3.927175490000001,
+      "zc": 15.405727769999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 5,
+    "fields": {
+      "cif": 1,
+      "name": "O2",
+      "element": "O",
+      "x": -0.0756,
+      "y": 0.5225,
+      "z": 0.682,
+      "xc": -0.4043012399999983,
+      "yc": 9.016782500000001,
+      "zc": 19.168974000000002,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 6,
+    "fields": {
+      "cif": 1,
+      "name": "C2",
+      "element": "C",
+      "x": 0.0153,
+      "y": 0.68356,
+      "z": 0.59533,
+      "xc": 0.08182287000000174,
+      "yc": 11.796194920000001,
+      "zc": 16.73294031,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 7,
+    "fields": {
+      "cif": 1,
+      "name": "C3",
+      "element": "C",
+      "x": 0.1745,
+      "y": 0.70811,
+      "z": 0.55756,
+      "xc": 0.9332085500000017,
+      "yc": 12.219854270000003,
+      "zc": 15.671338919999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 8,
+    "fields": {
+      "cif": 1,
+      "name": "H3",
+      "element": "H",
+      "x": 0.299453,
+      "y": 0.673983,
+      "z": 0.545819,
+      "xc": 1.6014446987000017,
+      "yc": 11.630924631000003,
+      "zc": 15.341334633,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 9,
+    "fields": {
+      "cif": 1,
+      "name": "O3",
+      "element": "O",
+      "x": 0.0935,
+      "y": 0.58661,
+      "z": 0.76551,
+      "xc": 0.500028650000002,
+      "yc": 10.123128770000003,
+      "zc": 21.51618957,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 10,
+    "fields": {
+      "cif": 1,
+      "name": "C4",
+      "element": "C",
+      "x": 0.1488,
+      "y": 0.78141,
+      "z": 0.53773,
+      "xc": 0.7957675200000016,
+      "yc": 13.484792370000005,
+      "zc": 15.11397711,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 11,
+    "fields": {
+      "cif": 1,
+      "name": "H4",
+      "element": "H",
+      "x": 0.259666,
+      "y": 0.797583,
+      "z": 0.513258,
+      "xc": 1.3886678014000018,
+      "yc": 13.763889831000002,
+      "zc": 14.426142605999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 12,
+    "fields": {
+      "cif": 1,
+      "name": "O4",
+      "element": "O",
+      "x": 0.0276,
+      "y": 0.37217,
+      "z": 0.67166,
+      "xc": 0.14760204000000154,
+      "yc": 6.422537690000001,
+      "zc": 18.87834762,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 13,
+    "fields": {
+      "cif": 1,
+      "name": "C5",
+      "element": "C",
+      "x": -0.0415,
+      "y": 0.83222,
+      "z": 0.55375,
+      "xc": -0.2219378499999982,
+      "yc": 14.361620540000002,
+      "zc": 15.564251249999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 14,
+    "fields": {
+      "cif": 1,
+      "name": "H5",
+      "element": "H",
+      "x": -0.062848,
+      "y": 0.881332,
+      "z": 0.539028,
+      "xc": -0.33610481919999813,
+      "yc": 15.209146324000002,
+      "zc": 15.150459995999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 15,
+    "fields": {
+      "cif": 1,
+      "name": "C6",
+      "element": "C",
+      "x": -0.1957,
+      "y": 0.81043,
+      "z": 0.59068,
+      "xc": -1.046584029999998,
+      "yc": 13.985590510000003,
+      "zc": 16.60224276,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 16,
+    "fields": {
+      "cif": 1,
+      "name": "H6",
+      "element": "H",
+      "x": -0.323578,
+      "y": 0.844686,
+      "z": 0.601074,
+      "xc": -1.730462786199998,
+      "yc": 14.576746302000004,
+      "zc": 16.894386918,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 17,
+    "fields": {
+      "cif": 1,
+      "name": "C7",
+      "element": "C",
+      "x": -0.1661,
+      "y": 0.73715,
+      "z": 0.61355,
+      "xc": -0.8882861899999981,
+      "yc": 12.720997550000002,
+      "zc": 17.24504985,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 18,
+    "fields": {
+      "cif": 1,
+      "name": "C8",
+      "element": "C",
+      "x": -0.3041,
+      "y": 0.71764,
+      "z": 0.6554,
+      "xc": -1.6262963899999983,
+      "yc": 12.384313480000001,
+      "zc": 18.4213278,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 19,
+    "fields": {
+      "cif": 1,
+      "name": "H8",
+      "element": "H",
+      "x": -0.428374,
+      "y": 0.752202,
+      "z": 0.666918,
+      "xc": -2.290901314599998,
+      "yc": 12.980749914000004,
+      "zc": 18.745064226,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 20,
+    "fields": {
+      "cif": 1,
+      "name": "C9",
+      "element": "C",
+      "x": -0.259,
+      "y": 0.64945,
+      "z": 0.67921,
+      "xc": -1.3851060999999982,
+      "yc": 11.207558650000003,
+      "zc": 19.090555469999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 21,
+    "fields": {
+      "cif": 1,
+      "name": "H9",
+      "element": "H",
+      "x": -0.339792,
+      "y": 0.639067,
+      "z": 0.708628,
+      "xc": -1.8171736367999982,
+      "yc": 11.028379219000003,
+      "zc": 19.917407196,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 22,
+    "fields": {
+      "cif": 1,
+      "name": "C10",
+      "element": "C",
+      "x": -0.0908,
+      "y": 0.5948,
+      "z": 0.65937,
+      "xc": -0.4855893199999983,
+      "yc": 10.264463600000003,
+      "zc": 18.53291259,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 23,
+    "fields": {
+      "cif": 1,
+      "name": "C11",
+      "element": "C",
+      "x": 0.1917,
+      "y": 0.54494,
+      "z": 0.5956,
+      "xc": 1.025192430000002,
+      "yc": 9.404029580000003,
+      "zc": 16.7405292,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 24,
+    "fields": {
+      "cif": 1,
+      "name": "C12",
+      "element": "C",
+      "x": 0.3605,
+      "y": 0.50654,
+      "z": 0.62467,
+      "xc": 1.9279179500000014,
+      "yc": 8.741360780000003,
+      "zc": 17.557599689999996,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 25,
+    "fields": {
+      "cif": 1,
+      "name": "C13",
+      "element": "C",
+      "x": 0.5344,
+      "y": 0.45067,
+      "z": 0.60799,
+      "xc": 2.857917760000001,
+      "yc": 7.777212190000002,
+      "zc": 17.08877493,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 26,
+    "fields": {
+      "cif": 1,
+      "name": "H13",
+      "element": "H",
+      "x": 0.650221,
+      "y": 0.427098,
+      "z": 0.629145,
+      "xc": 3.477316885900002,
+      "yc": 7.370430186000001,
+      "zc": 17.683378514999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 27,
+    "fields": {
+      "cif": 1,
+      "name": "C14",
+      "element": "C",
+      "x": 0.5315,
+      "y": 0.43134,
+      "z": 0.56029,
+      "xc": 2.8424088500000013,
+      "yc": 7.4436343800000015,
+      "zc": 15.748071029999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 28,
+    "fields": {
+      "cif": 1,
+      "name": "H14",
+      "element": "H",
+      "x": 0.651259,
+      "y": 0.395751,
+      "z": 0.548206,
+      "xc": 3.4828680061000017,
+      "yc": 6.829475007000002,
+      "zc": 15.408426041999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 29,
+    "fields": {
+      "cif": 1,
+      "name": "C15",
+      "element": "C",
+      "x": 0.3501,
+      "y": 0.46438,
+      "z": 0.52898,
+      "xc": 1.8722997900000016,
+      "yc": 8.013805660000003,
+      "zc": 14.868040859999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 30,
+    "fields": {
+      "cif": 1,
+      "name": "C16",
+      "element": "C",
+      "x": 0.3382,
+      "y": 0.4409,
+      "z": 0.48015,
+      "xc": 1.8086597800000013,
+      "yc": 7.6086113000000015,
+      "zc": 13.49557605,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 31,
+    "fields": {
+      "cif": 1,
+      "name": "H16",
+      "element": "H",
+      "x": 0.457758,
+      "y": 0.405221,
+      "z": 0.468114,
+      "xc": 2.4480440082000015,
+      "yc": 6.992898797000001,
+      "zc": 13.157280197999999,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 32,
+    "fields": {
+      "cif": 1,
+      "name": "C17",
+      "element": "C",
+      "x": 0.1541,
+      "y": 0.46967,
+      "z": 0.45029,
+      "xc": 0.8241113900000012,
+      "yc": 8.10509519,
+      "zc": 12.65630103,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 33,
+    "fields": {
+      "cif": 1,
+      "name": "H17",
+      "element": "H",
+      "x": 0.148446,
+      "y": 0.453959,
+      "z": 0.417912,
+      "xc": 0.7938743634000011,
+      "yc": 7.833970463000002,
+      "zc": 11.746252584,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 34,
+    "fields": {
+      "cif": 1,
+      "name": "C18",
+      "element": "C",
+      "x": -0.0255,
+      "y": 0.52254,
+      "z": 0.46811,
+      "xc": -0.13637144999999865,
+      "yc": 9.01747278,
+      "zc": 13.157167770000001,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 35,
+    "fields": {
+      "cif": 1,
+      "name": "H18",
+      "element": "H",
+      "x": -0.154187,
+      "y": 0.540983,
+      "z": 0.447747,
+      "xc": -0.8245766572999986,
+      "yc": 9.335743631000001,
+      "zc": 12.584824929,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 36,
+    "fields": {
+      "cif": 1,
+      "name": "C19",
+      "element": "C",
+      "x": -0.0157,
+      "y": 0.54769,
+      "z": 0.51491,
+      "xc": -0.08396202999999852,
+      "yc": 9.451486330000002,
+      "zc": 14.47257537,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 37,
+    "fields": {
+      "cif": 1,
+      "name": "H19",
+      "element": "H",
+      "x": -0.137006,
+      "y": 0.583468,
+      "z": 0.526159,
+      "xc": -0.7326943873999984,
+      "yc": 10.068907276000003,
+      "zc": 14.788751013,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 38,
+    "fields": {
+      "cif": 1,
+      "name": "C20",
+      "element": "C",
+      "x": 0.1746,
+      "y": 0.52049,
+      "z": 0.54644,
+      "xc": 0.9337433400000015,
+      "yc": 8.982095930000003,
+      "zc": 15.358789080000001,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 39,
+    "fields": {
+      "cif": 1,
+      "name": "C21",
+      "element": "C",
+      "x": 0.1566,
+      "y": 0.49873,
+      "z": 0.69987,
+      "xc": 0.8374811400000017,
+      "yc": 8.606583610000003,
+      "zc": 19.67124609,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 40,
+    "fields": {
+      "cif": 1,
+      "name": "C22",
+      "element": "C",
+      "x": 0.2109,
+      "y": 0.53135,
+      "z": 0.75052,
+      "xc": 1.127872110000002,
+      "yc": 9.169506950000002,
+      "zc": 21.09486564,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 41,
+    "fields": {
+      "cif": 1,
+      "name": "C23",
+      "element": "C",
+      "x": 0.4182,
+      "y": 0.49234,
+      "z": 0.77663,
+      "xc": 2.236491780000002,
+      "yc": 8.496311380000002,
+      "zc": 21.82873941,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 42,
+    "fields": {
+      "cif": 1,
+      "name": "C24",
+      "element": "C",
+      "x": 0.5327,
+      "y": 0.52985,
+      "z": 0.81445,
+      "xc": 2.8488263300000014,
+      "yc": 9.143621450000003,
+      "zc": 22.89174615,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 43,
+    "fields": {
+      "cif": 1,
+      "name": "H24",
+      "element": "H",
+      "x": 0.47681,
+      "y": 0.579817,
+      "z": 0.823836,
+      "xc": 2.549932199000002,
+      "yc": 10.005901969000004,
+      "zc": 23.155558452,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 44,
+    "fields": {
+      "cif": 1,
+      "name": "C25",
+      "element": "C",
+      "x": 0.7335,
+      "y": 0.49382,
+      "z": 0.83924,
+      "xc": 3.922684650000002,
+      "yc": 8.521851740000002,
+      "zc": 23.58851868,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 45,
+    "fields": {
+      "cif": 1,
+      "name": "H25",
+      "element": "H",
+      "x": 0.811318,
+      "y": 0.519907,
+      "z": 0.865059,
+      "xc": 4.338847532200003,
+      "yc": 8.972035099000003,
+      "zc": 24.314213313,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 46,
+    "fields": {
+      "cif": 1,
+      "name": "C26",
+      "element": "C",
+      "x": 0.8149,
+      "y": 0.4217,
+      "z": 0.82605,
+      "xc": 4.358003710000003,
+      "yc": 7.277276900000003,
+      "zc": 23.21778735,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 47,
+    "fields": {
+      "cif": 1,
+      "name": "H26",
+      "element": "H",
+      "x": 0.949928,
+      "y": 0.398497,
+      "z": 0.84277,
+      "xc": 5.080119951200002,
+      "yc": 6.876862729000003,
+      "zc": 23.68773639,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 48,
+    "fields": {
+      "cif": 1,
+      "name": "C27",
+      "element": "C",
+      "x": 0.7009,
+      "y": 0.38083,
+      "z": 0.78768,
+      "xc": 3.7483431100000018,
+      "yc": 6.571983310000002,
+      "zc": 22.13932176,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 49,
+    "fields": {
+      "cif": 1,
+      "name": "C28",
+      "element": "C",
+      "x": 0.7809,
+      "y": 0.3053,
+      "z": 0.7739,
+      "xc": 4.176175110000001,
+      "yc": 5.268562100000001,
+      "zc": 21.7520073,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 50,
+    "fields": {
+      "cif": 1,
+      "name": "H28",
+      "element": "H",
+      "x": 0.917102,
+      "y": 0.28179,
+      "z": 0.790094,
+      "xc": 4.9045697858000015,
+      "yc": 4.8628500300000015,
+      "zc": 22.207172057999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 51,
+    "fields": {
+      "cif": 1,
+      "name": "C29",
+      "element": "C",
+      "x": 0.6645,
+      "y": 0.26578,
+      "z": 0.73758,
+      "xc": 3.553679550000002,
+      "yc": 4.586565460000002,
+      "zc": 20.73116106,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 52,
+    "fields": {
+      "cif": 1,
+      "name": "H29",
+      "element": "H",
+      "x": 0.721973,
+      "y": 0.215744,
+      "z": 0.728686,
+      "xc": 3.8610394067000016,
+      "yc": 3.7230942080000013,
+      "zc": 20.481177401999997,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 53,
+    "fields": {
+      "cif": 1,
+      "name": "C30",
+      "element": "C",
+      "x": 0.4588,
+      "y": 0.29969,
+      "z": 0.7134,
+      "xc": 2.453616520000002,
+      "yc": 5.171750330000002,
+      "zc": 20.0515338,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 54,
+    "fields": {
+      "cif": 1,
+      "name": "H30",
+      "element": "H",
+      "x": 0.375674,
+      "y": 0.271441,
+      "z": 0.689077,
+      "xc": 2.0090669846000018,
+      "yc": 4.684257337000001,
+      "zc": 19.367887239,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 55,
+    "fields": {
+      "cif": 1,
+      "name": "C31",
+      "element": "C",
+      "x": 0.3781,
+      "y": 0.3736,
+      "z": 0.72497,
+      "xc": 2.0220409900000016,
+      "yc": 6.447215200000001,
+      "zc": 20.37673179,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 56,
+    "fields": {
+      "cif": 1,
+      "name": "C32",
+      "element": "C",
+      "x": 0.168,
+      "y": 0.40874,
+      "z": 0.69778,
+      "xc": 0.8984472000000018,
+      "yc": 7.053626180000001,
+      "zc": 19.612502459999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 57,
+    "fields": {
+      "cif": 1,
+      "name": "C33",
+      "element": "C",
+      "x": 0.4982,
+      "y": 0.41633,
+      "z": 0.76241,
+      "xc": 2.664323780000002,
+      "yc": 7.184606810000001,
+      "zc": 21.42905787,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 58,
+    "fields": {
+      "cif": 1,
+      "name": "C34",
+      "element": "C",
+      "x": 0.056,
+      "y": 0.2541,
+      "z": 0.58261,
+      "xc": 0.2994824000000013,
+      "yc": 4.385003700000001,
+      "zc": 16.37541927,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 59,
+    "fields": {
+      "cif": 1,
+      "name": "H34A",
+      "element": "H",
+      "x": -0.091762,
+      "y": 0.258523,
+      "z": 0.561572,
+      "xc": -0.49073399979999877,
+      "yc": 4.4613314110000015,
+      "zc": 15.784104203999998,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.atom",
+    "pk": 60,
+    "fields": {
+      "cif": 1,
+      "name": "H34B",
+      "element": "H",
+      "x": 0.085725,
+      "y": 0.305407,
+      "z": 0.597306,
+      "xc": 0.4584487275000014,
+      "yc": 5.270408599000001,
+      "zc": 16.788479742,
+      "occupancy": 1.0,
+      "part": 0
+    }
+  },
+  {
+    "model": "scxrd.person",
+    "pk": 1,
+    "fields": {
+      "first_name": "Stefan",
+      "last_name": "Meier",
+      "company": "Albert-Ludwigs-Universit\u00e4t Freiburg",
+      "work_group": 1,
+      "street": "Albertstra\u00dfe",
+      "house_number": "21",
+      "building": "AC",
+      "town": "Freiburg",
+      "country": "",
+      "postal_code": "79104",
+      "email_adress": "daniel.kratzert@ac.uni-freiburg.de",
+      "phone_number": "7612036156",
+      "comment": ""
+    }
+  },
+  {
+    "model": "scxrd.person",
+    "pk": 2,
+    "fields": {
+      "first_name": "Ingo",
+      "last_name": "Krossing",
+      "company": "Albert-Ludwigs-Universit\u00e4t Freiburg",
+      "work_group": 1,
+      "street": "Albertstra\u00dfe",
+      "house_number": "21",
+      "building": "Institut f\u00fcr Anorganische und Analytische Chemie",
+      "town": "Freiburg im Breisgau",
+      "country": "Deutschland",
+      "postal_code": "79104",
+      "email_adress": "daniel.kratzert@ac.uni-freiburg.de",
+      "phone_number": "7612036156",
+      "comment": ""
+    }
+  },
+  {
+    "model": "scxrd.person",
+    "pk": 3,
+    "fields": {
+      "first_name": "Birgit",
+      "last_name": "Esser",
+      "company": "Albert-Ludwigs-Universit\u00e4t Freiburg",
+      "work_group": null,
+      "street": "Institut f\u00fcr Anorganische und Analytische Chemie, Albertstra\u00dfe 21",
+      "house_number": "21",
+      "building": "Oc",
+      "town": "Freiburg im Breisgau",
+      "country": "Deutschland",
+      "postal_code": "79104",
+      "email_adress": "daniel.kratzert@ac.uni-freiburg.de",
+      "phone_number": "7612036156",
+      "comment": ""
+    }
+  },
+  {
+    "model": "scxrd.workgroup",
+    "pk": 1,
+    "fields": {
+      "group_head": 2
+    }
+  },
+  {
+    "model": "scxrd.workgroup",
+    "pk": 3,
+    "fields": {
+      "group_head": 3
+    }
+  },
+  {
+    "model": "scxrd.machine",
+    "pk": 1,
+    "fields": {
+      "name": "APEX"
+    }
+  },
+  {
+    "model": "scxrd.machine",
+    "pk": 2,
+    "fields": {
+      "name": "Spider"
+    }
+  },
+  {
+    "model": "scxrd.machine",
+    "pk": 3,
+    "fields": {
+      "name": "Venture"
+    }
+  },
+  {
+    "model": "scxrd.machine",
+    "pk": 4,
+    "fields": {
+      "name": "Foobar"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 1,
+    "fields": {
+      "name": "Hexane"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 2,
+    "fields": {
+      "name": "THF"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 3,
+    "fields": {
+      "name": "Toluene"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 4,
+    "fields": {
+      "name": "Pentane"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 5,
+    "fields": {
+      "name": "CHCl3"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 6,
+    "fields": {
+      "name": "acetone"
+    }
+  },
+  {
+    "model": "scxrd.solvent",
+    "pk": 7,
+    "fields": {
+      "name": "diglyme"
+    }
+  },
+  {
+    "model": "scxrd.crystalsupport",
+    "pk": 1,
+    "fields": {
+      "support": "glass capillary"
+    }
+  },
+  {
+    "model": "scxrd.crystalsupport",
+    "pk": 2,
+    "fields": {
+      "support": "cat whisker"
+    }
+  },
+  {
+    "model": "scxrd.crystalsupport",
+    "pk": 3,
+    "fields": {
+      "support": "cactus needle"
+    }
+  },
+  {
+    "model": "scxrd.crystalsupport",
+    "pk": 4,
+    "fields": {
+      "support": "glass fiber"
+    }
+  },
+  {
+    "model": "scxrd.crystalsupport",
+    "pk": 5,
+    "fields": {
+      "support": "MiTeGen Loop"
+    }
+  },
+  {
+    "model": "scxrd.crystalglue",
+    "pk": 1,
+    "fields": {
+      "glue": "Polyether Oil"
+    }
+  },
+  {
+    "model": "scxrd.crystalglue",
+    "pk": 2,
+    "fields": {
+      "glue": "Grease"
+    }
+  },
+  {
+    "model": "scxrd.crystalglue",
+    "pk": 3,
+    "fields": {
+      "glue": "Motor Oil"
+    }
+  },
+  {
+    "model": "scxrd.crystalshape",
+    "pk": 1,
+    "fields": {
+      "habitus": "block"
+    }
+  },
+  {
+    "model": "scxrd.crystalshape",
+    "pk": 2,
+    "fields": {
+      "habitus": "plate"
+    }
+  },
+  {
+    "model": "scxrd.crystalshape",
+    "pk": 3,
+    "fields": {
+      "habitus": "needle"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$120000$VN2ZklDtRVGO$J2WuC0GQF8Q206AcaGPKiyIAftHBqgtDhLhu4R2OwZg=",
+      "last_login": "2019-01-14T16:17:23Z",
+      "is_superuser": true,
+      "username": "daniel",
+      "first_name": "Daniel",
+      "last_name": "Kratzert",
+      "email": "dkratzert@gmx.de",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-01-14T16:13:20Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "scxrd.experiment",
+    "pk": 1,
+    "fields": {
+      "experiment": "Breit_F124B",
+      "number": 1,
+      "customer": 1,
+      "operator": 1,
+      "machine": 1,
+      "sum_formula": "C5H5O4",
+      "measure_date": "2019-01-14T16:33:46Z",
+      "submit_date": "2019-01-14",
+      "result_date": null,
+      "base": 5,
+      "glue": 1,
+      "cif": 1,
+      "crystal_colour": 3,
+      "crystal_colour_mod": 2,
+      "crystal_colour_lustre": 3,
+      "special_details": "",
+      "solvents_used": [
+        1,
+        2
+      ]
+    }
+  }
+]

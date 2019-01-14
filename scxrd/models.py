@@ -1,15 +1,13 @@
 import datetime
 
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
 from django.utils import timezone
 
-from myuser.models import Person
-from utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
-from .cif_model import CifFile, Atom
-
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from scxrd.cif_model import CifFile, Atom
 
 """
 TODO:
@@ -24,6 +22,47 @@ TODO:
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
 """
+
+validate_email = EmailValidator()
+
+phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                 message="Phone number must be entered in the format: "
+                                         "'+999999999'. Up to 15 digits allowed.")
+
+
+class Person(models.Model):
+    """
+    Persons where samples belong to.
+    A Person is a Human that has no authentication.
+    """
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
+    company = models.CharField(max_length=200, verbose_name='company', blank=True)
+    work_group = models.ForeignKey('WorkGroup', related_name='person', max_length=200, blank=True, null=True,
+                                   on_delete=models.DO_NOTHING)
+    street = models.CharField(max_length=250, blank=True)
+    house_number = models.CharField(max_length=200, blank=True)
+    building = models.CharField(max_length=200, blank=True)
+    town = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+    postal_code = models.CharField(max_length=200, blank=True)
+    email_adress = models.EmailField(max_length=250, validators=[validate_email], blank=True)
+    phone_number = models.CharField(  # validators=[phone_validator],
+        max_length=17, blank=True)
+    comment = models.TextField(blank=True)
+
+    def __str__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+
+class WorkGroup(models.Model):
+    """
+    A work group is a group of Person() with a leading group_head (which is also a Person).
+    """
+    group_head = models.ForeignKey(Person, related_name='group', on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return "AK {}".format(self.group_head.last_name)
 
 
 class Machine(models.Model):
@@ -52,12 +91,18 @@ class CrystalSupport(models.Model):
     """
     support = models.CharField(verbose_name='crystal support', max_length=200, unique=True)
 
+    def __str__(self):
+        return self.support
+
 
 class CrystalGlue(models.Model):
     """
     What kind of addhesive was used?
     """
     glue = models.CharField(verbose_name='crystal glue', max_length=200, unique=True)
+
+    def __str__(self):
+        return self.glue
 
 
 class CrystalShape(models.Model):
@@ -66,22 +111,15 @@ class CrystalShape(models.Model):
     """
     habitus = models.CharField(verbose_name='crystal shape', max_length=200, unique=True)
 
-
-class Customer(models.Model):
-    """
-    Persons where samples belong to.
-    """
-    person = models.ForeignKey(Person, related_name='customer', on_delete=models.DO_NOTHING, null=True)
-
     def __str__(self):
-        return '{} {}'.format(self.person.first_name, self.person.last_name)
+        return self.habitus
 
 
 class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='')
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(to=Person, on_delete=models.SET_NULL, null=True, blank=True, related_name='experiment')
     # TODO: Change to MyUser for case insensitive usernames:
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
                                  on_delete=models.SET_NULL, null=True, blank=True)
@@ -101,7 +139,7 @@ class Experiment(models.Model):
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=0)
     crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, default=0)
     crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES, default=0)
-    #_exptl_special_details:
+    # _exptl_special_details:
     special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True, default='')
 
     class Meta:
@@ -117,4 +155,3 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
-

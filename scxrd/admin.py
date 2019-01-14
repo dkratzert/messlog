@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
-from django.contrib.auth.models import User
+from scxrd.cif_model import Atom
+from scxrd.models import CifFile, Machine, Solvent, Experiment, WorkGroup
+from scxrd.models import CrystalSupport, CrystalShape, CrystalGlue
+from scxrd.models import Person
 
-from scxrd.cif_model import Atom, SumFormula
-from scxrd.models import Customer, CifFile, Machine, Solvent, Experiment
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserChangeForm
-#from myuser.models import MyUser
+
+# Register your models here.
+# from myuser.models import MyUser
 
 
 class ExperimentAdmin(admin.ModelAdmin):
@@ -45,19 +46,22 @@ class CifAdmin(admin.ModelAdmin):
     class Meta(UserChangeForm.Meta):
         model = MyUser"""
 
-
-#class MyUserAdmin(UserAdmin):
+# class MyUserAdmin(UserAdmin):
 #    form = MyUserChangeForm
 #
-    #fieldsets = UserAdmin.fieldsets + (
-    #        (None, {'fields': ('some_extra_data',)}),
-    #)
+# fieldsets = UserAdmin.fieldsets + (
+#        (None, {'fields': ('some_extra_data',)}),
+# )
 
 
-#admin.site.register(MyUser)
+# admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(Machine)
 admin.site.register(Solvent)
-admin.site.register(Customer)
+admin.site.register(Person)
+admin.site.register(WorkGroup)
 admin.site.register(CifFile, CifAdmin)
+admin.site.register(CrystalSupport)
+admin.site.register(CrystalShape)
+admin.site.register(CrystalGlue)
 
