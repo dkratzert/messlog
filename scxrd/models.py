@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+from utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 from .cif_model import CifFile, Atom
 
 # from django.contrib.auth.models import AbstractUser, UserManager
@@ -45,6 +46,28 @@ class Solvent(models.Model):
         return self.name
 
 
+class CrystalSupport(models.Model):
+    """
+    How was it mounted?
+    _diffrn_measurement_specimen_support e.g. 'glass capillary'
+    """
+    support = models.CharField(verbose_name='crystal support', max_length=200, unique=True)
+
+
+class CrystalGlue(models.Model):
+    """
+    What kind of addhesive was used?
+    """
+    glue = models.CharField(verbose_name='crystal glue', max_length=200, unique=True)
+
+
+class CrystalShape(models.Model):
+    """
+    A description of the quality and habit of the crystal.
+    """
+    habitus = models.CharField(verbose_name='crystal shape', max_length=200, unique=True)
+
+
 class Customer(models.Model):
     """
     Persons where samples belong to.
@@ -68,18 +91,27 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='')
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Customer, on_delete=models.SET_NULL, null=True, blank=True)
-    machine = models.ForeignKey(to=Machine, verbose_name='diffractometer', parent_link=True,
-                                on_delete=models.SET_NULL, null=True, blank=True)
+    # TODO: Change to MyUser for case insensitive usernames:
+    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
+                                 on_delete=models.SET_NULL, null=True, blank=True)
+    machine = models.OneToOneField(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
+                                   related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='structure results date', blank=True, null=True)
-    # TODO: Change to MyUser for case insensitive usernames:
-    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiment',
-                                 on_delete=models.SET_NULL, null=True, blank=True)
-    cif = models.ForeignKey(CifFile, null=True, blank=True, related_name="cif_file",
-                            verbose_name='cif file', on_delete=models.SET_NULL)
+    base = models.ForeignKey(CrystalSupport, verbose_name='sample base', related_name='+', blank=True, null=True,
+                             on_delete=models.DO_NOTHING)
+    glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='+', blank=True, null=True,
+                             on_delete=models.DO_NOTHING)
+    cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
+                               verbose_name='cif file', on_delete=models.CASCADE)
+    crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=0)
+    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, default=0)
+    crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES, default=0)
+    #_exptl_special_details:
+    special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True, default='')
 
     class Meta:
         ordering = ["-number"]
@@ -94,3 +126,4 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
+

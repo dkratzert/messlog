@@ -20,4 +20,26 @@ class CustomUser(AbstractUser):
     """
     Extend user model here:
     """
-    objects = CustomUserManager()'''
+    objects = CustomUserManager()
+
+
+class Person():
+    first_name =
+    last_name =
+    street =
+    house_number =
+    building =
+    town =
+    country =
+    postal_code =
+    email_adress =
+    phone_number =
+    comment =
+
+
+class WorkGroup():
+    group_leader = ForeignKey(Person, related_name='group')
+
+
+
+'''

@@ -32,7 +32,8 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    # sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING)
+    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING, 
+    #                                     related_name='cif_file')
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
     cell_length_a = models.FloatField(null=True, blank=True)
@@ -144,15 +145,18 @@ class CifFile(models.Model):
         else:
             return None
         if cif_parsed.cif_data['calculated_formula_sum']:
-            # TODO: Sum formula calculation is wrong
             self.sumform_exact = self.fill_formula(cif_parsed)
             self.sumform_exact.save()
         if cif_parsed.atoms:
             for at in cif_parsed.atoms:
-                self.atoms = Atom(cif=self, name=at[0], element=at[1],
-                                  x=at[2], y=at[3], z=at[4],
+                self.atoms = Atom(cif=self,
+                                  name=at[0],
+                                  element=at[1],
+                                  x=at[2],  y=at[3],  z=at[4],
                                   xc=at[5], yc=at[6], zc=at[7],
-                                  occupancy=at[8], part=at[9])
+                                  occupancy=at[8],
+                                  part=at[9])
+                # TODO: Is it faster with save_base()? 
                 self.atoms.save()
         self.data = cif_parsed.cif_data["data"]
         self.cell_length_a = get_float(cif_parsed.cif_data["_cell_length_a"])
@@ -354,6 +358,9 @@ class SumFormula(models.Model):
     Zr = models.FloatField(default=0)
 
     def __str__(self):
+        """
+        Returns a html formated sum formula.
+        """
         atomsdict = {key: getattr(self, key) for key in sorted_atoms}
         return format_sum_formula(atomsdict)
 
