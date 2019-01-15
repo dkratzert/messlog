@@ -98,7 +98,7 @@ class CifFile(models.Model):
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
-    shelx_res_file = models.TextField(null=True, blank=True)
+    shelx_res_file = models.TextField(null=True, blank=True, max_length=10000000)
 
     #################################
 

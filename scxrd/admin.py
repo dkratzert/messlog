@@ -39,7 +39,8 @@ class AtomsInline(admin.TabularInline):
 
 
 class CifAdmin(admin.ModelAdmin):
-    inlines = [AtomsInline]
+    pass
+    #inlines = [AtomsInline]
 
 
 """class MyUserChangeForm(UserChangeForm):
@@ -56,11 +57,11 @@ class CifAdmin(admin.ModelAdmin):
 
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
-admin.site.register(Machine)
-admin.site.register(Solvent)
+admin.site.register(CifFile, CifAdmin)
 admin.site.register(Person)
 admin.site.register(WorkGroup)
-admin.site.register(CifFile, CifAdmin)
+admin.site.register(Machine)
+admin.site.register(Solvent)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalShape)
 admin.site.register(CrystalGlue)
