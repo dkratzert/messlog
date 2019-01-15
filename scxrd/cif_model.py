@@ -4,7 +4,9 @@ from django.db import models
 from django.utils import timezone
 import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
-from scxrd.cif.cifparser import Cif
+from gemmi import cif as gcif
+
+from scxrd.utils import frac_to_cart
 from .utils import generate_sha256
 DEBUG = False
 
@@ -105,9 +107,8 @@ class CifFile(models.Model):
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
         self.sha256 = generate_sha256(self.cif_file_on_disk.file)
-        with open(self.cif_file_on_disk.file.name, errors='ignore') as cf:
-            # save cif content to db table
-            self.fill_residuals_table(cf.readlines())
+        # save cif content to db table:
+        self.fill_residuals_table(self.cif_file_on_disk.file.name)
         self.filesize = self.cif_file_on_disk.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()
@@ -135,27 +136,38 @@ class CifFile(models.Model):
         cf.unlink()
         super().delete(*args, **kwargs)
 
-    def fill_residuals_table(self, ciflist):
+    def fill_residuals_table(self, cif_file):
         """
         Fill the table with residuals of the refinement.
         """
-        cif_parsed = Cif()
-        cifok = cif_parsed.parsefile(ciflist)
-        if cifok:
-            if DEBUG:
-                print('cif file parsed')
-        else:
-            return None
-        if cif_parsed.cif_data['calculated_formula_sum']:
-            self.sumform_exact = self.fill_formula(cif_parsed)
-            self.sumform_exact.save()
+        cif_parsed = gcif.read_file(cif_file)
+        cif_block = cif_parsed.sole_block()
+        fw = cif_block.find_value
+        cell = gcif.as_number(fw('_cell_length_a')), gcif.as_number(fw('_cell_length_b')), gcif.as_number(
+            fw('_cell_length_c'))
+        #struct = gemmi.read_atomic_structure(cif_file)  # This is a bit hacky
+        #if cif_parsed.cif_data['calculated_formula_sum']:
+        #    self.sumform_exact = self.fill_formula(cif_parsed)
+        #    self.sumform_exact.save()
+
+        # struct = gemmi.read_atomic_structure('media/cifs/BreitJS_5_74_0m_a.cif')
+        # struct.cell.orthogonalize(gemmi.Fractional(struct.sites[0].fract.x, struct.sites[0].fract.y, struct.sites[0].fract.z))
+        #[struct.cell.orthogonalize(gemmi.Fractional(x.fract.x, x.fract.y, x.fract.z)) for x in struct.sites]
+
         if cif_parsed.atoms:
-            for at in cif_parsed.atoms:
+            for name, type, x, y, z, occ, part in (cif_block.find_loop('_atom_site_label'),
+                                                       cif_block.find_loop('_atom_site_type_symbol'),
+                                                       cif_block.find_loop('_atom_site_fract_x'),
+                                                       cif_block.find_loop('_atom_site_fract_y'),
+                                                       cif_block.find_loop('_atom_site_fract_z'),
+                                                       cif_block.find_loop('_atom_site_occupancy'),
+                                                       cif_block.find_loop('_atom_site_disorder_group')):
+                xc, yc, zc = frac_to_cart((x, y, z), cell)
                 self.atoms = Atom(cif=self,
-                                  name=at[0],
-                                  element=at[1],
-                                  x=at[2],  y=at[3],  z=at[4],
-                                  xc=at[5], yc=at[6], zc=at[7],
+                                  name=name,
+                                  element=type,
+                                  x=x,  y=y,  z=z,
+                                  xc=xc, yc=yc, zc=zc,
                                   occupancy=at[8],
                                   part=at[9])
                 # TODO: Is it faster with save_base()?

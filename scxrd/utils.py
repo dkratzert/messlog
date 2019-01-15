@@ -16,6 +16,25 @@ def generate_sha256(file):
     return hash.hexdigest()
 
 
+def frac_to_cart(frac_coord, cell):
+    """
+    Converts fractional coordinates to cartesian coodinates
+    :param frac_coord: [float, float, float]
+    :param cell:       [float, float, float, float, float, float]
+    """
+    a, b, c, alpha, beta, gamma = cell
+    x, y, z = frac_coord
+    alpha = radians(alpha)
+    beta = radians(beta)
+    gamma = radians(gamma)
+    cosastar = (cos(beta) * cos(gamma) - cos(alpha)) / (sin(beta) * sin(gamma))
+    sinastar = sqrt(1 - cosastar ** 2)
+    Xc = a * x + (b * cos(gamma)) * y + (c * cos(beta)) * z
+    Yc = 0 + (b * sin(gamma)) * y + (-c * sin(beta) * cosastar) * z
+    Zc = 0 + 0 + (c * sin(beta) * sinastar) * z
+    return [Xc, Yc, Zc]
+
+
 COLOUR_CHOICES = (
     (0, 'not applicable'),
     (1, 'colourless'),
