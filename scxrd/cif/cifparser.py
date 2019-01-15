@@ -4,8 +4,8 @@ Created on 09.02.2015
 
  ----------------------------------------------------------------------------
 * "THE BEER-WARE LICENSE" (Revision 42):
-* <daniel.kratzert@uni-freiburg.de> wrote this file. As long as you retain this 
-* notice you can do whatever you want with this stuff. If we meet some day, and 
+* <daniel.kratzert@uni-freiburg.de> wrote this file. As long as you retain this
+* notice you can do whatever you want with this stuff. If we meet some day, and
 * you think this stuff is worth it, you can buy me a beer in return.
 * ----------------------------------------------------------------------------
 
@@ -231,9 +231,7 @@ class Cif(object):
                     semi_colon_text_field = ''
                     continue
             if (textlen - 1 > num) and txt[num + 1][0] == ";":
-                # if line.startswith("_shelx_res_file"):
-                #    break
-                # continue  # use continue if data is behind res file
+                # First line of a semicolon text field:
                 semi_colon_text_field = line
                 continue
         self.cif_data['_loop'] = loops

@@ -5,9 +5,9 @@ from django.core.validators import MinValueValidator, EmailValidator, RegexValid
 from django.db import models
 # Create your models here.
 from django.utils import timezone
-
-from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from django.utils.translation import gettext_lazy as _
 from scxrd.cif_model import CifFile, Atom
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
@@ -23,7 +23,18 @@ TODO:
 - http://ccbv.co.uk/projects/Django/2.0
 """
 
-validate_email = EmailValidator()
+
+def validate_email(value):
+    """
+    Validate that a username is email like.
+    """
+    _validate_email = EmailValidator()
+    try:
+        _validate_email(value)
+    except ValidationError:
+        raise ValidationError(_('Enter a valid email address.'))
+    return value
+
 
 phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: "
@@ -34,6 +45,7 @@ class Person(models.Model):
     """
     Persons where samples belong to.
     A Person is a Human that has no authentication.
+    A Person does not need to have a User account.
     """
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
@@ -46,20 +58,30 @@ class Person(models.Model):
     town = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200, blank=True)
     postal_code = models.CharField(max_length=200, blank=True)
-    email_adress = models.EmailField(max_length=250, validators=[validate_email], blank=True)
-    phone_number = models.CharField(  # validators=[phone_validator],
-        max_length=17, blank=True)
+    email_adress = models.EmailField(max_length=250, blank=True, validators=[validate_email])
+    phone_number = models.CharField(max_length=17, blank=True
+                                    # validators=[phone_validator],
+                                    )
     comment = models.TextField(blank=True)
 
     def __str__(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        name = '{} {}'.format(self.first_name, self.last_name)
+        try:
+            self.work_group.group_head
+        except AttributeError:
+            return name
+        else:
+            if self.work_group.group_head == self:
+                return name + '*'
+            else:
+                return name
 
 
 class WorkGroup(models.Model):
     """
     A work group is a group of Person() with a leading group_head (which is also a Person).
     """
-    group_head = models.ForeignKey(Person, related_name='group', on_delete=models.DO_NOTHING)
+    group_head = models.OneToOneField(Person, related_name='group', on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return "AK {}".format(self.group_head.last_name)
@@ -120,10 +142,10 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='')
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(to=Person, on_delete=models.SET_NULL, null=True, blank=True, related_name='experiment')
-    # TODO: Change to MyUser for case insensitive usernames:
+    # Operator has to be an authenticated User:
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
                                  on_delete=models.SET_NULL, null=True, blank=True)
-    machine = models.OneToOneField(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
+    machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                    related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
@@ -137,8 +159,8 @@ class Experiment(models.Model):
     cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
                                verbose_name='cif file', on_delete=models.CASCADE)
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=0)
-    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, default=0)
-    crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES, default=0)
+    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, default=0, blank=True)
+    crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES, default=0, blank=True)
     # _exptl_special_details:
     special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True, default='')
 

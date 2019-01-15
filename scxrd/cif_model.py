@@ -6,7 +6,7 @@ import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.cif.cifparser import Cif
 from .utils import generate_sha256
-
+DEBUG = False
 
 def get_float(line: str) -> (int, None):
     try:
@@ -32,7 +32,7 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING, 
+    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING,
     #                                     related_name='cif_file')
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
@@ -130,7 +130,8 @@ class CifFile(models.Model):
 
     def delete(self, *args, **kwargs):
         cf = Path(self.cif_file_on_disk.path)
-        print('deleting', cf.name, 'in', cf.absolute())
+        if DEBUG:
+            print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)
 
@@ -141,7 +142,8 @@ class CifFile(models.Model):
         cif_parsed = Cif()
         cifok = cif_parsed.parsefile(ciflist)
         if cifok:
-            print('cif file parsed')
+            if DEBUG:
+                print('cif file parsed')
         else:
             return None
         if cif_parsed.cif_data['calculated_formula_sum']:
@@ -156,7 +158,7 @@ class CifFile(models.Model):
                                   xc=at[5], yc=at[6], zc=at[7],
                                   occupancy=at[8],
                                   part=at[9])
-                # TODO: Is it faster with save_base()? 
+                # TODO: Is it faster with save_base()?
                 self.atoms.save()
         self.data = cif_parsed.cif_data["data"]
         self.cell_length_a = get_float(cif_parsed.cif_data["_cell_length_a"])
