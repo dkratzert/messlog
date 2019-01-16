@@ -1,4 +1,5 @@
 import hashlib
+from math import radians, cos, sin, sqrt
 
 
 def generate_sha256(file):
@@ -51,7 +52,6 @@ COLOUR_CHOICES = (
     (12, 'violet')
 )
 
-
 COLOUR_MOD_CHOICES = (
     (0, 'not applicable'),
     (1, 'light'),
@@ -68,7 +68,6 @@ COLOUR_MOD_CHOICES = (
     (12, 'bluish')
 )
 
-
 COLOUR_LUSTRE_COICES = (
     (0, 'not applicable'),
     (1, 'metallic'),
@@ -77,6 +76,35 @@ COLOUR_LUSTRE_COICES = (
 )
 
 
+def get_float(line: str) -> (int, None):
+    try:
+        return float(line.split('(')[0].split(' ')[0])
+    except ValueError:
+        return None
 
 
+def get_int(line: str) -> (int, None):
+    try:
+        return int(line.split('(')[0].split(' ')[0])
+    except ValueError:
+        return None
 
+
+st = r''';
+Olex2 1.2
+(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)
+;'''
+
+
+def get_string(line: str):
+    """
+    >>> get_string("';foo bar;'")
+    'foo bar'
+    >>> get_string(st)
+    '\nOlex2 1.2\n(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)\n'
+    """
+    try:
+        # I do this, because gemmi returns strings with quotes:
+        return line.strip("';")
+    except AttributeError:
+        return ''

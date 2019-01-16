@@ -6,22 +6,10 @@ import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from gemmi import cif as gcif
 
-from scxrd.utils import frac_to_cart
-from .utils import generate_sha256
+from scxrd.utils import frac_to_cart, get_float, get_int, get_string
+from scxrd.utils import generate_sha256
+
 DEBUG = False
-
-def get_float(line: str) -> (int, None):
-    try:
-        return float(line.split('(')[0].split(' ')[0])
-    except ValueError:
-        return None
-
-
-def get_int(line: str) -> (int, None):
-    try:
-        return int(line.split('(')[0].split(' ')[0])
-    except ValueError:
-        return None
 
 
 class CifFile(models.Model):
@@ -34,7 +22,7 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    #sumform_exact = models.OneToOneField(SumFormula, null=True, blank=True, on_delete=models.DO_NOTHING,
+    # sumform_exact = models.OneToOneField('SumFormula', null=True, blank=True, on_delete=models.DO_NOTHING,
     #                                     related_name='cif_file')
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
@@ -143,98 +131,89 @@ class CifFile(models.Model):
         cif_parsed = gcif.read_file(cif_file)
         cif_block = cif_parsed.sole_block()
         fw = cif_block.find_value
-        cell = gcif.as_number(fw('_cell_length_a')), gcif.as_number(fw('_cell_length_b')), gcif.as_number(
-            fw('_cell_length_c'))
-        #struct = gemmi.read_atomic_structure(cif_file)  # This is a bit hacky
-        #if cif_parsed.cif_data['calculated_formula_sum']:
-        #    self.sumform_exact = self.fill_formula(cif_parsed)
-        #    self.sumform_exact.save()
-
-        # struct = gemmi.read_atomic_structure('media/cifs/BreitJS_5_74_0m_a.cif')
-        # struct.cell.orthogonalize(gemmi.Fractional(struct.sites[0].fract.x, struct.sites[0].fract.y, struct.sites[0].fract.z))
-        #[struct.cell.orthogonalize(gemmi.Fractional(x.fract.x, x.fract.y, x.fract.z)) for x in struct.sites]
-
-        if cif_parsed.atoms:
-            for name, type, x, y, z, occ, part in (cif_block.find_loop('_atom_site_label'),
-                                                       cif_block.find_loop('_atom_site_type_symbol'),
-                                                       cif_block.find_loop('_atom_site_fract_x'),
-                                                       cif_block.find_loop('_atom_site_fract_y'),
-                                                       cif_block.find_loop('_atom_site_fract_z'),
-                                                       cif_block.find_loop('_atom_site_occupancy'),
-                                                       cif_block.find_loop('_atom_site_disorder_group')):
-                xc, yc, zc = frac_to_cart((x, y, z), cell)
-                self.atoms = Atom(cif=self,
-                                  name=name,
-                                  element=type,
-                                  x=x,  y=y,  z=z,
-                                  xc=xc, yc=yc, zc=zc,
-                                  occupancy=at[8],
-                                  part=at[9])
-                # TODO: Is it faster with save_base()?
-                self.atoms.save()
-        self.data = cif_parsed.cif_data["data"]
-        self.cell_length_a = get_float(cif_parsed.cif_data["_cell_length_a"])
-        self.cell_length_b = get_float(cif_parsed.cif_data['_cell_length_b'])
-        self.cell_length_c = get_float(cif_parsed.cif_data['_cell_length_c'])
-        self.cell_angle_alpha = get_float(cif_parsed.cif_data['_cell_angle_alpha'])
-        self.cell_angle_beta = get_float(cif_parsed.cif_data['_cell_angle_beta'])
-        self.cell_angle_gamma = get_float(cif_parsed.cif_data['_cell_angle_gamma'])
-        self.cell_volume = get_float(cif_parsed.cif_data["_cell_volume"])
-        self.cell_formula_units_Z = get_int(cif_parsed.cif_data["_cell_formula_units_Z"])
-        self.space_group_name_H_M_alt = cif_parsed.cif_data["_space_group_name_H-M_alt"]
-        self.space_group_name_Hall = cif_parsed.cif_data["_space_group_name_Hall"]
-        self.space_group_centring_type = cif_parsed.cif_data["_space_group_centring_type"]
-        self.space_group_IT_number = get_int(cif_parsed.cif_data["_space_group_IT_number"])
-        self.space_group_crystal_system = cif_parsed.cif_data["_space_group_crystal_system"]
-        self.space_group_symop_operation_xyz = cif_parsed.cif_data["_space_group_symop_operation_xyz"]
-        self.audit_creation_method = cif_parsed.cif_data["_audit_creation_method"]
-        self.chemical_formula_sum = cif_parsed.cif_data["_chemical_formula_sum"]
-        self.chemical_formula_weight = cif_parsed.cif_data["_chemical_formula_weight"]
-        self.exptl_crystal_description = cif_parsed.cif_data["_exptl_crystal_description"]
-        self.exptl_crystal_colour = cif_parsed.cif_data["_exptl_crystal_colour"]
-        self.exptl_crystal_size_max = get_float(cif_parsed.cif_data["_exptl_crystal_size_max"])
-        self.exptl_crystal_size_mid = get_float(cif_parsed.cif_data["_exptl_crystal_size_mid"])
-        self.exptl_crystal_size_min = get_float(cif_parsed.cif_data["_exptl_crystal_size_min"])
-        self.exptl_absorpt_coefficient_mu = get_float(cif_parsed.cif_data["_exptl_absorpt_coefficient_mu"])
-        self.exptl_absorpt_correction_type = cif_parsed.cif_data["_exptl_absorpt_correction_type"]
-        self.diffrn_ambient_temperature = get_float(cif_parsed.cif_data["_diffrn_ambient_temperature"])
-        self.diffrn_radiation_wavelength = get_float(cif_parsed.cif_data["_diffrn_radiation_wavelength"])
-        self.diffrn_radiation_type = cif_parsed.cif_data["_diffrn_radiation_type"]
-        self.diffrn_source = cif_parsed.cif_data["_diffrn_source"]
-        self.diffrn_measurement_device_type = cif_parsed.cif_data["_diffrn_measurement_device_type"]
-        self.diffrn_reflns_number = get_int(cif_parsed.cif_data["_diffrn_reflns_number"])
-        self.diffrn_reflns_av_R_equivalents = get_float(cif_parsed.cif_data["_diffrn_reflns_av_R_equivalents"])
-        self.diffrn_reflns_theta_min = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_min"])
-        self.diffrn_reflns_theta_max = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_max"])
-        self.diffrn_reflns_theta_full = get_float(cif_parsed.cif_data["_diffrn_reflns_theta_full"])
-        self.diffrn_measured_fraction_theta_max = get_float(cif_parsed.cif_data["_diffrn_measured_fraction_theta_max"])
-        self.diffrn_measured_fraction_theta_full = get_float(cif_parsed.cif_data["_diffrn_measured_fraction_theta_full"])
-        self.reflns_number_total = get_int(cif_parsed.cif_data["_reflns_number_total"])
-        self.reflns_number_gt = get_int(cif_parsed.cif_data["_reflns_number_gt"])
-        self.reflns_threshold_expression = cif_parsed.cif_data["_reflns_threshold_expression"]
-        self.reflns_Friedel_coverage = get_float(cif_parsed.cif_data["_reflns_Friedel_coverage"])
-        self.computing_structure_solution = cif_parsed.cif_data["_computing_structure_solution"]
-        self.computing_structure_refinement = cif_parsed.cif_data["_computing_structure_refinement"]
-        self.refine_special_details = cif_parsed.cif_data["_refine_special_details"]
-        self.refine_ls_abs_structure_Flack = cif_parsed.cif_data["_refine_ls_abs_structure_Flack"]
-        self.refine_ls_structure_factor_coef = cif_parsed.cif_data["_refine_ls_structure_factor_coef"]
-        self.refine_ls_weighting_details = cif_parsed.cif_data["_refine_ls_weighting_details"]
-        self.refine_ls_number_reflns = get_int(cif_parsed.cif_data["_refine_ls_number_reflns"])
-        self.refine_ls_number_parameters = get_int(cif_parsed.cif_data["_refine_ls_number_parameters"])
-        self.refine_ls_number_restraints = get_int(cif_parsed.cif_data["_refine_ls_number_restraints"])
-        self.refine_ls_R_factor_all = get_float(cif_parsed.cif_data["_refine_ls_R_factor_all"])
-        self.refine_ls_R_factor_gt = get_float(cif_parsed.cif_data["_refine_ls_R_factor_gt"])
-        self.refine_ls_wR_factor_ref = get_float(cif_parsed.cif_data["_refine_ls_wR_factor_ref"])
-        self.refine_ls_wR_factor_gt = get_float(cif_parsed.cif_data["_refine_ls_wR_factor_gt"])
-        self.refine_ls_goodness_of_fit_ref = get_float(cif_parsed.cif_data["_refine_ls_goodness_of_fit_ref"])
-        self.refine_ls_restrained_S_all = get_float(cif_parsed.cif_data["_refine_ls_restrained_S_all"])
-        self.refine_ls_shift_su_max = get_float(cif_parsed.cif_data["_refine_ls_shift/su_max"])
-        self.refine_ls_shift_su_mean = get_float(cif_parsed.cif_data["_refine_ls_shift/su_mean"])
-        self.refine_diff_density_max = get_float(cif_parsed.cif_data["_refine_diff_density_max"])
-        self.refine_diff_density_min = get_float(cif_parsed.cif_data["_refine_diff_density_min"])
-        self.diffrn_reflns_av_unetI_netI = get_float(cif_parsed.cif_data["_diffrn_reflns_av_unetI/netI"])
-        self.database_code_depnum_ccdc_archive = cif_parsed.cif_data["_database_code_depnum_ccdc_archive"]
-        self.shelx_res_file = cif_parsed.cif_data["_shelx_res_file"]
+        fl = cif_block.find_loop
+        cell = gcif.as_number(fw('_cell_length_a')), \
+               gcif.as_number(fw('_cell_length_b')), \
+               gcif.as_number(fw('_cell_length_c')), \
+               gcif.as_number(fw('_cell_angle_alpha')), \
+               gcif.as_number(fw('_cell_angle_beta')), \
+               gcif.as_number(fw('_cell_angle_gamma')), \
+               gcif.as_number(fw('_cell_volume'))
+        for name, element, x, y, z, occ, part in zip(list(fl('_atom_site_label')),
+                                                     list(fl('_atom_site_type_symbol')),
+                                                     list(fl('_atom_site_fract_x')),
+                                                     list(fl('_atom_site_fract_y')),
+                                                     list(fl('_atom_site_fract_z')),
+                                                     list(fl('_atom_site_occupancy')),
+                                                     list(fl('_atom_site_disorder_group'))):
+            xc, yc, zc = frac_to_cart((get_float(x), get_float(y), get_float(z)), cell[:6])
+            part = get_int(part)
+            self.atoms = Atom(cif=self,
+                              name=name,
+                              element=element,
+                              x=get_float(x), y=get_float(y), z=get_float(z),
+                              xc=xc, yc=yc, zc=zc,
+                              occupancy=gcif.as_number(occ),
+                              part=part if part else 0)
+            self.atoms.save()
+        self.data = cif_block.name
+        self.cell_length_a, self.cell_length_b, self.cell_length_c, self.cell_angle_alpha, \
+        self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cell
+        self.cell_formula_units_Z = get_int(fw("_cell_formula_units_Z"))
+        self.space_group_name_H_M_alt = get_string(fw("_space_group_name_H-M_alt"))
+        self.space_group_name_Hall = get_string(fw("_space_group_name_Hall"))
+        self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
+        self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
+        self.space_group_crystal_system = get_string(fw("_space_group_crystal_system"))
+        self.space_group_symop_operation_xyz = get_string(fw("_space_group_symop_operation_xyz"))
+        self.audit_creation_method = get_string(fw("_audit_creation_method"))
+        self.chemical_formula_sum = get_string(fw("_chemical_formula_sum"))
+        self.chemical_formula_weight = get_string(fw("_chemical_formula_weight"))
+        self.exptl_crystal_description = get_string(fw("_exptl_crystal_description"))
+        self.exptl_crystal_colour = get_string(fw("_exptl_crystal_colour"))
+        self.exptl_crystal_size_max = get_float(fw("_exptl_crystal_size_max"))
+        self.exptl_crystal_size_mid = get_float(fw("_exptl_crystal_size_mid"))
+        self.exptl_crystal_size_min = get_float(fw("_exptl_crystal_size_min"))
+        self.exptl_absorpt_coefficient_mu = get_float(fw("_exptl_absorpt_coefficient_mu"))
+        self.exptl_absorpt_correction_type = get_string(fw("_exptl_absorpt_correction_type"))
+        self.diffrn_ambient_temperature = get_float(fw("_diffrn_ambient_temperature"))
+        self.diffrn_radiation_wavelength = get_float(fw("_diffrn_radiation_wavelength"))
+        self.diffrn_radiation_type = get_string(fw("_diffrn_radiation_type"))
+        self.diffrn_source = get_string(fw("_diffrn_source"))
+        self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
+        self.diffrn_reflns_number = get_int(fw("_diffrn_reflns_number"))
+        self.diffrn_reflns_av_R_equivalents = get_float(fw("_diffrn_reflns_av_R_equivalents"))
+        self.diffrn_reflns_theta_min = get_float(fw("_diffrn_reflns_theta_min"))
+        self.diffrn_reflns_theta_max = get_float(fw("_diffrn_reflns_theta_max"))
+        self.diffrn_reflns_theta_full = get_float(fw("_diffrn_reflns_theta_full"))
+        self.diffrn_measured_fraction_theta_max = get_float(fw("_diffrn_measured_fraction_theta_max"))
+        self.diffrn_measured_fraction_theta_full = get_float(fw("_diffrn_measured_fraction_theta_full"))
+        self.reflns_number_total = get_int(fw("_reflns_number_total"))
+        self.reflns_number_gt = get_int(fw("_reflns_number_gt"))
+        self.reflns_threshold_expression = get_string(fw("_reflns_threshold_expression"))
+        self.reflns_Friedel_coverage = get_float(fw("_reflns_Friedel_coverage"))
+        self.computing_structure_solution = get_string(fw("_computing_structure_solution"))
+        self.computing_structure_refinement = get_string(fw("_computing_structure_refinement"))
+        self.refine_special_details = get_string(fw("_refine_special_details"))
+        self.refine_ls_abs_structure_Flack = get_string(fw("_refine_ls_abs_structure_Flack"))
+        self.refine_ls_structure_factor_coef = get_string(fw("_refine_ls_structure_factor_coef"))
+        self.refine_ls_weighting_details = get_string(fw("_refine_ls_weighting_details"))
+        self.refine_ls_number_reflns = get_int(fw("_refine_ls_number_reflns"))
+        self.refine_ls_number_parameters = get_int(fw("_refine_ls_number_parameters"))
+        self.refine_ls_number_restraints = get_int(fw("_refine_ls_number_restraints"))
+        self.refine_ls_R_factor_all = get_float(fw("_refine_ls_R_factor_all"))
+        self.refine_ls_R_factor_gt = get_float(fw("_refine_ls_R_factor_gt"))
+        self.refine_ls_wR_factor_ref = get_float(fw("_refine_ls_wR_factor_ref"))
+        self.refine_ls_wR_factor_gt = get_float(fw("_refine_ls_wR_factor_gt"))
+        self.refine_ls_goodness_of_fit_ref = get_float(fw("_refine_ls_goodness_of_fit_ref"))
+        self.refine_ls_restrained_S_all = get_float(fw("_refine_ls_restrained_S_all"))
+        self.refine_ls_shift_su_max = get_float(fw("_refine_ls_shift/su_max"))
+        self.refine_ls_shift_su_mean = get_float(fw("_refine_ls_shift/su_mean"))
+        self.refine_diff_density_max = get_float(fw("_refine_diff_density_max"))
+        self.refine_diff_density_min = get_float(fw("_refine_diff_density_min"))
+        self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
+        self.database_code_depnum_ccdc_archive = get_string(fw("_database_code_depnum_ccdc_archive"))
+        self.shelx_res_file = get_string(fw("_shelx_res_file"))
 
     def wr2_in_percent(self):
         if self.refine_ls_wR_factor_ref:

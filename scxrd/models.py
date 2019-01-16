@@ -6,7 +6,7 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from scxrd.cif_model import CifFile, Atom
+from scxrd.cif_model import CifFile
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """

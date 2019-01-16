@@ -1,0 +1,1 @@
+[{"model": "scxrd.crystalshape", "pk": 1, "fields": {"habitus": "block"}}, {"model": "scxrd.crystalshape", "pk": 2, "fields": {"habitus": "plate"}}, {"model": "scxrd.crystalshape", "pk": 3, "fields": {"habitus": "needle"}}]

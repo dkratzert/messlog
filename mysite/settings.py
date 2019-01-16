@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'bootstrapform',
     'bootstrap_datepicker_plus',
     'crispy_forms',
-    'myuser',
     # 'debug_toolbar',
 ]
 
