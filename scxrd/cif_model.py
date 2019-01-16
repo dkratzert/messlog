@@ -131,22 +131,26 @@ class CifFile(models.Model):
         cif_parsed = gcif.read_file(cif_file)
         cif_block = cif_parsed.sole_block()
         fw = cif_block.find_value
-        fl = cif_block.find_loop
-        cell = gcif.as_number(fw('_cell_length_a')), \
-               gcif.as_number(fw('_cell_length_b')), \
-               gcif.as_number(fw('_cell_length_c')), \
-               gcif.as_number(fw('_cell_angle_alpha')), \
-               gcif.as_number(fw('_cell_angle_beta')), \
-               gcif.as_number(fw('_cell_angle_gamma')), \
-               gcif.as_number(fw('_cell_volume'))
-        for name, element, x, y, z, occ, part in zip(list(fl('_atom_site_label')),
-                                                     list(fl('_atom_site_type_symbol')),
-                                                     list(fl('_atom_site_fract_x')),
-                                                     list(fl('_atom_site_fract_y')),
-                                                     list(fl('_atom_site_fract_z')),
-                                                     list(fl('_atom_site_occupancy')),
-                                                     list(fl('_atom_site_disorder_group'))):
-            xc, yc, zc = frac_to_cart((get_float(x), get_float(y), get_float(z)), cell[:6])
+        cell = get_float(fw('_cell_length_a')), \
+               get_float(fw('_cell_length_b')), \
+               get_float(fw('_cell_length_c')), \
+               get_float(fw('_cell_angle_alpha')), \
+               get_float(fw('_cell_angle_beta')), \
+               get_float(fw('_cell_angle_gamma')), \
+               get_float(fw('_cell_volume'))
+        # TODO: This might be optimized by
+        table = cif_block.find(['_atom_site_label',
+                                '_atom_site_type_symbol',
+                                '_atom_site_fract_x',
+                                '_atom_site_fract_y',
+                                '_atom_site_fract_z',
+                                '_atom_site_occupancy',
+                                '_atom_site_disorder_group'])
+        for name, element, x, y, z, occ, part in table:
+            try:
+                xc, yc, zc = frac_to_cart((get_float(x), get_float(y), get_float(z)), cell[:6])
+            except (TypeError, ValueError):
+                continue
             part = get_int(part)
             self.atoms = Atom(cif=self,
                               name=name,

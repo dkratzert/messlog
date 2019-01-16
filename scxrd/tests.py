@@ -135,7 +135,12 @@ class CifFileTest(TestCase):
         self.assertEqual(ex.cif.data, 'p21c')
         # ex.save() would delete the cif handle:
         ex.save_base()
-        self.assertEqual(ex.cif.shelx_res_file[:20], 'TITL p21c in P2(1)/c')
+        self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
+        self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
+        self.assertEqual(ex.cif.shelx_res_file[:30].replace('\r\n', '').replace('\n', ''),
+                         'TITL p21c in P2(1)/c    p2')
+        #self.assertEqual(ex.cif.atoms.x, '')
+        self.assertEqual(ex.cif.space_group_name_H_M_alt, 'P 21/c')
         response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         # delete file afterwards:
@@ -167,7 +172,7 @@ class WorkGroupTest(TestCase):
         # TODO: why is it not evaluating?
         pers = Person(first_name='DAniel', last_name='Kratzert', email_adress='-!ß\/()')
         pers.save()
-        #print(pers.email_adress)
+        # print(pers.email_adress)
 
 
 class OtherTablesTest(TestCase):
@@ -192,6 +197,7 @@ class OtherTablesTest(TestCase):
         shape = CrystalShape(habitus='block')
         shape = save()
         self.assertEqual(str(shape), 'block')
+
 
 if __name__ == '__main':
     pass

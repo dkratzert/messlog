@@ -1,6 +1,6 @@
- 
+
 data_p21c
- 
+
 _audit_creation_method            'SHELXL-2016/6'
 _shelx_SHELXL_version_number      '2016/6'
 _chemical_name_systematic         ?
@@ -8,7 +8,7 @@ _chemical_name_common             ?
 _chemical_melting_point           ?
 _chemical_formula_moiety          ?
 _chemical_formula_sum
- 'C0.25 H0.50 Al1.25 F Ga1.50 O0.75' 
+ 'C0.25 H0.50 Al1.25 F Ga1.50 O0.75'
 _chemical_formula_weight          172.81
 
 loop_
@@ -29,12 +29,12 @@ loop_
  'International Tables Vol C Tables 4.2.6.8 and 6.1.1.4'
  'Ga'  'Ga'   0.2307   1.6083
  'International Tables Vol C Tables 4.2.6.8 and 6.1.1.4'
- 
+
 _space_group_crystal_system       monoclinic
 _space_group_IT_number            14
 _space_group_name_H-M_alt         'P 21/c'
 _space_group_name_Hall            '-P 2ybc'
- 
+
 _shelx_space_group_comment
 ;
 The symmetry employed for this shelxl refinement is uniquely defined
@@ -42,14 +42,14 @@ by the following loop, which should always be used as a source of
 symmetry information in preference to the above space-group names.
 They are only intended as comments.
 ;
- 
+
 loop_
  _space_group_symop_operation_xyz
  'x, y, z'
  '-x, y+1/2, -z+1/2'
  '-x, -y, -z'
  'x, -y-1/2, z-1/2'
- 
+
 _cell_length_a                    10.5086(3)
 _cell_length_b                    20.9035(5)
 _cell_length_c                    20.5072(5)
@@ -62,12 +62,12 @@ _cell_measurement_temperature     100(2)
 _cell_measurement_reflns_used     ?
 _cell_measurement_theta_min       ?
 _cell_measurement_theta_max       ?
- 
+
 _exptl_crystal_description        ?
 _exptl_crystal_colour             ?
 _exptl_crystal_density_meas       ?
 _exptl_crystal_density_method     ?
-_exptl_crystal_density_diffrn     0.255          
+_exptl_crystal_density_diffrn     0.255
 _exptl_crystal_F_000              319
 _exptl_transmission_factor_min    ?
 _exptl_transmission_factor_max    ?
@@ -113,18 +113,18 @@ _reflns_threshold_expression      'I > 2\s(I)'
 _reflns_Friedel_coverage          0.000
 _reflns_Friedel_fraction_max      .
 _reflns_Friedel_fraction_full     .
- 
+
 _reflns_special_details
 ;
  Reflections were merged by SHELXL according to the crystal
  class for the calculation of statistics and refinement.
- 
+
  _reflns_Friedel_fraction is defined as the number of unique
  Friedel pairs measured divided by the number that would be
  possible theoretically, ignoring centric projections and
  systematic absences.
 ;
- 
+
 _computing_data_collection        ?
 _computing_cell_refinement        ?
 _computing_data_reduction         ?
@@ -155,7 +155,7 @@ _refine_ls_goodness_of_fit_ref    0.999
 _refine_ls_restrained_S_all       0.919
 _refine_ls_shift/su_max           0.135
 _refine_ls_shift/su_mean          0.004
- 
+
 loop_
  _atom_site_label
  _atom_site_type_symbol
@@ -165,7 +165,7 @@ loop_
  _atom_site_U_iso_or_equiv
  _atom_site_adp_type
  _atom_site_occupancy
- _atom_site_site_symmetry_order  
+ _atom_site_site_symmetry_order
  _atom_site_calc_flag
  _atom_site_refinement_flags_posn
  _atom_site_refinement_flags_adp
@@ -300,7 +300,7 @@ C4_4 C -0.1029(6) 0.2022(3) 0.3323(3) 0.0352(16) Uani 0.445(4) 1 d D U P A 2
 F7_4 F -0.1050(17) 0.1523(7) 0.3731(8) 0.052(4) Uani 0.445(4) 1 d D U P A 2
 F8_4 F -0.1346(16) 0.1792(9) 0.2721(5) 0.044(3) Uani 0.445(4) 1 d D U P A 2
 F9_4 F -0.1940(4) 0.2425(3) 0.3470(2) 0.0455(14) Uani 0.445(4) 1 d D U P A 2
- 
+
 loop_
  _atom_site_aniso_label
  _atom_site_aniso_U_11
@@ -413,7 +413,7 @@ C4_4 0.029(3) 0.061(4) 0.014(3) -0.006(3) -0.003(2) -0.008(3)
 F7_4 0.043(6) 0.069(7) 0.042(6) 0.014(5) -0.006(4) -0.019(4)
 F8_4 0.030(4) 0.077(8) 0.024(3) -0.017(3) -0.009(2) -0.012(4)
 F9_4 0.020(2) 0.084(4) 0.031(2) -0.015(3) -0.0066(17) 0.008(3)
- 
+
 _geom_special_details
 ;
  All esds (except the esd in the dihedral angle between two l.s. planes)
@@ -423,7 +423,7 @@ _geom_special_details
  used when they are defined by crystal symmetry.  An approximate (isotropic)
  treatment of cell esds is used for estimating esds involving l.s. planes.
 ;
- 
+
 loop_
  _geom_bond_atom_site_label_1
  _geom_bond_atom_site_label_2
@@ -556,7 +556,7 @@ C3_4 F5_4 1.339(10) . ?
 C4_4 F9_4 1.326(8) . ?
 C4_4 F8_4 1.346(9) . ?
 C4_4 F7_4 1.338(10) . ?
- 
+
 loop_
  _geom_angle_atom_site_label_1
  _geom_angle_atom_site_label_2
@@ -798,7 +798,7 @@ F8_4 C4_4 F7_4 106.3(9) . . ?
 F9_4 C4_4 C1_4 111.7(6) . . ?
 F8_4 C4_4 C1_4 112.3(10) . . ?
 F7_4 C4_4 C1_4 110.7(10) . . ?
- 
+
 _refine_diff_density_max    0.404
 _refine_diff_density_min   -0.688
 _refine_diff_density_rms    0.073
