@@ -9,3 +9,5 @@ easy-thumbnails==2.5
 Pillow==5.4.1
 pytz==2018.9
 sqlparse==0.2.4
+gemmi
+django-cleanup

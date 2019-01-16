@@ -95,6 +95,7 @@ class CifFile(models.Model):
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
         self.sha256 = generate_sha256(self.cif_file_on_disk.file)
+        Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         self.fill_residuals_table(self.cif_file_on_disk.file.name)
         self.filesize = self.cif_file_on_disk.size
