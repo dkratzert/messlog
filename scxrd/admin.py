@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.contrib import admin
 
 from scxrd.cif_model import Atom
@@ -15,6 +16,11 @@ class ExperimentAdmin(admin.ModelAdmin):
     list_filter = ['measure_date']
     search_fields = ['experiment', 'number', 'sum_formula']
     ordering = ['-number']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['number'].initial = Experiment.objects.first().number + 1
+        return form
 
 
 class AtomsInline(admin.TabularInline):
@@ -39,8 +45,17 @@ class AtomsInline(admin.TabularInline):
 
 
 class CifAdmin(admin.ModelAdmin):
-    pass
-    #inlines = [AtomsInline]
+    model = CifFile
+    list_display = ['change', 'cif_file_on_disk', 'experiment', 'number_of_atoms']
+
+    def change(self, obj):
+        return self.model.objects.get(id=obj.id)
+
+    def experiment(self, obj):
+        return Experiment.objects.get(cif_id=obj.pk)
+
+    def number_of_atoms(self, obj):
+        return Atom.objects.filter(cif_id=obj.pk).count()
 
 
 """class MyUserChangeForm(UserChangeForm):
@@ -65,4 +80,3 @@ admin.site.register(Solvent)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalShape)
 admin.site.register(CrystalGlue)
-

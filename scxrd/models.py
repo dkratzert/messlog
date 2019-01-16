@@ -139,12 +139,11 @@ class CrystalShape(models.Model):
 
 class Experiment(models.Model):
     fixtures = ['experiment']
-    experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='')
+    experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    customer = models.ForeignKey(to=Person, on_delete=models.SET_NULL, null=True, blank=True, related_name='experiment')
+    customer = models.ForeignKey(to=Person, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
     # Operator has to be an authenticated User:
-    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments',
-                                 on_delete=models.SET_NULL, null=True, blank=True)
+    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                    related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)

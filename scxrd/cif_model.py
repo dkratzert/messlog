@@ -1,10 +1,12 @@
 from pathlib import Path
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from gemmi import cif as gcif
+from django.utils.translation import gettext_lazy as _
 
 from scxrd.utils import frac_to_cart, get_float, get_int, get_string
 from scxrd.utils import generate_sha256
@@ -12,11 +14,16 @@ from scxrd.utils import generate_sha256
 DEBUG = False
 
 
+def validate_file_extension(value):
+    if not value.name.endswith('.cif'):
+        raise ValidationError(_('Only .cif files are allowed to upload here.'))
+
+
 class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True)
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_file_extension])
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -94,10 +101,14 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
+        # save cif content to db table:
+        try:
+            self.fill_residuals_table(self.cif_file_on_disk.file.name)
+        except RuntimeError as e:
+            print('Error while saving cif file:', e)
+            return
         self.sha256 = generate_sha256(self.cif_file_on_disk.file)
         Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
-        # save cif content to db table:
-        self.fill_residuals_table(self.cif_file_on_disk.file.name)
         self.filesize = self.cif_file_on_disk.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()
@@ -150,7 +161,8 @@ class CifFile(models.Model):
         for name, element, x, y, z, occ, part in table:
             try:
                 xc, yc, zc = frac_to_cart((get_float(x), get_float(y), get_float(z)), cell[:6])
-            except (TypeError, ValueError):
+            except (TypeError, ValueError) as e:
+                print("Error while calculating cart. coords:", e)
                 continue
             part = get_int(part)
             self.atoms = Atom(cif=self,
@@ -158,7 +170,7 @@ class CifFile(models.Model):
                               element=element,
                               x=get_float(x), y=get_float(y), z=get_float(z),
                               xc=xc, yc=yc, zc=zc,
-                              occupancy=gcif.as_number(occ),
+                              occupancy=get_float(occ),
                               part=part if part else 0)
             self.atoms.save()
         self.data = cif_block.name
