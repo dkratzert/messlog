@@ -1,21 +1,23 @@
-{% extends 'base.html' %}
+{% extends 'scxrd/experiment_base.html' %}
 {% load bootstrap %}
 
-{% block content %}
-{% load static %}
-{{ form.media }}
+{% block inner_content %}
+    {% load crispy_forms_tags %}
+    {% load crispy_forms_field %}
+    {% load static %}
+    {{ form.media }}
 
 
-<form class="form-h" method="post">
-     {# <legend>Form Title</legend> #}
-    {% csrf_token %}
-    {{ form| bootstrap_horizontal }}
-    <div class="form-group">
-        <div class="col-sm-6 col-sm-offset-2">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
+    <form method="post" novalidate>
+        {# <legend>Form Title</legend> #}
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'scxrd:index' %}" class="btn btn-danger" role="button">Cancel</a>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
-{% endblock content %}
+{% endblock inner_content %}

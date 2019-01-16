@@ -1,11 +1,12 @@
 # Create your tests here.
+import sys
 import tempfile
+import unittest
 from datetime import datetime
 from pathlib import Path
 from wsgiref.handlers import SimpleHandler
 
 import pytz
-import sys
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -18,15 +19,17 @@ from scxrd.cif_model import CifFile
 from scxrd.models import Experiment, Machine, Person, WorkGroup, Solvent, CrystalSupport, CrystalGlue, CrystalShape
 
 """
-TODO: 
-The position of 
-migrations.CreateModel(
-    name='Machine',
-    [...]
-is critical. By default, its position in the migration is faulty.      
+TODO:      
 
 - Test atoms   
 """
+
+
+class HomeTests(TestCase):
+    def test_home_view_status_code(self):
+        url = reverse('scxrd:index')
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
 
 
 def create_experiment(number, cif=None, save_related=False):
@@ -140,8 +143,8 @@ class CifFileTest(TestCase):
         ex.save_base()
         self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
         self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
-        self.assertEqual(ex.cif.shelx_res_file[:30].replace('\r\n', '').replace('\n', ''),
-                         'TITL p21c in P2(1)/c    p2')
+        self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '')[:30],
+                         'TITL p21c in P2(1)/c    p21c.r')
         # self.assertEqual(ex.cif.atoms.x, '')
         self.assertEqual(ex.cif.space_group_name_H_M_alt, 'P 21/c')
         response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
@@ -212,6 +215,7 @@ def hello_app(environ, start_response):
 
 class TestWSGIRef(TestCase):
 
+    @unittest.skip
     def testConnectionAbortedError(self):
         class AbortingWriter:
             def write(self, b):

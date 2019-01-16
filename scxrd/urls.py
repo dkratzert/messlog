@@ -8,7 +8,7 @@ from . import views
 app_name = 'scxrd'
 
 urlpatterns = [
-    path('', views.ExperimentView.as_view(), name='index'),
+    path('', views.ExperimentIndexView.as_view(), name='index'),
     path('new/', views.ExperimentCreateView.as_view(), name='new'),
     path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit'),
     path('view/<int:pk>/', views.ExperimentDetailView.as_view(), name='view'),

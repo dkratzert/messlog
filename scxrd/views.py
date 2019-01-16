@@ -14,7 +14,7 @@ from scxrd.forms import ExperimentForm
 from scxrd.models import Experiment
 
 
-class ExperimentView(TemplateView):
+class ExperimentIndexView(TemplateView):
     """
     The view for the main scxrd page.
     """
