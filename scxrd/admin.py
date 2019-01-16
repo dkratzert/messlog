@@ -19,7 +19,10 @@ class ExperimentAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['number'].initial = Experiment.objects.first().number + 1
+        try:
+            form.base_fields['number'].initial = Experiment.objects.first().number + 1
+        except AttributeError:
+            form.base_fields['number'].initial = 1
         return form
 
 

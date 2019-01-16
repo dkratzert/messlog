@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import View
@@ -140,7 +141,45 @@ class OrderListJson(BaseDatatableView):
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
-    max_display_length = 5000000
+    max_display_length = 500000
 
-    # def get_filter_method(self):
-    #    return self.FILTER_ICONTAINS
+    pre_camel_case_notation = False
+
+    def get_filter_method(self):
+        return self.FILTER_ICONTAINS
+
+    '''
+    def render_column(self, row, column):
+        # We want to render user as a custom column
+        if column == 'user':
+            return '%s %s' % (row.customer_firstname, row.customer_lastname)
+        else:
+            return super(OrderListJson, self).render_column(row, column)
+    '''
+    '''
+    def filter_queryset(self, qs):
+        """ If search['value'] is provided then filter all searchable columns using filter_method (istartswith
+            by default).
+
+            Automatic filtering only works for Datatables 1.10+. For older versions override this method
+        """
+        columns = self._columns
+        if not self.pre_camel_case_notation:
+            # get global search value
+            search = self._querydict.get('search[value]', None)
+            q = Q()
+            filter_method = self.get_filter_method()
+            for col_no, col in enumerate(self.columns_data):
+                print(col_no, col, '##')
+                # apply global search to all searchable columns
+                if search and col['searchable']:
+                    q |= Q(**{'{0}__{1}'.format(columns[col_no].replace('.', '__'), filter_method): search})
+                    print(search, '######')
+                # column specific filter
+                if col['search.value']:
+                    qs = qs.filter(**{
+                        '{0}__{1}'.format(columns[col_no].replace('.', '__'), filter_method): col['search.value']})
+            qs = qs.filter(q)
+        return qs
+    '''
+
