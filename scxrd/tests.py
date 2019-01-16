@@ -2,13 +2,16 @@
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from wsgiref.handlers import SimpleHandler
 
 import pytz
+import sys
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.six import BytesIO
 
 from scxrd.cif.cifparser import Cif
 from scxrd.cif_model import CifFile
@@ -139,7 +142,7 @@ class CifFileTest(TestCase):
         self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
         self.assertEqual(ex.cif.shelx_res_file[:30].replace('\r\n', '').replace('\n', ''),
                          'TITL p21c in P2(1)/c    p2')
-        #self.assertEqual(ex.cif.atoms.x, '')
+        # self.assertEqual(ex.cif.atoms.x, '')
         self.assertEqual(ex.cif.space_group_name_H_M_alt, 'P 21/c')
         response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
@@ -197,6 +200,31 @@ class OtherTablesTest(TestCase):
         shape = CrystalShape(habitus='block')
         shape = save()
         self.assertEqual(str(shape), 'block')
+
+
+def hello_app(environ, start_response):
+    start_response("200 OK", [
+        ('Content-Type', 'text/plain'),
+        ('Date', 'Mon, 05 Jun 2006 18:49:54 GMT')
+    ])
+    return [b"Hello, world!"]
+
+
+class TestWSGIRef(TestCase):
+
+    def testConnectionAbortedError(self):
+        class AbortingWriter:
+            def write(self, b):
+                raise ConnectionAbortedError()
+
+            def flush(self):
+                pass
+
+        environ = {"SERVER_PROTOCOL": "HTTP/1.0"}
+        h = SimpleHandler(BytesIO(), AbortingWriter(), sys.stderr, environ)
+        msg = "Client connection aborted"
+        with self.assertWarnsRegex(RuntimeWarning, msg):
+            h.run(hello_app)
 
 
 if __name__ == '__main':

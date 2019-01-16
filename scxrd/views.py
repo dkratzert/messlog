@@ -130,13 +130,13 @@ class OrderListJson(BaseDatatableView):
     template_name = 'scxrd/experiment_table.html'
 
     # define the columns that will be returned
-    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine']
+    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine']
+    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data

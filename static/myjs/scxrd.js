@@ -74,20 +74,24 @@ $(document).ready(function() {
               searchable: true,
               orderable: true,
             },
+            { title: "Operator",
+              searchable: true,
+              orderable: true,
+            },
             {
               title: '',
               mRender: function(data, type, full) {
-              return '<a class="badge badge-warning" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
-              searchable: false,
-              orderable: false,
+                return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
+                searchable: false,
+                orderable: false,
             },
         ],
-        "initComplete": function(settings, json) {
+        //"initComplete": function(settings, json) {
             // Do stuff after table init:
             //var row = dtable.row(':first');
             //$(row).addClass('selected');
             //console.log(row.data());
-        }
+        //}
 
         //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
         // No extra menus:
