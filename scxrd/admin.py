@@ -46,12 +46,12 @@ class AtomsInline(admin.TabularInline):
 
 class CifAdmin(admin.ModelAdmin):
     model = CifFile
-    list_display = ['change', 'cif_file_on_disk', 'experiment', 'number_of_atoms']
+    list_display = ['edit_file', 'cif_file_on_disk', 'related_experiment', 'number_of_atoms']
 
-    def change(self, obj):
+    def edit_file(self, obj):
         return self.model.objects.get(id=obj.id)
 
-    def experiment(self, obj):
+    def related_experiment(self, obj):
         return Experiment.objects.get(cif_id=obj.pk)
 
     def number_of_atoms(self, obj):

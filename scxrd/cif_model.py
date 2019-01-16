@@ -23,7 +23,8 @@ class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_file_extension])
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_file_extension],
+                                        verbose_name='cif file name')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -101,6 +102,7 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
+        Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
             self.fill_residuals_table(self.cif_file_on_disk.file.name)
@@ -108,7 +110,6 @@ class CifFile(models.Model):
             print('Error while saving cif file:', e)
             return
         self.sha256 = generate_sha256(self.cif_file_on_disk.file)
-        Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         self.filesize = self.cif_file_on_disk.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()

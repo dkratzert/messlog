@@ -29,7 +29,7 @@ $(document).ready(function() {
         j2sPath: ".",
         _serverUrl: ''
     };
-    
+
     var dtable = $('#exptable').DataTable( {
         searching: true,
         processing: true,
@@ -77,18 +77,18 @@ $(document).ready(function() {
             {
               title: '',
               mRender: function(data, type, full) {
-              return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
+              return '<a class="badge badge-warning" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
               searchable: false,
               orderable: false,
             },
         ],
         "initComplete": function(settings, json) {
             // Do stuff after table init:
-            //var row = dtable.row(':first'); 
+            //var row = dtable.row(':first');
             //$(row).addClass('selected');
             //console.log(row.data());
         }
-        
+
         //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
         // No extra menus:
         //dom: '<"top"i><"clear">',
@@ -119,7 +119,7 @@ $(document).ready(function() {
         });
         //row0.removeClass('selected');
     });
-    
+
     dtable.ajax.reload( function (json) {
         var row = $('#exptable tbody tr:eq(0)');
         //row.addClass("selected");
@@ -133,10 +133,10 @@ $(document).ready(function() {
         var jsmolcol = $("#molcard");
         jsmolcol.html(jmol._code);
         jmol.__loadModel(molfile);
-        
+
         //jsmolcol.removeClass('invisible');
     }
-    
+
     // just to have it initialized:
     display_molecule('');
 
