@@ -2,7 +2,7 @@
 
 {% comment %}
 
-This table is used to display details about a selected structure on the main page when 
+This table is used to display details about a selected structure on the main page when
 a certain structure is selected in the experiment table.
 
 {% endcomment %}
@@ -23,7 +23,11 @@ a certain structure is selected in the experiment table.
     </tr>
     <tr class="d-flex">
         <td class="col-4"> Solvents</td>
-        <td class="col-8" id="t_solents"> {{ experiment.solvents_used.all |join:",<br>" }} </td>
+        {% if experiment.solvents_used.exists %}
+            <td class="col-8 ScrollBarsY" id="t_solents"> {{ experiment.solvents_used.all |join:", <wbr>" }} </td>
+        {% else %}
+            <td class="col-8 ScrollBarsY" id="t_solents"> ----- </td>
+        {% endif %}
     </tr>
     {% if sumform %}
     <tr class="d-flex">

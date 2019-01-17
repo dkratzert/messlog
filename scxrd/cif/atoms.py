@@ -19,7 +19,6 @@ def format_sum_formula(sumform: dict, break_after: int = 99) -> str:
     >>> format_sum_formula({'C': 12, 'H': 6, 'O': 3, 'Mn': 7})
     '<html><body>C<sub>12 </sub>H<sub>6 </sub>O<sub>3 </sub>Mn<sub>7 </sub></body></html>'
     """
-    # atlist = formula_str_to_dict(sumform)
     if not sumform:
         return ''
     l = ['']

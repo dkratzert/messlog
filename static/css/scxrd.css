@@ -16,3 +16,8 @@ a div, a:hover {
 form .alert ul li {
     list-style: none;
 }
+
+.ScrollBarsY {
+  height: 4rem;
+  overflow-y: auto;
+}

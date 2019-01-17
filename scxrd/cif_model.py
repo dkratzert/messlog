@@ -30,8 +30,8 @@ class CifFile(models.Model):
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     # TODO: Find a better solution:
-    # sumform_exact = models.OneToOneField('SumFormula', null=True, blank=True, on_delete=models.DO_NOTHING,
-    #                                     related_name='cif_file')
+    sumform_calc = models.OneToOneField('SumFormula', null=True, blank=True, on_delete=models.DO_NOTHING,
+                                        related_name='cif_file')
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
     cell_length_a = models.FloatField(null=True, blank=True)
@@ -289,11 +289,12 @@ class CifFile(models.Model):
             del formula[x]
         if not formula:
             return
-        return SumFormula(cif=self, **formula)
+        return SumFormula(**formula)
 
 
 class SumFormula(models.Model):
-    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE, related_name='sumform')
+    # Is a OneToOne field in CifFile now:
+    # cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE, related_name='sumform')
     C = models.FloatField(default=0)
     D = models.FloatField(default=0)
     H = models.FloatField(default=0)
@@ -403,6 +404,9 @@ class SumFormula(models.Model):
 
 
 class Atom(models.Model):
+    """
+    This table holds the atoms of a cif file.
+    """
     cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=16)
     # Element as element symbol:
@@ -419,9 +423,8 @@ class Atom(models.Model):
     part = models.IntegerField()
 
     def __str__(self):
-        # print(self.name, self.element, self.x, self.y, self.z, self.occupancy, self.part)
-        # "{:4.6s}{:4}{:8.6f}{:8.6f}{:8.6f}{:6.4f}{:4}"
-        """if all([self.name, self.element, self.x, self.y, self.z]):
-            return "{} {} {:8.6f}{:8.6f}{:8.6f} {} {}".format(self.name, self.element, self.x, self.y, self.z,
-                                                              self.occupancy, self.part)"""
+        """
+        return "{} {} {:8.6f}{:8.6f}{:8.6f} {} {}".format(self.name, self.element, self.x, self.y, self.z,
+                                                              self.occupancy, self.part)
+        """
         return self.name

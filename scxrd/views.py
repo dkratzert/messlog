@@ -63,8 +63,10 @@ class DetailsTable(DetailView):
         context = super().get_context_data(**kwargs)
         try:
             exp_id = self.kwargs['pk']
-            context['sumform'] = SumFormula.objects.get(pk=Experiment.objects.get(pk=exp_id).cif_id)
-        except SumFormula.DoesNotExist:
+            context['sumform'] = SumFormula.objects.get(pk=exp_id)
+            #SumFormula.objects.get(pk=Experiment.objects.get(pk=exp_id).cif_id)
+        except SumFormula.DoesNotExist as e:
+            print(e, '#')
             pass
         return context
 
