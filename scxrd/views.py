@@ -21,7 +21,7 @@ class ExperimentIndexView(TemplateView):
     The view for the main scxrd page.
     """
     model = Experiment
-    template_name = 'scxrd/index.html'
+    template_name = 'scxrd/scxrd_index.html'
 
 
 class ExperimentCreateView(CreateView):
