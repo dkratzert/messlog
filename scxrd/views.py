@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
@@ -64,7 +66,6 @@ class DetailsTable(DetailView):
         try:
             exp_id = self.kwargs['pk']
             context['sumform'] = SumFormula.objects.get(pk=exp_id)
-            #SumFormula.objects.get(pk=Experiment.objects.get(pk=exp_id).cif_id)
         except SumFormula.DoesNotExist as e:
             print(e, '#')
             pass
@@ -133,13 +134,13 @@ class OrderListJson(BaseDatatableView):
     template_name = 'scxrd/experiment_table.html'
 
     # define the columns that will be returned
-    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator']
+    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator']
+    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
@@ -150,14 +151,16 @@ class OrderListJson(BaseDatatableView):
     def get_filter_method(self):
         return self.FILTER_ICONTAINS
 
-    '''
     def render_column(self, row, column):
         # We want to render user as a custom column
-        if column == 'user':
-            return '%s %s' % (row.customer_firstname, row.customer_lastname)
+        if column == 'publishable':
+            if row.publishable:
+                return '<span class="badge badge-success ml-4">ok</span>'
+            else:
+                return '<span class="badge badge-warning ml-4">no</span>'
         else:
             return super(OrderListJson, self).render_column(row, column)
-    '''
+
     '''
     def filter_queryset(self, qs):
         """ If search['value'] is provided then filter all searchable columns using filter_method (istartswith

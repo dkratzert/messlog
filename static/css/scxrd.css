@@ -18,6 +18,10 @@ form .alert ul li {
 }
 
 .ScrollBarsY {
-  height: 4rem;
+  height: 3rem;
   overflow-y: auto;
+}
+
+.card-header {
+    font-weight: bold;
 }

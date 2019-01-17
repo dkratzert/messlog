@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from wsgiref.handlers import SimpleHandler
 
+import gemmi
 import pytz
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,7 +15,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.six import BytesIO
 
-from scxrd.cif.cifparser import Cif
 from scxrd.cif_model import CifFile
 from scxrd.models import Experiment, Machine, Person, WorkGroup, Solvent, CrystalSupport, CrystalGlue, CrystalShape
 
@@ -98,10 +98,13 @@ class ExperimentCreateTest(TestCase):
 class ExperimentCreateCif(TestCase):
 
     def test_parsecif(self):
-        self.cif = Cif()
-        self.cif.parsefile(Path('scxrd/testfiles/p21c.cif').read_text(encoding='ascii').splitlines(keepends=True))
-        self.assertEqual(self.cif.cif_data['_diffrn_reflns_number'], '42245')
-        self.assertEqual(self.cif.cif_data['_shelx_res_file'][:20], 'TITL p21c in P2(1)/c')
+        struct = gemmi.cif.read_file('scxrd/testfiles/p21c.cif')
+        struct.sole_block()
+        b = struct.sole_block()
+        self.assertEqual(b.find_value('_diffrn_reflns_number'), '42245')
+        self.assertEqual(b.find_value('_shelx_res_file')[:20], ';\r\nTITL p21c in P2(1')
+        lo = b.find_loop('_atom_site_label')
+        self.assertEqual(lo[1], 'Al1')
 
 
 class UploadTest(TestCase):
@@ -134,6 +137,8 @@ class CifFileTest(TestCase):
         self.assertEqual(ex.operator.username, 'foouser')
         self.assertEqual(ex.cif.data, None)
         ex.cif.save()
+        first_atom = CifFile.objects.first().atom_set.first()
+        self.assertEqual(0.63951, first_atom.x)
         # Test the calculated sum formula:
         self.assertEqual(
             'C<sub>34</sub><wbr>H<sub>24</sub><wbr>O<sub>4</sub><wbr>F<sub>36</sub>'
@@ -147,6 +152,7 @@ class CifFileTest(TestCase):
         ex.save_base()
         self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
         self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
+        self.assertEqual(-0.194, ex.cif.atoms.x)
         self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '')[:30],
                          'TITL p21c in P2(1)/c    p21c.r')
         # self.assertEqual(ex.cif.atoms.x, '')

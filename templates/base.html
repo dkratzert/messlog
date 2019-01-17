@@ -30,7 +30,7 @@ TODO: move base template to mysite
 <!-- The navigation bar -->
 
 <nav id="topNav" class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
-    
+
     <a class="navbar-brand" href="{% url 'index' %}">MESSLOG</a>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
@@ -67,7 +67,7 @@ TODO: move base template to mysite
 </nav>
 
 
-<div class="container-fluid px-lg-5 px-md-3 px-sm-0">
+<div class="container-fluid"> {# px-lg-5 px-md-3 px-sm-0"> #}
     {% block content %}
 
     {% endblock content %}

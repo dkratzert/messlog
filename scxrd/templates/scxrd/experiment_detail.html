@@ -5,9 +5,9 @@
 {% block content %}
     {% if object.experiment %}
         <h3>{{ object.experiment }}</h3>
-        <div id="myresidualtable" class="col-sm-6">
+        <div id="myresidualtable">
             <table class="table table-bordered" style="white-space: pre">
-                
+
             <tbody>
                 <tr>
                     <td> Machine </td><td> {{ object.machine }} </td>
@@ -34,7 +34,7 @@
                 </tr>
                 </tbody>
             </table>
-       
+
 
     {% else %}
         <p>No experiments are available.</p>

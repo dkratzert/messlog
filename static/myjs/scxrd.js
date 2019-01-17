@@ -88,10 +88,15 @@ $(document).ready(function() {
               searchable: false,
               orderable: true,
             },
+            { title: "Publishable",
+              name: 'publishable',
+              searchable: false,
+              orderable: false,
+            },
             {
               title: '',
               mRender: function(data, type, full) {
-                return '<a class="badge badge-danger" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
+                return '<a class="badge badge-danger m-0 justify-content-center" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
                 searchable: false,
                 orderable: false,
             },
@@ -154,4 +159,13 @@ $(document).ready(function() {
     // just to have it initialized:
     display_molecule('');
 
+
+     $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    // Initialize popover component
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
 });

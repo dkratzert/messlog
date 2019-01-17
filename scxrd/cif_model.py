@@ -29,7 +29,6 @@ class CifFile(models.Model):
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
-    # TODO: Find a better solution:
     sumform_calc = models.OneToOneField('SumFormula', null=True, blank=True, on_delete=models.DO_NOTHING,
                                         related_name='cif_file')
     #########################################
@@ -182,20 +181,18 @@ class CifFile(models.Model):
                                 '_atom_site_occupancy',
                                 '_atom_site_disorder_group'])
         for name, element, x, y, z, occ, part in table:
+            x, y, z = (get_float(x), get_float(y), get_float(z))
             try:
-                xc, yc, zc = frac_to_cart((get_float(x), get_float(y), get_float(z)), cell[:6])
+                xc, yc, zc = frac_to_cart((x, y, z), cell[:6])
             except (TypeError, ValueError) as e:
                 print("Error while calculating cart. coords:", e)
                 continue
             part = get_int(part)
             occ = get_float(occ)
-            self.atoms = Atom(cif=self,
-                              name=name,
-                              element=element,
-                              x=get_float(x), y=get_float(y), z=get_float(z),
+            self.atoms = Atom(cif=self, name=name, element=element,
+                              x=x, y=y, z=z,
                               xc=xc, yc=yc, zc=zc,
-                              occupancy=occ,
-                              part=part if part else 0)
+                              occupancy=occ, part=part if part else 0)
             self.add_to_sumform(occ=occ, atype=element)
             self.atoms.save()
         if self.sum_form_dict:

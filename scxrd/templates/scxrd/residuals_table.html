@@ -42,23 +42,23 @@ a certain structure is selected in the experiment table.
     <tr class="d-flex">
         {# |date:'d.m.Y, H:i' #}
         <td class="col-4">Results sent</td>
-        <td class="col-8" id="t_results"> {{ experiment.result_date }} </td>
+        <td class="col-8" id="t_results"> {{ experiment.result_date|default_if_none:"-----" }} </td>
     </tr>
     <tr class="d-flex">
         <td class="col-4">Cif file</td>
-        <td class="col-8" id="t_cif"> {{ experiment.cif.data }} </td>
+        <td class="col-8" id="t_cif"> {{ experiment.cif.data|default_if_none:"-----"  }} </td>
     </tr>
     <tr class="d-flex">
         <td class="col-4"><i>wR</i><sub>2</sub></td>
-        <td class="col-8" > {{ object.cif.wr2_in_percent }} % </td>
+        <td class="col-8" > {{ object.cif.wr2_in_percent|default_if_none:"-----"  }} % </td>
     </tr>
     <tr class="d-flex">
         <td class="col-4"><i>R</i><sub>int</sub></td>
-        <td class="col-8" > {{ object.cif.rint_in_percent }} % </td>
+        <td class="col-8" > {{ object.cif.rint_in_percent|default_if_none:"-----"  }} % </td>
     </tr>
     <tr class="d-flex">
         <td class="col-4">Completeness</td>
-        <td class="col-8" > {{ object.cif.completeness_in_percent }} % </td>
+        <td class="col-8" > {{ object.cif.completeness_in_percent|default_if_none:"-----"  }} % </td>
     </tr>
     </tbody>
 </table>
