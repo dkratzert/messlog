@@ -6,6 +6,7 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
 from scxrd.cif_model import CifFile
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
@@ -141,13 +142,14 @@ class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
     number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    publishable = models.BooleanField(verbose_name="structure is pubishable", default=False)
+    publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
     customer = models.ForeignKey(to=Person, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
-                                   related_name='experiments', null=True, blank=True)
+                                related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
+    # Maybe solvent1, solvent2, solvent3 ?
     solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)

@@ -9,8 +9,9 @@
 
 
     <form method="post" novalidate>
-        {# <legend>Form Title</legend> #}
+        <legend>Edit Experiment</legend>
         {% csrf_token %}
+        {# {{ solvents }} #}
         {{ form|crispy }}
         <div class="form-group">
             <div class="col-sm-6 col-sm-offset-2">

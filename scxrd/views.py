@@ -45,6 +45,16 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
+    """
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['solvents'] = MyCheckBoxForm()
+        except Solvent.DoesNotExist as e:
+            print(e, '#')
+            pass
+        return context"""
+
 
 class ExperimentDetailView(DetailView):
     """
@@ -187,4 +197,3 @@ class OrderListJson(BaseDatatableView):
             qs = qs.filter(q)
         return qs
     '''
-
