@@ -1,0 +1,3 @@
+
+# from Terminal in windows:
+venv\Scripts\python.exe manage.py dumpdata scxrd --indent 4  > scxrd/fixtures/complete_db.json
