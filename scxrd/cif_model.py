@@ -137,10 +137,32 @@ class CifFile(models.Model):
         cf.unlink()
         super().delete(*args, **kwargs)
 
+    def add_to_sumform(self, occ=None, atype=None):
+            #  0     1   2 3 4   5  6  7   8       9
+            # [Name type x y z  xc xc zc occupancy part]
+            atom_type_symbol = ''
+            try:
+                if occ:
+                    occu = occ
+                else:
+                    occu = 1.0
+                if atype:
+                    atom_type_symbol = atype
+                else:
+                    assert KeyError
+                elem = atom_type_symbol.capitalize()
+                if elem in self.sum_form_dict:
+                    self.sum_form_dict[elem] += occu
+                else:
+                    self.sum_form_dict[elem] = occu
+            except KeyError:
+                pass
+
     def fill_residuals_table(self, cif_file):
         """
         Fill the table with residuals of the refinement.
         """
+        self.sum_form_dict = {}
         cif_parsed = gcif.read_file(cif_file)
         cif_block = cif_parsed.sole_block()
         fw = cif_block.find_value
@@ -166,14 +188,19 @@ class CifFile(models.Model):
                 print("Error while calculating cart. coords:", e)
                 continue
             part = get_int(part)
+            occ = get_float(occ)
             self.atoms = Atom(cif=self,
                               name=name,
                               element=element,
                               x=get_float(x), y=get_float(y), z=get_float(z),
                               xc=xc, yc=yc, zc=zc,
-                              occupancy=get_float(occ),
+                              occupancy=occ,
                               part=part if part else 0)
+            self.add_to_sumform(occ=occ, atype=element)
             self.atoms.save()
+        if self.sum_form_dict:
+            self.sumform_exact = self.fill_formula(self.sum_form_dict)
+            self.sumform_exact.save()
         self.data = cif_block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, self.cell_angle_alpha, \
         self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cell
@@ -249,12 +276,11 @@ class CifFile(models.Model):
         if self.diffrn_measured_fraction_theta_max:
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
 
-    def fill_formula(self, cif):
+    def fill_formula(self, formula):
         """
         Fills formula data into the sum formula table.
         """
         out = []
-        formula = cif.cif_data['calculated_formula_sum']
         for x in formula:
             if not x.capitalize() in sorted_atoms:
                 out.append(x)
@@ -267,7 +293,7 @@ class CifFile(models.Model):
 
 
 class SumFormula(models.Model):
-    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
+    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE, related_name='sumform')
     C = models.FloatField(default=0)
     D = models.FloatField(default=0)
     H = models.FloatField(default=0)

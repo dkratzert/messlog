@@ -10,50 +10,51 @@ a certain structure is selected in the experiment table.
 
 
 
-<table class="table table-condensed table-borderless table-sm">
+<table class="table table-condensed table-sm table-borderless">
+
     <tbody>
-    <tr>
-        <td> Experiment Number</td>
-        <td id="t_exp">  {{ experiment.number }} </td>
+    <tr class="d-flex">
+        <td class="col-4"> Exp. Number</td>
+        <td class="col-8" id="t_exp">  {{ experiment.number }} </td>
     </tr>
-    <tr>
-        <td> Machine</td>
-        <td id="t_machine"> {{ experiment.machine }} </td>
+    <tr class="d-flex">
+        <td class="col-4"> Machine</td>
+        <td class="col-8" id="t_machine"> {{ experiment.machine }} </td>
     </tr>
-    <tr>
-        <td> Solvents</td>
-        <td id="t_solents"> {{ experiment.solvents_used.all |join:",<br>" }} </td>
+    <tr class="d-flex">
+        <td class="col-4"> Solvents</td>
+        <td class="col-8" id="t_solents"> {{ experiment.solvents_used.all |join:",<br>" }} </td>
     </tr>
     {% if sumform %}
-    <tr>
-        <td>Sum Formula</td>
-        <td id="t_sumform"> {{ sumform|safe }} </td>
+    <tr class="d-flex">
+        <td class="col-4">Sum Formula</td>
+        <td class="col-8" id="t_sumform"> {{ sumform|safe }} </td>
     </tr>
     {% endif %}
-    <tr>
-        <td>Measured by</td>
-        <td id="t_mesuredate"> {{ experiment.operator.get_username }} </td>
+    <tr class="d-flex">
+        <td class="col-4">Measured by</td>
+        <td class="col-8" id="t_mesuredate"> {{ experiment.operator.get_username }} </td>
     </tr>
-    <tr>
+    <tr class="d-flex">
         {# |date:'d.m.Y, H:i' #}
-        <td>Results sent</td>
-        <td id="t_results"> {{ experiment.result_date }} </td>
+        <td class="col-4">Results sent</td>
+        <td class="col-8" id="t_results"> {{ experiment.result_date }} </td>
     </tr>
-    <tr>
-        <td>Cif file</td>
-        <td id="t_cif"> {{ experiment.cif.data }} </td>
+    <tr class="d-flex">
+        <td class="col-4">Cif file</td>
+        <td class="col-8" id="t_cif"> {{ experiment.cif.data }} </td>
     </tr>
-    <tr>
-        <td><i>wR</i><sub>2</sub></td>
-        <td> {{ object.cif.wr2_in_percent }} % </td>
+    <tr class="d-flex">
+        <td class="col-4"><i>wR</i><sub>2</sub></td>
+        <td class="col-8" > {{ object.cif.wr2_in_percent }} % </td>
     </tr>
-    <tr>
-        <td><i>R</i><sub>int</sub></td>
-        <td> {{ object.cif.rint_in_percent }} % </td>
+    <tr class="d-flex">
+        <td class="col-4"><i>R</i><sub>int</sub></td>
+        <td class="col-8" > {{ object.cif.rint_in_percent }} % </td>
     </tr>
-    <tr>
-        <td>Completeness</td>
-        <td> {{ object.cif.completeness_in_percent }} % </td>
+    <tr class="d-flex">
+        <td class="col-4">Completeness</td>
+        <td class="col-8" > {{ object.cif.completeness_in_percent }} % </td>
     </tr>
     </tbody>
 </table>
