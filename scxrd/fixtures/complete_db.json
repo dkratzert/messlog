@@ -48066,14 +48066,14 @@
     "fields": {
         "experiment": "foobar",
         "number": 12,
-        "publishable": false,
+        "publishable": true,
         "customer": null,
         "operator": 1,
         "machine": 2,
         "sum_formula": "",
-        "measure_date": "2019-01-16T12:59:00Z",
-        "submit_date": null,
-        "result_date": null,
+        "measure_date": "2019-01-13T23:00:00Z",
+        "submit_date": "2019-01-18",
+        "result_date": "2019-01-18",
         "base": null,
         "glue": null,
         "cif": 12,
@@ -48081,7 +48081,9 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": []
+        "solvents_used": [
+            2
+        ]
     }
 },
 {
