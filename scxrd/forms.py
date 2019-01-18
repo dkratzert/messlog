@@ -4,6 +4,7 @@ from crispy_forms.layout import Field
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from scxrd.models import Experiment, Solvent, Machine, Person
 
@@ -36,14 +37,17 @@ class CustomCheckbox(Field):
 
 
 class ExperimentnewForm(forms.ModelForm):
+    # TODO: make solvents as solvent1, solvent2, solvent3 model
     solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
                                                    widget=forms.CheckboxSelectMultiple)
-
     experiment = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Experiment name'}))
     number = forms.IntegerField(required=True)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
     customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False)
+    measure_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+    result_date = forms.DateTimeField(widget=DatePickerInput(format="%Y-%m-%d %H:%M"))
     publishable = CustomCheckbox('publishable')
 
     def __init__(self, *args, **kwargs):
@@ -66,11 +70,23 @@ class ExperimentnewForm(forms.ModelForm):
                 Column('customer', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
-            # Submit('submit', 'Save'),
-            # Submit('submit', 'Cancel', css_class='btn btn-danger', href=reverse_lazy('scxrd:index'))
+            Row(
+                Column('measure_date', css_class='form-group col-md-4 mb-0'),
+                Column('submit_date', css_class='form-group col-md-4 mb-0'),
+                Column('result_date', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            'solvents_used',
+            'base',
+            'glue',
+            'cif',
+            'crystal_colour',  # important
+            'crystal_colour_mod',
+            'crystal_colour_lustre',
+            'special_details',  # important
+            Submit('submit', 'Save', css_class='btn-primary'),
+            Submit('cancel', 'Cancel', css_class='btn-danger'),
         )
-        self.helper.add_input(Submit('submit', 'Save', css_class='btn-primary'))
-        self.helper.add_input(Submit('cancel', 'Cancel', css_class='btn-danger'))
 
     class Meta:
         model = Experiment

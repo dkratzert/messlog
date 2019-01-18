@@ -148,5 +148,8 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 
 #AUTH_USER_MODEL = 'myuser.MyUser'
 
-
+BOOTSTRAP4 = {
+    # Using extra jquery, not the one in bootstrap
+    'include_jquery': False,
+}
 
