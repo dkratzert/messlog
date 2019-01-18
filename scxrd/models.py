@@ -1,11 +1,13 @@
 import datetime
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from pip._vendor.colorama import initialise
 
 from scxrd.cif_model import CifFile
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
@@ -149,8 +151,12 @@ class Experiment(models.Model):
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
-    # Maybe solvent1, solvent2, solvent3 ?
-    solvents_used = models.ManyToManyField(Solvent, verbose_name='solvents used', blank=True)
+    solvent1 = models.ForeignKey(Solvent, verbose_name='solvent 1', null=True, blank=True,
+                                 related_name='experiment1', on_delete=models.CASCADE, default='')
+    solvent2 = models.ForeignKey(Solvent, verbose_name='solvent 2', null=True, blank=True,
+                                 related_name='experiment2', on_delete=models.CASCADE, default='')
+    solvent3 = models.ForeignKey(Solvent, verbose_name='solvents 3', null=True, blank=True,
+                                 related_name='experiment3', on_delete=models.CASCADE, default='')
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='results sent date', blank=True, null=True)
@@ -160,9 +166,11 @@ class Experiment(models.Model):
                              on_delete=models.DO_NOTHING)
     cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
                                verbose_name='cif file', on_delete=models.CASCADE)
-    crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=0)
-    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, default=0, blank=True)
-    crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES, default=0, blank=True)
+    crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])
+    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, verbose_name='crystal colour modifier',
+                                             default=COLOUR_MOD_CHOICES[0][0])
+    crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES,
+                                                default=COLOUR_LUSTRE_COICES[0][0])  # no blank=True here!
     # _exptl_special_details:
     special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True, default='')
 

@@ -47845,10 +47845,7 @@
         "crystal_colour_mod": 2,
         "crystal_colour_lustre": 3,
         "special_details": "Some comment",
-        "solvents_used": [
-            1,
-            7
-        ]
+        "solvent1": null
     }
 },
 {
@@ -47872,9 +47869,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "Only omega scans",
-        "solvents_used": [
-            6
-        ]
+        "solvent1": 1
     }
 },
 {
@@ -47898,10 +47893,7 @@
         "crystal_colour_mod": 1,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            1,
-            4
-        ]
+        "solvent1": 6
     }
 },
 {
@@ -47925,9 +47917,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 1,
         "special_details": "",
-        "solvents_used": [
-            2
-        ]
+        "solvent1": 4
     }
 },
 {
@@ -47951,10 +47941,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            6,
-            7
-        ]
+        "solvent1": 7
     }
 },
 {
@@ -47978,9 +47965,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            3
-        ]
+        "solvent1": 3
     }
 },
 {
@@ -48004,10 +47989,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "fertig",
-        "solvents_used": [
-            9,
-            8
-        ]
+        "solvent1": 8
     }
 },
 {
@@ -48031,9 +48013,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            1
-        ]
+        "solvent1": 2
     }
 },
 {
@@ -48057,7 +48037,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": []
+        "solvent1": 1
     }
 },
 {
@@ -48081,9 +48061,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            2
-        ]
+        "solvent1": 5
     }
 },
 {
@@ -48107,17 +48085,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            5,
-            1,
-            4,
-            2,
-            3,
-            6,
-            7,
-            9,
-            8
-        ]
+        "solvent1": 9
     }
 },
 {
@@ -48141,10 +48109,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": [
-            5,
-            1
-        ]
+        "solvent1": 5
     }
 },
 {
@@ -48168,7 +48133,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": []
+        "solvent1": null
     }
 },
 {
@@ -48192,7 +48157,7 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "special_details": "",
-        "solvents_used": []
+        "solvent1": 2
     }
 }
 ]

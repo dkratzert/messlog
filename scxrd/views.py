@@ -17,7 +17,7 @@ from scxrd.forms import ExperimentForm, ExperimentnewForm
 from scxrd.models import Experiment
 
 
-class FormActionMixin(object):
+class FormActionMixin():
 
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
@@ -26,14 +26,14 @@ class FormActionMixin(object):
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = ExperimentnewForm(request.POST)
-            print(form.is_valid(), '####')
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
             else:
-                return super(FormActionMixin, self).post(request, *args, **kwargs)
+                print('#### Form is not valid')
+                return super().post(request, *args, **kwargs)
         else:
-            return super(FormActionMixin, self).post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(TemplateView):

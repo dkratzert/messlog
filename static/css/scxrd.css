@@ -25,3 +25,7 @@ form .alert ul li {
 .card-header {
     font-weight: bold;
 }
+
+.col-form-label {
+    /*font-weight: bold;*/
+}
