@@ -102,7 +102,8 @@ class ExperimentCreateCif(TestCase):
         struct.sole_block()
         b = struct.sole_block()
         self.assertEqual(b.find_value('_diffrn_reflns_number'), '42245')
-        self.assertEqual(b.find_value('_shelx_res_file')[:20], ';\r\nTITL p21c in P2(1')
+        self.assertEqual(b.find_value('_shelx_res_file').replace('\r\n', '')
+                         .replace('\n', '')[:20], ';TITL p21c in P2(1)/')
         lo = b.find_loop('_atom_site_label')
         self.assertEqual(lo[1], 'Al1')
 
