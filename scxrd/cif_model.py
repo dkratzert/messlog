@@ -101,10 +101,18 @@ class CifFile(models.Model):
 
     def save(self, *args, **kwargs):
         super(CifFile, self).save(*args, **kwargs)
+        try:
+            cif_parsed = gcif.read_file(self.cif_file_on_disk.file.name)
+            cif_block = cif_parsed.sole_block()
+        except (RuntimeError, IndexError) as e:
+            print(e)
+            #raise ValidationError('Unable to parse cif file:', e)
+            return
         Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
-            self.fill_residuals_table(self.cif_file_on_disk.file.name)
+            # self.cif_file_on_disk.file.name
+            self.fill_residuals_table(cif_block)
         except RuntimeError as e:
             print('Error while saving cif file:', e)
             return
@@ -157,13 +165,11 @@ class CifFile(models.Model):
             except KeyError:
                 pass
 
-    def fill_residuals_table(self, cif_file):
+    def fill_residuals_table(self, cif_block):
         """
         Fill the table with residuals of the refinement.
         """
         self.sum_form_dict = {}
-        cif_parsed = gcif.read_file(cif_file)
-        cif_block = cif_parsed.sole_block()
         fw = cif_block.find_value
         cell = get_float(fw('_cell_length_a')), \
                get_float(fw('_cell_length_b')), \

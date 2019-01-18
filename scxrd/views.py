@@ -1,9 +1,10 @@
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
@@ -12,8 +13,27 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from scxrd.models import Person
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentForm
+from scxrd.forms import ExperimentForm, ExperimentnewForm
 from scxrd.models import Experiment
+
+
+class FormActionMixin(object):
+
+    def post(self, request, *args, **kwargs):
+        """Add 'Cancel' button redirect."""
+        if "cancel" in request.POST:
+            url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
+            return HttpResponseRedirect(url)
+        if 'submit' in request.POST:
+            form = ExperimentnewForm(request.POST)
+            print(form.is_valid(), '####')
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse_lazy('scxrd:index'))
+            else:
+                return super(FormActionMixin, self).post(request, *args, **kwargs)
+        else:
+            return super(FormActionMixin, self).post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(TemplateView):
@@ -36,14 +56,17 @@ class ExperimentCreateView(CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentEditView(LoginRequiredMixin, UpdateView):
+class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
     """
     Edit an experiment
     """
     model = Experiment
-    form_class = ExperimentForm
+    form_class = ExperimentnewForm
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
+
+    def get_success_url(self):
+        return reverse_lazy('scxrd:index')
 
     """
     def get_context_data(self, **kwargs):
