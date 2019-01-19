@@ -13,7 +13,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from scxrd.models import Person
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentForm, ExperimentnewForm
+from scxrd.forms import ExperimentForm, ExperimentForm
 from scxrd.models import Experiment
 
 
@@ -25,7 +25,7 @@ class FormActionMixin():
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
-            form = ExperimentnewForm(request.POST)
+            form = ExperimentForm(request.POST)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
@@ -61,7 +61,7 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
     Edit an experiment
     """
     model = Experiment
-    form_class = ExperimentnewForm
+    form_class = ExperimentForm
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 

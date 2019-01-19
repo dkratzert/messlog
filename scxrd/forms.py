@@ -7,23 +7,7 @@ from django import forms
 from django.contrib.auth.models import User
 
 from scxrd.models import Experiment, Solvent, Machine, Person
-
-
-class ExperimentForm(forms.ModelForm):
-    solvents_used = forms.ModelMultipleChoiceField(
-        queryset=Solvent.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-    )
-
-    class Meta:
-        model = Experiment
-        # fields = ('experiment', 'solvents_used', 'number', 'measure_date', 'machine', 'sum_formula', 'submit_date')
-        fields = '__all__'
-        widgets = {
-            'submit_date': DatePickerInput(format='%Y-%m-%d'),
-            'result_date': DatePickerInput(format='%Y-%m-%d'),
-            'measure_date': DateTimePickerInput(format="%Y-%m-%d %H:%M"),
-        }
+from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
 class ExperimentTableForm(forms.ModelForm):
@@ -36,12 +20,14 @@ class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
 
 
-class ExperimentnewForm(forms.ModelForm):
+class ExperimentForm(forms.ModelForm):
     # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
     #                                               widget=forms.CheckboxSelectMultiple)
-    measure_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=True)
+    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False)
-    result_date = forms.DateTimeField(widget=DatePickerInput(format="%Y-%m-%d %H:%M"), required=False)
+    result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False)
+    crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label='Colour modifier')
+    crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -56,11 +42,11 @@ class ExperimentnewForm(forms.ModelForm):
         self.helper.field_class = 'p-2'
 
         self.helper.layout = Layout(
+            ###############################Experiment#################################
             HTML('<div class="card w-100"><div class="card-header">Experiment</div>'),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(CustomCheckbox('publishable'), css_class='form-inline col-md-4'),
                 css_class='form-row'
             ),
             Row(
@@ -72,13 +58,21 @@ class ExperimentnewForm(forms.ModelForm):
             Row(
                 Column(Field('base', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
                 Column(Field('glue', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
-                Column(
-                ),
+                Column(),
                 css_class='form-row'
             ),
+            Row(
+            #    FormActions(
+            #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
+            #        Submit('cancel', 'Cancel', css_class='btn-danger'),
+            #        ),
+                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
+                css_class='form-row ml-0 mb-0'
+            ),
             HTML('</div>'),
-            #HTML("<hr>"),
-            HTML('<div class="card w-100 mt-3"><div class="card-header">Crystal</div>'),
+            ###############################Crystal#####################################
+            HTML('<div class="card w-100 mt-3">'
+                 '  <div class="card-header">Crystal</div>'),
             AppendedText('sum_formula', 'assumed formula', active=True),
             Row(
                 Column('measure_date', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -94,19 +88,33 @@ class ExperimentnewForm(forms.ModelForm):
             ),
             Row(
                 Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
+                                                                                                   'col-md-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
+            #Row(
+            #    FormActions(
+            #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
+            #        Submit('cancel', 'Cancel', css_class='btn-danger'),
+            #    ),
+            #    css_class='form-row ml-0 mb-0'
+            #),
             HTML('</div>'),
+            #################################Files##########################################
+            HTML('<div class="card w-100 mt-3">'
+                 '  <div class="card-header">Files and comments</div>'),
             Field('cif', css_class='custom-select'),
-            #'publishable',
-            'special_details',  # important
-            FormActions(
-                Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                Submit('cancel', 'Cancel', css_class='btn-danger'),
-                css_class='form-row mb-4 ml-0'
+            'special_details',
+            Row(
+                FormActions(
+                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
+                    Submit('cancel', 'Cancel', css_class='btn-danger'),
+                ),
+                css_class='form-row ml-0 mb-0'
             ),
+            HTML('</div>'),
+
         )
 
     class Meta:
