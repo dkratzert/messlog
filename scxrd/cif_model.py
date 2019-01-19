@@ -1,3 +1,4 @@
+import gemmi
 from pathlib import Path
 
 from django.core.exceptions import ValidationError
@@ -168,6 +169,14 @@ class CifFile(models.Model):
     def fill_residuals_table(self, cif_block):
         """
         Fill the table with residuals of the refinement.
+
+        >>> cell = gemmi.UnitCell(25.14, 39.50, 45.07, 90, 90, 90)
+        >>> cell
+        <gemmi.UnitCell(25.14, 39.5, 45.07, 90, 90, 90)>
+        >>> cell.fractionalize(gemmi.Position(10, 10, 10))
+        <gemmi.Fractional(0.397772, 0.253165, 0.221877)>
+        >>> cell.orthogonalize(gemmi.Fractional(0.5, 0.5, 0.5))
+        <gemmi.Position(12.57, 19.75, 22.535)>
         """
         self.sum_form_dict = {}
         fw = cif_block.find_value
@@ -213,6 +222,7 @@ class CifFile(models.Model):
         self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
         self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
         self.space_group_crystal_system = get_string(fw("_space_group_crystal_system"))
+        'loop_'
         self.space_group_symop_operation_xyz = get_string(fw("_space_group_symop_operation_xyz"))
         self.audit_creation_method = get_string(fw("_audit_creation_method"))
         self.chemical_formula_sum = get_string(fw("_chemical_formula_sum"))
@@ -262,6 +272,58 @@ class CifFile(models.Model):
         self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
         self.database_code_depnum_ccdc_archive = get_string(fw("_database_code_depnum_ccdc_archive"))
         self.shelx_res_file = get_string(fw("_shelx_res_file"))
+        '_reflns_Friedel_fraction_full'
+        '_refine_ls_abs_structure_details'
+        '_reflns_special_details'
+        '_computing_data_collection'
+        '_computing_cell_refinement'
+        '_computing_data_reduction'
+        '_computing_molecular_graphics'
+        '_computing_publication_material'
+        '_atom_sites_solution_primary'
+        '_atom_sites_solution_secondary'
+        '_atom_sites_solution_hydrogens'
+        '_refine_ls_hydrogen_treatment'
+        '_refine_ls_extinction_method'
+        '_refine_ls_extinction_coef'
+        '_refine_ls_extinction_expression'
+        '_geom_special_details'
+        '_refine_diff_density_rms'
+        '_shelx_hkl_file'
+        '_shelx_hkl_checksum'
+        '_shelx_res_checksum'
+        '_diffrn_radiation_monochromator'
+        '_diffrn_measurement_method'
+        '_shelx_estimated_absorpt_T_min'
+        '_shelx_estimated_absorpt_T_max'
+        '_exptl_absorpt_correction_T_min'
+        '_exptl_absorpt_correction_T_max'
+        '_exptl_absorpt_process_details'
+        '_exptl_absorpt_special_details'
+        '_diffrn_radiation_probe'
+        '_diffrn_measurement_details'
+        '_diffrn_detector'
+        '_diffrn_detector_type'
+        '_diffrn_detector_area_resol_mean'
+        '_diffrn_reflns_limit_h_max'
+        '_diffrn_reflns_limit_h_min'
+        '_diffrn_reflns_limit_k_max'
+        '_diffrn_reflns_limit_k_min'
+        '_diffrn_reflns_limit_l_max'
+        '_diffrn_reflns_limit_l_min'
+        '_diffrn_reflns_Laue_measured_fraction_full'
+        '_diffrn_reflns_Laue_measured_fraction_max'
+        '_exptl_crystal_density_meas'
+        '_exptl_crystal_density_method'
+        '_exptl_crystal_density_diffrn'
+        '_exptl_crystal_F_000'
+        '_exptl_transmission_factor_min'
+        '_exptl_transmission_factor_max'
+        'loop_'
+        '_exptl_crystal_face_index_h'
+        '_exptl_crystal_face_index_k'
+        '_exptl_crystal_face_index_l'
+        '_exptl_crystal_face_perp_dist'
 
     def wr2_in_percent(self):
         if self.refine_ls_wR_factor_ref:

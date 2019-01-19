@@ -139,7 +139,10 @@ class ExperimentFormMixin(forms.ModelForm):
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
-    number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
+    try:
+        number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
+    except AttributeError:
+        number = 1
 
     def __init__(self, *args, **kwargs):
         self.exp_title = 'New Experiment'
