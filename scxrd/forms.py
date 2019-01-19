@@ -1,12 +1,11 @@
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
-from crispy_forms.bootstrap import FormActions, AppendedText, InlineCheckboxes
+from bootstrap_datepicker_plus import DatePickerInput
+from crispy_forms.bootstrap import FormActions, AppendedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
-from django.contrib.auth.models import User
 
-from scxrd.models import Experiment, Solvent, Machine, Person
+from scxrd.models import Experiment
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
@@ -20,7 +19,7 @@ class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
 
 
-class ExperimentForm(forms.ModelForm):
+class ExperimentFormMixin(forms.ModelForm):
     # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
     #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
@@ -41,8 +40,7 @@ class ExperimentForm(forms.ModelForm):
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
         self.helper.field_class = 'p-2'
 
-        self.helper.layout = Layout(
-            ###############################Experiment#################################
+        self.experiment_layout = Layout(
             HTML('<div class="card w-100"><div class="card-header">Experiment</div>'),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -61,16 +59,10 @@ class ExperimentForm(forms.ModelForm):
                 Column(),
                 css_class='form-row'
             ),
-            Row(
-            #    FormActions(
-            #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
-            #        Submit('cancel', 'Cancel', css_class='btn-danger'),
-            #        ),
-                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
-                css_class='form-row ml-0 mb-0'
-            ),
             HTML('</div>'),
-            ###############################Crystal#####################################
+        )
+
+        self.crystal_layout = Layout(
             HTML('<div class="card w-100 mt-3">'
                  '  <div class="card-header">Crystal</div>'),
             AppendedText('sum_formula', 'assumed formula', active=True),
@@ -89,22 +81,32 @@ class ExperimentForm(forms.ModelForm):
             Row(
                 Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
-                                                                                                   'col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_lustre', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
+                                                                                         'col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_lustre', css_class='custom-select'),
+                       css_class='form-group col-md-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
-            #Row(
+            # Row(
             #    FormActions(
             #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
             #        Submit('cancel', 'Cancel', css_class='btn-danger'),
             #    ),
             #    css_class='form-row ml-0 mb-0'
-            #),
+            # ),
             HTML('</div>'),
-            #################################Files##########################################
-            HTML('<div class="card w-100 mt-3">'
+        )
+        self.files_layout = Layout(
+            HTML('<div class="card w-100 mt-3 mb-4">'
                  '  <div class="card-header">Files and comments</div>'),
             Field('cif', css_class='custom-select'),
+            Row(
+                #    FormActions(
+                #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
+                #        Submit('cancel', 'Cancel', css_class='btn-danger'),
+                #        ),
+                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
+                css_class='form-row ml-0 mb-0'
+            ),
             'special_details',
             Row(
                 FormActions(
@@ -114,6 +116,35 @@ class ExperimentForm(forms.ModelForm):
                 css_class='form-row ml-0 mb-0'
             ),
             HTML('</div>'),
+        )
+
+
+class NewExperimentForm(ExperimentFormMixin, forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.render_unmentioned_fields = False
+        self.helper.layout = Layout(
+            # Experiment ###
+            self.experiment_layout,
+        )
+
+    class Meta:
+        model = Experiment
+        fields = '__all__'
+
+
+class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            # Experiment ###
+            self.experiment_layout,
+            # Crystal ######
+            self.crystal_layout,
+            # Files ########
+            self.files_layout,
 
         )
 

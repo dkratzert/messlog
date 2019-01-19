@@ -13,7 +13,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from scxrd.models import Person
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentForm, ExperimentForm
+from scxrd.forms import ExperimentEditForm, ExperimentEditForm, NewExperimentForm
 from scxrd.models import Experiment
 
 
@@ -25,7 +25,7 @@ class FormActionMixin():
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
-            form = ExperimentForm(request.POST)
+            form = ExperimentEditForm(request.POST)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
@@ -44,13 +44,13 @@ class ExperimentIndexView(TemplateView):
     template_name = 'scxrd/scxrd_index.html'
 
 
-class ExperimentCreateView(CreateView):
+class ExperimentCreateView(LoginRequiredMixin, FormActionMixin, CreateView):
     """
     Start a new experiment
     """
     model = Experiment
-    form_class = ExperimentForm
-    template_name = 'scxrd/new_experiment.html'
+    form_class = NewExperimentForm
+    template_name = 'scxrd/experiment_edit.html'
     # Fields are defined in form_class:
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
@@ -61,7 +61,7 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
     Edit an experiment
     """
     model = Experiment
-    form_class = ExperimentForm
+    form_class = ExperimentEditForm
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
@@ -112,7 +112,7 @@ class UploadView(CreateView):
     model = Experiment
     template_name = "scxrd/upload.html"
     # success_url = reverse_lazy('scxrd:index')
-    form_class = ExperimentForm
+    form_class = ExperimentEditForm
 
     def get_success_url(self):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
