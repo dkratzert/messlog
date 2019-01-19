@@ -4,8 +4,9 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
+from django.contrib.auth.models import User
 
-from scxrd.models import Experiment
+from scxrd.models import Experiment, Machine
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
@@ -27,6 +28,8 @@ class ExperimentFormMixin(forms.ModelForm):
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False)
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label='Colour modifier')
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
+    machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
+    operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -41,7 +44,7 @@ class ExperimentFormMixin(forms.ModelForm):
         self.helper.field_class = 'p-2'
 
         self.experiment_layout = Layout(
-            HTML('<div class="card w-100"><div class="card-header">Experiment</div>'),
+            HTML('<div class="card w-100 mb-3"><div class="card-header">Experiment</div>'),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -56,20 +59,25 @@ class ExperimentFormMixin(forms.ModelForm):
             Row(
                 Column(Field('base', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
                 Column(Field('glue', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
-                Column(),
+                Column('measure_date', css_class='form-group col-md-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
-            HTML('</div>'),
+            Row(
+                Column(Field('crystal_size_x', css_class='custom'), css_class='col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_size_y'), css_class='col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_size_z'), css_class='col-md-4 mb-0 mt-0'),
+                css_class='form-row'
+            ),
         )
 
         self.crystal_layout = Layout(
-            HTML('<div class="card w-100 mt-3">'
-                 '  <div class="card-header">Crystal</div>'),
+            HTML('<div class="card w-100 mb-3">'
+                 '  <div class="card-header">Crystal and Results</div>'),
             AppendedText('sum_formula', 'assumed formula', active=True),
             Row(
-                Column('measure_date', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('submit_date', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('result_date', css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(),
                 css_class='form-row'
             ),
             Row(
@@ -93,11 +101,12 @@ class ExperimentFormMixin(forms.ModelForm):
             #    ),
             #    css_class='form-row ml-0 mb-0'
             # ),
-            HTML('</div>'),
         )
+
         self.files_layout = Layout(
-            HTML('<div class="card w-100 mt-3 mb-4">'
-                 '  <div class="card-header">Files and comments</div>'),
+            HTML('<div class="card w-100 mb-4">'
+                 '  <div class="card-header">Files and Comments</div>'),
+            # TODO: add drag&drop file upload:
             Field('cif', css_class='custom-select'),
             Row(
                 #    FormActions(
@@ -115,11 +124,22 @@ class ExperimentFormMixin(forms.ModelForm):
                 ),
                 css_class='form-row ml-0 mb-0'
             ),
-            HTML('</div>'),
+        )
+
+        self.crystal_colour_layout = Layout(
+            Row(
+                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
+                                                                                         'col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_lustre', css_class='custom-select'),
+                       css_class='form-group col-md-4 mb-0 mt-0'),
+                css_class='form-row'
+            ),
         )
 
 
 class NewExperimentForm(ExperimentFormMixin, forms.ModelForm):
+    number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -127,6 +147,16 @@ class NewExperimentForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
+            self.crystal_colour_layout,
+            AppendedText('sum_formula', 'assumed formula', active=True),
+            Row(
+                FormActions(
+                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
+                    Submit('cancel', 'Cancel', css_class='btn-danger'),
+                ),
+                css_class='form-row ml-0 mb-0'
+            ),
+            HTML('</div>'),
         )
 
     class Meta:
@@ -141,11 +171,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
+            HTML('</div>'),
             # Crystal ######
             self.crystal_layout,
+            HTML('</div>'),
             # Files ########
             self.files_layout,
-
+            HTML('</div>'),
         )
 
     class Meta:

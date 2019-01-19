@@ -143,7 +143,7 @@ class CrystalShape(models.Model):
 class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
-    number = models.IntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
+    number = models.PositiveIntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
     customer = models.ForeignKey(to=Person, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
     # Operator has to be an authenticated User:
@@ -166,6 +166,9 @@ class Experiment(models.Model):
                              on_delete=models.DO_NOTHING)
     cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
                                verbose_name='cif file', on_delete=models.CASCADE)
+    crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
+    crystal_size_y = models.FloatField(verbose_name='crystal size mid', null=True, blank=True)
+    crystal_size_z = models.FloatField(verbose_name='crystal size min', null=True, blank=True)
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])
     crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, verbose_name='crystal colour modifier',
                                              default=COLOUR_MOD_CHOICES[0][0])

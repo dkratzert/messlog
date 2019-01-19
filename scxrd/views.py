@@ -25,12 +25,13 @@ class FormActionMixin():
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
-            form = ExperimentEditForm(request.POST)
+            form = self.form_class(request.POST)
+            #print(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
             else:
-                print('#### Form is not valid')
+                print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
                 return super().post(request, *args, **kwargs)
         else:
             return super().post(request, *args, **kwargs)
@@ -65,8 +66,8 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
-    def get_success_url(self):
-        return reverse_lazy('scxrd:index')
+    #def get_success_url(self):
+    #    return reverse_lazy('scxrd:index')
 
     """
     def get_context_data(self, **kwargs):
@@ -100,7 +101,7 @@ class DetailsTable(DetailView):
             exp_id = self.kwargs['pk']
             context['sumform'] = SumFormula.objects.get(pk=exp_id)
         except SumFormula.DoesNotExist as e:
-            print(e, '#')
+            print(e, '#-#')
             pass
         return context
 
