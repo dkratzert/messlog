@@ -217,6 +217,7 @@ class CifFile(models.Model):
         self.cell_length_a, self.cell_length_b, self.cell_length_c, self.cell_angle_alpha, \
         self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cell
         self.cell_formula_units_Z = get_int(fw("_cell_formula_units_Z"))
+        # TODO: How about foo.as_string("'bar'")
         self.space_group_name_H_M_alt = get_string(fw("_space_group_name_H-M_alt"))
         self.space_group_name_Hall = get_string(fw("_space_group_name_Hall"))
         self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
