@@ -29,3 +29,10 @@ form .alert ul li {
 .col-form-label {
     /*font-weight: bold;*/
 }
+
+/*
+  smaller font size for the main experiments table:
+*/
+#exptable_wrapper {
+    font-size: 0.9rem;
+}

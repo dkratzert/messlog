@@ -1,20 +1,17 @@
-from pprint import pprint
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
-from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy, reverse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
-from scxrd.models import Person
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentEditForm, ExperimentEditForm, NewExperimentForm
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment
+from scxrd.models import Person
 
 
 class FormActionMixin():
@@ -26,7 +23,7 @@ class FormActionMixin():
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
-            #print(form)
+            # print(form)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
@@ -37,7 +34,7 @@ class FormActionMixin():
             return super().post(request, *args, **kwargs)
 
 
-class ExperimentIndexView(TemplateView):
+class ExperimentIndexView(LoginRequiredMixin, TemplateView):
     """
     The view for the main scxrd page.
     """
@@ -50,8 +47,8 @@ class ExperimentCreateView(LoginRequiredMixin, FormActionMixin, CreateView):
     Start a new experiment
     """
     model = Experiment
-    form_class = NewExperimentForm
-    template_name = 'scxrd/experiment_edit.html'
+    form_class = ExperimentNewForm
+    template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
@@ -66,7 +63,7 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
-    #def get_success_url(self):
+    # def get_success_url(self):
     #    return reverse_lazy('scxrd:index')
 
     """
@@ -80,7 +77,7 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
         return context"""
 
 
-class ExperimentDetailView(DetailView):
+class ExperimentDetailView(LoginRequiredMixin, DetailView):
     """
     Show details of an experiment
     """
@@ -106,9 +103,9 @@ class DetailsTable(DetailView):
         return context
 
 
-class UploadView(CreateView):
+class UploadView(LoginRequiredMixin, CreateView):
     """
-    An file upload view.
+    A file upload view.
     """
     model = Experiment
     template_name = "scxrd/upload.html"
@@ -119,7 +116,23 @@ class UploadView(CreateView):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
-class Customers(ListView):
+class DragAndDropUploadView(View):
+
+    def get(self, request):
+        photos_list = Photo.objects.all()
+        return render(request, 'photos/drag_and_drop_upload/index.html', {'photos': photos_list})
+
+    def post(self, request):
+        form = PhotoForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+
+class Customers(LoginRequiredMixin, ListView):
     """
     The customers list view.
     """
@@ -127,7 +140,7 @@ class Customers(ListView):
     template_name = 'scxrd/customers.html'
 
 
-class MoleculeView(View):
+class MoleculeView(LoginRequiredMixin, View):
     """
     View to get atom data as .mol file.
     """

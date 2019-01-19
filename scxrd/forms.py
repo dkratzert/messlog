@@ -44,7 +44,7 @@ class ExperimentFormMixin(forms.ModelForm):
         self.helper.field_class = 'p-2'
 
         self.experiment_layout = Layout(
-            HTML('<div class="card w-100 mb-3"><div class="card-header">Experiment</div>'),
+            HTML('<div class="card w-100 mb-3"><div class="card-header">{}</div>'.format(self.exp_title)),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -138,12 +138,14 @@ class ExperimentFormMixin(forms.ModelForm):
         )
 
 
-class NewExperimentForm(ExperimentFormMixin, forms.ModelForm):
+class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
 
     def __init__(self, *args, **kwargs):
+        self.exp_title = 'New Experiment'
         super().__init__(*args, **kwargs)
         self.helper.render_unmentioned_fields = False
+
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
@@ -167,6 +169,7 @@ class NewExperimentForm(ExperimentFormMixin, forms.ModelForm):
 class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        self.exp_title = 'Experiment'
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             # Experiment ###
