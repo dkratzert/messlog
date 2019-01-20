@@ -1,4 +1,3 @@
-
 st = r''';
 Olex2 1.2
 (compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)
@@ -28,4 +27,22 @@ def foo():
     'foo bar'
     >>> get_string(st)
     '\nOlex2 1.2\n(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)\n'
+    """
+
+
+def cif_writing():
+    """
+    >>> from pathlib import Path
+    >>> import gemmi
+    >>> doc = gemmi.cif.read_file("testfiles/p21c.cif")
+    >>> # work with the json representation
+    >>> js = doc.as_json()
+    >>> # change items
+    >>> doc.sole_block().set_pair('_cell_length_a', '12.123(23)')
+    >>> # write back
+    >>> doc.write_file('testfiles/test.cif')
+    >>> doc = gemmi.cif.read_file("testfiles/test.cif")
+    >>> doc.sole_block().find_pair('_cell_length_a')
+    ['_cell_length_a', '12.123(23)']
+    >>> Path('testfiles/test.cif').unlink()
     """
