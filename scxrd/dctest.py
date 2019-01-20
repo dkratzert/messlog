@@ -32,11 +32,14 @@ def foo():
 
 def cif_writing():
     """
+    >>> import json
     >>> from pathlib import Path
+    >>> from pprint import pprint
     >>> import gemmi
     >>> doc = gemmi.cif.read_file("testfiles/p21c.cif")
     >>> # work with the json representation
     >>> js = doc.as_json()
+    >>> pprint(json.loads(js)['p21c']['_atom_site_fract_x'])
     >>> # change items
     >>> doc.sole_block().set_pair('_cell_length_a', '12.123(23)')
     >>> # write back
