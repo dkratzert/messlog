@@ -25,7 +25,6 @@ from mysite import settings
 from mysite.mysite.views import HomePageView
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')),  # grappelli URLS
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
     path('favicon.ico', favicon_view),

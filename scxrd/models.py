@@ -151,6 +151,7 @@ class Experiment(models.Model):
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, blank=True)
+    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='preliminary unit cell')
     solvent1 = models.ForeignKey(Solvent, verbose_name='solvent 1', null=True, blank=True,
                                  related_name='experiment1', on_delete=models.CASCADE, default='')
     solvent2 = models.ForeignKey(Solvent, verbose_name='solvent 2', null=True, blank=True,

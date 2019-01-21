@@ -5,6 +5,7 @@ from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
+from django.db import OperationalError
 
 from scxrd.models import Experiment, Machine
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
@@ -24,8 +25,8 @@ class ExperimentFormMixin(forms.ModelForm):
     # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
     #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
-    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False)
-    result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False)
+    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False, label="Sample submission date")
+    result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False, label="Results sent date")
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label='Colour modifier')
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
@@ -75,12 +76,6 @@ class ExperimentFormMixin(forms.ModelForm):
                  '  <div class="card-header">Crystal and Results</div>'),
             AppendedText('sum_formula', 'assumed formula', active=True),
             Row(
-                Column('submit_date', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column('result_date', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(),
-                css_class='form-row'
-            ),
-            Row(
                 Column(Field('solvent1', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('solvent2', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('solvent3', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
@@ -92,6 +87,12 @@ class ExperimentFormMixin(forms.ModelForm):
                                                                                          'col-md-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'),
                        css_class='form-group col-md-4 mb-0 mt-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('submit_date', css_class='form-group col-md-4 mb-0 mt-0'),
+                Column('result_date', css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(),
                 css_class='form-row'
             ),
             # Row(
@@ -141,7 +142,7 @@ class ExperimentFormMixin(forms.ModelForm):
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     try:
         number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
-    except AttributeError:
+    except (AttributeError, OperationalError):
         number = 1
 
     def __init__(self, *args, **kwargs):
