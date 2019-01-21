@@ -39,7 +39,10 @@ def cif_writing():
     >>> doc = gemmi.cif.read_file("testfiles/p21c.cif")
     >>> # work with the json representation
     >>> js = doc.as_json()
-    >>> pprint(json.loads(js)['p21c']['_atom_site_fract_x'])
+
+    #>>> pprint(json.loads(js)['p21c']['_atom_site_fract_x'])
+    >>> doc.sole_block().find_pair('_cell_length_a')
+    ['_cell_length_a', '10.5086(3)']
     >>> # change items
     >>> doc.sole_block().set_pair('_cell_length_a', '12.123(23)')
     >>> # write back

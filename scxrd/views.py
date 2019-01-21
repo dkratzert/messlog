@@ -9,7 +9,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
 
@@ -75,6 +75,26 @@ class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
             print(e, '#')
             pass
         return context"""
+
+
+class ReportView(LoginRequiredMixin, CreateView):
+    """
+    Generate a report anf finalize the cif.
+    """
+    model = Experiment
+    form_class = FinalizeCifForm
+    template_name = 'scxrd/finalize_cif.html'
+    success_url = reverse_lazy('scxrd:index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            exp_id = self.kwargs['pk']
+            context['cifname'] = Experiment.objects.get(pk=exp_id).cif.cif_file_on_disk.url
+        except SumFormula.DoesNotExist as e:
+            print(e, '#!#')
+            pass
+        return context
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
@@ -169,7 +189,7 @@ class MoleculeView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
 
-class OrderListJson(BaseDatatableView):
+class ExperimentListJson(BaseDatatableView):
     """
     The view to show the datatabes table for the list of experiments.
 
@@ -206,7 +226,7 @@ class OrderListJson(BaseDatatableView):
             else:
                 return '<span class="badge badge-warning ml-4">no</span>'
         else:
-            return super(OrderListJson, self).render_column(row, column)
+            return super(ExperimentListJson, self).render_column(row, column)
 
     '''
     def filter_queryset(self, qs):

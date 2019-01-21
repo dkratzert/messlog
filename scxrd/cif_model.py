@@ -1,3 +1,5 @@
+from typing import List
+
 import gemmi
 from pathlib import Path
 
@@ -107,7 +109,7 @@ class CifFile(models.Model):
             cif_block = cif_parsed.sole_block()
         except (RuntimeError, IndexError) as e:
             print(e)
-            #raise ValidationError('Unable to parse cif file:', e)
+            # raise ValidationError('Unable to parse cif file:', e)
             return
         Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
@@ -146,25 +148,25 @@ class CifFile(models.Model):
         super().delete(*args, **kwargs)
 
     def add_to_sumform(self, occ=None, atype=None):
-            #  0     1   2 3 4   5  6  7   8       9
-            # [Name type x y z  xc xc zc occupancy part]
-            atom_type_symbol = ''
-            try:
-                if occ:
-                    occu = occ
-                else:
-                    occu = 1.0
-                if atype:
-                    atom_type_symbol = atype
-                else:
-                    assert KeyError
-                elem = atom_type_symbol.capitalize()
-                if elem in self.sum_form_dict:
-                    self.sum_form_dict[elem] += occu
-                else:
-                    self.sum_form_dict[elem] = occu
-            except KeyError:
-                pass
+        #  0     1   2 3 4   5  6  7   8       9
+        # [Name type x y z  xc xc zc occupancy part]
+        atom_type_symbol = ''
+        try:
+            if occ:
+                occu = occ
+            else:
+                occu = 1.0
+            if atype:
+                atom_type_symbol = atype
+            else:
+                assert KeyError
+            elem = atom_type_symbol.capitalize()
+            if elem in self.sum_form_dict:
+                self.sum_form_dict[elem] += occu
+            else:
+                self.sum_form_dict[elem] = occu
+        except KeyError:
+            pass
 
     def fill_residuals_table(self, cif_block):
         """
@@ -338,11 +340,12 @@ class CifFile(models.Model):
         else:
             return '---'
 
-    def completeness_in_percent(self):
+    def completeness_in_percent(self) -> float:
         if self.diffrn_measured_fraction_theta_max:
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
 
-    def fill_formula(self, formula):
+    @staticmethod
+    def fill_formula(formula):
         """
         Fills formula data into the sum formula table.
         """
@@ -356,6 +359,28 @@ class CifFile(models.Model):
         if not formula:
             return
         return SumFormula(**formula)
+
+    @staticmethod
+    def get_cif_item(file: str, item: str) -> List[str]:
+        """
+        "testfiles/p21c.cif"
+        """
+        doc = gemmi.cif.read_file(file)
+        pair = doc.sole_block().find_pair(item)
+        return pair
+
+    def set_cif_item(self, file: str, pair: List[str]) -> bool:
+        """
+        sets a new cif item value and writes the file
+        """
+        doc = gemmi.cif.read_file(file)
+        doc.sole_block().set_pair(*pair)
+        try:
+            doc.write_file(file)
+        except Exception as e:
+            print('Error during cif write:', e, '##set_cif_item')
+            return False
+        return True
 
 
 class SumFormula(models.Model):

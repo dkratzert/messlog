@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
 
+from scxrd.cif_model import CifFile
 from scxrd.models import Experiment, Machine
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
@@ -25,7 +26,8 @@ class ExperimentFormMixin(forms.ModelForm):
     # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
     #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
-    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False, label="Sample submission date")
+    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
+                                  label="Sample submission date")
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False, label="Results sent date")
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label='Colour modifier')
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
@@ -45,7 +47,7 @@ class ExperimentFormMixin(forms.ModelForm):
         self.helper.field_class = 'p-2'
 
         self.experiment_layout = Layout(
-            HTML('<div class="card w-100 mb-3"><div class="card-header">{}</div>'.format(self.exp_title)),
+            self.card(self.exp_title),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -72,8 +74,7 @@ class ExperimentFormMixin(forms.ModelForm):
         )
 
         self.crystal_layout = Layout(
-            HTML('<div class="card w-100 mb-3">'
-                 '  <div class="card-header">Crystal and Results</div>'),
+            self.card('Crystal and Results'),
             AppendedText('sum_formula', 'assumed formula', active=True),
             Row(
                 Column(Field('solvent1', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
@@ -105,8 +106,7 @@ class ExperimentFormMixin(forms.ModelForm):
         )
 
         self.files_layout = Layout(
-            HTML('<div class="card w-100 mb-4">'
-                 '  <div class="card-header">Files and Comments</div>'),
+            self.card('Files and Comments'),
             # TODO: add drag&drop file upload:
             Field('cif', css_class='custom-select'),
             Row(
@@ -137,6 +137,9 @@ class ExperimentFormMixin(forms.ModelForm):
                 css_class='form-row'
             ),
         )
+
+    def card(self, header_title):
+        return HTML('<div class="card w-100 mb-3">  <div class="card-header">{}</div>'.format(header_title))
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
@@ -185,6 +188,27 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             # Files ########
             self.files_layout,
             HTML('</div>'),
+        )
+
+    class Meta:
+        model = Experiment
+        fields = '__all__'
+
+
+class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
+    """
+    CrispyForm class to generate a cif report.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.exp_title = 'Experiment'
+        super().__init__(*args, **kwargs)
+        self.helper.render_unmentioned_fields = False
+        self.helper.layout = Layout(
+            self.card('Finalize Cif'),
+            Column(
+                HTML('{{ cifname }}'),
+            ),
         )
 
     class Meta:

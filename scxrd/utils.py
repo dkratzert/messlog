@@ -76,6 +76,37 @@ COLOUR_LUSTRE_COICES = (
 )
 
 
+"""
+From https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Ichemical_absolute_configuration.html
+
+rm	    Absolute configuration established by the structure determination of a compound containing a 
+        chiral reference molecule of known absolute configuration.
+
+ad	    Absolute configuration established by anomalous-dispersion effects in diffraction measurements on the crystal.
+
+rmad	Absolute configuration established by the structure determination of a compound containing 
+        a chiral reference molecule of known absolute configuration and confirmed by anomalous-dispersion effects 
+        in diffraction measurements on the crystal.
+
+syn	    Absolute configuration has not been established by anomalous-dispersion effects in diffraction 
+        measurements on the crystal. The enantiomer has been assigned by reference to an unchanging 
+        chiral centre in the synthetic procedure.
+
+unk	    Absolute configuration is unknown, there being no firm chemical evidence for its assignment to hand 
+        and it having not been established by anomalous-dispersion effects in diffraction measurements on the crystal. 
+        An arbitrary choice of enantiomer has been made.
+.	    Inapplicable.
+"""
+ABSOLUTE_CONFIGURATION_CHOICES = (
+    ('ad', 'Anomalous dispersion'),
+    ('rm', 'Reference Molecule'),
+    ('rmad', 'Reference Molecule and anomalous dispersion'),
+    ('syn', 'Synthesis'),
+    ('unk', 'Unknown'),
+    ('.', 'Inapplicable'),
+)
+
+
 def get_float(line: str) -> (int, None):
     try:
         return float(line.split('(')[0].split(' ')[0])

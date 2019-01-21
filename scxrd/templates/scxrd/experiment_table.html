@@ -5,9 +5,9 @@
     {% load static %}
     {% csrf_token %}
     <script type="text/javascript">
-    
+
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-    var table_url = "{% url 'scxrd:order_list_json' %}";
+    var table_url = "{% url 'scxrd:experiments_list' %}";
 
     </script>
 {% endblock grid %}
