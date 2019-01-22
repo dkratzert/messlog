@@ -107,6 +107,27 @@ ABSOLUTE_CONFIGURATION_CHOICES = (
     ('.', 'Inapplicable'),
 )
 
+# _refine_ls_hydrogen_treatment
+"""
+The data value must be one of the following:
+refall	refined all H-atom parameters
+refxyz	refined H-atom coordinates only
+refU	refined H-atom U's only
+noref	no refinement of H-atom parameters
+constr	H-atom parameters constrained
+hetero	H-atom parameters constrained for H on C, all H-atom parameters refined for H on heteroatoms
+heteroxyz	H-atom parameters constrained for H on C, refined H-atom coordinates only for H on heteroatoms
+heteroU	H-atom parameters constrained for H on C, refined H-atom U's only for H on heteroatoms
+heteronoref	H-atom parameters constrained for H on C, no refinement of H-atom parameters for H on heteroatoms
+hetero-mixed	H-atom parameters constrained for H on C and some heteroatoms, all H-atom parameters refined for H on remaining heteroatoms
+heteroxyz-mixed	H-atom parameters constrained for H on C and some heteroatoms, refined H-atom coordinates only for H on remaining heteroatoms
+heteroU-mixed	H-atom parameters constrained for H on C and some heteroatoms, refined H-atom U's only for H on remaining heteroatoms
+heteronoref-mixed	H-atom parameters constrained for H on C and some heteroatoms, no refinement of H-atom parameters for H on remaining heteroatoms
+mixed	some constrained, some independent
+undef	H-atom parameters not defined
+"""
+REFINE_LS_HYDROGEN_TREATMENT = ()
+
 
 def get_float(line: str) -> (int, None):
     try:
@@ -166,5 +187,3 @@ def get_table(block, items: [list, tuple]) -> gemmi.cif.Table:
     'x, y, z\\n-x, y+1/2, -z+1/2\\n-x, -y, -z\\nx, -y-1/2, z-1/2'
     """
     return block.find(items)
-
-
