@@ -90,11 +90,24 @@ class ReportView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         try:
             exp_id = self.kwargs['pk']
-            context['cifname'] = Experiment.objects.get(pk=exp_id).cif.cif_file_on_disk.url
+            cifpath = Experiment.objects.get(pk=exp_id).cif.cif_file_on_disk.path
+            context['cifname'] = cifpath
+            context['cifdata'] = self.get_cif_data(cifpath)
         except SumFormula.DoesNotExist as e:
             print(e, '#!#')
             pass
         return context
+
+    def get_cif_data(self, cifpath):
+        print('foo bar cif')
+        import gemmi
+        doc = gemmi.cif.read_file(cifpath)
+        d = doc.sole_block().find_pair('_cell_length_a')
+        """
+        for d in find_pair():
+            d.append_to_dict('cif_items')
+        """
+        return d
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
