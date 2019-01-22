@@ -50,10 +50,10 @@ class CifFile(models.Model):
     space_group_IT_number = models.PositiveIntegerField(null=True, blank=True)
     space_group_crystal_system = models.CharField(max_length=255, null=True, blank=True)
     space_group_symop_operation_xyz = models.TextField(null=True, blank=True)
-    audit_creation_method = models.CharField(max_length=255, null=True, blank=True)
-    chemical_formula_sum = models.CharField(max_length=255, null=True, blank=True)
+    audit_creation_method = models.CharField(max_length=2048, null=True, blank=True)
+    chemical_formula_sum = models.CharField(max_length=2048, null=True, blank=True)
     chemical_formula_weight = models.CharField(max_length=255, null=True, blank=True)
-    exptl_crystal_description = models.CharField(max_length=255, null=True, blank=True)
+    exptl_crystal_description = models.CharField(max_length=2048, null=True, blank=True)
     exptl_crystal_colour = models.CharField(max_length=255, null=True, blank=True)
     exptl_crystal_size_max = models.FloatField(null=True, blank=True)
     exptl_crystal_size_mid = models.FloatField(null=True, blank=True)
@@ -63,8 +63,8 @@ class CifFile(models.Model):
     diffrn_ambient_temperature = models.FloatField(null=True, blank=True)
     diffrn_radiation_wavelength = models.FloatField(null=True, blank=True)
     diffrn_radiation_type = models.CharField(max_length=255, null=True, blank=True)
-    diffrn_source = models.CharField(max_length=255, null=True, blank=True)
-    diffrn_measurement_device_type = models.CharField(max_length=255, null=True, blank=True)
+    diffrn_source = models.CharField(max_length=2048, null=True, blank=True)
+    diffrn_measurement_device_type = models.CharField(max_length=2048, null=True, blank=True)
     diffrn_reflns_number = models.IntegerField(null=True, blank=True)
     diffrn_reflns_av_R_equivalents = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_min = models.FloatField(null=True, blank=True)
@@ -79,7 +79,7 @@ class CifFile(models.Model):
     computing_structure_solution = models.CharField(max_length=255, null=True, blank=True)
     computing_structure_refinement = models.CharField(max_length=255, null=True, blank=True)
     refine_special_details = models.TextField(null=True, blank=True)
-    refine_ls_abs_structure_Flack = models.CharField(max_length=255, null=True, blank=True)
+    refine_ls_abs_structure_Flack = models.FloatField(null=True, blank=True)
     refine_ls_structure_factor_coef = models.CharField(max_length=255, null=True, blank=True)
     refine_ls_weighting_details = models.TextField(null=True, blank=True)
     refine_ls_number_reflns = models.PositiveIntegerField(null=True, blank=True)
@@ -95,10 +95,61 @@ class CifFile(models.Model):
     refine_ls_shift_su_mean = models.FloatField(null=True, blank=True)
     refine_diff_density_max = models.FloatField(null=True, blank=True)
     refine_diff_density_min = models.FloatField(null=True, blank=True)
+    refine_diff_density_rms = models.FloatField(null=True, blank=True)
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
     shelx_res_file = models.TextField(null=True, blank=True, max_length=10000000)
+    shelx_res_checksum  = models.PositiveIntegerField(null=True, blank=True)
+
+    #shelx_hkl_file = models.TextField(null=True, blank=True)
+    #shelx_hkl_checksum = models.IntegerField(null=True, blank=True)
+
+    reflns_Friedel_fraction_full = models.FloatField(null=True, blank=True)
+    refine_ls_abs_structure_details = models.FloatField(null=True, blank=True)
+    reflns_special_details = models.FloatField(null=True, blank=True)
+    computing_data_collection = models.CharField(null=True, blank=True, max_length=2048)
+    computing_cell_refinement = models.CharField(null=True, blank=True, max_length=2048)
+    computing_data_reduction = models.CharField(null=True, blank=True, max_length=2048)
+    computing_molecular_graphics = models.CharField(null=True, blank=True, max_length=2048)
+    computing_publication_material = models.CharField(null=True, blank=True, max_length=2048)
+    atom_sites_solution_primary = models.CharField(null=True, blank=True, max_length=2048)
+    atom_sites_solution_secondary = models.CharField(null=True, blank=True, max_length=2048)
+    atom_sites_solution_hydrogens = models.CharField(null=True, blank=True, max_length=2048)
+    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=2048)
+    refine_ls_extinction_method = models.CharField(null=True, blank=True, max_length=2048)
+    refine_ls_extinction_coef = models.FloatField(null=True, blank=True)
+    refine_ls_extinction_expression = models.CharField(null=True, blank=True, max_length=2048)
+    geom_special_details = models.TextField(null=True, blank=True, max_length=2048)
+    diffrn_radiation_monochromator = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_measurement_method = models.CharField(null=True, blank=True, max_length=2048)
+    shelx_estimated_absorpt_T_min = models.FloatField(null=True, blank=True)
+    shelx_estimated_absorpt_T_max = models.FloatField(null=True, blank=True)
+    exptl_absorpt_correction_T_min = models.FloatField(null=True, blank=True)
+    exptl_absorpt_correction_T_max = models.FloatField(null=True, blank=True)
+    exptl_absorpt_process_details = models.CharField(null=True, blank=True, max_length=2048)
+    exptl_absorpt_special_details = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_radiation_probe = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_measurement_details = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_detector = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_detector_type = models.CharField(null=True, blank=True, max_length=2048)
+    diffrn_detector_area_resol_mean = models.FloatField(null=True, blank=True)
+    diffrn_reflns_limit_h_max = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_limit_h_min = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_limit_k_max = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_limit_k_min = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_limit_l_max = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_limit_l_min = models.IntegerField(null=True, blank=True)
+    diffrn_reflns_Laue_measured_fraction_full = models.FloatField(null=True, blank=True)
+    diffrn_reflns_Laue_measured_fraction_max = models.FloatField(null=True, blank=True)
+    exptl_crystal_density_meas = models.FloatField(null=True, blank=True)
+    exptl_crystal_density_method = models.CharField(null=True, blank=True, max_length=2048)
+    exptl_crystal_density_diffrn = models.FloatField(null=True, blank=True)
+    exptl_crystal_F_000 = models.FloatField(null=True, blank=True)
+    exptl_transmission_factor_min = models.FloatField(null=True, blank=True)
+    exptl_transmission_factor_max = models.FloatField(null=True, blank=True)
+    exptl_crystal_face_x = models.TextField(null=True, blank=True)
+
 
     #################################
 
@@ -215,6 +266,7 @@ class CifFile(models.Model):
         if self.sum_form_dict:
             self.sumform_exact = self.fill_formula(self.sum_form_dict)
             self.sumform_exact.save()
+
         self.data = cif_block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cell
@@ -224,7 +276,15 @@ class CifFile(models.Model):
         self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
         self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
         self.space_group_crystal_system = get_string(fw("_space_group_crystal_system"))
-        self.space_group_symop_operation_xyz = '\n'.join([i.str(0) for i in cif_block.find(("_space_group_symop_operation_xyz",))])
+        self.space_group_symop_operation_xyz = '\n'.join(
+            [i.str(0) for i in cif_block.find(("_space_group_symop_operation_xyz",))])
+
+        self.shelx_res_file = get_string(fw("_shelx_res_file"))
+        self.shelx_res_checksum = get_int(fw('_shelx_res_checksum'))
+
+        #self.shelx_hkl_file = get_string(fw('_shelx_hkl_file'))
+        #self.shelx_hkl_checksum = get_int(fw('_shelx_hkl_checksum'))
+
         self.audit_creation_method = get_string(fw("_audit_creation_method"))
         self.chemical_formula_sum = get_string(fw("_chemical_formula_sum"))
         self.chemical_formula_weight = get_string(fw("_chemical_formula_weight"))
@@ -233,12 +293,12 @@ class CifFile(models.Model):
         self.exptl_crystal_size_max = get_float(fw("_exptl_crystal_size_max"))
         self.exptl_crystal_size_mid = get_float(fw("_exptl_crystal_size_mid"))
         self.exptl_crystal_size_min = get_float(fw("_exptl_crystal_size_min"))
-        self.exptl_absorpt_coefficient_mu = get_float(fw("_exptl_absorpt_coefficient_mu"))
-        self.exptl_absorpt_correction_type = get_string(fw("_exptl_absorpt_correction_type"))
-        self.diffrn_ambient_temperature = get_float(fw("_diffrn_ambient_temperature"))
         self.diffrn_radiation_wavelength = get_float(fw("_diffrn_radiation_wavelength"))
+        self.diffrn_ambient_temperature = get_float(fw("_diffrn_ambient_temperature"))
         self.diffrn_radiation_type = get_string(fw("_diffrn_radiation_type"))
         self.diffrn_source = get_string(fw("_diffrn_source"))
+        self.exptl_absorpt_coefficient_mu = get_float(fw("_exptl_absorpt_coefficient_mu"))
+        self.exptl_absorpt_correction_type = get_string(fw("_exptl_absorpt_correction_type"))
         self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
         self.diffrn_reflns_number = get_int(fw("_diffrn_reflns_number"))
         self.diffrn_reflns_av_R_equivalents = get_float(fw("_diffrn_reflns_av_R_equivalents"))
@@ -254,7 +314,7 @@ class CifFile(models.Model):
         self.computing_structure_solution = get_string(fw("_computing_structure_solution"))
         self.computing_structure_refinement = get_string(fw("_computing_structure_refinement"))
         self.refine_special_details = get_string(fw("_refine_special_details"))
-        self.refine_ls_abs_structure_Flack = get_string(fw("_refine_ls_abs_structure_Flack"))
+        self.refine_ls_abs_structure_Flack = get_float(fw("_refine_ls_abs_structure_Flack"))
         self.refine_ls_structure_factor_coef = get_string(fw("_refine_ls_structure_factor_coef"))
         self.refine_ls_weighting_details = get_string(fw("_refine_ls_weighting_details"))
         self.refine_ls_number_reflns = get_int(fw("_refine_ls_number_reflns"))
@@ -270,61 +330,58 @@ class CifFile(models.Model):
         self.refine_ls_shift_su_mean = get_float(fw("_refine_ls_shift/su_mean"))
         self.refine_diff_density_max = get_float(fw("_refine_diff_density_max"))
         self.refine_diff_density_min = get_float(fw("_refine_diff_density_min"))
+        self.refine_diff_density_rms = get_float(fw('_refine_diff_density_rms'))
         self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
         self.database_code_depnum_ccdc_archive = get_string(fw("_database_code_depnum_ccdc_archive"))
-        self.shelx_res_file = get_string(fw("_shelx_res_file"))
-        '_reflns_Friedel_fraction_full'
-        '_refine_ls_abs_structure_details'
-        '_reflns_special_details'
-        '_computing_data_collection'
-        '_computing_cell_refinement'
-        '_computing_data_reduction'
-        '_computing_molecular_graphics'
-        '_computing_publication_material'
-        '_atom_sites_solution_primary'
-        '_atom_sites_solution_secondary'
-        '_atom_sites_solution_hydrogens'
-        '_refine_ls_hydrogen_treatment'
-        '_refine_ls_extinction_method'
-        '_refine_ls_extinction_coef'
-        '_refine_ls_extinction_expression'
-        '_geom_special_details'
-        '_refine_diff_density_rms'
-        '_shelx_hkl_file'
-        '_shelx_hkl_checksum'
-        '_shelx_res_checksum'
-        '_diffrn_radiation_monochromator'
-        '_diffrn_measurement_method'
-        '_shelx_estimated_absorpt_T_min'
-        '_shelx_estimated_absorpt_T_max'
-        '_exptl_absorpt_correction_T_min'
-        '_exptl_absorpt_correction_T_max'
-        '_exptl_absorpt_process_details'
-        '_exptl_absorpt_special_details'
-        '_diffrn_radiation_probe'
-        '_diffrn_measurement_details'
-        '_diffrn_detector'
-        '_diffrn_detector_type'
-        '_diffrn_detector_area_resol_mean'
-        '_diffrn_reflns_limit_h_max'
-        '_diffrn_reflns_limit_h_min'
-        '_diffrn_reflns_limit_k_max'
-        '_diffrn_reflns_limit_k_min'
-        '_diffrn_reflns_limit_l_max'
-        '_diffrn_reflns_limit_l_min'
-        '_diffrn_reflns_Laue_measured_fraction_full'
-        '_diffrn_reflns_Laue_measured_fraction_max'
-        '_exptl_crystal_density_meas'
-        '_exptl_crystal_density_method'
-        '_exptl_crystal_density_diffrn'
-        '_exptl_crystal_F_000'
-        '_exptl_transmission_factor_min'
-        '_exptl_transmission_factor_max'
-        'loop_'
-        '_exptl_crystal_face_index_h'
-        '_exptl_crystal_face_index_k'
-        '_exptl_crystal_face_index_l'
-        '_exptl_crystal_face_perp_dist'
+        self.reflns_Friedel_fraction_full = get_float(fw('_reflns_Friedel_fraction_full'))
+        self.refine_ls_abs_structure_details = get_float(fw('_refine_ls_abs_structure_details'))
+        self.reflns_special_details = get_float(fw('_reflns_special_details'))
+        self.computing_data_collection = get_string(fw('_computing_data_collection'))
+        self.computing_cell_refinement = get_string(fw('_computing_cell_refinement'))
+        self.computing_data_reduction = get_string(fw('_computing_data_reduction'))
+        self.computing_molecular_graphics = get_string(fw('_computing_molecular_graphics'))
+        self.computing_publication_material = get_string(fw('_computing_publication_material'))
+        self.atom_sites_solution_primary = get_string(fw('_atom_sites_solution_primary'))
+        self.atom_sites_solution_secondary = get_string(fw('_atom_sites_solution_secondary'))
+        self.atom_sites_solution_hydrogens = get_string(fw('_atom_sites_solution_hydrogens'))
+        self.refine_ls_hydrogen_treatment = get_string(fw('_refine_ls_hydrogen_treatment'))
+        self.refine_ls_extinction_method = get_string(fw('_refine_ls_extinction_method'))
+        self.refine_ls_extinction_coef = get_float(fw('_refine_ls_extinction_coef'))
+        self.refine_ls_extinction_expression = get_string(fw('_refine_ls_extinction_expression'))
+        self.geom_special_details = get_string(fw('_geom_special_details'))
+        self.diffrn_radiation_monochromator = get_string(fw('_diffrn_radiation_monochromator'))
+        self.diffrn_measurement_method = get_string(fw('_diffrn_measurement_method'))
+        self.shelx_estimated_absorpt_T_min = get_float(fw('_shelx_estimated_absorpt_T_min'))
+        self.shelx_estimated_absorpt_T_max = get_float(fw('_shelx_estimated_absorpt_T_max'))
+        self.exptl_absorpt_correction_T_min = get_float(fw('_exptl_absorpt_correction_T_min'))
+        self.exptl_absorpt_correction_T_max = get_float(fw('_exptl_absorpt_correction_T_max'))
+        self.exptl_absorpt_process_details = get_string(fw('_exptl_absorpt_process_details'))
+        self.exptl_absorpt_special_details = get_string(fw('_exptl_absorpt_special_details'))
+        self.diffrn_radiation_probe = get_string(fw('_diffrn_radiation_probe'))
+        self.diffrn_measurement_details = get_string(fw('_diffrn_measurement_details'))
+        self.diffrn_detector = get_string(fw('_diffrn_detector'))
+        self.diffrn_detector_type = get_string(fw('_diffrn_detector_type'))
+        self.diffrn_detector_area_resol_mean = get_float(fw('_diffrn_detector_area_resol_mean'))
+        self.diffrn_reflns_limit_h_max = get_int(fw('_diffrn_reflns_limit_h_max'))
+        self.diffrn_reflns_limit_h_min = get_int(fw('_diffrn_reflns_limit_h_min'))
+        self.diffrn_reflns_limit_k_max = get_int(fw('_diffrn_reflns_limit_k_max'))
+        self.diffrn_reflns_limit_k_min = get_int(fw('_diffrn_reflns_limit_k_min'))
+        self.diffrn_reflns_limit_l_max = get_int(fw('_diffrn_reflns_limit_l_max'))
+        self.diffrn_reflns_limit_l_min = get_int(fw('_diffrn_reflns_limit_l_min'))
+        self.diffrn_reflns_Laue_measured_fraction_full = get_float(fw('_diffrn_reflns_Laue_measured_fraction_full'))
+        self.diffrn_reflns_Laue_measured_fraction_max = get_float(fw('_diffrn_reflns_Laue_measured_fraction_max'))
+        self.exptl_crystal_density_meas = get_float(fw('_exptl_crystal_density_meas'))
+        self.exptl_crystal_density_method = get_string(fw('_exptl_crystal_density_method'))
+        self.exptl_crystal_density_diffrn = get_float(fw('_exptl_crystal_density_diffrn'))
+        self.exptl_crystal_F_000 = get_float(fw('_exptl_crystal_F_000'))
+        self.exptl_transmission_factor_min = get_float(fw('_exptl_transmission_factor_min'))
+        self.exptl_transmission_factor_max = get_float(fw('_exptl_transmission_factor_max'))
+        self.exptl_crystal_face_x = '\n'.join([i.str(0) for i in cif_block.find(
+            ("_exptl_crystal_face_index_h",
+             '_exptl_crystal_face_index_k',
+             '_exptl_crystal_face_index_l',
+             '_exptl_crystal_face_perp_dist'
+             ))])
 
     def wr2_in_percent(self):
         if self.refine_ls_wR_factor_ref:

@@ -111,14 +111,18 @@ ABSOLUTE_CONFIGURATION_CHOICES = (
 def get_float(line: str) -> (int, None):
     try:
         return float(line.split('(')[0].split(' ')[0])
-    except ValueError:
+    except (ValueError, AttributeError):
         return None
 
 
 def get_int(line: str) -> (int, None):
+    """
+    >>> get_int("34829")
+    34829
+    """
     try:
         return int(line.split('(')[0].split(' ')[0])
-    except ValueError:
+    except (ValueError, AttributeError):
         return None
 
 
@@ -133,7 +137,13 @@ def get_string(line: str):
     >>> get_string("';foo bar;'")
     'foo bar'
     >>> get_string(st)
-    '\nOlex2 1.2\n(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)\n'
+    '\\nOlex2 1.2\\n(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)\\n'
+    >>> get_string('.')
+    '.'
+    >>> get_string('?')
+    '?'
+    >>> get_string("'?'")
+    '?'
     """
     try:
         # I do this, because gemmi returns strings with quotes:
