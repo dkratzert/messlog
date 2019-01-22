@@ -1,6 +1,8 @@
 import hashlib
 from math import radians, cos, sin, sqrt
 
+import gemmi
+
 
 def generate_sha256(file):
     """
@@ -75,7 +77,6 @@ COLOUR_LUSTRE_COICES = (
     (3, 'clear'),
 )
 
-
 """
 From https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Ichemical_absolute_configuration.html
 
@@ -139,3 +140,21 @@ def get_string(line: str):
         return line.strip("';")
     except AttributeError:
         return ''
+
+
+def get_table(block, items: [list, tuple]) -> gemmi.cif.Table:
+    """
+    items is a list of loop header to find in the loop. This method is only for testing.
+    table = block.find(['_atom_type_symbol', '_atom_type_description', '_atom_type_scat_dispersion_real'])
+
+    >>> import gemmi
+    >>> cif_block = gemmi.cif.read_file("testfiles/p21c.cif").sole_block()
+    >>> t = get_table(cif_block, ("_space_group_symop_operation_xyz",))
+    >>> [i.str(0) for i in t]
+    ['x, y, z', '-x, y+1/2, -z+1/2', '-x, -y, -z', 'x, -y-1/2, z-1/2']
+    >>> '\\n'.join([i.str(0) for i in get_table(cif_block, ("_space_group_symop_operation_xyz",))])
+    'x, y, z\\n-x, y+1/2, -z+1/2\\n-x, -y, -z\\nx, -y-1/2, z-1/2'
+    """
+    return block.find(items)
+
+
