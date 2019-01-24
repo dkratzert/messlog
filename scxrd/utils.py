@@ -139,7 +139,23 @@ heteronoref-mixed	H-atom parameters constrained for H on C and some heteroatoms,
 mixed	some constrained, some independent
 undef	H-atom parameters not defined
 """
-REFINE_LS_HYDROGEN_TREATMENT = ()
+REFINE_LS_HYDROGEN_TREATMENT = (
+    ('undef', "H-atom parameters not defined"),
+    ('mixed', "some constrained, some independent"),
+    ('constr', 'H-atom parameters constrained'),
+    ('noref', 'no refinement of H-atom parameters'),
+    ('refall', 'refined all H-atom parameters'),
+    ('refxyz', 'refined H-atom coordinates only'),
+    ('refU', "refined H-atom U's only"),
+    ('hetero', 'H-atom parameters constrained for H on C, all<wbr> H-atom parameters refined for H on heteroatoms'),
+    ('heteroxyz', "H-atom parameters constrained for H on C, refined H-atom coordinates only for H on heteroatoms"),
+    ('heteroU', "H-atom parameters constrained for H on C, refined H-atom U's only for H on heteroatoms"),
+    ('heteronoref', "H-atom parameters constrained for H on C, no refinement of H-atom parameters for H on heteroatoms"),
+    ('hetero-mixed', "H-atom parameters constrained for H on C and some heteroatoms, refined H-atom coordinates only for H on remaining heteroatoms"),
+    ('heteroxyz-mixed', 'H-atom parameters constrained for H on C and some heteroatoms, refined H-atom coordinates only for H on remaining heteroatoms'),
+    ('heteroU-mixed', "H-atom parameters constrained for H on C and some heteroatoms, refined H-atom U's only for H on remaining heteroatoms"),
+    ('heteronoref-mixed', "H-atom parameters constrained for H on C and some heteroatoms, no refinement of H-atom parameters for H on remaining heteroatoms"),
+)
 
 
 def get_float(line: str) -> (int, None):

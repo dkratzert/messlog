@@ -11,7 +11,7 @@ from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from gemmi import cif as gcif
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell
+from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell, REFINE_LS_HYDROGEN_TREATMENT
 from scxrd.utils import generate_sha256
 
 DEBUG = False
@@ -117,7 +117,7 @@ class CifFile(models.Model):
     atom_sites_solution_primary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_secondary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_hydrogens = models.CharField(null=True, blank=True, max_length=2048)
-    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=2048)
+    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=255, choices=REFINE_LS_HYDROGEN_TREATMENT)
     refine_ls_extinction_method = models.CharField(null=True, blank=True, max_length=2048)
     refine_ls_extinction_coef = models.FloatField(null=True, blank=True)
     refine_ls_extinction_expression = models.CharField(null=True, blank=True, max_length=2048)
