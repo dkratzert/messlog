@@ -11,7 +11,7 @@ from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from gemmi import cif as gcif
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.utils import frac_to_cart, get_float, get_int, get_string
+from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell
 from scxrd.utils import generate_sha256
 
 DEBUG = False
@@ -79,7 +79,8 @@ class CifFile(models.Model):
     computing_structure_solution = models.CharField(max_length=255, null=True, blank=True)
     computing_structure_refinement = models.CharField(max_length=255, null=True, blank=True)
     refine_special_details = models.TextField(null=True, blank=True)
-    refine_ls_abs_structure_Flack = models.FloatField(null=True, blank=True)
+    # has to be a charfield, because of the error value:
+    refine_ls_abs_structure_Flack = models.CharField(null=True, blank=True, max_length=255)
     refine_ls_structure_factor_coef = models.CharField(max_length=255, null=True, blank=True)
     refine_ls_weighting_details = models.TextField(null=True, blank=True)
     refine_ls_number_reflns = models.PositiveIntegerField(null=True, blank=True)
@@ -270,11 +271,27 @@ class CifFile(models.Model):
         self.data = cif_block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cell
+        if not self.cell_volume and all(cell[:6]):
+            self.cell_volume = vol_unitcell(*cell[:6])
         self.cell_formula_units_Z = get_int(fw("_cell_formula_units_Z"))
-        self.space_group_name_H_M_alt = get_string(fw("_space_group_name_H-M_alt"))
-        self.space_group_name_Hall = get_string(fw("_space_group_name_Hall"))
+        if fw("_symmetry_space_group_name_H-M"):
+            self.space_group_name_H_M_alt = get_string(fw("_symmetry_space_group_name_H-M"))
+        else:
+            self.space_group_name_H_M_alt = get_string(fw("_space_group_name_H-M_alt"))
+        if fw('_symmetry_space_group_name_Hall'):
+            self.space_group_name_Hall = get_string(fw("_symmetry_space_group_name_Hall"))
+        else:
+            self.space_group_name_Hall = get_string(fw("_space_group_name_Hall"))
         self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
-        self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
+        if not self.space_group_centring_type:
+            if fw("_space_group_name_H-M_alt"):
+                self.space_group_centring_type = get_string(fw("_space_group_name_H-M_alt")).split()[0][:1]
+            elif fw('_space_group_name_Hall'):
+                self.space_group_centring_type = get_string(fw("_space_group_name_Hall")).split()[0][:1]
+        if fw('_symmetry_Int_Tables_number'):
+            self.space_group_IT_number = get_int(fw("_symmetry_Int_Tables_number"))
+        else:
+            self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
         self.space_group_crystal_system = get_string(fw("_space_group_crystal_system"))
         self.space_group_symop_operation_xyz = '\n'.join(
             [i.str(0) for i in cif_block.find(("_space_group_symop_operation_xyz",))])
@@ -299,7 +316,10 @@ class CifFile(models.Model):
         self.diffrn_source = get_string(fw("_diffrn_source"))
         self.exptl_absorpt_coefficient_mu = get_float(fw("_exptl_absorpt_coefficient_mu"))
         self.exptl_absorpt_correction_type = get_string(fw("_exptl_absorpt_correction_type"))
-        self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
+        if fw('_diffrn_measurement_device'):
+            self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device"))
+        else:
+            self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
         self.diffrn_reflns_number = get_int(fw("_diffrn_reflns_number"))
         self.diffrn_reflns_av_R_equivalents = get_float(fw("_diffrn_reflns_av_R_equivalents"))
         self.diffrn_reflns_theta_min = get_float(fw("_diffrn_reflns_theta_min"))
@@ -314,7 +334,7 @@ class CifFile(models.Model):
         self.computing_structure_solution = get_string(fw("_computing_structure_solution"))
         self.computing_structure_refinement = get_string(fw("_computing_structure_refinement"))
         self.refine_special_details = get_string(fw("_refine_special_details"))
-        self.refine_ls_abs_structure_Flack = get_float(fw("_refine_ls_abs_structure_Flack"))
+        self.refine_ls_abs_structure_Flack = get_string(fw("_refine_ls_abs_structure_Flack"))
         self.refine_ls_structure_factor_coef = get_string(fw("_refine_ls_structure_factor_coef"))
         self.refine_ls_weighting_details = get_string(fw("_refine_ls_weighting_details"))
         self.refine_ls_number_reflns = get_int(fw("_refine_ls_number_reflns"))
@@ -326,12 +346,21 @@ class CifFile(models.Model):
         self.refine_ls_wR_factor_gt = get_float(fw("_refine_ls_wR_factor_gt"))
         self.refine_ls_goodness_of_fit_ref = get_float(fw("_refine_ls_goodness_of_fit_ref"))
         self.refine_ls_restrained_S_all = get_float(fw("_refine_ls_restrained_S_all"))
-        self.refine_ls_shift_su_max = get_float(fw("_refine_ls_shift/su_max"))
-        self.refine_ls_shift_su_mean = get_float(fw("_refine_ls_shift/su_mean"))
+        if fw("_refine_ls_shift/esd_max"):
+            self.refine_ls_shift_su_max = get_float(fw("_refine_ls_shift/esd_max"))
+        else:
+            self.refine_ls_shift_su_max = get_float(fw("_refine_ls_shift/su_max"))
+        if fw('_refine_ls_shift/esd_mean'):
+            self.refine_ls_shift_su_mean = get_float(fw("_refine_ls_shift/esd_mean"))
+        else:
+            self.refine_ls_shift_su_mean = get_float(fw("_refine_ls_shift/su_mean"))
         self.refine_diff_density_max = get_float(fw("_refine_diff_density_max"))
         self.refine_diff_density_min = get_float(fw("_refine_diff_density_min"))
         self.refine_diff_density_rms = get_float(fw('_refine_diff_density_rms'))
-        self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
+        if fw('_diffrn_reflns_av_sigmaI/netI'):
+            self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
+        else:
+            self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
         self.database_code_depnum_ccdc_archive = get_string(fw("_database_code_depnum_ccdc_archive"))
         self.reflns_Friedel_fraction_full = get_float(fw('_reflns_Friedel_fraction_full'))
         self.refine_ls_abs_structure_details = get_float(fw('_refine_ls_abs_structure_details'))

@@ -38,6 +38,19 @@ def frac_to_cart(frac_coord, cell):
     return [Xc, Yc, Zc]
 
 
+def vol_unitcell(a: float, b: float, c: float, al: float, be: float, ga: float):
+    """
+    calculates the volume of a unit cell
+
+    >>> v = vol_unitcell(2, 2, 2, 90, 90, 90)
+    >>> print(v)
+    8.0
+
+    """
+    return a * b * c * sqrt(1 + 2 * cos(radians(al)) * cos(radians(be)) * cos(radians(ga))
+                            - cos(radians(al)) ** 2 - cos(radians(be)) ** 2 - cos(radians(ga)) ** 2)
+
+
 COLOUR_CHOICES = (
     (0, 'not applicable'),
     (1, 'colourless'),
@@ -165,6 +178,8 @@ def get_string(line: str):
     '?'
     >>> get_string("'?'")
     '?'
+    >>> get_string('P').split()[0][:1]
+    'P'
     """
     try:
         # I do this, because gemmi returns strings with quotes:
