@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
@@ -102,7 +104,16 @@ class ReportView(LoginRequiredMixin, CreateView):
         print('foo bar cif')
         import gemmi
         doc = gemmi.cif.read_file(cifpath)
-        d = doc.sole_block().find_pair('_cell_length_a')
+        print(doc.sole_block().name, '#r#r')
+        d = json.loads(doc.as_json())
+        d = d[doc.sole_block().name]
+        # go through all items and check if they are in the minimal items list.
+        # This list should be configurable.
+        # Display a page where missing items could be resolved. e.g. by uploading more files or
+        # by typing informations in forms.
+        for x in d:
+            print(x)
+        #d = doc.sole_block().find_pair('_cell_length_a')
         """
         for d in find_pair():
             d.append_to_dict('cif_items')
