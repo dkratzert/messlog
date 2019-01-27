@@ -28,7 +28,7 @@ TODO:
 class HomeTests(TestCase):
     def test_home_view_status_code(self):
         url = reverse('scxrd:index')
-        response = self.client.get(url)
+        response = self.client.get(url, follow=True)
         self.assertEquals(response.status_code, 200)
 
 
@@ -69,10 +69,10 @@ def create_experiment(number, cif=None, save_related=False):
 class ExperimentIndexViewTests(TestCase):
 
     def test_no_experiements(self):
-        response = self.client.get(reverse('scxrd:index'))
+        response = self.client.get(reverse('scxrd:index'), follow=True)
         # print('response:', response)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(str(response.context['request']), "<WSGIRequest: GET '/scxrd/'>")
+        self.assertEqual("<WSGIRequest: GET '/accounts/login/?next=%2Fscxrd%2F'>", str(response.context['request']))
 
 
 class ExperimentCreateTest(TestCase):
@@ -94,6 +94,9 @@ class ExperimentCreateTest(TestCase):
         self.assertEqual(str(ex.customer.last_name), 'Meyerhof')
         ex.cif.delete()
 
+    def test_string_representation(self):
+        entry = Experiment(experiment="My entry title")
+        self.assertEqual(str(entry), entry.experiment)
 
 class ExperimentCreateCif(TestCase):
 
@@ -123,7 +126,7 @@ class UploadTest(TestCase):
 
     def test_uploadCif(self):
         with open('scxrd/testfiles/p21c.cif') as fp:
-            response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp})
+            response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp}, follow=True)
             self.assertEqual(response.status_code, 200)
 
 
