@@ -14,6 +14,7 @@ from scxrd.cif_model import SumFormula, Atom
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
+from scxrd.utils import minimal_cif_items
 
 
 class FormActionMixin():
@@ -108,11 +109,10 @@ class ReportView(LoginRequiredMixin, CreateView):
         d = json.loads(doc.as_json())
         d = d[doc.sole_block().name]
         tocheck = {}
-        minimal_cif_items = ['_chemical_formula_moiety', '_space_group_crystal_system', '_cell_measurement_reflns_used']
         for x in minimal_cif_items:
             item = doc.sole_block().find_pair(x)
-            print(item)
-            if item[1] in ['?', '.', '']:
+            print('item:', item)
+            if item and item[1] in ['?', '.', '']:
                 tocheck[x] = item[1]
         # go through all items and check if they are in the minimal items list.
         # This list should be configurable.
@@ -125,8 +125,12 @@ class ReportView(LoginRequiredMixin, CreateView):
         for d in find_pair():
             d.append_to_dict('cif_items')
         """
-        print(tocheck)
+        #print(tocheck)
         return tocheck
+
+    def _diffrn_ambient_temperature(self, value):
+        pass
+        # Do some stuff to return the appropriate form value
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):

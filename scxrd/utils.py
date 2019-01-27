@@ -51,6 +51,34 @@ def vol_unitcell(a: float, b: float, c: float, al: float, be: float, ga: float):
                             - cos(radians(al)) ** 2 - cos(radians(be)) ** 2 - cos(radians(ga)) ** 2)
 
 
+# A list of minimal item that should be defined in a final cif file:
+# Maybe as a dict where the value can be a method to perform actions to fill out the value e.g. for
+# _refine_ls_extinction_coef: find in res file if extinction was refined.
+minimal_cif_items = {'_chemical_formula_moiety': '',
+                     '_space_group_crystal_system': '',
+                     '_cell_measurement_reflns_used': '',
+                     '_cell_measurement_theta_min': '',
+                     '_cell_measurement_theta_max': '',
+                     '_exptl_crystal_description': '',
+                     '_exptl_crystal_colour': '',
+                     '_exptl_absorpt_correction_type': '',
+                     '_exptl_absorpt_correction_T_min': '',
+                     '_exptl_absorpt_correction_T_max': '',
+                     # the page should give a hint that SIZE in SHELXL can fill out some values:
+                     '_shelx_estimated_absorpt_T_min': '',
+                     '_exptl_absorpt_process_details': '',
+                     '_exptl_absorpt_special_details': '',
+                     '_diffrn_ambient_temperature': '',   # I could try to determine the temp if it is room or lower
+                     '_diffrn_source': '',
+                     '_refine_ls_extinction_coef': '',
+                     'x': '',
+                     'y': '',
+                     'z': '',
+                     'g': '',
+                     'h': '',
+                     'b': ''
+                     }
+
 COLOUR_CHOICES = (
     (0, 'not applicable'),
     (1, 'colourless'),
