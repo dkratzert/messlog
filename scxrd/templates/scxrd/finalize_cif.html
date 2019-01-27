@@ -8,9 +8,26 @@
 {% block content %}
     {% load crispy_forms_tags %}
     <div class="row justify-content-center">
-        <div class="col">
-            Foo:
-            {{ cifdata }}
+        <div class="col-6">
+            <table id="reptable" class="table table-sm table-condensed table-hover" width="100%">
+                <thead>
+                <tr>
+                    <td>Key</td><td>Value</td>
+                </tr>
+                </thead>
+                <tbody>
+
+{#                {% for key in cifdata %}#}
+                {% for key, value in cifdata.items %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>
+                            <input type="text" class="form-control-plaintext" value="{{ value }}">
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="row justify-content-center">

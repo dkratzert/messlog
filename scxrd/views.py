@@ -107,18 +107,26 @@ class ReportView(LoginRequiredMixin, CreateView):
         print(doc.sole_block().name, '#r#r')
         d = json.loads(doc.as_json())
         d = d[doc.sole_block().name]
+        tocheck = {}
+        minimal_cif_items = ['_chemical_formula_moiety', '_space_group_crystal_system', '_cell_measurement_reflns_used']
+        for x in minimal_cif_items:
+            item = doc.sole_block().find_pair(x)
+            print(item)
+            if item[1] in ['?', '.', '']:
+                tocheck[x] = item[1]
         # go through all items and check if they are in the minimal items list.
         # This list should be configurable.
         # Display a page where missing items could be resolved. e.g. by uploading more files or
         # by typing informations in forms.
-        for x in d:
-            print(x)
+        #for x in d:
+        #    print(x)
         #d = doc.sole_block().find_pair('_cell_length_a')
         """
         for d in find_pair():
             d.append_to_dict('cif_items')
         """
-        return d
+        print(tocheck)
+        return tocheck
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
