@@ -1,6 +1,4 @@
-
-
-$(document).ready(function() {
+$(document).ready(function () {
     // some options for JSmol:
     var bgcolor = $(this.body).css("background-color");
     var jsmol_options;
@@ -30,15 +28,15 @@ $(document).ready(function() {
         _serverUrl: ''
     };
 
-    var dtable = $('#exptable').DataTable( {
+    var dtable = $('#exptable').DataTable({
         searching: true,
         processing: true,
         serverSide: true,  // without serverside=true, the list is only 10 items long!
-        select:     true,
+        select: true,
         ajax: {
             url: table_url,
             type: "POST",
-            headers: { "X-CSRFToken": csrftoken },  // django templates only the html pages
+            headers: {"X-CSRFToken": csrftoken},  // django templates only the html pages
         },
         stateSave: false,
         deferRender: false,
@@ -46,66 +44,75 @@ $(document).ready(function() {
         "scrollY": "350px",     // This defines the height of the table!
         "scrollCollapse": true,
         "paging": false,
-        "order": [[ 2, "desc" ]],
+        "order": [[2, "desc"]],
         columns: [
-            { title: 'id',
-              name: 'id',
-              visible: false,
-              searchable: false,
-              orderable: true,
-            },
-            { title: 'cif_id',
-              name: 'cif_id',
-              visible: false,
-              searchable: false,
-              orderable: true,
-            },
-            { title: "Number",
-              name: 'number',
-              searchable: false,
-              orderable: true,
-            },
-            { title: "Experiment",
-              name: 'experiment',
-              searchable: true,
-              orderable: true,
-            },
-            { title: "Date",
-              name: 'date',
-              searchable: false,
-              orderable: true,
-              render: function(d) {
-              return moment(d).format("DD:MM:YYYY, HH:mm");
-              },
-            },
-            { title: "Machine",
-              name: 'machine',
-              searchable: false,
-              orderable: true,
-            },
-            { title: "Operator",
-              name: 'operator',
-              searchable: false,
-              orderable: true,
-            },
-            { title: "Publishable",
-              name: 'publishable',
-              searchable: false,
-              orderable: false,
+            {
+                title: 'id',
+                name: 'id',
+                visible: false,
+                searchable: false,
+                orderable: true,
             },
             {
-              title: '',
-              mRender: function(data, type, full) {
-                return '<a class="badge badge-danger m-0 justify-content-center" href=edit/' + full[0] + '>' + 'Edit' + '</a>';},
+                title: 'cif_id',
+                name: 'cif_id',
+                visible: false,
+                searchable: false,
+                orderable: true,
+            },
+            {
+                title: "Number",
+                name: 'number',
+                searchable: false,
+                orderable: true,
+            },
+            {
+                title: "Experiment",
+                name: 'experiment',
+                searchable: true,
+                orderable: true,
+            },
+            {
+                title: "Date",
+                name: 'date',
+                searchable: false,
+                orderable: true,
+                render: function (d) {
+                    return moment(d).format("DD:MM:YYYY, HH:mm");
+                },
+            },
+            {
+                title: "Machine",
+                name: 'machine',
+                searchable: false,
+                orderable: true,
+            },
+            {
+                title: "Operator",
+                name: 'operator',
+                searchable: false,
+                orderable: true,
+            },
+            {
+                title: "Publishable",
+                name: 'publishable',
+                searchable: false,
+                orderable: false,
+            },
+            {
+                title: '',
+                mRender: function (data, type, full) {
+                    return '<a class="badge badge-danger m-0 justify-content-center" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
+                },
                 searchable: false,
                 orderable: false,
             },
         ],
         //"initComplete": function(settings, json) {
-            // Do stuff after table init:
-            //var row = dtable.row(':first');
-            //$(row).addClass('selected');
-            //console.log(row.data());
+        // Do stuff after table init:
+        //var row = dtable.row(':first');
+        //$(row).addClass('selected');
+        //console.log(row.data());
         //}
 
         //"lengthMenu": [[2, 25, 50, -1], [2, 25, 50, "All"]],
@@ -115,11 +122,11 @@ $(document).ready(function() {
 
 
     dtable.on('click', 'tr', function () {
-        var row = dtable.row( this );
+        var row = dtable.row(this);
         //var row0 = $('#exptable tbody tr:eq(0)');
         var tdata = row.data();
         //console.log(tdata);
-        var tab_url = 'table/'+tdata[0];
+        var tab_url = 'table/' + tdata[0];
 
         // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
@@ -129,17 +136,18 @@ $(document).ready(function() {
 
         $.post(
             url = 'molecule/',
-            data = {cif_id: tdata[1],
-                    grow: false,
-                    'csrfmiddlewaretoken': csrftoken
-                    },
+            data = {
+                cif_id: tdata[1],
+                grow: false,
+                'csrfmiddlewaretoken': csrftoken
+            },
             function (result) {
                 display_molecule(result);
-        });
+            });
         //row0.removeClass('selected');
     });
 
-    dtable.ajax.reload( function (json) {
+    dtable.ajax.reload(function (json) {
         var row = $('#exptable tbody tr:eq(0)');
         //row.addClass("selected");
         row.click();
@@ -160,7 +168,7 @@ $(document).ready(function() {
     display_molecule('');
 
 
-     $(function () {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
 
