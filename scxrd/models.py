@@ -191,3 +191,8 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment
+
+    # This can not work, because cif values are not always model items
+    #def save(self, *args, **kwargs):
+    #    super().save()
+    #    # save changed cif items to file

@@ -1,11 +1,13 @@
+from decimal import Decimal
 from typing import List
 
 import gemmi
 from pathlib import Path
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils import timezone
+from django.utils import timezone, numberformat
 import os
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from gemmi import cif as gcif
@@ -155,7 +157,7 @@ class CifFile(models.Model):
     #################################
 
     def save(self, *args, **kwargs):
-        super(CifFile, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         try:
             cif_parsed = gcif.read_file(self.cif_file_on_disk.file.name)
             cif_block = cif_parsed.sole_block()

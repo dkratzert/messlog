@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions, AppendedText
 from crispy_forms.helper import FormHelper
@@ -5,11 +7,11 @@ from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import OperationalError
 
-from scxrd.cif_model import CifFile
 from scxrd.models import Experiment, Machine
-from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
 class ExperimentTableForm(forms.ModelForm):
@@ -33,6 +35,9 @@ class ExperimentFormMixin(forms.ModelForm):
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
+    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2)
+    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2)
+    crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -195,10 +200,11 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
+class FinalizeCifForm(ExperimentFormMixin, forms.Form):
     """
     CrispyForm class to generate a cif report.
     """
+    _exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
     def __init__(self, *args, **kwargs):
         self.exp_title = 'Experiment'
@@ -207,7 +213,21 @@ class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             self.card('Finalize Cif'),
             Column(
-                HTML('{{ cifname }}'),
+                #Row(
+                #    HTML('{{ cifname }}'),
+                #),
+                Row(
+                    Field('_exptl_crystal_colour',css_class='custom-select'),
+                ),
+                Row(
+                    FormActions(
+                        Submit('submit', 'Save', css_class='btn-primary mr-2'),
+                        Submit('cancel', 'Cancel', css_class='btn-danger'),
+                    ),
+                    css_class='form-row ml-0 mb-0'
+                ),
+
+                css_class='col-6 form-inline'
             ),
         )
 

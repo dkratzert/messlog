@@ -46,7 +46,7 @@ $(document).ready(function () {
         "paging": false,
         "order": [[2, "desc"]],
         columns: [
-            {
+            {  // title and name are important, otherwise the server-side processing does not work.
                 title: 'id',
                 name: 'id',
                 visible: false,
@@ -101,6 +101,7 @@ $(document).ready(function () {
             },
             {
                 title: '',
+                name: 'edit_button',
                 mRender: function (data, type, full) {
                     return '<a class="badge badge-danger m-0 justify-content-center" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
                 },

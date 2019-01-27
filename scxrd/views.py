@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -16,7 +16,7 @@ from scxrd.models import Experiment
 from scxrd.models import Person
 from scxrd.utils import minimal_cif_items
 
-
+'''
 class FormActionMixin():
 
     def post(self, request, *args, **kwargs):
@@ -34,7 +34,7 @@ class FormActionMixin():
                 print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
                 return super().post(request, *args, **kwargs)
         else:
-            return super().post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)'''
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -45,7 +45,7 @@ class ExperimentIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'scxrd/scxrd_index.html'
 
 
-class ExperimentCreateView(LoginRequiredMixin, FormActionMixin, CreateView):
+class ExperimentCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new experiment
     """
@@ -57,7 +57,7 @@ class ExperimentCreateView(LoginRequiredMixin, FormActionMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentEditView(LoginRequiredMixin, FormActionMixin, UpdateView):
+class ExperimentEditView(LoginRequiredMixin, UpdateView):
     """
     Edit an experiment
     """
@@ -106,8 +106,8 @@ class ReportView(LoginRequiredMixin, CreateView):
         import gemmi
         doc = gemmi.cif.read_file(cifpath)
         print(doc.sole_block().name, '#r#r')
-        d = json.loads(doc.as_json())
-        d = d[doc.sole_block().name]
+        #d = json.loads(doc.as_json())
+        #d = d[doc.sole_block().name]
         tocheck = {}
         for x in minimal_cif_items:
             item = doc.sole_block().find_pair(x)
@@ -121,10 +121,6 @@ class ReportView(LoginRequiredMixin, CreateView):
         #for x in d:
         #    print(x)
         #d = doc.sole_block().find_pair('_cell_length_a')
-        """
-        for d in find_pair():
-            d.append_to_dict('cif_items')
-        """
         #print(tocheck)
         return tocheck
 
