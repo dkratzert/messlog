@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -16,7 +16,7 @@ from scxrd.models import Experiment
 from scxrd.models import Person
 from scxrd.utils import minimal_cif_items
 
-'''
+
 class FormActionMixin():
 
     def post(self, request, *args, **kwargs):
@@ -26,7 +26,7 @@ class FormActionMixin():
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
-            # print(form)
+            print(request.POST)
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
@@ -34,7 +34,7 @@ class FormActionMixin():
                 print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
                 return super().post(request, *args, **kwargs)
         else:
-            return super().post(request, *args, **kwargs)'''
+            return super().post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -80,7 +80,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         return context"""
 
 
-class ReportView(LoginRequiredMixin, CreateView):
+class ReportView(LoginRequiredMixin, FormActionMixin, CreateView):
     """
     Generate a report anf finalize the cif.
     """

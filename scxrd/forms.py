@@ -209,7 +209,7 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         self.exp_title = 'Experiment'
         super().__init__(*args, **kwargs)
-        self.helper.render_unmentioned_fields = False
+        self.helper.render_unmentioned_fields = True
         self.helper.layout = Layout(
             self.card('Finalize Cif'),
             Column(
