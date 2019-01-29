@@ -23,8 +23,8 @@ a certain structure is selected in the experiment table.
     </tr>
     <tr class="d-flex">
         <td class="col-4"> Solvents</td>
-        {% if experiment.solvents_used.exists %}
-            <td class="col-8 ScrollBarsY" id="t_solents"> {{ experiment.solvents_used.all |join:", <wbr>" }} </td>
+        {% if experiment.solvent1 %}
+            <td class="col-8 ScrollBarsY" id="t_solents"> {{ experiment.solvents_list| safe }} </td>
         {% else %}
             <td class="col-8 ScrollBarsY" id="t_solents"> ----- </td>
         {% endif %}

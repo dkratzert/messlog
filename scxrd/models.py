@@ -181,6 +181,15 @@ class Experiment(models.Model):
     class Meta:
         ordering = ["-number"]
 
+    def solvents_list(self):
+        slist = ''
+        for x in [str(self.solvent1), str(self.solvent2), str(self.solvent3)]:
+            if x != 'None' and slist:
+                slist += ', <wbr>' + x
+            if x != 'None' and not slist:
+                slist += x
+        return slist
+
     def was_measured_recently(self) -> bool:
         now = timezone.now()
         return now - datetime.timedelta(days=2) <= self.measure_date <= now
