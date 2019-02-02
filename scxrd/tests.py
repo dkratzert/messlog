@@ -98,6 +98,7 @@ class ExperimentCreateTest(TestCase):
         entry = Experiment(experiment="My entry title")
         self.assertEqual(str(entry), entry.experiment)
 
+
 class ExperimentCreateCif(TestCase):
 
     def test_parsecif(self):
@@ -165,6 +166,19 @@ class CifFileTest(TestCase):
         self.assertEqual(response.status_code, 200)
         # delete file afterwards:
         ex.cif.delete()
+
+    def test_read_cif_content_by_gemmi(self):
+        self.assertEqual(['_diffrn_reflns_number', '42245'], CifFile.get_cif_item('scxrd/testfiles/p21c.cif',
+                                                                                  '_diffrn_reflns_number'))
+        # set new number
+        s = CifFile.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '22246'])
+        self.assertEqual(s, True)
+        # check
+        self.assertEqual(['_diffrn_reflns_number', '22246'], CifFile.get_cif_item('scxrd/testfiles/p21c.cif',
+                                                                                  '_diffrn_reflns_number'))
+        # set back
+        s = CifFile.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '42245'])
+        self.assertEqual(s, True)
 
 
 class WorkGroupTest(TestCase):

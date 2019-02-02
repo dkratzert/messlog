@@ -4,6 +4,7 @@ from typing import List
 import gemmi
 from pathlib import Path
 
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -455,7 +456,10 @@ class CifFile(models.Model):
         pair = doc.sole_block().find_pair(item)
         return pair
 
-    def set_cif_item(self, file: str, pair: List[str]) -> bool:
+    # probably move this into a view?
+    #@login_required
+    @staticmethod
+    def set_cif_item(file: str, pair: List[str]) -> bool:
         """
         sets a new cif item value and writes the file
         """
