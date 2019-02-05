@@ -203,6 +203,9 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 class FinalizeCifForm(ExperimentFormMixin, forms.Form):
     """
     CrispyForm class to generate a cif report.
+
+    TODO: Maybe add two columns. One with the information that is alredy there, and one with the
+          controls to modify/add more information.
     """
     _exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
