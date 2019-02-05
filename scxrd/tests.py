@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.six import BytesIO
 
 from scxrd.cif_model import CifFile
@@ -257,6 +257,20 @@ class TestWSGIRef(TestCase):
         msg = "Client connection aborted"
         with self.assertWarnsRegex(RuntimeWarning, msg):
             h.run(hello_app)
+
+
+class TestViews(TestCase):
+
+    def test_report(self):
+        response = self.client.get(reverse_lazy('scxrd:report', kwargs={'pk': 3}))
+        self.assertEqual("/accounts/login/?next=/scxrd/report/3/", response.url)
+        self.assertEqual(302, response.status_code)
+        self.assertEqual("utf-8", response.charset)
+        self.assertEqual("ResolverMatch(func=scxrd.views.ReportView, args=(), kwargs={'pk': 3}, url_name=report, "
+                         "app_names=['scxrd'], namespaces=['scxrd'])", str(response.resolver_match))
+
+    def test_post_data(self):
+        response = self.client.post(reverse_lazy('scxrd:report', kwargs={'pk': 3}), data={'foo': 'bar'})
 
 
 if __name__ == '__main':

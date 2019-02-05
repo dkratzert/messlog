@@ -206,8 +206,11 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
 
     TODO: Maybe add two columns. One with the information that is alredy there, and one with the
           controls to modify/add more information.
+
+          View goes through all submitted form data and merges the information to a new cif.
     """
     _exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
+
 
     def __init__(self, *args, **kwargs):
         self.exp_title = 'Experiment'
@@ -215,6 +218,8 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
         self.helper.render_unmentioned_fields = True
         self.helper.layout = Layout(
             self.card('Finalize Cif'),
+            # Left column
+            Row(
             Column(
                 #Row(
                 #    HTML('{{ cifname }}'),
@@ -222,15 +227,23 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
                 Row(
                     Field('_exptl_crystal_colour',css_class='custom-select'),
                 ),
-                Row(
-                    FormActions(
-                        Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                        Submit('cancel', 'Cancel', css_class='btn-danger'),
-                    ),
-                    css_class='form-row ml-0 mb-0'
+                css_class='col-4'
+            ),
+            # Right column
+            Column(
+              Row(
+                  Field('crystal_colour', css_class='custom-select warning'),
+              ),
+              css_class='col-4'
+            ),
+                css_class='form-row ml-2 mb-0'
+            ),
+            Row(
+                FormActions(
+                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
+                    Submit('cancel', 'Cancel', css_class='btn-danger'),
                 ),
-
-                css_class='col-6 form-inline'
+                css_class='form-row ml-2'
             ),
         )
 
