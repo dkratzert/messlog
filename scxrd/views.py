@@ -1,4 +1,5 @@
 import json
+from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -7,6 +8,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
+from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
@@ -17,7 +19,7 @@ from scxrd.models import Person
 from scxrd.utils import minimal_cif_items
 
 
-class FormActionMixin():
+class FormActionMixin(FormMixin):
 
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
@@ -26,7 +28,9 @@ class FormActionMixin():
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
-            print(request.POST)
+            print('The post request:')
+            pprint(request.POST)
+            print('end request ----------------')
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
@@ -102,13 +106,14 @@ class ReportView(LoginRequiredMixin, FormActionMixin, CreateView):
         return context
 
     def get_cif_data(self, cifpath):
-        print('foo bar cif')
+        print('get_cif_data():')
         import gemmi
         doc = gemmi.cif.read_file(cifpath)
-        print(doc.sole_block().name, '#r#r')
+        #print(doc.sole_block().name, '#r#r')
         #d = json.loads(doc.as_json())
         #d = d[doc.sole_block().name]
         tocheck = {}
+        print('minimal_cif_items: -----')
         for x in minimal_cif_items:
             item = doc.sole_block().find_pair(x)
             print('item:', item)

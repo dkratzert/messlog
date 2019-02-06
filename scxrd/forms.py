@@ -204,6 +204,12 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
     """
     CrispyForm class to generate a cif report.
 
+    TODO: - Make an example where only crystal color, operator and absorption correction appear.
+          - work this out until the you can choose between the alternatives and the form is valid.
+          - add all the other aspects
+
+    https://stackoverflow.com/questions/17754295/can-i-have-a-django-form-without-model
+
     TODO: Maybe add two columns. One with the information that is alredy there, and one with the
           controls to modify/add more information.
 
