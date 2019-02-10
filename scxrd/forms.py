@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions, AppendedText
 from crispy_forms.helper import FormHelper
@@ -7,7 +5,6 @@ from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
 from django.db import OperationalError
 
 from scxrd.models import Experiment, Machine
@@ -24,7 +21,7 @@ class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
 
 
-class ExperimentFormMixin(forms.ModelForm):
+class ExperimentFormfieldsMixin(forms.ModelForm):
     # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
     #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
@@ -38,6 +35,9 @@ class ExperimentFormMixin(forms.ModelForm):
     crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2)
     crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2)
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2)
+
+
+class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -200,7 +200,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class FinalizeCifForm(ExperimentFormMixin, forms.Form):
+class FinalizeCifForm(ExperimentFormfieldsMixin, forms.Form):
     """
     CrispyForm class to generate a cif report.
 
@@ -217,41 +217,8 @@ class FinalizeCifForm(ExperimentFormMixin, forms.Form):
     """
     _exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
-
     def __init__(self, *args, **kwargs):
-        self.exp_title = 'Experiment'
         super().__init__(*args, **kwargs)
-        self.helper.render_unmentioned_fields = True
-        self.helper.layout = Layout(
-            self.card('Finalize Cif'),
-            # Left column
-            Row(
-            Column(
-                #Row(
-                #    HTML('{{ cifname }}'),
-                #),
-                Row(
-                    Field('_exptl_crystal_colour',css_class='custom-select'),
-                ),
-                css_class='col-4'
-            ),
-            # Right column
-            Column(
-              Row(
-                  Field('crystal_colour', css_class='custom-select warning'),
-              ),
-              css_class='col-4'
-            ),
-                css_class='form-row ml-2 mb-0'
-            ),
-            Row(
-                FormActions(
-                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    Submit('cancel', 'Cancel', css_class='btn-danger'),
-                ),
-                css_class='form-row ml-2'
-            ),
-        )
 
     class Meta:
         model = Experiment

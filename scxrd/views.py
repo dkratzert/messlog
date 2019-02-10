@@ -118,7 +118,7 @@ class ReportView(LoginRequiredMixin, FormActionMixin, CreateView):
             item = doc.sole_block().find_pair(x)
             print('item:', item)
             if item and item[1] in ['?', '.', '']:
-                tocheck[x] = item[1]
+                tocheck[x.lstrip('_')] = item[1]
         # go through all items and check if they are in the minimal items list.
         # This list should be configurable.
         # Display a page where missing items could be resolved. e.g. by uploading more files or
