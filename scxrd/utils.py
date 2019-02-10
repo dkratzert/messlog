@@ -73,10 +73,6 @@ minimal_cif_items = {'_chemical_formula_moiety': '',
                      '_refine_ls_extinction_coef': '',
                      'x': '',
                      'y': '',
-                     'z': '',
-                     'g': '',
-                     'h': '',
-                     'b': ''
                      }
 
 COLOUR_CHOICES = (

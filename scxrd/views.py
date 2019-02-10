@@ -28,11 +28,12 @@ class FormActionMixin(FormMixin):
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
-            print('The post request:')
-            pprint(request.POST)
+            #print('The post request:')
+            #pprint(request.POST)
             print('end request ----------------')
             if form.is_valid():
                 form.save()
+                print('The form is valid!!')
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
             else:
                 print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
@@ -84,7 +85,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         return context"""
 
 
-class ReportView(LoginRequiredMixin, FormActionMixin, CreateView):
+class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
     """
     Generate a report anf finalize the cif.
     """
@@ -117,8 +118,9 @@ class ReportView(LoginRequiredMixin, FormActionMixin, CreateView):
         for x in minimal_cif_items:
             item = doc.sole_block().find_pair(x)
             print('item:', item)
-            if item and item[1] in ['?', '.', '']:
+            if item:# and item[1] in ['?', '.', '']:
                 tocheck[x.lstrip('_')] = item[1]
+        print('tocheck:', tocheck)
         # go through all items and check if they are in the minimal items list.
         # This list should be configurable.
         # Display a page where missing items could be resolved. e.g. by uploading more files or

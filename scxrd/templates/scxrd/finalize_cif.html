@@ -13,9 +13,18 @@
             <div class="row">cif</div>
             <form method="post">
                 {% csrf_token %}
+                <ul>
                 {% for key, value in cifdata.items %}
-                    {{ value  }}
+                    <li>{{key}}:{{ value }}</li>
                 {% endfor %}
+                </ul>
+                space_group_crystal_system:<br>
+                <input aria-label="space_group_crystal_system" type="text"
+                       name="space_group_crystal_system"
+                       class="form-control"
+                       value="{{ cifdata.space_group_crystal_system }}"
+                /><br>
+                {# {{ cifdata.space_group_crystal_system }} #}
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="cancel" class="btn btn-danger">Cancel</button>
             </form>
@@ -24,7 +33,7 @@
             <div class="row">DB</div>
             <form method="post">
                 {% csrf_token %}
-                {{ form|crispy }}
+                {% crispy form %}
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="cancel" class="btn btn-danger">Cancel</button>
             </form>

@@ -202,6 +202,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
 class FinalizeCifForm(ExperimentFormfieldsMixin, forms.Form):
     """
+    New Idea:
+    - The database is the master of information. During Save(), I compare the database and the cif values.
+      The differ items are displayed in a card with the title "Unclear cif items"
+    - every empty cif key/value is taken from the db.
+    - during file upload, I show a page with conflicting item if there are any.
+
+    -----------------------------------------------------------------------------
     CrispyForm class to generate a cif report.
 
     TODO: - Make an example where only crystal color, operator and absorption correction appear.
@@ -215,10 +222,16 @@ class FinalizeCifForm(ExperimentFormfieldsMixin, forms.Form):
 
           View goes through all submitted form data and merges the information to a new cif.
     """
-    _exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
+    exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        exptl_crystal_colour = cleaned_data.get('exptl_crystal_colour')
+        if not exptl_crystal_colour:
+            raise forms.ValidationError('You have to give a color.')
 
     class Meta:
         model = Experiment
