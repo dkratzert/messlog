@@ -23,14 +23,14 @@ class FormActionMixin(FormMixin):
 
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
+        print('The post request:')
+        pprint(request.POST)
+        print('end request ----------------')
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
-            #print('The post request:')
-            #pprint(request.POST)
-            print('end request ----------------')
             if form.is_valid():
                 form.save()
                 print('The form is valid!!')
@@ -118,7 +118,7 @@ class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
         for x in minimal_cif_items:
             item = doc.sole_block().find_pair(x)
             print('item:', item)
-            if item:# and item[1] in ['?', '.', '']:
+            if item and item[1] in ['?', '.', '']:
                 tocheck[x.lstrip('_')] = item[1]
         print('tocheck:', tocheck)
         # go through all items and check if they are in the minimal items list.

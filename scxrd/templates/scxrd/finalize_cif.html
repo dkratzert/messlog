@@ -11,27 +11,47 @@
     <div class="row justify-content-center">
         <div class="col-6">
             <div class="row">cif</div>
-            <form method="post">
+            <form method="POST">
                 {% csrf_token %}
                 <ul>
-                {% for key, value in cifdata.items %}
-                    <li>{{key}}:{{ value }}</li>
-                {% endfor %}
+                    {% for key, value in cifdata.items %}
+                        <li>{{ key }}:{{ value }}</li>
+                    {% endfor %}
                 </ul>
-                space_group_crystal_system:<br>
-                <input aria-label="space_group_crystal_system" type="text"
-                       name="space_group_crystal_system"
-                       class="form-control"
-                       value="{{ cifdata.space_group_crystal_system }}"
-                /><br>
-                {# {{ cifdata.space_group_crystal_system }} #}
+
+                {% if cifdata.chemical_formula_moiety %}
+                     <div id="div_chemical_formula_moiety" class="form-group">
+                        <label for="id_chemical_formula_moiety" class="col-form-label requiredField">
+                            Moyety Formula<span class="asteriskField">*</span>
+                        </label>
+                        <div class=""><input type="text" name="chemical_formula_moiety"
+                                             value="{{ cifdata.chemical_formula_moiety }}" maxlength="200"
+                                             class="textinput textInput form-control" required=""
+                                             id="id_chemical_formula_moiety">
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if cifdata.space_group_crystal_system %}
+                    <div id="div_space_group_crystal_system" class="form-group">
+                        <label for="id_space_group_crystal_system" class="col-form-label requiredField">
+                            Crystal system<span class="asteriskField">*</span>
+                        </label>
+                        <div class=""><input type="text" name="space_group_crystal_system"
+                                             value="{{ cifdata.space_group_crystal_system }}" maxlength="200"
+                                             class="textinput textInput form-control" required=""
+                                             id="id_space_group_crystal_system">
+                        </div>
+                    </div>
+                {% endif %}
+
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="cancel" class="btn btn-danger">Cancel</button>
             </form>
         </div>
         <div class="col-6">
             <div class="row">DB</div>
-            <form method="post">
+            <form method="POST">
                 {% csrf_token %}
                 {% crispy form %}
                 <button type="submit" class="btn btn-primary">Save</button>
