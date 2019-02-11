@@ -2,16 +2,15 @@
 {% load bootstrap %}
 {% load static %}
 {{ form.media }}
-{% load crispy_forms_tags %}
+
 
 
 
 {% block content %}
-    {% load crispy_forms_tags %}
     <div class="row justify-content-center">
         <div class="col-6">
             <div class="row">cif</div>
-            <form method="POST">
+            <form method="POST" novalidate="novalidate">
                 {% csrf_token %}
                 <ul>
                     {% for key, value in cifdata.items %}
@@ -20,7 +19,7 @@
                 </ul>
 
                 {% if cifdata.chemical_formula_moiety %}
-                     <div id="div_chemical_formula_moiety" class="form-group">
+                    <div id="div_chemical_formula_moiety" class="form-group">
                         <label for="id_chemical_formula_moiety" class="col-form-label requiredField">
                             Moyety Formula<span class="asteriskField">*</span>
                         </label>
@@ -44,19 +43,23 @@
                         </div>
                     </div>
                 {% endif %}
+                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-primary mr-2"
+                       id="submit-id-submit">
+                <input type="submit" name="cancel" value="Cancel" class="btn btn-primary btn-danger"
+                       id="submit-id-cancel">
 
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="cancel" class="btn btn-danger">Cancel</button>
             </form>
+
         </div>
         <div class="col-6">
-            <div class="row">DB</div>
-            <form method="POST">
-                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                <div class="row">DB</div>
                 {% crispy form %}
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="cancel" class="btn btn-danger">Cancel</button>
-            </form>
+                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-primary mr-2"
+                       id="submit-id-submit">
+                <input type="submit" name="cancel" value="Cancel" class="btn btn-primary btn-danger"
+                       id="submit-id-cancel">
+
         </div>
     </div>
 {% endblock content %}
