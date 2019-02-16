@@ -89,6 +89,14 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
 class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
     """
     Generate a report anf finalize the cif.
+
+    - Informationsfluss muss sein: Die Datenbank wird editiert und mit dem cif abgegelichen, d.h das Formular
+      von Experiment entscheidet was im cif steht. d.h. auch beim cif upload wird die Information die schon
+      im Experiment ist in das cif geschrieben! z.B. Kristallgröße
+    - Später kommt villeicht noch eine Abfrage bei Konflikten.
+    - Also brauche ich: für jedes item in Experiment.ciffile: schreibe value in cif.
+    - Übersetzungsfunktion von cifnahmen in Datenbankfeldnahmen. Also doch alle Felder in die Datenbank!
+
     """
     model = Experiment
     form_class = FinalizeCifForm
