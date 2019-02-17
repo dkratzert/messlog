@@ -1,4 +1,5 @@
 import datetime
+import gemmi
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
@@ -9,7 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFile
-from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, field_name_to_cif
 
 """
 TODO:
@@ -220,5 +221,30 @@ class Experiment(models.Model):
 
     def push_info_to_cif(self):
         print('Pushing saves')
-        # saves the pair '_exptl_crystal_colour', "'whiteblue'" into the current cif file
-        s = CifFile.set_cif_item(file=self.cif.cif_file_on_disk.path, pair=['_exptl_crystal_colour', "'whiteblue'"])
+        file = self.cif.cif_file_on_disk.path
+        doc = gemmi.cif.read_file(file)
+        # CifFile Model field names:
+        names = [f.name for f in CifFile._meta.get_fields()]
+        for n in names:
+            cif_key = field_name_to_cif(n)
+            if cif_key:
+                if isinstance(cif_key, str):
+                    try:
+                        print(cif_key, str(getattr(self.cif, n)), n)
+                        doc.sole_block().set_pair(cif_key, getattr(self.cif, n))
+                    except Exception as e:
+                        pass
+                        #print(e, 'push_info_to_cif() -> set_pair')
+                if isinstance(cif_key, list):
+                    # TODO: Handle deprecated cif items:
+                    try:
+                        doc.sole_block().set_pair(cif_key[0], getattr(self.cif, n))
+                    except Exception as e:
+                        pass
+                        #print(e, 'push_info_to_cif() -> set_pair')
+        try:
+            doc.write_file(file)
+        except Exception as e:
+            print('Error during cif write:', e, '##set_cif_item')
+            return False
+        return True

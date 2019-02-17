@@ -362,6 +362,7 @@ class CifFile(models.Model):
             self.diffrn_reflns_av_unetI_netI = get_float(fw("_diffrn_reflns_av_unetI/netI"))
         self.database_code_depnum_ccdc_archive = get_string(fw("_database_code_depnum_ccdc_archive"))
         self.reflns_Friedel_fraction_full = get_float(fw('_reflns_Friedel_fraction_full'))
+        self.reflns_Friedel_fraction_max = get_float(fw('_reflns_Friedel_fraction_max'))
         self.refine_ls_abs_structure_details = get_float(fw('_refine_ls_abs_structure_details'))
         self.reflns_special_details = get_float(fw('_reflns_special_details'))
         self.computing_data_collection = get_string(fw('_computing_data_collection'))
