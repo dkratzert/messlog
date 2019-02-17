@@ -43,6 +43,10 @@ class CifFile(models.Model):
     cell_angle_gamma = models.FloatField(null=True, blank=True)
     cell_volume = models.FloatField(null=True, blank=True)
     cell_formula_units_Z = models.PositiveIntegerField(null=True, blank=True)
+    cell_measurement_temperature = models.CharField(max_length=255, null=True, blank=True)
+    cell_measurement_reflns_used = models.PositiveIntegerField(null=True, blank=True)
+    cell_measurement_theta_min = models.CharField(max_length=255, null=True, blank=True)
+    cell_measurement_theta_max = models.CharField(max_length=255, null=True, blank=True)
     space_group_name_H_M_alt = models.CharField(max_length=255, null=True, blank=True)
     space_group_name_Hall = models.CharField(max_length=255, null=True, blank=True)
     space_group_centring_type = models.CharField(max_length=255, null=True, blank=True)
@@ -63,6 +67,7 @@ class CifFile(models.Model):
     diffrn_radiation_wavelength = models.FloatField(null=True, blank=True)
     diffrn_radiation_type = models.CharField(max_length=255, null=True, blank=True)
     diffrn_source = models.CharField(max_length=2048, null=True, blank=True)
+    diffrn_measurement_device = models.CharField(max_length=2048, null=True, blank=True)
     diffrn_measurement_device_type = models.CharField(max_length=2048, null=True, blank=True)
     diffrn_reflns_number = models.IntegerField(null=True, blank=True)
     diffrn_reflns_av_R_equivalents = models.FloatField(null=True, blank=True)
@@ -240,7 +245,6 @@ class CifFile(models.Model):
                get_float(fw('_cell_angle_beta')), \
                get_float(fw('_cell_angle_gamma')), \
                get_float(fw('_cell_volume'))
-        # TODO: This might be optimized by
         table = cif_block.find(['_atom_site_label',
                                 '_atom_site_type_symbol',
                                 '_atom_site_fract_x',
@@ -301,6 +305,10 @@ class CifFile(models.Model):
         # self.shelx_hkl_file = get_string(fw('_shelx_hkl_file'))
         # self.shelx_hkl_checksum = get_int(fw('_shelx_hkl_checksum'))
 
+        self.cell_measurement_temperature = get_string(fw('_cell_measurement_temperature'))
+        self.cell_measurement_reflns_used = get_int(fw('_cell_measurement_reflns_used'))
+        self.cell_measurement_theta_min = get_string(fw('_cell_measurement_theta_min'))
+        self.cell_measurement_theta_max = get_string(fw('_cell_measurement_theta_max'))
         self.audit_creation_method = get_string(fw("_audit_creation_method"))
         self.chemical_formula_sum = get_string(fw("_chemical_formula_sum"))
         self.chemical_formula_weight = get_string(fw("_chemical_formula_weight"))
@@ -315,10 +323,8 @@ class CifFile(models.Model):
         self.diffrn_source = get_string(fw("_diffrn_source"))
         self.exptl_absorpt_coefficient_mu = get_float(fw("_exptl_absorpt_coefficient_mu"))
         self.exptl_absorpt_correction_type = get_string(fw("_exptl_absorpt_correction_type"))
-        if fw('_diffrn_measurement_device'):
-            self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device"))
-        else:
-            self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
+        self.diffrn_measurement_device = get_string(fw("_diffrn_measurement_device"))
+        self.diffrn_measurement_device_type = get_string(fw("_diffrn_measurement_device_type"))
         self.diffrn_reflns_number = get_int(fw("_diffrn_reflns_number"))
         self.diffrn_reflns_av_R_equivalents = get_float(fw("_diffrn_reflns_av_R_equivalents"))
         self.diffrn_reflns_theta_min = get_float(fw("_diffrn_reflns_theta_min"))

@@ -1,6 +1,7 @@
 import datetime
-import gemmi
+import textwrap
 
+import gemmi
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
@@ -10,7 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFile
-from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, field_name_to_cif
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
@@ -184,7 +185,8 @@ class Experiment(models.Model):
     crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES,
                                                 default=COLOUR_LUSTRE_COICES[0][0])  # no blank=True here!
     # _exptl_special_details:
-    special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True, default='')
+    exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
+                                             default='')
 
     class Meta:
         ordering = ["-number"]
@@ -212,6 +214,16 @@ class Experiment(models.Model):
     def save(self, *args, **kwargs):
         """
         Saves all differences between the database items into the cif file.
+
+        # TODO: for cif parser:
+          - It should detect if string should be written into ; ; quotes
+            _foo_bar_baz
+            ;
+            I am a multiline string
+            with some text.
+            ;
+          - strings with spaces should be quoted like 'I am a string'
+          - set_pair() should accept numbers
         """
         super().save()
         try:
@@ -224,27 +236,70 @@ class Experiment(models.Model):
         file = self.cif.cif_file_on_disk.path
         doc = gemmi.cif.read_file(file)
         # CifFile Model field names:
-        names = [f.name for f in CifFile._meta.get_fields()]
-        for n in names:
-            cif_key = field_name_to_cif(n)
-            if cif_key:
-                if isinstance(cif_key, str):
-                    try:
-                        print(cif_key, str(getattr(self.cif, n)), n)
-                        doc.sole_block().set_pair(cif_key, getattr(self.cif, n))
-                    except Exception as e:
-                        pass
-                        #print(e, 'push_info_to_cif() -> set_pair')
-                if isinstance(cif_key, list):
-                    # TODO: Handle deprecated cif items:
-                    try:
-                        doc.sole_block().set_pair(cif_key[0], getattr(self.cif, n))
-                    except Exception as e:
-                        pass
-                        #print(e, 'push_info_to_cif() -> set_pair')
+        # names = [f.name for f in CifFile._meta.get_fields()]
+        # Data from Experiment:
+        self.write_cif_item(doc, '_exptl_crystal_size_max', str(getattr(self, 'crystal_size_x')))
+        self.write_cif_item(doc, '_exptl_crystal_size_mid', str(getattr(self, 'crystal_size_y')))
+        self.write_cif_item(doc, '_exptl_crystal_size_min', str(getattr(self, 'crystal_size_z')))
+        self.write_cif_item(doc, '_exptl_crystal_colour', self.get_choice(COLOUR_CHOICES, 'crystal_colour'))
+        self.write_cif_item(doc, '_exptl_crystal_colour_mod', self.get_choice(COLOUR_MOD_CHOICES, 'crystal_colour_mod'))
+        self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
+                            self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
+        self.write_cif_item(doc, '_exptl_special_details', self.quote_string(getattr(self, 'exptl_special_details')))
+
+        # Data from Cif:
+        self.write_cif_item(doc, '_exptl_absorpt_correction_T_min',
+                            str(getattr(self.cif, 'exptl_absorpt_correction_T_min')))
+        self.write_cif_item(doc, '_exptl_absorpt_correction_T_max',
+                            str(getattr(self.cif, 'exptl_absorpt_correction_T_max')))
+        self.write_cif_item(doc, '_exptl_crystal_description',
+                            self.quote_string(getattr(self.cif, 'exptl_crystal_description')))
+        self.write_cif_item(doc, '_cell_measurement_temperature',
+                            self.quote_string(getattr(self.cif, 'cell_measurement_temperature')))
+        self.write_cif_item(doc, '_cell_measurement_reflns_used',
+                            self.quote_string(getattr(self.cif, 'cell_measurement_reflns_used')))
+        self.write_cif_item(doc, '_cell_measurement_theta_min',
+                            self.quote_string(getattr(self.cif, 'cell_measurement_theta_min')))
+
         try:
             doc.write_file(file)
         except Exception as e:
             print('Error during cif write:', e, '##set_cif_item')
             return False
         return True
+
+    def get_choice(self, choices, attibute, na_0=True):
+        """
+        Get the choice value from a choices field.
+        :param choices: The choice dictionary
+        :param attibute: the attribute to retrieve from the choice
+        :param na_0: Decide wether 0 should be translated to '?' or not.
+        :return: Choice value
+        """
+        value = getattr(self, attibute)
+        if na_0:
+            if value == 0:
+                return '?'
+            else:
+                return choices[value][1]
+        else:
+            return choices[value][1]
+
+    def quote_string(self, string):
+        """
+        Quotes the string value in a way that the line maximum of cif 1.1 with 2048 characters is fulfilled and longer
+        strings are embedded into ; quotes.
+        :param string: The string to save
+        :return: a quoted string
+        """
+        if len(string) < 2047 and (not '\n' in string or not '\r' in string):
+            return "'{}'".format(string)
+        else:
+            return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
+
+    def write_cif_item(self, doc, key, value):
+        try:
+            doc.sole_block().set_pair(key, value)
+        except Exception as e:
+            pass
+            print('Error in write_cif_item() -> set_pair:\n', e)

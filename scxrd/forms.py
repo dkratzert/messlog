@@ -122,7 +122,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
                 css_class='form-row ml-0 mb-0'
             ),
-            'special_details',
+            'exptl_special_details',
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
