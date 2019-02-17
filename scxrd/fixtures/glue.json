@@ -1,1 +1,23 @@
-[{"model": "scxrd.crystalglue", "pk": 1, "fields": {"glue": "Polyether Oil"}}, {"model": "scxrd.crystalglue", "pk": 2, "fields": {"glue": "Grease"}}, {"model": "scxrd.crystalglue", "pk": 3, "fields": {"glue": "Motor Oil"}}]
+[
+{
+    "model": "scxrd.crystalglue",
+    "pk": 1,
+    "fields": {
+        "glue": "Polyether Oil"
+    }
+},
+{
+    "model": "scxrd.crystalglue",
+    "pk": 2,
+    "fields": {
+        "glue": "Grease"
+    }
+},
+{
+    "model": "scxrd.crystalglue",
+    "pk": 3,
+    "fields": {
+        "glue": "Motor Oil"
+    }
+}
+]

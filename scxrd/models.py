@@ -95,13 +95,20 @@ class WorkGroup(models.Model):
 
 class Machine(models.Model):
     """
-    A diffractometer name.
+    A diffractometer name and type.
     """
     fixtures = ['machines']
-    name = models.CharField(verbose_name="machines name", max_length=200)
+    # The make, model or name of the measurement device (goniometer) used:
+    diffrn_measurement_device_type = models.CharField(verbose_name="machine model name", max_length=200)
+    # The general class of goniometer or device used to support and orient the specimen:
+    # e.g. 'three-circle diffractometer'
+    diffrn_measurement_device = models.CharField(verbose_name="machine type", max_length=200, null=True, blank=True)
+    # A description of special aspects of the device used to measure the diffraction intensities:
+    diffrn_measurement_device_details = models.CharField(verbose_name="machine special aspects",
+                                                         max_length=2000, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.diffrn_measurement_device_type
 
 
 class Solvent(models.Model):
@@ -227,16 +234,32 @@ class Experiment(models.Model):
         """
         super().save()
         try:
-            self.push_info_to_cif()
+            p = self.push_info_to_cif()
         except Exception as e:
-            print(e, '-> save() in Experiment')
+            print('Error during push_info_to_cif() ->', e)
+            raise
+        if p:
+            print('Cif updated sucessfully!')
 
     def push_info_to_cif(self):
-        print('Pushing saves')
-        file = self.cif.cif_file_on_disk.path
-        doc = gemmi.cif.read_file(file)
+        """
+        Writes information from the database into the cif file
+        """
+        print('----- Pushing values -----')
+        try:
+            file = self.cif.cif_file_on_disk.path
+        except AttributeError:
+            # There is no cif file for this Experiment:
+            print('No cif file...')
+            return False
+        try:
+            doc = gemmi.cif.read_file(file)
+        except RuntimeError:
+            print('unable to open file')
+            return False
         # CifFile Model field names:
         # names = [f.name for f in CifFile._meta.get_fields()]
+
         # Data from Experiment:
         self.write_cif_item(doc, '_exptl_crystal_size_max', str(getattr(self, 'crystal_size_x')))
         self.write_cif_item(doc, '_exptl_crystal_size_mid', str(getattr(self, 'crystal_size_y')))
@@ -246,6 +269,8 @@ class Experiment(models.Model):
         self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
                             self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
         self.write_cif_item(doc, '_exptl_special_details', self.quote_string(getattr(self, 'exptl_special_details')))
+        self.write_cif_item(doc, '_diffrn_measurement_specimen_support', self.quote_string(getattr(self.base,
+                                                                                                   'support')))
 
         # Data from Cif:
         self.write_cif_item(doc, '_exptl_absorpt_correction_T_min',
