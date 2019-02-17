@@ -269,6 +269,7 @@ class Experiment(models.Model):
         self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
                             self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
         self.write_cif_item(doc, '_exptl_special_details', self.quote_string(getattr(self, 'exptl_special_details')))
+        # TODO: Handle getattr of None:
         self.write_cif_item(doc, '_diffrn_measurement_specimen_support', self.quote_string(getattr(self.base,
                                                                                                    'support')))
 
@@ -317,6 +318,8 @@ class Experiment(models.Model):
         :param string: The string to save
         :return: a quoted string
         """
+        if not string:
+            return '?'
         if len(string) < 2047 and (not '\n' in string or not '\r' in string):
             return "'{}'".format(string)
         else:
