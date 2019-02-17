@@ -1,19 +1,15 @@
-from decimal import Decimal
+import os
+from gemmi import cif as gcif
+from pathlib import Path
 from typing import List
 
 import gemmi
-from pathlib import Path
-
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils import timezone, numberformat
-import os
-from scxrd.cif.atoms import sorted_atoms, format_sum_formula
-from gemmi import cif as gcif
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell, REFINE_LS_HYDROGEN_TREATMENT
 from scxrd.utils import generate_sha256
 
@@ -104,10 +100,10 @@ class CifFile(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
     shelx_res_file = models.TextField(null=True, blank=True, max_length=10000000)
-    shelx_res_checksum  = models.PositiveIntegerField(null=True, blank=True)
+    shelx_res_checksum = models.PositiveIntegerField(null=True, blank=True)
 
-    #shelx_hkl_file = models.TextField(null=True, blank=True)
-    #shelx_hkl_checksum = models.IntegerField(null=True, blank=True)
+    # shelx_hkl_file = models.TextField(null=True, blank=True)
+    # shelx_hkl_checksum = models.IntegerField(null=True, blank=True)
 
     reflns_Friedel_fraction_full = models.FloatField(null=True, blank=True)
     refine_ls_abs_structure_details = models.FloatField(null=True, blank=True)
@@ -120,7 +116,8 @@ class CifFile(models.Model):
     atom_sites_solution_primary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_secondary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_hydrogens = models.CharField(null=True, blank=True, max_length=2048)
-    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=255, choices=REFINE_LS_HYDROGEN_TREATMENT)
+    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=255,
+                                                    choices=REFINE_LS_HYDROGEN_TREATMENT)
     refine_ls_extinction_method = models.CharField(null=True, blank=True, max_length=2048)
     refine_ls_extinction_coef = models.FloatField(null=True, blank=True)
     refine_ls_extinction_expression = models.CharField(null=True, blank=True, max_length=2048)
@@ -153,7 +150,6 @@ class CifFile(models.Model):
     exptl_transmission_factor_min = models.FloatField(null=True, blank=True)
     exptl_transmission_factor_max = models.FloatField(null=True, blank=True)
     exptl_crystal_face_x = models.TextField(null=True, blank=True)
-
 
     #################################
 
@@ -302,8 +298,8 @@ class CifFile(models.Model):
         self.shelx_res_file = get_string(fw("_shelx_res_file"))
         self.shelx_res_checksum = get_int(fw('_shelx_res_checksum'))
 
-        #self.shelx_hkl_file = get_string(fw('_shelx_hkl_file'))
-        #self.shelx_hkl_checksum = get_int(fw('_shelx_hkl_checksum'))
+        # self.shelx_hkl_file = get_string(fw('_shelx_hkl_file'))
+        # self.shelx_hkl_checksum = get_int(fw('_shelx_hkl_checksum'))
 
         self.audit_creation_method = get_string(fw("_audit_creation_method"))
         self.chemical_formula_sum = get_string(fw("_chemical_formula_sum"))
@@ -457,7 +453,7 @@ class CifFile(models.Model):
         return pair
 
     # probably move this into a view?
-    #@login_required
+    # @login_required
     @staticmethod
     def set_cif_item(file: str, pair: List[str]) -> bool:
         """
@@ -602,6 +598,8 @@ class Atom(models.Model):
     zc = models.FloatField(default=0)
     occupancy = models.FloatField()
     part = models.IntegerField()
+    # incicates wether the atom belongs to the asymmetric unit:
+    asym = models.BooleanField(default=False)
 
     def __str__(self):
         """

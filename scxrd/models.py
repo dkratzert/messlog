@@ -7,7 +7,6 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from pip._vendor.colorama import initialise
 
 from scxrd.cif_model import CifFile
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
@@ -84,7 +83,7 @@ class Person(models.Model):
 
 class WorkGroup(models.Model):
     """
-    A work group is a group of Person() with a leading group_head (which is also a Person).
+    A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
     group_head = models.OneToOneField(Person, related_name='group', on_delete=models.DO_NOTHING)
 
@@ -93,6 +92,9 @@ class WorkGroup(models.Model):
 
 
 class Machine(models.Model):
+    """
+    A diffractometer name.
+    """
     fixtures = ['machines']
     name = models.CharField(verbose_name="machines name", max_length=200)
 
@@ -101,6 +103,9 @@ class Machine(models.Model):
 
 
 class Solvent(models.Model):
+    """
+    A solvent to be used in the reaction or for crystallisation.
+    """
     fixtures = ['solvents.json']
     name = models.CharField(verbose_name="solvents name", max_length=200, unique=True)
 
@@ -113,7 +118,7 @@ class Solvent(models.Model):
 
 class CrystalSupport(models.Model):
     """
-    How was it mounted?
+    The support where the crystal was mounted on the diffraktometer.
     _diffrn_measurement_specimen_support e.g. 'glass capillary'
     """
     support = models.CharField(verbose_name='crystal support', max_length=200, unique=True)
@@ -203,7 +208,17 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-    # This can not work, because cif values are not always model items
-    #def save(self, *args, **kwargs):
-    #    super().save()
-    #    # save changed cif items to file
+    def save(self, *args, **kwargs):
+        """
+        Saves all differences between the database items into the cif file.
+        """
+        super().save()
+        try:
+            self.push_info_to_cif()
+        except Exception as e:
+            print(e, '-> save() in Experiment')
+
+    def push_info_to_cif(self):
+        print('Pushing saves')
+        # saves the pair '_exptl_crystal_colour', "'whiteblue'" into the current cif file
+        s = CifFile.set_cif_item(file=self.cif.cif_file_on_disk.path, pair=['_exptl_crystal_colour', "'whiteblue'"])

@@ -200,7 +200,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class FinalizeCifForm(ExperimentFormfieldsMixin, forms.Form):
+class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
     """
     New Idea:
     - The database is the master of information. During Save(), I compare the database and the cif values.
@@ -225,13 +225,26 @@ class FinalizeCifForm(ExperimentFormfieldsMixin, forms.Form):
     exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
     def __init__(self, *args, **kwargs):
+        self.exp_title = 'Report'
         super().__init__(*args, **kwargs)
+        self.helper.layout = Layout(
+            # Experiment ###
+            self.experiment_layout,
+            HTML('</div>'),
+            # Crystal ######
+            self.crystal_layout,
+            HTML('</div>'),
+            # Files ########
+            self.files_layout,
+            HTML('</div>'),
+        )
 
+    """    
     def clean(self):
         cleaned_data = super().clean()
         exptl_crystal_colour = cleaned_data.get('exptl_crystal_colour')
         if not exptl_crystal_colour:
-            raise forms.ValidationError('You have to give a color.')
+            raise forms.ValidationError('You have to give a color.')"""
 
     class Meta:
         model = Experiment

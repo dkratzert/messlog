@@ -2,64 +2,14 @@
 {% load bootstrap %}
 {% load static %}
 {{ form.media }}
-
-
+{% load crispy_forms_tags %}
 
 
 {% block content %}
+
     <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="row">cif</div>
-            <form method="POST" novalidate="novalidate">
-                {% csrf_token %}
-                <ul>
-                    {% for key, value in cifdata.items %}
-                        <li>{{ key }}:{{ value }}</li>
-                    {% endfor %}
-                </ul>
-
-                {% if cifdata.chemical_formula_moiety %}
-                    <div id="div_chemical_formula_moiety" class="form-group">
-                        <label for="id_chemical_formula_moiety" class="col-form-label requiredField">
-                            Moyety Formula<span class="asteriskField">*</span>
-                        </label>
-                        <div class=""><input type="text" name="chemical_formula_moiety"
-                                             value="{{ cifdata.chemical_formula_moiety }}" maxlength="200"
-                                             class="textinput textInput form-control" required=""
-                                             id="id_chemical_formula_moiety">
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if cifdata.space_group_crystal_system %}
-                    <div id="div_space_group_crystal_system" class="form-group">
-                        <label for="id_space_group_crystal_system" class="col-form-label requiredField">
-                            Crystal system<span class="asteriskField">*</span>
-                        </label>
-                        <div class=""><input type="text" name="space_group_crystal_system"
-                                             value="{{ cifdata.space_group_crystal_system }}" maxlength="200"
-                                             class="textinput textInput form-control" required=""
-                                             id="id_space_group_crystal_system">
-                        </div>
-                    </div>
-                {% endif %}
-                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-primary mr-2"
-                       id="submit-id-submit">
-                <input type="submit" name="cancel" value="Cancel" class="btn btn-primary btn-danger"
-                       id="submit-id-cancel">
-
-            </form>
-
-        </div>
-        <div class="col-6">
-                {% load crispy_forms_tags %}
-                <div class="row">DB</div>
-                {% crispy form %}
-                <input type="submit" name="submit" value="Save" class="btn btn-primary btn-primary mr-2"
-                       id="submit-id-submit">
-                <input type="submit" name="cancel" value="Cancel" class="btn btn-primary btn-danger"
-                       id="submit-id-cancel">
-
+        <div class="col-lg-7 col-md-8 col-sm-8">
+            {% crispy form %}
         </div>
     </div>
 {% endblock content %}
