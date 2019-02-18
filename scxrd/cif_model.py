@@ -296,9 +296,13 @@ class CifFile(models.Model):
         else:
             self.space_group_IT_number = get_int(fw("_space_group_IT_number"))
         self.space_group_crystal_system = get_string(fw("_space_group_crystal_system"))
-        self.space_group_symop_operation_xyz = '\n'.join(
-            [i.str(0) for i in cif_block.find(("_space_group_symop_operation_xyz",))])
-
+        # loop
+        xyz1 = cif_block.find(("_symmetry_equiv_pos_as_xyz",))  # deprecated
+        xyz2 = cif_block.find(("_space_group_symop_operation_xyz",))  # New definition
+        if xyz1:
+            self.space_group_symop_operation_xyz = '\n'.join([i.str(0) for i in xyz1])
+        else:
+            self.space_group_symop_operation_xyz = '\n'.join([i.str(0) for i in xyz2])
         self.shelx_res_file = get_string(fw("_shelx_res_file"))
         self.shelx_res_checksum = get_int(fw('_shelx_res_checksum'))
 
@@ -411,6 +415,7 @@ class CifFile(models.Model):
         self.exptl_crystal_F_000 = get_float(fw('_exptl_crystal_F_000'))
         self.exptl_transmission_factor_min = get_float(fw('_exptl_transmission_factor_min'))
         self.exptl_transmission_factor_max = get_float(fw('_exptl_transmission_factor_max'))
+        # loop:
         self.exptl_crystal_face_x = '\n'.join([i.str(0) for i in cif_block.find(
             ("_exptl_crystal_face_index_h",
              '_exptl_crystal_face_index_k',
