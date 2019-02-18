@@ -27,10 +27,11 @@ def distance(x1, y1, z1, x2, y2, z2, round_out=False):
 
 class MolFile(object):
     """
-    This mol file writer is only to use the file with JSmol, not to implement the standard exactly!
+    This mol file writer is only to use the file with JSmol_lite.
+    It does not to implement the standard exactly!
     """
 
-    def __init__(self, atoms: QuerySet(Atom), bonds = None):
+    def __init__(self, atoms: QuerySet(Atom), bonds=None):
         self.atoms = atoms
         self.atomscount = 0
         if bonds:
