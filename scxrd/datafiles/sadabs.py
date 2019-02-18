@@ -33,6 +33,7 @@ def to_int(st):
 class Sadabs():
     """
     This is a SADABS/TWINABS file parsing object.
+    TODO: Add data structure that handles multiple refinements esp. in TWINABS
     """
     _written_refl_regex = re.compile(r'.*Corrected reflections written to file', re.IGNORECASE)
     _rint_regex = re.compile(r'^.*Rint\s=.*observations and')
