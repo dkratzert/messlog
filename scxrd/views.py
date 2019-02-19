@@ -194,11 +194,15 @@ class DeleteView(LoginRequiredMixin, CreateView):
 
 class DragAndDropUploadView(View):
 
-    def get(self, request):
-        absfile_list = SadabsModel.objects.all()
+    def get(self, request, *args, **kwargs):
+        exp_id = kwargs['pk']
+        try:
+            absfile_list = SadabsModel.objects.get(pk=exp_id)
+        except Exception:
+            absfile_list = []
         return render(request, 'scxrd/drag_drop_upload.html', {'absfiles': absfile_list})
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = SadabsForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             absfile = form.save()

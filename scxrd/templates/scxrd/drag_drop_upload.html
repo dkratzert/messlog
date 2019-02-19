@@ -22,7 +22,7 @@
         {# name=foo hast to be named like the FileField instance in the model! #}
         <input id="fileupload" type="file" name="abs_file" multiple
                class="d-none"
-               data-url="{% url 'scxrd:absfiles' %}"
+               data-url="{% url 'scxrd:absfiles' 4 %}"
                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
     </div>
 
@@ -60,11 +60,11 @@
         </tr>
         </thead>
         <tbody>
-        {% for absfile in absfiles %}
+        {# {% for absfile in absfiles %} #}
             <tr>
-                <td><a href="{{ absfile.abs_file.url }}">{{ absfile.abs_file.name }}</a></td>
+                <td><a href="{{ absfiles.abs_file.url }}">{{ absfiles.abs_file.name }}</a></td>
             </tr>
-        {% endfor %}
+        {# {% endfor %} #}
         </tbody>
     </table>
 {% endblock %}
