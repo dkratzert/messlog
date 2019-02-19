@@ -25,7 +25,7 @@ class CustomCheckbox(Field):
 class SadabsForm(forms.ModelForm):
     class Meta:
         model = SadabsModel
-        fields = ('abs_file_on_disk',)
+        fields = ('abs_file',)
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
+{# TODO: merge into project and add a drag&drop hint fpr the user (with indication of file types) #}
 {% block title %}Drag and Drop Upload{% endblock %}
 
 {% block javascript %}
@@ -19,10 +19,25 @@
         <button type="button" class="btn btn-primary js-upload-files">
             <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
         </button>
-        <input id="fileupload" type="file" name="file" multiple
+        {# name=foo hast to be named like the FileField instance in the model! #}
+        <input id="fileupload" type="file" name="abs_file" multiple
                style="display: none;"
                data-url="{% url 'scxrd:absfiles' %}"
                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+    </div>
+    <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Uploading...</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <table id="gallery" class="table table-bordered">
@@ -34,7 +49,7 @@
         <tbody>
         {% for absfile in absfiles %}
             <tr>
-                <td><a href="{{ absfile.file.url }}">{{ absfile.file.name }}</a></td>
+                <td><a href="{{ absfile.abs_file.url }}">{{ absfile.abs_file.name }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
