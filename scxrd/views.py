@@ -13,7 +13,8 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm
+from scxrd.datafiles.sadabs_model import SadabsModel
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm, SadabsForm
 from scxrd.models import Experiment
 from scxrd.models import Person
 from scxrd.utils import minimal_cif_items
@@ -184,17 +185,32 @@ class UploadView(LoginRequiredMixin, CreateView):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
+class BasicUploadView(View):
+    def get(self, request):
+        absfile_list = SadabsModel.objects.all()
+        return render(self.request, 'scxrd/drag_drop_upload.html', {'absfiles': absfile_list})
+
+    def post(self, request):
+        form = SadabsForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            photo = form.save()
+            data = {'is_valid': True, 'name': photo.abs_file_on_disk.name, 'url': photo.abs_file_on_disk.url}
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+
 class DragAndDropUploadView(View):
 
     def get(self, request):
-        photos_list = Photo.objects.all()
-        return render(request, 'photos/drag_and_drop_upload/index.html', {'photos': photos_list})
+        absfile_list = SadabsModel.objects.all()
+        return render(request, 'scxrd/drag_drop_upload.html', {'absfiles': absfile_list})
 
     def post(self, request):
-        form = PhotoForm(self.request.POST, self.request.FILES)
+        form = SadabsForm(self.request.POST, self.request.FILES)
         if form.is_valid():
-            photo = form.save()
-            data = {'is_valid': True, 'name': photo.file.name, 'url': photo.file.url}
+            absfile = form.save()
+            data = {'is_valid': True, 'name': absfile.abs_file_on_disk.name, 'url': absfile.abs_file_on_disk.url}
         else:
             data = {'is_valid': False}
         return JsonResponse(data)

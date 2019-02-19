@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Drag and Drop Upload{% endblock %}
+
+{% block javascript %}
+    {# JQUERY FILE UPLOAD SCRIPTS #}
+    <script src="{% static 'jquery-file-upload-9.28.0/vendor/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'jquery-file-upload-9.28.0/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'jquery-file-upload-9.28.0/jquery.fileupload.js' %}"></script>
+
+    {# PHOTOS PAGE SCRIPTS #}
+    <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div style="margin-bottom: 20px;">
+        <button type="button" class="btn btn-primary js-upload-files">
+            <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+        </button>
+        <input id="fileupload" type="file" name="file" multiple
+               style="display: none;"
+               data-url="{% url 'scxrd:absfiles' %}"
+               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+    </div>
+
+    <table id="gallery" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Absfiles</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for absfile in absfiles %}
+            <tr>
+                <td><a href="{{ absfile.file.url }}">{{ absfile.file.name }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

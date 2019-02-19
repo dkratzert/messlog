@@ -1,7 +1,7 @@
-// Drag&Drop upload:
+
 $(function () {
 
-  $(".js-upload-photos").click(function () {
+  $(".js-upload-files").click(function () {
     $("#fileupload").click();
   });
 
@@ -17,4 +17,3 @@ $(function () {
   });
 
 });
-

@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
 
+from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.models import Experiment, Machine
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
@@ -19,6 +20,12 @@ class ExperimentTableForm(forms.ModelForm):
 
 class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
+
+
+class SadabsForm(forms.ModelForm):
+    class Meta:
+        model = SadabsModel
+        fields = ('abs_file_on_disk',)
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):

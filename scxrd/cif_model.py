@@ -16,7 +16,7 @@ from scxrd.utils import generate_sha256
 DEBUG = False
 
 
-def validate_file_extension(value):
+def validate_cif_file_extension(value):
     if not value.name.endswith('.cif'):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
@@ -25,8 +25,8 @@ class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_file_extension],
-                                        verbose_name='cif file name')
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_cif_file_extension],
+                                        verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
