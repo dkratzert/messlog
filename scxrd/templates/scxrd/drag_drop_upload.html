@@ -15,19 +15,19 @@
 {% endblock %}
 
 {% block content %}
-    <div style="margin-bottom: 20px;">
+    <div class="mb-3">
         <button type="button" class="btn btn-primary js-upload-files">
             <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
         </button>
         {# name=foo hast to be named like the FileField instance in the model! #}
         <input id="fileupload" type="file" name="abs_file" multiple
-               style="display: none;"
+               class="d-none"
                data-url="{% url 'scxrd:absfiles' %}"
                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal-progress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    {% comment %}<div class="modal fade" id="modal-progress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -47,6 +47,9 @@
                 </div>
             </div>
         </div>
+    </div>{% endcomment %}
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
     </div>
 
     <table id="gallery" class="table table-bordered">

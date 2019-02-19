@@ -16,7 +16,7 @@ urlpatterns = [
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('customers/', views.Customers.as_view(), name='customers'),
     path('molecule/', views.MoleculeView.as_view(), name='molecule'),
-    path('upload/<int:pk>/', views.UploadView.as_view(), name='upload'),
+    #path('upload/<int:pk>/', views.UploadView.as_view(), name='upload'),
     path('report/<int:pk>/', views.ReportView.as_view(), name='report'),
     path('dupload/', views.DragAndDropUploadView.as_view(), name='absfiles'),
 ]
