@@ -12,7 +12,6 @@ $(function () {
         },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINNISHED, HIDE THE MODAL */
             /* But only hide if modal sends the shown signal */
-
             $('#modal-progress').on('shown.bs.modal', function () {
                 $('#modal-progress').modal('hide');
             });
@@ -29,9 +28,12 @@ $(function () {
                 $("#gallery tbody").prepend(
                     "<tr><td><a href='" + data.result.url + "'>" + data.result.name + "</a></td></tr>"
                 );
+                /*
                 var bar = $(".progress-bar");
                 bar.css({"width": '0%'});
                 bar.text('0%');
+                 */
+                /* $('#progress_upload').hide(); */
             }
         }
 
