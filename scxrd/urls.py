@@ -18,7 +18,7 @@ urlpatterns = [
     path('molecule/', views.MoleculeView.as_view(), name='molecule'),
     path('upload/<int:pk>/', views.UploadView.as_view(), name='upload'),
     path('report/<int:pk>/', views.ReportView.as_view(), name='report'),
-    path('drag-drop-upload/', views.DragAndDropUploadView.as_view(), name='absfiles'),
+    path('dupload/', views.DragAndDropUploadView.as_view(), name='absfiles'),
 ]
 
 

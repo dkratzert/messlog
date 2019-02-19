@@ -1,4 +1,5 @@
 import json
+import os
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,6 +12,7 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
+from mysite import settings
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
 from scxrd.datafiles.sadabs_model import SadabsModel
@@ -172,14 +174,19 @@ class DetailsTable(DetailView):
         return context
 
 
-class UploadView(LoginRequiredMixin, CreateView):
+class DeleteView(LoginRequiredMixin, CreateView):
     """
     A file upload view.
     """
     model = Experiment
-    template_name = "scxrd/upload.html"
+    #template_name = "scxrd/upload.html"
     # success_url = reverse_lazy('scxrd:index')
-    form_class = ExperimentEditForm
+    #form_class = ExperimentEditForm
+
+    """def delete_file(self, pk):
+        document = self.model.objects.get(pk)
+        document.delete()
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.docfile.name))"""
 
     def get_success_url(self):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
@@ -198,7 +205,7 @@ class DragAndDropUploadView(View):
             data = {'is_valid': True, 'name': absfile.abs_file.name, 'url': absfile.abs_file.url}
         else:
             data = {'is_valid': False}
-            messages.warning(request, 'Please correct the error below.')
+            #messages.warning(request, 'Please correct the error below.')
         return JsonResponse(data)
 
 

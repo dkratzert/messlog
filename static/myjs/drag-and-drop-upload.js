@@ -10,8 +10,11 @@ $(function () {
         start: function (e) {  /* 2. WHEN THE UPLOADING PROCESS STARTS, SHOW THE MODAL */
             $("#modal-progress").modal("show");
         },
-        stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINALIZE, HIDE THE MODAL */
-            $("#modal-progress").modal("hide");
+        stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINNISHED, HIDE THE MODAL */
+            /* But only hide if modal sends the shown signal */
+            $('#modal-progress').on('shown.bs.modal', function () {
+                $('#modal-progress').modal('hide');
+            });
         },
         progressall: function (e, data) {  /* 4. UPDATE THE PROGRESS BAR */
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -26,7 +29,6 @@ $(function () {
                     "<tr><td><a href='" + data.result.url + "'>" + data.result.name + "</a></td></tr>"
                 )
             }
-            $("#modal-progress").modal("hide");
         }
 
     });

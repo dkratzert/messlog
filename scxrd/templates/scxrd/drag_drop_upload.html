@@ -25,16 +25,25 @@
                data-url="{% url 'scxrd:absfiles' %}"
                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
     </div>
-    <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-progress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Uploading...</h4>
+                    <h5 class="modal-title" id="exampleModalLabel">Uploading...</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
