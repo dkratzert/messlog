@@ -136,10 +136,6 @@ class CrystalSupport(models.Model):
     def __str__(self):
         return self.support
 
-    #def __getattribute__(self, item):
-    #    print('foo2')
-    #    return dontknow
-
 
 class CrystalGlue(models.Model):
     """
@@ -242,7 +238,6 @@ class Experiment(models.Model):
         super().save()
         try:
             p = self.push_info_to_cif()
-            print(p, '####')
         except Exception as e:
             print('Error during push_info_to_cif() ->', e)
             raise
@@ -272,21 +267,27 @@ class Experiment(models.Model):
         # names = [f.name for f in CifFile._meta.get_fields()]
 
         # Data from Experiment:
-        self.write_cif_item(doc, '_exptl_crystal_size_max', str(getattr(self, 'crystal_size_x')))
-        self.write_cif_item(doc, '_exptl_crystal_size_mid', str(getattr(self, 'crystal_size_y')))
-        self.write_cif_item(doc, '_exptl_crystal_size_min', str(getattr(self, 'crystal_size_z')))
+        data_items = (('_diffrn_measurement_specimen_support', 'base'),
+                      # there is no official item for sample glue!
+                      ('_exptl_crystal_size_max', 'crystal_size_x'),
+                      ('_exptl_crystal_size_mid', 'crystal_size_y'),
+                      ('_exptl_crystal_size_min', 'crystal_size_z'),
+                      ('_exptl_special_details', 'exptl_special_details'),
+                      ('_exptl_absorpt_correction_T_min', 'cif.exptl_absorpt_correction_T_min'),
+                      #('', ''),
+                      #('', ''),
+                      #('', ''),
+                      #('', ''),
+                      )
+        self.get_data_items_for_cif(data_items, doc)
+        # Choices
         self.write_cif_item(doc, '_exptl_crystal_colour', self.get_choice(COLOUR_CHOICES, 'crystal_colour'))
         self.write_cif_item(doc, '_exptl_crystal_colour_mod', self.get_choice(COLOUR_MOD_CHOICES, 'crystal_colour_mod'))
         self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
                             self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
-        self.write_cif_item(doc, '_exptl_special_details', self.quote_string(getattr(self, 'exptl_special_details')))
-        # TODO: Handle getattr of None:
-        self.write_cif_item(doc, '_diffrn_measurement_specimen_support', self.quote_string(getattr(self.base,
-                                                                                                   'support')))
-
         # Data from Cif:
-        self.write_cif_item(doc, '_exptl_absorpt_correction_T_min',
-                            str(getattr(self.cif, 'exptl_absorpt_correction_T_min')))
+        #self.write_cif_item(doc, '_exptl_absorpt_correction_T_min',
+        #                    str(getattr(self.cif, 'exptl_absorpt_correction_T_min')))
         self.write_cif_item(doc, '_exptl_absorpt_correction_T_max',
                             str(getattr(self.cif, 'exptl_absorpt_correction_T_max')))
         self.write_cif_item(doc, '_exptl_crystal_description',
@@ -305,6 +306,17 @@ class Experiment(models.Model):
             return False
         return True
 
+    def get_data_items_for_cif(self, data_items, doc):
+        for key, value in data_items:
+            try:
+                item = getattr(self, value)
+                Experiment.write_cif_item(doc, key, Experiment.quote_string(item))
+                print('written:', key, value, item)
+            except AttributeError as e:
+                print('### error in:', key, value)
+                print(e)
+                continue
+
     def get_choice(self, choices, attibute, na_0=True):
         """
         Get the choice value from a choices field.
@@ -322,24 +334,28 @@ class Experiment(models.Model):
         else:
             return choices[value][1]
 
-    def quote_string(self, string):
+    @staticmethod
+    def quote_string(string):
         """
         Quotes the string value in a way that the line maximum of cif 1.1 with 2048 characters is fulfilled and longer
         strings are embedded into ; quotes.
         :param string: The string to save
         :return: a quoted string
         """
-        if isinstance(string, (int, float)):
-            print('Warning! You tried to quote a number!')
-            return str(string)
         if not string:
             return '?'
+        if isinstance(string, (int, float)):
+            return str(string)
+        if not isinstance(string, (str)):
+            # To get the string representation of model instances first:
+            string = str(string)
         if len(string) < 2047 and (not '\n' in string or not '\r' in string):
             return "'{}'".format(string)
         else:
             return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
 
-    def write_cif_item(self, doc, key, value):
+    @staticmethod
+    def write_cif_item(doc, key, value):
         try:
             doc.sole_block().set_pair(key, value)
         except Exception as e:
