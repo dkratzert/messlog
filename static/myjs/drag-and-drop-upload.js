@@ -8,13 +8,15 @@ $(function () {
         dataType: 'json',
         sequentialUploads: true,  /* 1. SEND THE FILES ONE BY ONE */
         start: function (e) {  /* 2. WHEN THE UPLOADING PROCESS STARTS, SHOW THE MODAL */
-            $("#modal-progress").modal("show");
+            /*$("#modal-progress").modal("show");*/
         },
         stop: function (e) {  /* 3. WHEN THE UPLOADING PROCESS FINNISHED, HIDE THE MODAL */
             /* But only hide if modal sends the shown signal */
+            /*
             $('#modal-progress').on('shown.bs.modal', function () {
                 $('#modal-progress').modal('hide');
             });
+            */
         },
         progressall: function (e, data) {  /* 4. UPDATE THE PROGRESS BAR */
             var progress = parseInt(data.loaded / data.total * 100, 10);

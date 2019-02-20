@@ -1,15 +1,16 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions, AppendedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML
+from crispy_forms.layout import Field, HTML, Button
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
+from django.forms.widgets import Input
 
 from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.models import Experiment, Machine
-from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
+from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
 class ExperimentTableForm(forms.ModelForm):
@@ -53,7 +54,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.attrs = {'novalidate': 'novalidate'}
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
-        self.helper.render_unmentioned_fields = True
+        # Turn this off to see only mentioned form fields:
+        self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
         self.helper.field_class = 'p-2'
@@ -87,7 +89,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
         self.crystal_layout = Layout(
             self.card('Crystal and Results'),
-            AppendedText('sum_formula', 'assumed formula', active=True),
+            AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
                 Column(Field('solvent1', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('solvent2', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
@@ -95,11 +97,11 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row mt-0 mb-0 form-sm'
             ),
             Row(
-                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
-                                                                                         'col-md-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'),
                        css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
+                                                                                         'col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
             Row(
@@ -119,14 +121,15 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
         self.files_layout = Layout(
             self.card('Files and Comments'),
-            # TODO: add drag&drop file upload:
-            Field('cif', css_class='custom-select'),
             Row(
-                #    FormActions(
-                #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                #        Submit('cancel', 'Cancel', css_class='btn-danger'),
-                #        ),
+                Column(
+                    HTML('<div class="ml-3">drag & drop files here to upload.</div>')
+                ),
+                css_class='form-row ml-0 mb-0'
+            ),
+            Row(
                 Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
+                Column(HTML('''<div id="upload_here"></div>''')),
                 css_class='form-row ml-0 mb-0'
             ),
             'exptl_special_details',
@@ -134,9 +137,23 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
                     Submit('cancel', 'Cancel', css_class='btn-danger'),
+                    Button(type='button', name='button', value='Upload Files',
+                           css_class='btn btn-primary js-upload-files', id="uploadbutton"),
                 ),
+                # File upload:
+                HTML('''
+                        {# name=foo hast to be named like the FileField instance in the model! #}
+                        <input id="fileupload" type="file" name="abs_file" multiple
+                               class="d-none"
+                               data-url="{% url 'scxrd:upload_files' object.pk %}"
+                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                     '''),
                 css_class='form-row ml-0 mb-0'
             ),
+            #Row(
+            #    HTML('''<div id="upload_here"></div>'''),
+            #    css_class='row ml-0 mb-0'
+            #),
         )
 
         self.crystal_colour_layout = Layout(
@@ -177,7 +194,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
                 ),
                 css_class='form-row ml-0 mb-0'
             ),
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
         )
 
     class Meta:
@@ -193,13 +210,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
             # Crystal ######
             self.crystal_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
             # Files ########
             self.files_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
         )
 
     class Meta:
@@ -209,27 +226,8 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
 class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
     """
-    New Idea:
-    - The database is the master of information. During Save(), I compare the database and the cif values.
-      The differ items are displayed in a card with the title "Unclear cif items"
-    - every empty cif key/value is taken from the db.
-    - during file upload, I show a page with conflicting item if there are any.
 
-    -----------------------------------------------------------------------------
-    CrispyForm class to generate a cif report.
-
-    TODO: - Make an example where only crystal color, operator and absorption correction appear.
-          - work this out until the you can choose between the alternatives and the form is valid.
-          - add all the other aspects
-
-    https://stackoverflow.com/questions/17754295/can-i-have-a-django-form-without-model
-
-    TODO: Maybe add two columns. One with the information that is alredy there, and one with the
-          controls to modify/add more information.
-
-          View goes through all submitted form data and merges the information to a new cif.
     """
-    exptl_crystal_colour = forms.ChoiceField(choices=COLOUR_CHOICES, label='Crystal Colour')
 
     def __init__(self, *args, **kwargs):
         self.exp_title = 'Report'
@@ -237,21 +235,14 @@ class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
             # Crystal ######
             self.crystal_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
             # Files ########
             self.files_layout,
-            HTML('</div>'),
+            HTML('</div>'),  # end of card
         )
-
-    """    
-    def clean(self):
-        cleaned_data = super().clean()
-        exptl_crystal_colour = cleaned_data.get('exptl_crystal_colour')
-        if not exptl_crystal_colour:
-            raise forms.ValidationError('You have to give a color.')"""
 
     class Meta:
         model = Experiment

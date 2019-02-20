@@ -192,15 +192,19 @@ class DeleteView(LoginRequiredMixin, CreateView):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 
 
-class DragAndDropUploadView(View):
+class DragAndDropUploadView(DetailView):
 
-    def get(self, request, *args, **kwargs):
-        exp_id = kwargs['pk']
+    model = Experiment
+    template_name = 'scxrd/drag_drop_upload.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exp_id = self.kwargs['pk']
         try:
-            absfile_list = SadabsModel.objects.get(pk=exp_id)
+            context['absfiles'] = SadabsModel.objects.get(pk=exp_id)
         except Exception:
             absfile_list = []
-        return render(request, 'scxrd/drag_drop_upload.html', {'absfiles': absfile_list})
+        return context
 
     def post(self, request, *args, **kwargs):
         form = SadabsForm(self.request.POST, self.request.FILES)

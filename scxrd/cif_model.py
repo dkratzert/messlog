@@ -175,7 +175,7 @@ class CifFile(models.Model):
         except RuntimeError as e:
             print('Error while saving cif file:', e)
             return
-        self.sha256 = generate_sha256(self.cif_file_on_disk.file)
+        self.sha256 = generate_sha256(self.cif_file_on_disk)
         self.filesize = self.cif_file_on_disk.size
         # TODO: Make check if file exists work:
         # inst = CifFile.objects.filter(sha1=checksum).first()

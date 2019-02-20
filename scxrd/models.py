@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFile
+from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
@@ -135,6 +136,10 @@ class CrystalSupport(models.Model):
     def __str__(self):
         return self.support
 
+    #def __getattribute__(self, item):
+    #    print('foo2')
+    #    return dontknow
+
 
 class CrystalGlue(models.Model):
     """
@@ -166,8 +171,8 @@ class Experiment(models.Model):
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
-    sum_formula = models.CharField(max_length=300, blank=True)
-    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='preliminary unit cell')
+    sum_formula = models.CharField(max_length=300, verbose_name="sum formula", blank=True)
+    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='assumed formula')
     solvent1 = models.ForeignKey(Solvent, verbose_name='solvent 1', null=True, blank=True,
                                  related_name='experiment1', on_delete=models.CASCADE, default='')
     solvent2 = models.ForeignKey(Solvent, verbose_name='solvent 2', null=True, blank=True,
@@ -183,6 +188,8 @@ class Experiment(models.Model):
                              on_delete=models.DO_NOTHING)
     cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
                                verbose_name='cif file', on_delete=models.CASCADE)
+    absfile = models.OneToOneField(SadabsModel, null=True, blank=True, related_name="experiments",
+                                   verbose_name='sadabs list file', on_delete=models.CASCADE)
     crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
     crystal_size_y = models.FloatField(verbose_name='crystal size mid', null=True, blank=True)
     crystal_size_z = models.FloatField(verbose_name='crystal size min', null=True, blank=True)
@@ -235,6 +242,7 @@ class Experiment(models.Model):
         super().save()
         try:
             p = self.push_info_to_cif()
+            print(p, '####')
         except Exception as e:
             print('Error during push_info_to_cif() ->', e)
             raise
@@ -248,6 +256,9 @@ class Experiment(models.Model):
         print('----- Pushing values -----')
         try:
             file = self.cif.cif_file_on_disk.path
+            print(file, '345#')
+            if not file:
+                return False
         except AttributeError:
             # There is no cif file for this Experiment:
             print('No cif file...')
@@ -283,7 +294,7 @@ class Experiment(models.Model):
         self.write_cif_item(doc, '_cell_measurement_temperature',
                             self.quote_string(getattr(self.cif, 'cell_measurement_temperature')))
         self.write_cif_item(doc, '_cell_measurement_reflns_used',
-                            self.quote_string(getattr(self.cif, 'cell_measurement_reflns_used')))
+                            str(getattr(self.cif, 'cell_measurement_reflns_used')))
         self.write_cif_item(doc, '_cell_measurement_theta_min',
                             self.quote_string(getattr(self.cif, 'cell_measurement_theta_min')))
 
@@ -318,6 +329,9 @@ class Experiment(models.Model):
         :param string: The string to save
         :return: a quoted string
         """
+        if isinstance(string, (int, float)):
+            print('Warning! You tried to quote a number!')
+            return str(string)
         if not string:
             return '?'
         if len(string) < 2047 and (not '\n' in string or not '\r' in string):

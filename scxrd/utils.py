@@ -2,20 +2,21 @@ import hashlib
 from math import radians, cos, sin, sqrt
 
 import gemmi
+from django.core.files import File
 
 
-def generate_sha256(file):
+def generate_sha256(file: File):
     """
     Generates a sha256 chcksum from a FileField file handle.
     """
-    f = file.open('rb')
+    #f = file.open('rb')
     myhash = hashlib.sha3_256()
-    if f.multiple_chunks():
-        for chunk in f.chunks(chunk_size=64 * 2 ** 10):
+    if file.multiple_chunks():
+        for chunk in file.chunks(chunk_size=64 * 2 ** 10):
             myhash.update(chunk)
     else:
-        myhash.update(f.read())
-    f.close()
+        myhash.update(file.read())
+    #file.close()
     return myhash.hexdigest()
 
 
