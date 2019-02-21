@@ -273,8 +273,10 @@ class Experiment(models.Model):
                       ('_exptl_crystal_size_mid', 'crystal_size_y'),
                       ('_exptl_crystal_size_min', 'crystal_size_z'),
                       ('_exptl_special_details', 'exptl_special_details'),
+                      # Data from cif
+                      # Todo: I should probably check if the data is already there?
                       ('_exptl_absorpt_correction_T_min', 'cif.exptl_absorpt_correction_T_min'),
-                      #('', ''),
+                      ('_exptl_absorpt_correction_T_max', 'cif.exptl_absorpt_correction_T_max'),
                       #('', ''),
                       #('', ''),
                       #('', ''),
@@ -286,10 +288,6 @@ class Experiment(models.Model):
         self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
                             self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
         # Data from Cif:
-        #self.write_cif_item(doc, '_exptl_absorpt_correction_T_min',
-        #                    str(getattr(self.cif, 'exptl_absorpt_correction_T_min')))
-        self.write_cif_item(doc, '_exptl_absorpt_correction_T_max',
-                            str(getattr(self.cif, 'exptl_absorpt_correction_T_max')))
         self.write_cif_item(doc, '_exptl_crystal_description',
                             self.quote_string(getattr(self.cif, 'exptl_crystal_description')))
         self.write_cif_item(doc, '_cell_measurement_temperature',
