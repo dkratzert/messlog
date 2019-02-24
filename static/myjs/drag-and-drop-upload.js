@@ -1,3 +1,12 @@
+
+function get_uploaded_files(upload_files) {
+    $.get(url = upload_files, function (result) {
+        // TODO: make a view only to get() the uploaded file names for each experiment.
+        console.log(result);
+        document.getElementById("upload_here").innerHTML = result;
+    });
+}
+
 $(function () {
 
     $(".js-upload-files").click(function () {
@@ -26,17 +35,20 @@ $(function () {
             bar.text(strProgress);
         },
         done: function (e, data) {
+            /*
             if (data.result.is_valid) {
                 $("#gallery tbody").prepend(
                     "<tr><td><a href='" + data.result.url + "'>" + data.result.name + "</a></td></tr>"
                 );
-                /*
+
                 var bar = $(".progress-bar");
                 bar.css({"width": '0%'});
                 bar.text('0%');
-                 */
-                /* $('#progress_upload').hide(); */
+
+                 $('#progress_upload').hide();
             }
+            */
+            get_uploaded_files(upload_files);
         }
 
     });

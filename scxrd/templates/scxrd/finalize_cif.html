@@ -12,14 +12,13 @@
 
     {# Custom upload SCRIPTS #}
     <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>
+
     <div class="row justify-content-center">
         <div class="col-lg-7 col-md-8 col-sm-8">
             {% crispy form %}
             <script>
-                $.get(url = '{% url "scxrd:upload_files" pk=object.pk %}', function (result) {
-                    //console.log(result);
-                    document.getElementById("upload_here").innerHTML = result;
-                });
+                var upload_files = '{% url "scxrd:upload_files" pk=object.pk %}';
+                get_uploaded_files(upload_files);
             </script>
         </div>
     </div>
