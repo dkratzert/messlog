@@ -178,12 +178,6 @@ class CifFile(models.Model):
             return
         self.sha256 = generate_sha256(self.cif_file_on_disk)
         self.filesize = self.cif_file_on_disk.size
-        # TODO: Make check if file exists work:
-        # inst = CifFile.objects.filter(sha1=checksum).first()
-        # if inst:
-        #    self.cif = inst
-        #    return
-        # https://timonweb.com/posts/cleanup-files-and-images-on-model-delete-in-django/
         if not self.date_created:
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
@@ -196,6 +190,12 @@ class CifFile(models.Model):
             return 'no file'
         # data is the cif _data value
         # return self.data
+
+    @property
+    def exists(self):
+        if Path(self.cif_file_on_disk.path).exists():
+            return True
+        return False
 
     def delete(self, *args, **kwargs):
         cf = Path(self.cif_file_on_disk.path)

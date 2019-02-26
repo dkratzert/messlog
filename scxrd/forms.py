@@ -143,7 +143,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 # File upload:
                 HTML('''
                         {# name=foo hast to be named like the FileField instance in the model! #}
-                        <input id="fileupload" type="file" name="abs_file" multiple
+                        <input id="fileupload" type="file" name="absfile" multiple
                                class="d-none"
                                data-url="{% url 'scxrd:upload_files' object.pk %}"
                                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>

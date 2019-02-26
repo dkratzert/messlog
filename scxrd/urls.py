@@ -19,6 +19,7 @@ urlpatterns = [
     #path('upload/<int:pk>/', views.UploadView.as_view(), name='upload'),
     path('report/<int:pk>/', views.ReportView.as_view(), name='report'),
     path('upload/<int:pk>/', views.DragAndDropUploadView.as_view(), name='upload_files'),
+    path('files/<int:pk>/', views.FilesUploadedView.as_view(), name='files'),
 ]
 
 

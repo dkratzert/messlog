@@ -1,10 +1,7 @@
-import json
-import os
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -12,10 +9,8 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
-from mysite import settings
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm, SadabsForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -78,8 +73,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     # def get_success_url(self):
     #    return reverse_lazy('scxrd:index')
 
-    """
-    def get_context_data(self, **kwargs):
+    """    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             context['solvents'] = MyCheckBoxForm()
@@ -106,25 +100,26 @@ class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
     template_name = 'scxrd/finalize_cif.html'
     success_url = reverse_lazy('scxrd:index')
 
+    """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             exp_id = self.kwargs['pk']
-            cifpath = Experiment.objects.get(pk=exp_id).cif.cif_file_on_disk.path
+            cifpath = Experiment.objects.get(number=exp_id).cif.cif_file_on_disk.path
             context['cifname'] = cifpath
             context['cifdata'] = self.get_cif_data(cifpath)
         except SumFormula.DoesNotExist as e:
             print(e, '#!#')
             pass
-        return context
+        return context"""
 
     def get_cif_data(self, cifpath):
         print('get_cif_data():')
         import gemmi
         doc = gemmi.cif.read_file(cifpath)
-        #print(doc.sole_block().name, '#r#r')
-        #d = json.loads(doc.as_json())
-        #d = d[doc.sole_block().name]
+        # print(doc.sole_block().name, '#r#r')
+        # d = json.loads(doc.as_json())
+        # d = d[doc.sole_block().name]
         tocheck = {}
         print('minimal_cif_items: -----')
         for x in minimal_cif_items:
@@ -137,10 +132,10 @@ class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
         # This list should be configurable.
         # Display a page where missing items could be resolved. e.g. by uploading more files or
         # by typing informations in forms.
-        #for x in d:
+        # for x in d:
         #    print(x)
-        #d = doc.sole_block().find_pair('_cell_length_a')
-        #print(tocheck)
+        # d = doc.sole_block().find_pair('_cell_length_a')
+        # print(tocheck)
         return tocheck
 
     def _diffrn_ambient_temperature(self, value):
@@ -179,9 +174,9 @@ class DeleteView(LoginRequiredMixin, CreateView):
     A file upload view.
     """
     model = Experiment
-    #template_name = "scxrd/upload.html"
+    # template_name = "scxrd/upload.html"
     # success_url = reverse_lazy('scxrd:index')
-    #form_class = ExperimentEditForm
+    # form_class = ExperimentEditForm
 
     """def delete_file(self, pk):
         document = self.model.objects.get(pk)
@@ -193,17 +188,13 @@ class DeleteView(LoginRequiredMixin, CreateView):
 
 
 class DragAndDropUploadView(DetailView):
-
     model = Experiment
     template_name = 'scxrd/drag_drop_upload.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        try:
-            context['absfiles'] = SadabsModel.objects.get(pk=exp_id)
-        except Exception:
-            absfile_list = []
+        context['absfiles'] = SadabsModel.objects.get(pk=exp_id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -213,8 +204,25 @@ class DragAndDropUploadView(DetailView):
             data = {'is_valid': True, 'name': absfile.abs_file.name, 'url': absfile.abs_file.url}
         else:
             data = {'is_valid': False}
-            #messages.warning(request, 'Please correct the error below.')
+            # messages.warning(request, 'Please correct the error below.')
         return JsonResponse(data)
+
+
+class FilesUploadedView(ListView):
+    """
+    creates a list of the uploaded files fore the respective experiment.
+    """
+    model = Experiment
+    template_name = 'scxrd/uploaded_files.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exp_id = self.kwargs['pk']
+        print(exp_id, '###')
+        exp = Experiment.objects.get(pk=exp_id)
+        context['absfile'] = exp.absfile
+        context['ciffile'] = exp.cif
+        return context
 
 
 class Customers(LoginRequiredMixin, ListView):

@@ -1,7 +1,7 @@
 
 function get_uploaded_files(upload_files) {
+    console.log(upload_files);
     $.get(url = upload_files, function (result) {
-        // TODO: make a view only to get() the uploaded file names for each experiment.
         console.log(result);
         document.getElementById("upload_here").innerHTML = result;
     });

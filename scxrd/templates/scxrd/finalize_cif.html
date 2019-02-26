@@ -17,7 +17,7 @@
         <div class="col-lg-7 col-md-8 col-sm-8">
             {% crispy form %}
             <script>
-                var upload_files = '{% url "scxrd:upload_files" pk=object.pk %}';
+                var upload_files = '{% url "scxrd:files" pk=object.pk %}';
                 get_uploaded_files(upload_files);
             </script>
         </div>

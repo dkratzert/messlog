@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -15,6 +17,7 @@ class SadabsModel(models.Model):
     """
     A model for SADABS and TWINABS files
     TODO: Check if file (sha256) was already uploaded somewhere and ask if shurely upload again.
+    TODO: try to get Tmin and Tmax from the hkl file in the cif file first.
     """
     abs_file = models.FileField(upload_to='abs', null=True, blank=True,
                                         validators=[validate_abs_file_extension], verbose_name='abs file')
@@ -31,3 +34,11 @@ class SadabsModel(models.Model):
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
         super(SadabsModel, self).save(*args, **kwargs)
+
+    @property
+    def exists(self):
+        if Path(self.abs_file.path).exists():
+            return True
+        return False
+
+
