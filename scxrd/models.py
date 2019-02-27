@@ -237,7 +237,9 @@ class Experiment(models.Model):
         """
         super().save()
         try:
-            p = self.push_info_to_cif()
+            # disabled for now
+            p = True
+            #p = self.push_info_to_cif()
         except Exception as e:
             print('Error during push_info_to_cif() ->', e)
             raise
