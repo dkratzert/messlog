@@ -147,7 +147,7 @@ class CifFileTest(TestCase):
         # Test the calculated sum formula:
         self.assertEqual(
             'C<sub>34</sub><wbr>H<sub>24</sub><wbr>O<sub>4</sub><wbr>F<sub>36</sub>'
-            '<wbr>Al<sub>1</sub><wbr>Ga<sub>1</sub><wbr>', str(ex.cif.sumform_exact))
+            '<wbr>Al<sub>1</sub><wbr>Ga<sub>1</sub><wbr>', str(ex.cif.sumform_from_atoms))
         self.assertEqual(str(c.experiments.glue), 'grease')
         self.assertEqual(str(c.experiments), 'test1')
         self.assertEqual(str(c.experiments.customer.work_group), 'AK Sorglos')

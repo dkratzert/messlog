@@ -167,8 +167,8 @@ class Experiment(models.Model):
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
-    sum_formula = models.CharField(max_length=300, verbose_name="sum formula", blank=True)
-    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='assumed formula')
+    sum_formula = models.CharField(max_length=300, verbose_name="assumed sum formula", blank=True)
+    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='first unit cell')
     solvent1 = models.ForeignKey(Solvent, verbose_name='solvent 1', null=True, blank=True,
                                  related_name='experiment1', on_delete=models.CASCADE, default='')
     solvent2 = models.ForeignKey(Solvent, verbose_name='solvent 2', null=True, blank=True,
@@ -186,14 +186,22 @@ class Experiment(models.Model):
                                verbose_name='cif file', on_delete=models.CASCADE)
     absfile = models.OneToOneField(SadabsModel, null=True, blank=True, related_name="experiments",
                                    verbose_name='sadabs list file', on_delete=models.CASCADE)
+    # equivalent to _exptl_crystal_size_max
     crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
+    # equivalent to _exptl_crystal_size_mid
     crystal_size_y = models.FloatField(verbose_name='crystal size mid', null=True, blank=True)
+    # equivalent to _exptl_crystal_size_min
     crystal_size_z = models.FloatField(verbose_name='crystal size min', null=True, blank=True)
+    # equivalent to _exptl_crystal_colour
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])
+    # equivalent to _exptl_crystal_colour_modifier
     crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, verbose_name='crystal colour modifier',
                                              default=COLOUR_MOD_CHOICES[0][0])
+    # equivalent to _exptl_crystal_colour_lustre
     crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES,
                                                 default=COLOUR_LUSTRE_COICES[0][0])  # no blank=True here!
+    # equivalent to _exptl_crystal_description
+    crystal_habit = models.CharField(max_length=300, blank=True, null=True, verbose_name="crystal habit")
     # _exptl_special_details:
     exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
                                              default='')

@@ -1,15 +1,15 @@
 from bootstrap_datepicker_plus import DatePickerInput
-from crispy_forms.bootstrap import FormActions, AppendedText
+from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, HTML, Button
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
-from django.forms.widgets import Input
+from django.utils.translation import gettext_lazy as _
 
 from scxrd.datafiles.sadabs_model import SadabsModel
-from scxrd.models import Experiment, Machine
+from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
@@ -34,15 +34,17 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
-                                  label="Sample submission date")
-    result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False, label="Results sent date")
-    crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label='Colour modifier')
-    crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label='Colour lustre')
+                                  label=_("Sample submission date"))
+    result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
+                                  label=_("Results sent date"))
+    crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour modifier'))
+    crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label=_('Colour lustre'))
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
-    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2)
-    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2)
-    crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2)
+    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size max"))
+    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
+    crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
+    base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
 
 
 class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
@@ -89,7 +91,11 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
         self.crystal_layout = Layout(
             self.card('Crystal and Results'),
-            AppendedText('prelim_unit_cell', 'assumed formula', active=True),
+            # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
+            Row(
+                Column('sum_formula', css_class='col-12 mb-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
             Row(
                 Column(Field('solvent1', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('solvent2', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
@@ -120,25 +126,33 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.files_layout = Layout(
-            self.card('Files and Comments'),
             Row(
+                self.card(_('File upload')),
                 Column(
-                    HTML('<div class="ml-3">drag & drop files here to upload.</div>')
+                    #HTML('<div class="ml-3">' + str(_('Drag & Drop files here to upload.')) + '</div>'),
+                    Button(type='button', name='button', value=_('Upload .abs file'),
+                           css_class='btn btn-primary js-upload-files', id="uploadbutton"),
                 ),
+                HTML('</div>'),  # end of card
                 css_class='form-row ml-0 mb-0'
             ),
+            self.card(_('Miscelanious')),
             Row(
-                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2'),
                 Column(HTML('''<div id="upload_here"></div>''')),
                 css_class='form-row ml-0 mb-0'
             ),
-            'exptl_special_details',
+            Row(
+                Column('exptl_special_details', css_class='col-12 mb-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
+            Row(
+                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2 mt-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
                     Submit('cancel', 'Cancel', css_class='btn-danger'),
-                    Button(type='button', name='button', value='Upload Files',
-                           css_class='btn btn-primary js-upload-files', id="uploadbutton"),
                 ),
                 # File upload:
                 HTML('''
@@ -150,10 +164,11 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                      '''),
                 css_class='form-row ml-0 mb-0'
             ),
-            #Row(
+
+            # Row(
             #    HTML('''<div id="upload_here"></div>'''),
             #    css_class='row ml-0 mb-0'
-            #),
+            # ),
         )
 
         self.crystal_colour_layout = Layout(
@@ -186,7 +201,11 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             self.experiment_layout,
             self.crystal_colour_layout,
-            AppendedText('sum_formula', 'assumed formula', active=True),
+            # AppendedText('sum_formula', 'assumed formula', active=True),
+            Row(
+                Column('sum_formula', css_class='col-12 mb-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
@@ -224,7 +243,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
+'''class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
     """
 
     """
@@ -247,3 +266,4 @@ class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
     class Meta:
         model = Experiment
         fields = '__all__'
+        '''

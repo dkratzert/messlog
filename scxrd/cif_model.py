@@ -31,6 +31,7 @@ class CifFile(models.Model):
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
+    # This is the sum formula calculated from the atoms in the cif file:
     sumform_calc = models.OneToOneField('SumFormula', null=True, blank=True, on_delete=models.DO_NOTHING,
                                         related_name='cif_file')
     #########################################
@@ -54,6 +55,7 @@ class CifFile(models.Model):
     space_group_crystal_system = models.CharField(max_length=255, null=True, blank=True)
     space_group_symop_operation_xyz = models.TextField(null=True, blank=True)
     audit_creation_method = models.CharField(max_length=2048, null=True, blank=True)
+    # This is the sum formula directly from the cif key/value:
     chemical_formula_sum = models.CharField(max_length=2048, null=True, blank=True)
     chemical_formula_weight = models.CharField(max_length=255, null=True, blank=True)
     exptl_crystal_description = models.CharField(max_length=2048, null=True, blank=True)
@@ -269,8 +271,9 @@ class CifFile(models.Model):
             self.add_to_sumform(occ=occ, atype=element)
             self.atoms.save()
         if self.sum_form_dict:
-            self.sumform_exact = self.fill_formula(self.sum_form_dict)
-            self.sumform_exact.save()
+            self.sumform_from_atoms = self.fill_formula(self.sum_form_dict)
+            # safes the SumFormula instanse into the respectiva table:
+            self.sumform_from_atoms.save()
 
         self.data = cif_block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \

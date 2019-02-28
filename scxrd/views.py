@@ -11,10 +11,9 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm, FinalizeCifForm, SadabsForm
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, SadabsForm
 from scxrd.models import Experiment
 from scxrd.models import Person
-from scxrd.utils import minimal_cif_items
 
 
 class FormActionMixin(FormMixin):
@@ -83,6 +82,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         return context"""
 
 
+'''
 class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
     """
     Generate a report anf finalize the cif.
@@ -141,6 +141,7 @@ class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
     def _diffrn_ambient_temperature(self, value):
         pass
         # Do some stuff to return the appropriate form value
+'''
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
