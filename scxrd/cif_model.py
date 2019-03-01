@@ -206,6 +206,7 @@ class CifFile(models.Model):
         cf.unlink()
         super().delete(*args, **kwargs)
 
+
     def add_to_sumform(self, occ=None, atype=None):
         #  0     1   2 3 4   5  6  7   8       9
         # [Name type x y z  xc xc zc occupancy part]

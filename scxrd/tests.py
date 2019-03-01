@@ -43,7 +43,7 @@ def create_experiment(number, cif=None, save_related=False):
     group = WorkGroup(group_head=head)
     group.save()
     pers = Person(first_name='Hans', last_name='Meyerhof', work_group=group)
-    mach = Machine(name='FobarMachine')
+    mach = Machine(diffrn_measurement_device_type='FobarMachine')
     op = User(username='foouser')
     glue = CrystalGlue(glue='grease')
     if save_related:
@@ -158,7 +158,7 @@ class CifFileTest(TestCase):
         self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
         self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
         self.assertEqual(-0.194, ex.cif.atoms.x)
-        self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '')[:30],
+        self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
                          'TITL p21c in P2(1)/c    p21c.r')
         # self.assertEqual(ex.cif.atoms.x, '')
         self.assertEqual(ex.cif.space_group_name_H_M_alt, 'P 21/c')

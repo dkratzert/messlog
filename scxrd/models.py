@@ -233,7 +233,7 @@ class Experiment(models.Model):
         """
         Saves all differences between the database items into the cif file.
 
-        # TODO: for cif parser:
+        # TODO: for gemmi cif parser:
           - It should detect if string should be written into ; ; quotes
             _foo_bar_baz
             ;
@@ -242,6 +242,17 @@ class Experiment(models.Model):
             ;
           - strings with spaces should be quoted like 'I am a string'
           - set_pair() should accept numbers
+          - Windows line endings (\r\n) lead to problems:
+            doc = gemmi.cif.read_file(file)
+            doc.sole_block().set_pair('_diffrn_reflns_number', '22246')
+            doc.write_file(file)
+            results in \r accumulation in Windows:
+            _shelx_space_group_comment\r\n
+            ;\r
+            \r\n
+            The symmetry employed for this shelxl refinement is uniquely defined\r
+            \r\n
+            by the following loop, [...]
         """
         super().save()
         try:
