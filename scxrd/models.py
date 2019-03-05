@@ -258,7 +258,7 @@ class Experiment(models.Model):
         try:
             # disabled for now
             p = True
-            #p = self.push_info_to_cif()
+            # p = self.push_info_to_cif()
         except Exception as e:
             print('Error during push_info_to_cif() ->', e)
             raise
@@ -298,9 +298,9 @@ class Experiment(models.Model):
                       # Todo: I should probably check if the data is already there?
                       ('_exptl_absorpt_correction_T_min', 'cif.exptl_absorpt_correction_T_min'),
                       ('_exptl_absorpt_correction_T_max', 'cif.exptl_absorpt_correction_T_max'),
-                      #('', ''),
-                      #('', ''),
-                      #('', ''),
+                      # ('', ''),
+                      # ('', ''),
+                      # ('', ''),
                       )
         self.get_data_items_for_cif(data_items, doc)
         # Choices
@@ -319,7 +319,7 @@ class Experiment(models.Model):
                             self.quote_string(getattr(self.cif, 'cell_measurement_theta_min')))
 
         try:
-            doc.write_file(file)
+            doc.write_file(file, style=cif.Style.Indent35)
         except Exception as e:
             print('Error during cif write:', e, '##set_cif_item')
             return False
