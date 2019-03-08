@@ -165,7 +165,7 @@ class DetailsTable(DetailView):
             exp_id = self.kwargs['pk']
             context['sumform'] = SumFormula.objects.get(pk=exp_id)
         except SumFormula.DoesNotExist as e:
-            print(e, '#-#')
+            print(e, '#-DetailsTable view #')
             pass
         return context
 

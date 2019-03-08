@@ -1,7 +1,7 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, Button
+from crispy_forms.layout import Field, HTML
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
@@ -129,9 +129,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 self.card(_('File upload')),
                 Column(
-                    #HTML('<div class="ml-3">' + str(_('Drag & Drop files here to upload.')) + '</div>'),
-                    Button(type='button', name='button', value=_('Upload .abs file'),
-                           css_class='btn btn-primary js-upload-files', id="uploadbutton"),
+                    HTML('''{% include "scxrd/upload.html" %}'''),
+                    css_class='ml-2 mb-0'
                 ),
                 HTML('</div>'),  # end of card
                 css_class='form-row ml-0 mb-0'
@@ -154,21 +153,9 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
                     Submit('cancel', 'Cancel', css_class='btn-danger'),
                 ),
-                # File upload:
-                HTML('''
-                        {# name=foo hast to be named like the FileField instance in the model! #}
-                        <input id="fileupload" type="file" name="absfile" multiple
-                               class="d-none"
-                               data-url="{% url 'scxrd:upload_files' object.pk %}"
-                               data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
-                     '''),
                 css_class='form-row ml-0 mb-0'
             ),
 
-            # Row(
-            #    HTML('''<div id="upload_here"></div>'''),
-            #    css_class='row ml-0 mb-0'
-            # ),
         )
 
         self.crystal_colour_layout = Layout(

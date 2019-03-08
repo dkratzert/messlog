@@ -3,6 +3,13 @@
 {{ form.media }}
 {% load crispy_forms_tags %}
 
+{# JQUERY FILE UPLOAD SCRIPTS #}
+<script src="{% static 'jquery-file-upload-9.28.0/vendor/jquery.ui.widget.js' %}"></script>
+<script src="{% static 'jquery-file-upload-9.28.0/jquery.iframe-transport.js' %}"></script>
+<script src="{% static 'jquery-file-upload-9.28.0/jquery.fileupload.js' %}"></script>
+
+{# Custom upload SCRIPTS #}
+<script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>
 
 {% block content %}
 
