@@ -42,11 +42,11 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             ciffile = form.save()
             # self.model.cif.cif_file_on_disk = ciffile
             print('exp pk is:', self.kwargs['pk'])
-            print('cif pk is:', ciffile.pk)
-            exp = Experiment.objects.get(pk=self.kwargs['pk'])
-            exp.cif_id = ciffile.pk
-            state = exp.save(update_fields=['cif_id'])
-            print('cif worked?', state)
+            print('cif pk is:', ciffile.pk, ciffile.cif_file_on_disk.url)
+            #exp = Experiment.objects.get(pk=self.kwargs['pk'])
+            #exp.cif_id = ciffile.pk
+            #state = exp.save(update_fields=['cif_id'])
+            #print('cif worked?', state)
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
                 try:
@@ -58,7 +58,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             # data = {'is_valid': False}
             messages.warning(request, 'That cif file was invalid.')
         # return JsonResponse(data)  # for js upload
-        return super().post(request, *args, **kwargs)
+        return super(CifUploadView, self).post(request, *args, **kwargs)
 
 
 '''
