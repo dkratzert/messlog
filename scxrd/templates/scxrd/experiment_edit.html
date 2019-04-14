@@ -3,13 +3,14 @@
 {{ form.media }}
 {% load crispy_forms_tags %}
 
-{# JQUERY FILE UPLOAD SCRIPTS #}
-<script src="{% static 'jquery-file-upload-9.28.0/vendor/jquery.ui.widget.js' %}"></script>
-<script src="{% static 'jquery-file-upload-9.28.0/jquery.iframe-transport.js' %}"></script>
-<script src="{% static 'jquery-file-upload-9.28.0/jquery.fileupload.js' %}"></script>
+{% comment %}
+TODO:
+- make a simple "upload files" link.
+- below the link are the uploaded files listed in cathegories, minimum requirement is a cif file
+- make an upload page where a user can upload specific files. and get help what files are needed.
 
-{# Custom upload SCRIPTS #}
-<script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>
+{% endcomment %}
+
 
 {% block content %}
 
