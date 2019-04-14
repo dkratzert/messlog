@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.db import OperationalError
 from django.utils.translation import gettext_lazy as _
 
+from scxrd.cif_model import CifFile
 from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
@@ -27,6 +28,12 @@ class SadabsForm(forms.ModelForm):
     class Meta:
         model = SadabsModel
         fields = ('abs_file',)
+
+
+class CifForm(forms.ModelForm):
+    class Meta:
+        model = CifFile
+        fields = ('cif_file_on_disk',)
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):
@@ -61,9 +68,13 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.help_text_inline = False
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
         self.helper.field_class = 'p-2'
+        self.backbutton = """
+            <a class="btn btn-success btn-sm" href="{% url "scxrd:index"%}">Back to index</a>
+                        """
 
         self.experiment_layout = Layout(
-            self.card(self.exp_title),
+
+            self.card(self.exp_title, self.backbutton),
             Row(
                 Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
                 Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
@@ -129,7 +140,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 self.card(_('File upload')),
                 Column(
-                    HTML('''{% include "scxrd/upload.html" %}'''),
+                    #HTML('''{% include "scxrd/file_upload.html" %}'''),
+                    HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> Upload a cif file </a>'''),
                     css_class='ml-2 mb-0'
                 ),
                 HTML('</div>'),  # end of card
@@ -169,8 +181,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             ),
         )
 
-    def card(self, header_title):
-        return HTML('<div class="card w-100 mb-3">  <div class="card-header">{}</div>'.format(header_title))
+    def card(self, header_title, button=''):
+        return HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}</div>'.format(header_title, button))
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):

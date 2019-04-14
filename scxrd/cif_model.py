@@ -13,7 +13,7 @@ from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell, REFINE_LS_HYDROGEN_TREATMENT
 from scxrd.utils import generate_sha256
 
-DEBUG = False
+DEBUG = True
 
 
 def validate_cif_file_extension(value):
@@ -166,10 +166,11 @@ class CifFile(models.Model):
         try:
             cif_parsed = gcif.read_file(self.cif_file_on_disk.file.name)
             cif_block = cif_parsed.sole_block()
-        except (RuntimeError, IndexError) as e:
+        except Exception as e:
             print(e)
-            # raise ValidationError('Unable to parse cif file:', e)
-            return
+            print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
+            #raise ValidationError('Unable to parse cif file:', e)
+            return False
         Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
@@ -177,7 +178,7 @@ class CifFile(models.Model):
             self.fill_residuals_table(cif_block)
         except RuntimeError as e:
             print('Error while saving cif file:', e)
-            return
+            return False
         self.sha256 = generate_sha256(self.cif_file_on_disk)
         self.filesize = self.cif_file_on_disk.size
         if not self.date_created:

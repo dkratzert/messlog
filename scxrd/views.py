@@ -1,6 +1,7 @@
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -11,12 +12,56 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif_model import SumFormula, Atom
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm, SadabsForm
+from scxrd.datafiles.sadabs_model import SadabsModel
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, SadabsForm, CifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
 
 
-class FormActionMixin(FormMixin):
+class CifUploadView(LoginRequiredMixin, CreateView):
+    model = Experiment
+    form_class = CifForm
+    #success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
+    template_name = 'scxrd/file_upload.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        exp_id = self.kwargs['pk']
+        print(exp_id, '###')
+        exp = Experiment.objects.get(pk=exp_id)
+        context['absfile'] = exp.absfile
+        context['ciffile'] = exp.cif
+        context['experiment'] = exp
+        context['pk'] = exp_id
+        return context
+
+    def get_success_url(self, **kwargs):
+        # obj = form.instance or self.object
+        return reverse_lazy("scxrd:upload_cif_file", kwargs={'pk': self.kwargs['pk']})
+
+    def post(self, request, *args, **kwargs):
+        form = CifForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            ciffile = form.save()
+            self.model.cif.cif_file_on_disk = ciffile
+            print('exp pk is:', self.kwargs['pk'])
+            print('cif pk is:', ciffile.pk)
+            exp = Experiment.objects.get(pk=self.kwargs['pk'])
+            exp.cif_id = ciffile.pk
+            state = exp.save(update_fields=['cif_id'])
+            print('cif worked?', state)
+            if not ciffile.pk:
+                messages.warning(request, 'That cif file was invalid.')
+                #ciffile.delete()
+            #data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
+        else:
+            #data = {'is_valid': False}
+            messages.warning(request, 'That cif file was invalid.')
+        # return JsonResponse(data)  # for js upload
+        return super().post(request, *args, **kwargs)
+
+
+class FormActionMixin(LoginRequiredMixin, FormMixin):
 
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
@@ -72,14 +117,15 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     # def get_success_url(self):
     #    return reverse_lazy('scxrd:index')
 
-    """    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            context['solvents'] = MyCheckBoxForm()
-        except Solvent.DoesNotExist as e:
-            print(e, '#')
-            pass
-        return context"""
+        exp_id = self.kwargs['pk']
+        print(exp_id, '###')
+        exp = Experiment.objects.get(pk=exp_id)
+        context['expid'] = exp_id
+        context['absfile'] = exp.absfile
+        context['ciffile'] = exp.cif
+        return context
 
 
 '''

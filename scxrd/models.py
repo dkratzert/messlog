@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -19,13 +20,11 @@ TODO:
 
 - addd delete experiment
 - improve details page
-- add upload results dropdown
-- A really simple file upload handler: https://github.com/ipartola/django-upman
-- https://github.com/sibtc/form-rendering-examples
 - upload all needed files from work dir (foo.abs, foo.raw, foo_0m._ls, foo.prp, foo.lst, foo.res, foo.cif) and 
   have a button "generate report and final cif files"
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
+- cif is deleted from experiment when saving again!!
 """
 
 
@@ -242,28 +241,19 @@ class Experiment(models.Model):
             ;
           - strings with spaces should be quoted like 'I am a string'
           - set_pair() should accept numbers
-          - Windows line endings (\r\n) lead to problems:
-            doc = gemmi.cif.read_file(file)
-            doc.sole_block().set_pair('_diffrn_reflns_number', '22246')
-            doc.write_file(file)
-            results in \r accumulation in Windows:
-            _shelx_space_group_comment\r\n
-            ;\r
-            \r\n
-            The symmetry employed for this shelxl refinement is uniquely defined\r
-            \r\n
-            by the following loop, [...]
         """
         super().save()
+        """
         try:
             # disabled for now
             p = True
-            # p = self.push_info_to_cif()
+            p = self.push_info_to_cif()
         except Exception as e:
             print('Error during push_info_to_cif() ->', e)
             raise
         if p:
-            print('Cif updated sucessfully!')
+            print('Cif updated sucessfully!')"""
+        return True
 
     def push_info_to_cif(self):
         """
@@ -380,3 +370,4 @@ class Experiment(models.Model):
         except Exception as e:
             pass
             print('Error in write_cif_item() -> set_pair:\n', e)
+

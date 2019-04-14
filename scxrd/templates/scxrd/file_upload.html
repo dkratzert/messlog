@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" action="" id="ciffile_form" novalidate>
+        {% csrf_token %}
+        <label for="id_cif_file_on_disk">Cif file for {{ experiment }}:</label>
+        <input type="file" name="cif_file_on_disk" id="id_cif_file_on_disk">
+        <input type="submit" value="Save" class="default" name="_save">
+        {#        <a class="btn btn-primary file" href="{% url "scxrd:upload_abs_files" pk=object.pk %}">Upload .abs file</a>#}
+    </form>
+
+    {% if experiment.cif %}
+        <p>File uploaded: <a href="{{ experiment.cif.cif_file_on_disk.url }}">{{ experiment.cif }}</a></p>
+    {% endif %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <p><a class="btn btn-success" href="{% url "scxrd:edit" pk=experiment.pk %}">Back to
+        experiment {{ experiment.number }}</a></p>
+    {% comment %}<p><a href="{% url 'scxrd:edit' pk=object.pk %}">Return to experiment</a></p> {% endcomment %}
+{% endblock %}
