@@ -1,13 +1,10 @@
-from pprint import pprint
-
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
-from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
@@ -21,7 +18,7 @@ from scxrd.models import Person
 class CifUploadView(LoginRequiredMixin, CreateView):
     model = Experiment
     form_class = CifForm
-    #success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
+    # success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
     template_name = 'scxrd/file_upload.html'
 
     def get_context_data(self, *args, **kwargs):
@@ -43,7 +40,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         form = CifForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             ciffile = form.save()
-            self.model.cif.cif_file_on_disk = ciffile
+            # self.model.cif.cif_file_on_disk = ciffile
             print('exp pk is:', self.kwargs['pk'])
             print('cif pk is:', ciffile.pk)
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
@@ -52,15 +49,19 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             print('cif worked?', state)
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
-                #ciffile.delete()
-            #data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
+                try:
+                    ciffile.delete()
+                except Exception:
+                    pass
+            # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
-            #data = {'is_valid': False}
+            # data = {'is_valid': False}
             messages.warning(request, 'That cif file was invalid.')
         # return JsonResponse(data)  # for js upload
         return super().post(request, *args, **kwargs)
 
 
+'''
 class FormActionMixin(LoginRequiredMixin, FormMixin):
 
     def post(self, request, *args, **kwargs):
@@ -83,6 +84,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         else:
             print('else reached')
             return super().post(request, *args, **kwargs)
+'''
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -118,13 +120,17 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     #    return reverse_lazy('scxrd:index')
 
     def get_context_data(self, **kwargs):
+        exp = Experiment.objects.get(pk=self.kwargs['pk'])
+        cifid = exp.cif_id
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        print(exp_id, '###')
-        exp = Experiment.objects.get(pk=exp_id)
+        print('#edit#', exp_id, '###')
         context['expid'] = exp_id
         context['absfile'] = exp.absfile
         context['ciffile'] = exp.cif
+        # This tries to preserve the cif id, but somewhere it gets deleted during save()
+        state = exp.save(update_fields=["cif"])
+        print('state:', state, cifid)
         return context
 
 

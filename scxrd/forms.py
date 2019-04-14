@@ -1,7 +1,7 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML
+from crispy_forms.layout import Field, HTML, Button
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
@@ -65,12 +65,14 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.form_style = 'default'
         # Turn this off to see only mentioned form fields:
         self.helper.render_unmentioned_fields = False
-        self.helper.help_text_inline = False
+        self.helper.help_text_inline = False  # both can not have the same value
+        # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
         self.helper.field_class = 'p-2'
         self.backbutton = """
-            <a class="btn btn-success btn-sm" href="{% url "scxrd:index"%}">Back to index</a>
-                        """
+            <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
+                href="{% url "scxrd:index"%}">Back to start</a>
+            """
 
         self.experiment_layout = Layout(
 
@@ -101,7 +103,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.crystal_layout = Layout(
-            self.card('Crystal and Results'),
+            self.card('Crystal and Results', self.backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-12 mb-0'),
@@ -140,14 +142,16 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 self.card(_('File upload')),
                 Column(
-                    #HTML('''{% include "scxrd/file_upload.html" %}'''),
-                    HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> Upload a cif file </a>'''),
-                    css_class='ml-2 mb-0'
+                    # HTML('''{% include "scxrd/file_upload.html" %}'''),
+                    HTML('''<a class="btn btn-primary mt-2" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
+                            Upload a cif file </a>'''),
+                    HTML('''{% include "scxrd/uploaded_files.html" %}'''),
+                    css_class='ml-2 mb-2'
                 ),
                 HTML('</div>'),  # end of card
                 css_class='form-row ml-0 mb-0'
             ),
-            self.card(_('Miscelanious')),
+            self.card(_('Miscellaneous'), self.backbutton),
             Row(
                 Column(HTML('''<div id="upload_here"></div>''')),
                 css_class='form-row ml-0 mb-0'
@@ -163,7 +167,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    Submit('cancel', 'Cancel', css_class='btn-danger'),
+                    HTML('''<a name="cancel" class="btn btn-warning" id="button-id-cancel" 
+                            href="{% url 'scxrd:index' %}"/>Cancel</a>'''),
                 ),
                 css_class='form-row ml-0 mb-0'
             ),
@@ -208,7 +213,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    Submit('cancel', 'Cancel', css_class='btn-danger'),
+                    Button('cancel', 'Cancel', css_class='btn btn-default'),
                 ),
                 css_class='form-row ml-0 mb-0'
             ),

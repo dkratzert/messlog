@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -25,6 +24,8 @@ TODO:
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
 - cif is deleted from experiment when saving again!!
+- Check for existing unit cell during cif upload.
+- upload cif without input throws exception.
 """
 
 
@@ -228,6 +229,7 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
+    '''
     def save(self, *args, **kwargs):
         """
         Saves all differences between the database items into the cif file.
@@ -253,7 +255,7 @@ class Experiment(models.Model):
             raise
         if p:
             print('Cif updated sucessfully!')"""
-        return True
+        return True'''
 
     def push_info_to_cif(self):
         """
@@ -370,4 +372,3 @@ class Experiment(models.Model):
         except Exception as e:
             pass
             print('Error in write_cif_item() -> set_pair:\n', e)
-
