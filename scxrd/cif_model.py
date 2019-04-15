@@ -1,5 +1,4 @@
 import os
-from gemmi import cif as gcif
 from pathlib import Path
 from typing import List
 
@@ -8,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from gemmi import cif as gcif
 
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
 from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell, REFINE_LS_HYDROGEN_TREATMENT
@@ -25,7 +25,8 @@ class CifFile(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, validators=[validate_cif_file_extension],
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
+                                        validators=[validate_cif_file_extension],
                                         verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
@@ -162,14 +163,14 @@ class CifFile(models.Model):
     #################################
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        super(CifFile, self).save(*args, **kwargs)
         try:
             cif_parsed = gcif.read_file(self.cif_file_on_disk.file.name)
             cif_block = cif_parsed.sole_block()
         except Exception as e:
             print(e)
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
-            #raise ValidationError('Unable to parse cif file:', e)
+            # raise ValidationError('Unable to parse cif file:', e)
             return False
         Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
@@ -206,7 +207,6 @@ class CifFile(models.Model):
             print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)
-
 
     def add_to_sumform(self, occ=None, atype=None):
         #  0     1   2 3 4   5  6  7   8       9

@@ -1,10 +1,13 @@
+from pprint import pprint
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
+from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
@@ -40,19 +43,19 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         form = CifForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             ciffile = form.save()
-            # self.model.cif.cif_file_on_disk = ciffile
+            self.model.cif.cif_file_on_disk = ciffile
             print('exp pk is:', self.kwargs['pk'])
             print('cif pk is:', ciffile.pk, ciffile.cif_file_on_disk.url)
-            #exp = Experiment.objects.get(pk=self.kwargs['pk'])
+            exp = Experiment.objects.get(pk=self.kwargs['pk'])
             #exp.cif_id = ciffile.pk
-            #state = exp.save(update_fields=['cif_id'])
-            #print('cif worked?', state)
+            state = exp.save(update_fields=['cif_id'])
+            print('cif worked?', state)
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
-                try:
-                    ciffile.delete()
-                except Exception:
-                    pass
+                #try:
+                #    ciffile.delete()
+                #except Exception as e:
+                #    print('can not delede file:', e)
             # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
             # data = {'is_valid': False}
@@ -61,7 +64,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         return super(CifUploadView, self).post(request, *args, **kwargs)
 
 
-'''
+
 class FormActionMixin(LoginRequiredMixin, FormMixin):
 
     def post(self, request, *args, **kwargs):
@@ -84,7 +87,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         else:
             print('else reached')
             return super().post(request, *args, **kwargs)
-'''
+
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):

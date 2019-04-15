@@ -229,7 +229,7 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-    '''
+
     def save(self, *args, **kwargs):
         """
         Saves all differences between the database items into the cif file.
@@ -255,7 +255,7 @@ class Experiment(models.Model):
             raise
         if p:
             print('Cif updated sucessfully!')"""
-        return True'''
+        return True
 
     def push_info_to_cif(self):
         """

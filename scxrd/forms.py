@@ -65,7 +65,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
         # Turn this off to see only mentioned form fields:
-        self.helper.render_unmentioned_fields = False
+        self.helper.render_unmentioned_fields = True
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
@@ -169,7 +169,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    HTML('''<a name="cancel" class="btn btn-warning" id="button-id-cancel" 
+                    #Button('cancel', 'Cancel', css_class='btn btn-default'),
+                    HTML('''<a name="cancel" class="btn btn-warning" id="button-id-cancel"
                             href="{% url 'scxrd:index' %}"/>Cancel</a>'''),
                 ),
                 css_class='form-row ml-0 mb-0'

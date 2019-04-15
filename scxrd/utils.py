@@ -214,6 +214,7 @@ def get_string(line: str):
     'P'
     """
     try:
+        line=line.decode('utf-8', errors='surrogatescape')
         # I do this, because gemmi returns strings with quotes:
         return line.strip("';")
     except AttributeError:
