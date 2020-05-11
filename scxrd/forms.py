@@ -8,8 +8,7 @@ from django.contrib.auth.models import User
 from django.db import OperationalError
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.cif_model import CifFile
-from scxrd.datafiles.sadabs_model import SadabsModel
+from scxrd.cif_model import CifFileModel
 from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
@@ -24,15 +23,9 @@ class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
 
 
-class SadabsForm(forms.ModelForm):
-    class Meta:
-        model = SadabsModel
-        fields = ('abs_file',)
-
-
 class CifForm(forms.ModelForm):
     class Meta:
-        model = CifFile
+        model = CifFileModel
         fields = ('cif_file_on_disk',)
 
 
@@ -140,8 +133,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.files_layout = Layout(
+            self.card(_('File upload')),
             Row(
-                self.card(_('File upload')),
                 Column(
                     # HTML('''{% include "scxrd/file_upload.html" %}'''),
                     HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
@@ -249,28 +242,3 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         model = Experiment
         fields = '__all__'
 
-
-'''class FinalizeCifForm(ExperimentFormMixin, forms.ModelForm):
-    """
-
-    """
-
-    def __init__(self, *args, **kwargs):
-        self.exp_title = 'Report'
-        super().__init__(*args, **kwargs)
-        self.helper.layout = Layout(
-            # Experiment ###
-            self.experiment_layout,
-            HTML('</div>'),  # end of card
-            # Crystal ######
-            self.crystal_layout,
-            HTML('</div>'),  # end of card
-            # Files ########
-            self.files_layout,
-            HTML('</div>'),  # end of card
-        )
-
-    class Meta:
-        model = Experiment
-        fields = '__all__'
-        '''

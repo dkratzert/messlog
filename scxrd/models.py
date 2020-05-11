@@ -10,7 +10,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.cif_model import CifFile
+from scxrd.cif_model import CifFileModel
 from scxrd.datafiles.sadabs_model import SadabsModel
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
@@ -19,8 +19,6 @@ TODO:
 
 - addd delete experiment
 - improve details page
-- upload all needed files from work dir (foo.abs, foo.raw, foo_0m._ls, foo.prp, foo.lst, foo.res, foo.cif) and 
-  have a button "generate report and final cif files"
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
 - cif is deleted from experiment when saving again!!
@@ -182,10 +180,8 @@ class Experiment(models.Model):
                              on_delete=models.DO_NOTHING)
     glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='+', blank=True, null=True,
                              on_delete=models.DO_NOTHING)
-    cif = models.OneToOneField(CifFile, null=True, blank=True, related_name="experiments",
+    cif = models.OneToOneField(CifFileModel, null=True, blank=True, related_name="experiments",
                                verbose_name='cif file', on_delete=models.CASCADE)
-    absfile = models.OneToOneField(SadabsModel, null=True, blank=True, related_name="experiments",
-                                   verbose_name='sadabs list file', on_delete=models.CASCADE)
     # equivalent to _exptl_crystal_size_max
     crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
     # equivalent to _exptl_crystal_size_mid
@@ -229,105 +225,6 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-
-    def save(self, *args, **kwargs):
-        """
-        Saves all differences between the database items into the cif file.
-
-        # TODO: for gemmi cif parser:
-          - It should detect if string should be written into ; ; quotes
-            _foo_bar_baz
-            ;
-            I am a multiline string
-            with some text.
-            ;
-          - strings with spaces should be quoted like 'I am a string'
-          - set_pair() should accept numbers
-        """
-        super().save()
-        """
-        try:
-            # disabled for now
-            p = True
-            p = self.push_info_to_cif()
-        except Exception as e:
-            print('Error during push_info_to_cif() ->', e)
-            raise
-        if p:
-            print('Cif updated sucessfully!')"""
-        return True
-
-    def push_info_to_cif(self):
-        """
-        Writes information from the database into the cif file
-        """
-        print('----- Pushing values -----')
-        try:
-            file = self.cif.cif_file_on_disk.path
-            print(file, '345#')
-            if not file:
-                return False
-        except AttributeError:
-            # There is no cif file for this Experiment:
-            print('No cif file...')
-            return False
-        try:
-            doc = gemmi.cif.read_file(file)
-        except RuntimeError:
-            print('unable to open file')
-            return False
-        # CifFile Model field names:
-        # names = [f.name for f in CifFile._meta.get_fields()]
-
-        # Data from Experiment:
-        data_items = (('_diffrn_measurement_specimen_support', 'base'),
-                      # there is no official item for sample glue!
-                      ('_exptl_crystal_size_max', 'crystal_size_x'),
-                      ('_exptl_crystal_size_mid', 'crystal_size_y'),
-                      ('_exptl_crystal_size_min', 'crystal_size_z'),
-                      ('_exptl_special_details', 'exptl_special_details'),
-                      # Data from cif
-                      # Todo: I should probably check if the data is already there?
-                      ('_exptl_absorpt_correction_T_min', 'cif.exptl_absorpt_correction_T_min'),
-                      ('_exptl_absorpt_correction_T_max', 'cif.exptl_absorpt_correction_T_max'),
-                      # ('', ''),
-                      # ('', ''),
-                      # ('', ''),
-                      )
-        self.get_data_items_for_cif(data_items, doc)
-        # Choices
-        self.write_cif_item(doc, '_exptl_crystal_colour', self.get_choice(COLOUR_CHOICES, 'crystal_colour'))
-        self.write_cif_item(doc, '_exptl_crystal_colour_mod', self.get_choice(COLOUR_MOD_CHOICES, 'crystal_colour_mod'))
-        self.write_cif_item(doc, '_exptl_crystal_colour_lustre',
-                            self.get_choice(COLOUR_LUSTRE_COICES, 'crystal_colour_lustre'))
-        # Data from Cif:
-        self.write_cif_item(doc, '_exptl_crystal_description',
-                            self.quote_string(getattr(self.cif, 'exptl_crystal_description')))
-        self.write_cif_item(doc, '_cell_measurement_temperature',
-                            self.quote_string(getattr(self.cif, 'cell_measurement_temperature')))
-        self.write_cif_item(doc, '_cell_measurement_reflns_used',
-                            str(getattr(self.cif, 'cell_measurement_reflns_used')))
-        self.write_cif_item(doc, '_cell_measurement_theta_min',
-                            self.quote_string(getattr(self.cif, 'cell_measurement_theta_min')))
-
-        try:
-            doc.write_file(file, style=cif.Style.Indent35)
-        except Exception as e:
-            print('Error during cif write:', e, '##set_cif_item')
-            return False
-        return True
-
-    def get_data_items_for_cif(self, data_items, doc):
-        for key, value in data_items:
-            try:
-                item = getattr(self, value)
-                Experiment.write_cif_item(doc, key, Experiment.quote_string(item))
-                print('written:', key, value, item)
-            except AttributeError as e:
-                print('### error in:', key, value)
-                print(e)
-                continue
-
     def get_choice(self, choices, attibute, na_0=True):
         """
         Get the choice value from a choices field.
@@ -365,10 +262,4 @@ class Experiment(models.Model):
         else:
             return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
 
-    @staticmethod
-    def write_cif_item(doc, key, value):
-        try:
-            doc.sole_block().set_pair(key, value)
-        except Exception as e:
-            pass
-            print('Error in write_cif_item() -> set_pair:\n', e)
+

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from scxrd.cif_model import Atom
-from scxrd.models import CifFile, Machine, Solvent, Experiment, WorkGroup
+from scxrd.models import CifFileModel, Machine, Solvent, Experiment, WorkGroup
 from scxrd.models import CrystalSupport, CrystalShape, CrystalGlue
 from scxrd.models import Person
 
@@ -48,7 +48,7 @@ class AtomsInline(admin.TabularInline):
 
 
 class CifAdmin(admin.ModelAdmin):
-    model = CifFile
+    model = CifFileModel
     list_display = ['edit_file', 'cif_file_on_disk', 'related_experiment', 'number_of_atoms']
 
     def edit_file(self, obj):
@@ -75,7 +75,7 @@ class CifAdmin(admin.ModelAdmin):
 
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
-admin.site.register(CifFile, CifAdmin)
+admin.site.register(CifFileModel, CifAdmin)
 admin.site.register(Person)
 admin.site.register(WorkGroup)
 admin.site.register(Machine)

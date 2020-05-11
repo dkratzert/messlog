@@ -52,29 +52,6 @@ def vol_unitcell(a: float, b: float, c: float, al: float, be: float, ga: float):
                             - cos(radians(al)) ** 2 - cos(radians(be)) ** 2 - cos(radians(ga)) ** 2)
 
 
-# A list of minimal item that should be defined in a final cif file:
-# Maybe as a dict where the value can be a method to perform actions to fill out the value e.g. for
-# _refine_ls_extinction_coef: find in res file if extinction was refined.
-minimal_cif_items = {'_chemical_formula_moiety': '',
-                     '_space_group_crystal_system': '',
-                     '_cell_measurement_reflns_used': '',
-                     '_cell_measurement_theta_min': '',
-                     '_cell_measurement_theta_max': '',
-                     '_exptl_crystal_description': '',
-                     '_exptl_crystal_colour': '',
-                     '_exptl_absorpt_correction_type': '',
-                     '_exptl_absorpt_correction_T_min': '',
-                     '_exptl_absorpt_correction_T_max': '',
-                     # the page should give a hint that SIZE in SHELXL can fill out some values:
-                     '_shelx_estimated_absorpt_T_min': '',
-                     '_exptl_absorpt_process_details': '',
-                     '_exptl_absorpt_special_details': '',
-                     '_diffrn_ambient_temperature': '',  # I could try to determine the temp if it is room or lower
-                     '_diffrn_source': '',
-                     '_refine_ls_extinction_coef': '',
-                     'x': '',
-                     'y': '',
-                     }
 
 COLOUR_CHOICES = (
     (0, 'not applicable'),
@@ -145,34 +122,6 @@ ABSOLUTE_CONFIGURATION_CHOICES = (
     ('.', 'Inapplicable'),
 )
 
-# _refine_ls_hydrogen_treatment
-REFINE_LS_HYDROGEN_TREATMENT = (
-    ('undef', "H-atom parameters not defined"),
-    ('mixed', "some constrained, some independent"),
-    ('constr', 'H-atom parameters constrained'),
-    ('noref', 'no refinement of H-atom parameters'),
-    ('refall', 'refined all H-atom parameters'),
-    ('refxyz', 'refined H-atom coordinates only'),
-    ('refU', "refined H-atom U's only"),
-    ('hetero', 'H-atom parameters constrained for H on C, all<wbr> H-atom parameters refined for H on heteroatoms'),
-    ('heteroxyz', "H-atom parameters constrained for H on C, refined H-atom coordinates only for H on heteroatoms"),
-    ('heteroU', "H-atom parameters constrained for H on C, refined H-atom U's only for H on heteroatoms"),
-    ('heteronoref', "H-atom parameters constrained for H on C, "
-                    "no refinement of H-atom parameters for H on heteroatoms"),
-    ('hetero-mixed',
-     "H-atom parameters constrained for H on C and some heteroatoms, "
-     "refined H-atom coordinates only for H on remaining heteroatoms"),
-    ('heteroxyz-mixed',
-     'H-atom parameters constrained for H on C and some heteroatoms, '
-     'refined H-atom coordinates only for H on remaining heteroatoms'),
-    ('heteroU-mixed',
-     "H-atom parameters constrained for H on C and some heteroatoms, "
-     "refined H-atom U's only for H on remaining heteroatoms"),
-    ('heteronoref-mixed',
-     "H-atom parameters constrained for H on C and some heteroatoms, "
-     "no refinement of H-atom parameters for H on remaining heteroatoms"),
-)
-
 
 def get_float(line: str) -> (int, None):
     try:
@@ -192,25 +141,25 @@ def get_int(line: str) -> (int, None):
         return None
 
 
-st = r''';
+st = b''';
 Olex2 1.2
 (compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)
 ;'''
 
 
-def get_string(line: str):
+def get_string(line: bytes):
     """
-    >>> get_string("';foo bar;'")
+    >>> get_string(b"';foo bar;'")
     'foo bar'
     >>> get_string(st)
     '\\nOlex2 1.2\\n(compiled 2018.04.26 svn.r3504 for OlexSys, GUI svn.r5492)\\n'
-    >>> get_string('.')
+    >>> get_string(b'.')
     '.'
-    >>> get_string('?')
+    >>> get_string(b'?')
     '?'
-    >>> get_string("'?'")
+    >>> get_string(b"'?'")
     '?'
-    >>> get_string('P').split()[0][:1]
+    >>> get_string(b'P').split()[0][:1]
     'P'
     """
     try:

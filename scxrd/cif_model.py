@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from gemmi import cif as gcif
 
 from scxrd.cif.atoms import sorted_atoms, format_sum_formula
-from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell, REFINE_LS_HYDROGEN_TREATMENT
+from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell
 from scxrd.utils import generate_sha256
 
 DEBUG = True
@@ -21,7 +21,7 @@ def validate_cif_file_extension(value):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
 
-class CifFile(models.Model):
+class CifFileModel(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     """
@@ -124,8 +124,7 @@ class CifFile(models.Model):
     atom_sites_solution_primary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_secondary = models.CharField(null=True, blank=True, max_length=2048)
     atom_sites_solution_hydrogens = models.CharField(null=True, blank=True, max_length=2048)
-    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=255,
-                                                    choices=REFINE_LS_HYDROGEN_TREATMENT)
+    refine_ls_hydrogen_treatment = models.CharField(null=True, blank=True, max_length=255)
     refine_ls_extinction_method = models.CharField(null=True, blank=True, max_length=2048)
     refine_ls_extinction_coef = models.FloatField(null=True, blank=True)
     refine_ls_extinction_expression = models.CharField(null=True, blank=True, max_length=2048)
@@ -163,7 +162,7 @@ class CifFile(models.Model):
     #################################
 
     def save(self, *args, **kwargs):
-        super(CifFile, self).save(*args, **kwargs)
+        super(CifFileModel, self).save(*args, **kwargs)
         try:
             cif_parsed = gcif.read_file(self.cif_file_on_disk.file.name)
             cif_block = cif_parsed.sole_block()
@@ -185,7 +184,7 @@ class CifFile(models.Model):
         if not self.date_created:
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
-        super(CifFile, self).save(*args, **kwargs)
+        super(CifFileModel, self).save(*args, **kwargs)
 
     def __str__(self):
         try:
@@ -603,7 +602,7 @@ class Atom(models.Model):
     """
     This table holds the atoms of a cif file.
     """
-    cif = models.ForeignKey(CifFile, null=True, blank=True, on_delete=models.CASCADE)
+    cif = models.ForeignKey(CifFileModel, null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=16)
     # Element as element symbol:
     element = models.CharField(max_length=2)

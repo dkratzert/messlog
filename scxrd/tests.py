@@ -15,7 +15,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from django.utils.six import BytesIO
 
-from scxrd.cif_model import CifFile
+from scxrd.cif_model import CifFileModel
 from scxrd.models import Experiment, Machine, Person, WorkGroup, Solvent, CrystalSupport, CrystalGlue, CrystalShape
 
 """
@@ -79,7 +79,7 @@ class ExperimentCreateTest(TestCase):
 
     def test_makeexp(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFile(cif_file_on_disk=file)
+        c = CifFileModel(cif_file_on_disk=file)
         c.save()
         ex = create_experiment(100, cif=c, save_related=True)
         ex.save()
@@ -135,14 +135,14 @@ class CifFileTest(TestCase):
 
     def test_saveCif(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFile(cif_file_on_disk=file)
+        c = CifFileModel(cif_file_on_disk=file)
         ex = create_experiment(99, cif=c, save_related=True)
         self.assertEqual(ex.customer.first_name, 'Hans')
         self.assertEqual(ex.customer.last_name, 'Meyerhof')
         self.assertEqual(ex.operator.username, 'foouser')
         self.assertEqual(ex.cif.data, None)
         ex.cif.save()
-        first_atom = CifFile.objects.first().atom_set.first()
+        first_atom = CifFileModel.objects.first().atom_set.first()
         self.assertEqual(0.63951, first_atom.x)
         # Test the calculated sum formula:
         self.assertEqual(
@@ -168,16 +168,16 @@ class CifFileTest(TestCase):
         ex.cif.delete()
 
     def test_read_cif_content_by_gemmi(self):
-        self.assertEqual(['_diffrn_reflns_number', '42245'], CifFile.get_cif_item('scxrd/testfiles/p21c.cif',
+        self.assertEqual(['_diffrn_reflns_number', '42245'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
                                                                                   '_diffrn_reflns_number'))
         # set new number
-        s = CifFile.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '22246'])
+        s = CifFileModel.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '22246'])
         self.assertEqual(s, True)
         # check
-        self.assertEqual(['_diffrn_reflns_number', '22246'], CifFile.get_cif_item('scxrd/testfiles/p21c.cif',
+        self.assertEqual(['_diffrn_reflns_number', '22246'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
                                                                                   '_diffrn_reflns_number'))
         # set back
-        s = CifFile.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '42245'])
+        s = CifFileModel.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '42245'])
         self.assertEqual(s, True)
 
 

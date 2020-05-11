@@ -11,9 +11,9 @@ from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
-from scxrd.cif_model import SumFormula, Atom
+from scxrd.cif_model import SumFormula, Atom, CifFileModel
 from scxrd.datafiles.sadabs_model import SadabsModel
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm, SadabsForm, CifForm
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, CifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
 
@@ -29,7 +29,6 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         exp_id = self.kwargs['pk']
         print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
-        context['absfile'] = exp.absfile
         context['ciffile'] = exp.cif
         context['experiment'] = exp
         context['pk'] = exp_id
@@ -129,74 +128,11 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         exp_id = self.kwargs['pk']
         print('#edit#', exp_id, '###')
         context['expid'] = exp_id
-        context['absfile'] = exp.absfile
         context['ciffile'] = exp.cif
         # This tries to preserve the cif id, but somewhere it gets deleted during save()
         state = exp.save(update_fields=["cif"])
         print('state:', state, cifid)
         return context
-
-
-'''
-class ReportView(LoginRequiredMixin, FormActionMixin, UpdateView):
-    """
-    Generate a report anf finalize the cif.
-
-    - Informationsfluss muss sein: Die Datenbank wird editiert und mit dem cif abgegelichen, d.h das Formular
-      von Experiment entscheidet was im cif steht. d.h. auch beim cif upload wird die Information die schon
-      im Experiment ist in das cif geschrieben! z.B. Kristallgröße
-    - Später kommt villeicht noch eine Abfrage bei Konflikten.
-    - Also brauche ich: für jedes item in Experiment.ciffile: schreibe value in cif.
-    - Übersetzungsfunktion von cifnahmen in Datenbankfeldnahmen. Also doch alle Felder in die Datenbank!
-
-    """
-    model = Experiment
-    form_class = FinalizeCifForm
-    template_name = 'scxrd/finalize_cif.html'
-    success_url = reverse_lazy('scxrd:index')
-
-    """
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        try:
-            exp_id = self.kwargs['pk']
-            cifpath = Experiment.objects.get(number=exp_id).cif.cif_file_on_disk.path
-            context['cifname'] = cifpath
-            context['cifdata'] = self.get_cif_data(cifpath)
-        except SumFormula.DoesNotExist as e:
-            print(e, '#!#')
-            pass
-        return context"""
-
-    def get_cif_data(self, cifpath):
-        print('get_cif_data():')
-        import gemmi
-        doc = gemmi.cif.read_file(cifpath)
-        # print(doc.sole_block().name, '#r#r')
-        # d = json.loads(doc.as_json())
-        # d = d[doc.sole_block().name]
-        tocheck = {}
-        print('minimal_cif_items: -----')
-        for x in minimal_cif_items:
-            item = doc.sole_block().find_pair(x)
-            print('item:', item)
-            if item and item[1] in ['?', '.', '']:
-                tocheck[x.lstrip('_')] = item[1]
-        print('tocheck:', tocheck)
-        # go through all items and check if they are in the minimal items list.
-        # This list should be configurable.
-        # Display a page where missing items could be resolved. e.g. by uploading more files or
-        # by typing informations in forms.
-        # for x in d:
-        #    print(x)
-        # d = doc.sole_block().find_pair('_cell_length_a')
-        # print(tocheck)
-        return tocheck
-
-    def _diffrn_ambient_temperature(self, value):
-        pass
-        # Do some stuff to return the appropriate form value
-'''
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
@@ -250,14 +186,14 @@ class DragAndDropUploadView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        context['absfiles'] = SadabsModel.objects.get(pk=exp_id)
+        context['absfiles'] = CifFileModel.objects.get(pk=exp_id)
         return context
 
     def post(self, request, *args, **kwargs):
-        form = SadabsForm(self.request.POST, self.request.FILES)
+        form = CifForm(self.request.POST, self.request.FILES)
         if form.is_valid():
-            absfile = form.save()
-            data = {'is_valid': True, 'name': absfile.abs_file.name, 'url': absfile.abs_file.url}
+            ciffile = form.save()
+            data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
             data = {'is_valid': False}
             # messages.warning(request, 'Please correct the error below.')
@@ -276,7 +212,6 @@ class FilesUploadedView(ListView):
         exp_id = self.kwargs['pk']
         print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
-        context['absfile'] = exp.absfile
         context['ciffile'] = exp.cif
         return context
 
@@ -328,9 +263,30 @@ class ExperimentListJson(BaseDatatableView):
     # The model we're going to show
     model = Experiment
     template_name = 'scxrd/experiment_table.html'
+    title = 'Experiments'
 
     # define the columns that will be returned
-    columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
+    #columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
+    column_defs = [
+        {
+            'name': 'id',
+            'visible': False,
+        }, {
+            'name': 'cif_id',
+        }, {
+            'name': 'number',
+        }, {
+            'name': 'experiment',
+        }, {
+            'name': 'measure_date',
+        }, {
+            'name': 'machine',
+        }, {
+            'name': 'operator',
+        }, {
+            'name': 'publishable',
+        }
+    ]
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
