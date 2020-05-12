@@ -16,7 +16,11 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-
+- decide which cif resuduals do I really need? 
+  wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
+- Measurement temperatue to experiment start page
+- Upload save two files?
+- Make upload work
 - addd delete experiment
 - improve details page
 - for charts: https://www.chartjs.org/docs/latest/
