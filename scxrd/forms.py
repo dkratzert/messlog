@@ -140,8 +140,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                     # HTML('''{% include "scxrd/file_upload.html" %}'''),
                     HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
                             Upload a cif file </a>'''),
-                    # HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    Button('cif', 'File uploaded: {{ ciffile }}', css_class='my-2', readonly=True),
+                    HTML('''{% include "scxrd/uploaded_files.html" %}'''),
+                    #Button('cif', 'File uploaded: {{ ciffile }}', css_class='my-2', readonly=True),
                     css_class='ml-2 mb-2'
                 ),
                 HTML('</div>'),  # end of card

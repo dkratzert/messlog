@@ -6,8 +6,7 @@
 #  Dr. Daniel Kratzert
 #  ----------------------------------------------------------------------------
 from pathlib import Path
-# noinspection PyUnresolvedReferences
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple
 
 import gemmi
 

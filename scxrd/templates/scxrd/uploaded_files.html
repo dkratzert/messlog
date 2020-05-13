@@ -4,20 +4,14 @@
     <table class="table table-sm table-condensed table-hover" id="files_table">
         {% if ciffile.exists %}
             <tr>
-                <td>CIF file</td>
+                <td>Current CIF:</td>
                 <td><a href="{{ ciffile.cif_file_on_disk.url }}"
                        type="text/plain">{{ ciffile.cif_file_on_disk.name }}</a></td>
             </tr>
         {% endif %}
-        {% if absfile.exists %}
+        {% if supplement.exists %}
             <tr>
-                <td>SADABS list file</td>
-                <td><a href="{{ absfile.abs_file.url }}" type="text/plain">{{ absfile.abs_file.name }}</a></td>
-            </tr>
-        {% endif %}
-        {% if saint_listfile.exists %}
-            <tr>
-                <td>SAINT list file</td>
+                <td>Additional document:</td>
                 <td><a href="{{ absfile.abs_file.url }}" type="text/plain">{{ absfile.abs_file.name }}</a></td>
             </tr>
         {% endif %}

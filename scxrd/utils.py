@@ -9,14 +9,14 @@ def generate_sha256(file: File):
     """
     Generates a sha256 chcksum from a FileField file handle.
     """
-    #f = file.open('rb')
+    # f = file.open('rb')
     myhash = hashlib.sha3_256()
     if file.multiple_chunks():
         for chunk in file.chunks(chunk_size=64 * 2 ** 10):
             myhash.update(chunk)
     else:
         myhash.update(file.read())
-    #file.close()
+    # file.close()
     return myhash.hexdigest()
 
 
@@ -50,7 +50,6 @@ def vol_unitcell(a: float, b: float, c: float, al: float, be: float, ga: float):
     """
     return a * b * c * sqrt(1 + 2 * cos(radians(al)) * cos(radians(be)) * cos(radians(ga))
                             - cos(radians(al)) ** 2 - cos(radians(be)) ** 2 - cos(radians(ga)) ** 2)
-
 
 
 COLOUR_CHOICES = (
@@ -123,7 +122,7 @@ ABSOLUTE_CONFIGURATION_CHOICES = (
 )
 
 
-def get_float(line: str) -> (int, None):
+def get_float(line: str) -> (float, None):
     try:
         return float(line.split('(')[0].split(' ')[0])
     except (ValueError, AttributeError):
@@ -163,7 +162,7 @@ def get_string(line: bytes):
     'P'
     """
     try:
-        line=line.decode('utf-8', errors='surrogatescape')
+        line = line.decode('utf-8', errors='surrogatescape')
         # I do this, because gemmi returns strings with quotes:
         return line.strip("';")
     except AttributeError:
@@ -203,7 +202,7 @@ def field_name_to_cif(cif_key):
         'space_group_centring_type': '_' + cif_key,
         'space_group_IT_number': ['_space_group_IT_number', '_symmetry_Int_Tables_number'],
         'space_group_crystal_system': '_' + cif_key,
-        #'space_group_symop_operation_xyz': ['_space_group_symop_operation_xyz', '_symmetry_equiv_pos_as_xyz'],
+        # 'space_group_symop_operation_xyz': ['_space_group_symop_operation_xyz', '_symmetry_equiv_pos_as_xyz'],
         'audit_creation_method': '_' + cif_key,
         'chemical_formula_sum': '_' + cif_key,
         'chemical_formula_weight': '_' + cif_key,
@@ -252,10 +251,10 @@ def field_name_to_cif(cif_key):
         'refine_diff_density_rms': '_' + cif_key,
         'diffrn_reflns_av_unetI_netI': '_diffrn_reflns_av_unetI/netI',
         'database_code_depnum_ccdc_archive': '_' + cif_key,
-        #'shelx_res_file': '_' + cif_key,
-        #'shelx_res_checksum': '_' + cif_key,
-        #'shelx_hkl_file': '_' + cif_key,
-        #'shelx_hkl_checksum': '_' + cif_key,
+        # 'shelx_res_file': '_' + cif_key,
+        # 'shelx_res_checksum': '_' + cif_key,
+        # 'shelx_hkl_file': '_' + cif_key,
+        # 'shelx_hkl_checksum': '_' + cif_key,
         'reflns_Friedel_fraction_full': '_' + cif_key,
         'reflns_Friedel_fraction_max': '_' + cif_key,
         'refine_ls_abs_structure_details': '_' + cif_key,

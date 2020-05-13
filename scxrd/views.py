@@ -20,11 +20,11 @@ from scxrd.models import Person
 class CifUploadView(LoginRequiredMixin, CreateView):
     model = Experiment
     form_class = CifForm
-    # success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
     template_name = 'scxrd/file_upload.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
+        self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
         exp_id = self.kwargs['pk']
         print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
@@ -46,8 +46,8 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             print('cif pk is:', ciffile.pk, ciffile.cif_file_on_disk.url)
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
             exp.cif = CifFileModel.objects.get(pk=ciffile.pk)
-            state = exp.save(update_fields=['cif'])
-            print('cif worked?', state)
+            exp.save(update_fields=['cif'])
+            print('cif worked?')
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
                 # try:
@@ -123,7 +123,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         cifid = exp.cif_id
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        print('#edit#', exp_id, '###')
+        #print('#edit#', exp_id, '###')
         context['expid'] = exp_id
         context['ciffile'] = exp.cif
         # This tries to preserve the cif id, but somewhere it gets deleted during save()
