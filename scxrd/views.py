@@ -45,14 +45,14 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             print('exp pk is:', self.kwargs['pk'])
             print('cif pk is:', ciffile.pk, ciffile.cif_file_on_disk.url)
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
-            #exp.cif_id = ciffile.pk
-            state = exp.save(update_fields=['cif_id'])
+            exp.cif = CifFileModel.objects.get(pk=ciffile.pk)
+            state = exp.save(update_fields=['cif'])
             print('cif worked?', state)
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
-                #try:
+                # try:
                 #    ciffile.delete()
-                #except Exception as e:
+                # except Exception as e:
                 #    print('can not delede file:', e)
             # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
@@ -60,7 +60,6 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             messages.warning(request, 'That cif file was invalid.')
         # return JsonResponse(data)  # for js upload
         return super(CifUploadView, self).post(request, *args, **kwargs)
-
 
 
 class FormActionMixin(LoginRequiredMixin, FormMixin):
@@ -85,7 +84,6 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         else:
             print('else reached')
             return super().post(request, *args, **kwargs)
-
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -236,8 +234,10 @@ class MoleculeView(LoginRequiredMixin, View):
             atoms = Atom.objects.all().filter(cif_id=cif_id)
         if atoms:
             grow = request.POST.get('grow')
-            if grow:
+            if grow == 'true':
                 # Grow atoms here
+                print('Grow to be implemented!')
+                # print(grow)
                 pass
             try:
                 m = MolFile(atoms)
@@ -265,7 +265,7 @@ class ExperimentListJson(BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    #columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
+    # columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
     column_defs = [
         {
             'name': 'id',

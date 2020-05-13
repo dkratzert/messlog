@@ -58,7 +58,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
         # Turn this off to see only mentioned form fields:
-        self.helper.render_unmentioned_fields = True
+        self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
@@ -110,11 +110,12 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row mt-0 mb-0 form-sm'
             ),
             Row(
+                Column(Field('crystal_colour', css_class='custom-select'),
+                       css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour_mod', css_class='custom-select'),
+                       css_class='form-group col-md-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'),
                        css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
-                                                                                         'col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
             Row(
@@ -139,7 +140,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                     # HTML('''{% include "scxrd/file_upload.html" %}'''),
                     HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
                             Upload a cif file </a>'''),
-                    #HTML('''{% include "scxrd/uploaded_files.html" %}'''),
+                    # HTML('''{% include "scxrd/uploaded_files.html" %}'''),
                     Button('cif', 'File uploaded: {{ ciffile }}', css_class='my-2', readonly=True),
                     css_class='ml-2 mb-2'
                 ),
@@ -162,7 +163,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 FormActions(
                     Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    #Button('cancel', 'Cancel', css_class='btn btn-default'),
+                    # Button('cancel', 'Cancel', css_class='btn btn-default'),
                     HTML('''<a name="cancel" class="btn btn-warning" id="button-id-cancel"
                             href="{% url 'scxrd:index' %}"/>Cancel</a>'''),
                 ),
@@ -241,4 +242,3 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
     class Meta:
         model = Experiment
         fields = '__all__'
-

@@ -172,12 +172,6 @@ class CifFileModel(models.Model):
             self.space_group_name_Hall = get_string(fw("_symmetry_space_group_name_Hall"))
         else:
             self.space_group_name_Hall = get_string(fw("_space_group_name_Hall"))
-        self.space_group_centring_type = get_string(fw("_space_group_centring_type"))
-        if not self.space_group_centring_type:
-            if fw("_space_group_name_H-M_alt"):
-                self.space_group_centring_type = get_string(fw("_space_group_name_H-M_alt")).split()[0][:1]
-            elif fw('_space_group_name_Hall'):
-                self.space_group_centring_type = get_string(fw("_space_group_name_Hall")).split()[0][:1]
         if fw('_symmetry_Int_Tables_number'):
             self.space_group_IT_number = get_int(fw("_symmetry_Int_Tables_number"))
         else:
