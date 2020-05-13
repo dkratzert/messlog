@@ -11,8 +11,7 @@ from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
-from scxrd.cif_model import SumFormula, Atom, CifFileModel
-from scxrd.datafiles.sadabs_model import SadabsModel
+from scxrd.cif_model import Atom, CifFileModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, CifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -152,12 +151,12 @@ class DetailsTable(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
+        """try:
             exp_id = self.kwargs['pk']
             context['sumform'] = SumFormula.objects.get(pk=exp_id)
         except SumFormula.DoesNotExist as e:
             print(e, '#-DetailsTable view #')
-            pass
+            pass"""
         return context
 
 

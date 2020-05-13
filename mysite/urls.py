@@ -25,10 +25,10 @@ from mysite import settings
 from mysite.mysite.views import HomePageView
 
 urlpatterns = [
+    path('', HomePageView.as_view(), name='index'),
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
     path('favicon.ico', favicon_view),
-    path('', HomePageView.as_view(), name='index'),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('options/', views.OptionsView.as_view(), name='options'),
     path('accounts/', include('django.contrib.auth.urls')),
