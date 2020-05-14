@@ -140,7 +140,7 @@ class CifFileModel(models.Model):
         self.data = cif.block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cif.cell
-        self.cell_formula_units_Z = cif["_cell_formula_units_Z"]
+        self.cell_formula_units_Z = cif["_cell_formula_units_Z"] if cif["_cell_formula_units_Z"] else 99
         self.space_group_name_H_M_alt = cif["_space_group_name_H-M_alt"]
         self.space_group_name_Hall = cif["_space_group_name_Hall"]
         self.space_group_IT_number = cif.spgr_number_from_symmops
@@ -151,7 +151,7 @@ class CifFileModel(models.Model):
         # self.shelx_hkl_file = cif['_shelx_hkl_file']
         # self.shelx_hkl_checksum = cif['_shelx_hkl_checksum']
         self.chemical_formula_sum = cif["_chemical_formula_sum"]
-        self.diffrn_radiation_wavelength = cif["_diffrn_radiation_wavelength"]
+        self.diffrn_radiation_wavelength = cif["_diffrn_radiation_wavelength"] if cif["_diffrn_radiation_wavelength"] else 0
         self.diffrn_radiation_type = cif["_diffrn_radiation_type"]
         self.diffrn_reflns_av_R_equivalents = get_float(cif["_diffrn_reflns_av_R_equivalents"])
         self.diffrn_reflns_theta_min = get_float(cif["_diffrn_reflns_theta_min"])

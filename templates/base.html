@@ -22,9 +22,11 @@
     <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/scxrd.js' %}"></script>
 {#    <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>#}
-    <script>/*TODO: get rid of this hack: */
+    <script>
     var table_url;
     var csrftoken;
+    var cif_id;  {# The id of the current sturcture #}
+    var grow_struct;
     </script>
     <title>
         {% block title %}Messlog Main Page{% endblock title %}

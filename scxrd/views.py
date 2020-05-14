@@ -123,7 +123,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         cifid = exp.cif_id
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        #print('#edit#', exp_id, '###')
+        # print('#edit#', exp_id, '###')
         context['expid'] = exp_id
         context['ciffile'] = exp.cif
         # This tries to preserve the cif id, but somewhere it gets deleted during save()
@@ -232,13 +232,18 @@ class MoleculeView(LoginRequiredMixin, View):
         cif_id = request.POST.get('cif_id')
         if cif_id:
             atoms = Atom.objects.all().filter(cif_id=cif_id)
+        print(cif_id, atoms, 'atoms')
         if atoms:
             grow = request.POST.get('grow')
+            print(request.POST)
+            print(grow, '#grow')
             if grow == 'true':
                 # Grow atoms here
                 print('Grow to be implemented!')
-                # print(grow)
+                print('growing:', grow)
                 pass
+            else:
+                print('growing not true:', grow)
             try:
                 m = MolFile(atoms)
                 molfile = m.make_mol()
@@ -268,7 +273,7 @@ class ExperimentListJson(BaseDatatableView):
     # columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
     column_defs = [
         {
-            'name': 'id',
+            'name'   : 'id',
             'visible': False,
         }, {
             'name': 'cif_id',
