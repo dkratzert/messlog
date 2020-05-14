@@ -13,19 +13,23 @@
 import time
 from math import sqrt, cos, radians, sin
 
-from searcher import database_handler
-from searcher.atoms import get_radius_from_element
-from shelxfile.dsrmath import Array, SymmetryElement, Matrix, frac_to_cart
+from scxrd.cif.tools.atoms import get_radius_from_element
+from scxrd.cif.tools.dsrmath import Array, SymmetryElement, frac_to_cart
 
 DEBUG = False
 
-class Atom():
+
+class SDMAtom():
     def __init__(self, name, element, x, z, y, part):
         self._dict = {'name': name, 'element': element, 'x': x, 'y': y, 'z': z,
+                      'xc': x, 'yc': y, 'zc': z,
                       'part': part, 'molindex': None}
 
     def __getitem__(self, key):
         return self._dict[key]
+
+    def __getattr__(self, item):
+        return self._dict[item]
 
     def __repr__(self):
         return "Atom: " + repr(self._dict)
@@ -33,8 +37,6 @@ class Atom():
     def __setitem__(self, key, val):
         self._dict[key] = val
 
-    def __iter__(self):
-        return iter(['name', 'element', 'x', 'y', 'z', 'part', 'molindex'])
 
 
 class SymmCards():
@@ -133,7 +135,8 @@ class SDM():
         """
         return Matrix([[self.cell[0], self.cell[1] * cos(self.cell[5]), self.cell[2] * cos(self.cell[4])],
                        [0, self.cell[1] * sin(self.cell[5]),
-                        (self.cell[2] * (cos(self.cell[3]) - cos(self.cell[4]) * cos(self.cell[5])) / sin(self.cell[5]))],
+                        (self.cell[2] * (cos(self.cell[3]) - cos(self.cell[4]) * cos(self.cell[5])) / sin(
+                            self.cell[5]))],
                        [0, 0, self.cell[6] / (self.cell[0] * self.cell[1] * sin(self.cell[5]))]])
 
     def calc_sdm(self) -> list:
@@ -175,14 +178,14 @@ class SDM():
                 if sdmItem.dist < dddd:
                     if hma:
                         sdmItem.covalent = True
-                        #self.bondlist.append((i, j, sdmItem.atom1[0], sdmItem.atom2[0], sdmItem.dist))
+                        # self.bondlist.append((i, j, sdmItem.atom1[0], sdmItem.atom2[0], sdmItem.dist))
                 else:
                     sdmItem.covalent = False
                 if hma:
                     self.sdm_list.append(sdmItem)
         t2 = time.perf_counter()
         self.sdmtime = t2 - t1
-        #if DEBUG:
+        # if DEBUG:
         print('Time for sdm:', round(self.sdmtime, 3), 's')
         self.sdm_list.sort()
         self.calc_molindex(self.atoms)
@@ -215,7 +218,7 @@ class SDM():
                     dk = self.vector_length(*dp)
                     dddd = sdmItem.dist + 0.2
                     # Idea for fast bon list:
-                    #self.bondlist.append((sdmItem.a1, sdmItem.a2, sdmItem.atom1[0] + '<',
+                    # self.bondlist.append((sdmItem.a1, sdmItem.a2, sdmItem.atom1[0] + '<',
                     #                      sdmItem.atom2[0] + '<', sdmItem.dist))
                     if sdmItem.atom1[1] in ['H', 'D'] and sdmItem.atom2[1] in ['H', 'D']:
                         dddd = 1.8
@@ -262,7 +265,6 @@ class SDM():
         Packs atoms of the asymmetric unit to real molecules.
         """
         showatoms = self.atoms[:]
-        new_atoms = []
         for symm in need_symm:
             s, h, k, l, symmgroup = symm
             h -= 5
@@ -274,8 +276,7 @@ class SDM():
                     coords = Array(atom[2:5]) * self.symmcards[s].matrix \
                              + Array(self.symmcards[s].trans) + Array([h, k, l])
                     # The new atom:
-                    new = [atom[0], atom[1]] + list(coords) + [atom[5], atom[6], atom[7], 'symmgen']
-                    new_atoms.append(new)
+                    new = [atom[0], atom[1]] + list(coords) + [atom[5]]
                     isthere = False
                     if new[5] >= 0:
                         for atom in showatoms:
@@ -296,7 +297,8 @@ class SDM():
         return cart_atoms
 
     def to_cartesian(self, at):
-        return list(at[:2]) + frac_to_cart([at[2], at[3], at[4]], self.cell[:6]) + list(at[5:])
+        x, y, z = frac_to_cart([at[2], at[3], at[4]], self.cell[:6])
+        return SDMAtom(name=at[0], element=at[1], x=x, y=y, z=z, part=at[5])
 
 
 if __name__ == "__main__":
@@ -308,15 +310,15 @@ if __name__ == "__main__":
         .replace("'", "").replace(" ", "").split("\n")]
     sdm = SDM(atoms, symmcards, cell)
     needsymm = sdm.calc_sdm()
-    #print(needsymm)
-    #sys.exit()
+    # print(needsymm)
+    # sys.exit()
     packed_atoms = sdm.packer(sdm, needsymm)
     # print(needsymm)
     # [[8, 5, 5, 5, 1], [16, 5, 5, 5, 1], [7, 4, 5, 5, 3]]
     # print(len(shx.atoms))
     # print(len(packed_atoms))
 
-    #for at in packed_atoms:
+    # for at in packed_atoms:
     #    print(at)
 
     print('Zeit für sdm:', round(sdm.sdmtime, 3), 's')

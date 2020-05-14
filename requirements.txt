@@ -2,8 +2,6 @@ Django
 django-bootstrap-datepicker-plus
 django-bootstrap-form
 django-datatables-view
-django-tables2
-easy-thumbnails
 Pillow
 pytz
 sqlparse
