@@ -33,6 +33,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,  // without serverside=true, the list is only 10 items long!
         select: true,
+        full_row_select: true,
         ajax: {
             url: table_url,
             type: "POST",

@@ -1,9 +1,11 @@
 from pprint import pprint
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
@@ -254,6 +256,7 @@ class MoleculeView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class ExperimentListJson(BaseDatatableView):
     """
     The view to show the datatabes table for the list of experiments.
@@ -272,20 +275,28 @@ class ExperimentListJson(BaseDatatableView):
         {
             'name'   : 'id',
             'visible': False,
+            'orderable': False,
         }, {
             'name': 'cif_id',
+            'orderable': True,
         }, {
             'name': 'number',
+            'orderable': True,
         }, {
             'name': 'experiment',
+            'orderable': True,
         }, {
             'name': 'measure_date',
+            'orderable': True,
         }, {
             'name': 'machine',
+            'orderable': True,
         }, {
             'name': 'operator',
+            'orderable': True,
         }, {
             'name': 'publishable',
+            'orderable': True,
         }
     ]
 
@@ -293,7 +304,7 @@ class ExperimentListJson(BaseDatatableView):
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
+    #order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
