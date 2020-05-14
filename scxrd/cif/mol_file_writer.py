@@ -5,7 +5,7 @@ import os
 
 from django.db.models import QuerySet
 
-from scxrd.cif.atoms import get_radius_from_element
+from scxrd.cif.tools.atoms import get_radius_from_element
 from scxrd.cif_model import Atom
 
 

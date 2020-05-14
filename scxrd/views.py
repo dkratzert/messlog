@@ -11,6 +11,7 @@ from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
+from scxrd.cif.sdm import SDM
 from scxrd.cif_model import Atom, CifFileModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, CifForm
 from scxrd.models import Experiment
@@ -232,13 +233,19 @@ class MoleculeView(LoginRequiredMixin, View):
         cif_id = request.POST.get('cif_id')
         if cif_id:
             atoms = Atom.objects.all().filter(cif_id=cif_id)
-        print(cif_id, len(atoms), ':atoms', 'grow:', request.POST.get('grow'))
         if atoms:
             grow = request.POST.get('grow')
             if grow == 'true':
                 # Grow atoms here
-                print('Grow to be implemented!')
-                pass
+                print('growing atoms')
+                # TODO: Make this clean with atom objects and use x, y, z, xc, yc, zc:
+                cif = CifFileModel.objects.get(pk=cif_id)
+                cell = [cif.cell_length_a, cif.cell_length_b, cif.cell_length_c, cif.cell_angle_alpha,
+                        cif.cell_angle_beta, cif.cell_angle_gamma]
+                atoms = [[at.name, at.element, at.x, at.y, at.z, at.part] for at in atoms]
+                sdm = SDM(atoms, cif.space_group_symop_operation_xyz, cell)
+                needsymm = sdm.calc_sdm()
+                atoms = sdm.packer(sdm, needsymm)
             else:
                 print('growing is false:', grow)
             try:
