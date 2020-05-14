@@ -129,26 +129,12 @@ $(document).ready(function () {
         //console.log(tdata);
         var tab_url = 'table/' + tdata[0];
         cif_id = tdata[1];
-
         // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
             //console.log(result);
             document.getElementById("ttable").innerHTML = result;
         });
-        console.log('post table');
-        console.log(cif_id);
-        var growcheck = $('growStruct').is(':checked')
-        console.log('togrow:', growcheck)
-        $.post(
-            url = 'molecule/',
-            data = {
-                cif_id: tdata[1],
-                grow: growcheck,
-                'csrfmiddlewaretoken': csrftoken
-            },
-            function (result) {
-                display_molecule(result);
-            });
+        get_mol_and_display();
         //row0.removeClass('selected');
     });
 
@@ -158,6 +144,19 @@ $(document).ready(function () {
         row.click();
     });
 
+    function get_mol_and_display() {
+        $.post(
+            url = 'molecule/',
+            data = {
+                cif_id: cif_id,
+                grow: grow_struct,
+                'csrfmiddlewaretoken': csrftoken
+            },
+            function (result) {
+                display_molecule(result);
+            });
+    }
+
     function display_molecule(molfile) {
         Jmol._document = null;
         delete Jmol._tracker;
@@ -165,7 +164,6 @@ $(document).ready(function () {
         var jsmolcol = $("#molcard");
         jsmolcol.html(jmol._code);
         jmol.__loadModel(molfile);
-
         //jsmolcol.removeClass('invisible');
     }
 
@@ -175,33 +173,9 @@ $(document).ready(function () {
 
     $('#growStruct').click(function(){
         var jsmolcol = $("#molcard");
-        console.log('post grow');
-        console.log(cif_id, this.checked);
-        if (this.checked) {
-            // Get molecule data and display the grown molecule:
-            $.post(
-                url = 'molecule/',
-                data = {
-                    cif_id: cif_id,
-                    grow: true,
-                    'csrfmiddlewaretoken': csrftoken
-                   },
-                function (result) {
-                    display_molecule(result);
-            });
-        } else {
-            // Get molecule data and display the fused molecule:
-            $.post(
-                url = 'molecule/',
-                data = {
-                    cif_id: cif_id,
-                    grow: false,
-                    'csrfmiddlewaretoken': csrftoken
-                },
-                function (result) {
-                    display_molecule(result);
-            });
-        }
+        grow_struct = !!this.checked;
+        // Get molecule data and display the molecule:
+        get_mol_and_display();
     });
 
 

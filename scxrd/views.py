@@ -232,18 +232,15 @@ class MoleculeView(LoginRequiredMixin, View):
         cif_id = request.POST.get('cif_id')
         if cif_id:
             atoms = Atom.objects.all().filter(cif_id=cif_id)
-        print(cif_id, atoms, 'atoms')
+        print(cif_id, len(atoms), ':atoms', 'grow:', request.POST.get('grow'))
         if atoms:
             grow = request.POST.get('grow')
-            print(request.POST)
-            print(grow, '#grow')
             if grow == 'true':
                 # Grow atoms here
                 print('Grow to be implemented!')
-                print('growing:', grow)
                 pass
             else:
-                print('growing not true:', grow)
+                print('growing is false:', grow)
             try:
                 m = MolFile(atoms)
                 molfile = m.make_mol()
