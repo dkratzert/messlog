@@ -6,7 +6,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
 import scxrd.cif_model
-import scxrd.datafiles.sadabs_model
 import scxrd.models
 
 
@@ -191,17 +190,6 @@ class Migration(migrations.Migration):
                 ('email_adress', models.EmailField(blank=True, max_length=250, validators=[scxrd.models.validate_email])),
                 ('phone_number', models.CharField(blank=True, max_length=17)),
                 ('comment', models.TextField(blank=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='SadabsModel',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('abs_file', models.FileField(blank=True, null=True, upload_to='abs', validators=[scxrd.datafiles.sadabs_model.validate_abs_file_extension], verbose_name='abs file')),
-                ('sha256', models.CharField(blank=True, max_length=256, null=True)),
-                ('date_created', models.DateTimeField(blank=True, null=True, verbose_name='upload date')),
-                ('date_updated', models.DateTimeField(blank=True, null=True, verbose_name='change date')),
-                ('filesize', models.PositiveIntegerField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
