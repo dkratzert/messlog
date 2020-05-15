@@ -73,26 +73,27 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
             self.card(self.exp_title, self.backbutton),
             Row(
-                Column('experiment', css_class='form-group col-md-4'),
-                Column('number', css_class='form-group col-md-4'),
-                css_class='form-row mt-0 mb-0'
+                Column('experiment', css_class='col-4'),
+                Column('number', css_class='col-4'),
+                Column('measurement_temp', css_class='col-4'),
+                css_class='mt-0 mb-0'
             ),
             Row(
-                Column(Field('machine', css_class='custom-select'), css_class='form-group col-md-4'),
-                Column(Field('operator', css_class='custom-select'), css_class='form-group col-md-4'),
-                Column(Field('customer', css_class='custom-select'), css_class='form-group col-md-4'),
-                css_class='form-row mt-0 mb-0'
+                Column(Field('machine'), css_class='col-4'),
+                Column(Field('operator'), css_class='col-4'),
+                Column(Field('customer'), css_class='col-4'),
+                css_class='mt-0 mb-0'
             ),
             Row(
-                Column(Field('base', css_class='custom-select'), css_class='col-md-4'),
-                Column(Field('glue', css_class='custom-select'), css_class='col-md-4'),
-                Column('measure_date', css_class='form-group col-md-4'),
-                css_class='form-row mt-0 mb-0'
+                Column(Field('base'), css_class='col-4'),
+                Column(Field('glue'), css_class='col-4'),
+                Column(Field('measure_date'), css_class='col-4'),
+                css_class='mt-0 mb-0'
             ),
             Row(
-                Column(Field('crystal_size_x', css_class='custom'), css_class='col-md-4'),
-                Column(Field('crystal_size_y'), css_class='col-md-4'),
-                Column(Field('crystal_size_z'), css_class='col-md-4'),
+                Column(Field('crystal_size_x'), css_class='col-4'),
+                Column(Field('crystal_size_y'), css_class='col-4'),
+                Column(Field('crystal_size_z'), css_class='col-4'),
                 css_class='form-row mt-0 mb-0'
             ),
         )
@@ -105,9 +106,9 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row form-sm'
             ),
             Row(
-                Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-md-4'),
-                Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-md-4'),
-                Column(Field('crystal_habit'), css_class='form-group col-md-4'),
+                Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-4'),
+                Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-4'),
+                Column(Field('crystal_habit'), css_class='form-group col-4'),
                 css_class='form-row form-sm'
             ),
             Row(
@@ -120,8 +121,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('submit_date', css_class='form-group col-md-4'),
-                Column('result_date', css_class='form-group col-md-4'),
+                Column('submit_date', css_class='form-group col-4'),
+                Column('result_date', css_class='form-group col-4'),
                 css_class='form-row'
             ),
             # Row(
@@ -155,18 +156,18 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row ml-0 mb-0'
             ),
             Row(
-                Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2 mt-0'),
+                Column(CustomCheckbox('publishable'), css_class='form-group col-4 ml-2 mt-0'),
                 css_class='form-row ml-0 mb-0'
             ),
         )
 
         self.crystal_colour_layout = Layout(
             Row(
-                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
-                                                                                         'col-md-4 mb-0 mt-0'),
+                                                                                         'col-4 mb-0 mt-0'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'),
-                       css_class='form-group col-md-4 mb-0 mt-0'),
+                       css_class='form-group col-4 mb-0 mt-0'),
                 css_class='form-row'
             ),
         )

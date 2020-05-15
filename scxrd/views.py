@@ -176,7 +176,7 @@ class DeleteView(LoginRequiredMixin, CreateView):
 
 class DragAndDropUploadView(DetailView):
     model = Experiment
-    template_name = 'scxrd/drag_drop_upload.html'
+    template_name = 'scxrd/unused/drag_drop_upload.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -7,13 +7,14 @@
     <div class="row justify-content-center">
 
         <!-- Left column with experiment table --------- -->
-        <div class="col-sm-8 col-md-8 col-lg-7 ml-0">
+        <div class="col-8">
             <div class="card mb-3">
-                <div class="card-header">Experiments List
-                    <a role="button" class="btn btn-outline-primary btn-sm float-right my-0 py-1" href="{% url 'scxrd:new' %}">New Experiment</a>
+                <div class="card-header pb-2 pl-3">Experiments List
+                    <a role="button" class="btn btn-outline-primary btn-sm float-right p-1"
+                       href="{% url 'scxrd:new' %}">New Experiment</a>
                 </div>
                 <div class="card-body p-0">
-                    <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-0">
+                    <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
                         {% include 'scxrd/experiment_table.html' %}
                         <table id="exptable" class="table table-sm table-condensed table-hover"></table>
                     </div>
@@ -30,10 +31,10 @@
         </div>
 
         <!-- Right column with details ---------------   -->
-        <div class="col-sm-4 col-md-3 col-lg-3 mr-0">
+        <div class="col-4">
             <div class="row">
                 {% comment %}<a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a> {% endcomment %}
-                <div class="card mt-0 w-100 p-0">
+                <div class="card w-100 mr-2">
                     <div class="card-header">Structure View</div>
                     <div class="card-body p-0 pb-1 pr-0">
                         <div id="molcard" class="card border-0">
@@ -49,13 +50,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="card mt-3 w-100">
+                <div class="card mt-3 w-100 mr-2">
                     <div class="card-header">Details</div>
                     <div class="card-body pt-1 pl-3 pr-1 pb-2">
                         <!-- insert details_table.html -->
                         <div id="ttable"></div>
                     </div>
                 </div>
+                <br>
             </div>
         </div>
     </div>

@@ -5,14 +5,12 @@ from typing import List
 import gemmi
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from gemmi import cif as gcif
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.utils import frac_to_cart, get_float, get_int, get_string, vol_unitcell
 from scxrd.utils import generate_sha256
+from scxrd.utils import get_float
 
 DEBUG = True
 
@@ -151,7 +149,8 @@ class CifFileModel(models.Model):
         # self.shelx_hkl_file = cif['_shelx_hkl_file']
         # self.shelx_hkl_checksum = cif['_shelx_hkl_checksum']
         self.chemical_formula_sum = cif["_chemical_formula_sum"]
-        self.diffrn_radiation_wavelength = cif["_diffrn_radiation_wavelength"] if cif["_diffrn_radiation_wavelength"] else 0
+        self.diffrn_radiation_wavelength = cif["_diffrn_radiation_wavelength"] if cif[
+            "_diffrn_radiation_wavelength"] else 0
         self.diffrn_radiation_type = cif["_diffrn_radiation_type"]
         self.diffrn_reflns_av_R_equivalents = get_float(cif["_diffrn_reflns_av_R_equivalents"])
         self.diffrn_reflns_theta_min = get_float(cif["_diffrn_reflns_theta_min"])

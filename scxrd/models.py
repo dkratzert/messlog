@@ -18,6 +18,7 @@ TODO:
 - decide which cif resuduals do I really need? 
   wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
 - Add pdf/word upload for reaction conditions
+- check checksum for correctness
 - Measurement temperatue to experiment start page
 - Upload save two files?
 - Make upload work
@@ -174,6 +175,7 @@ class Experiment(models.Model):
     crystal_size_y = models.FloatField(verbose_name='crystal size mid', null=True, blank=True)
     # equivalent to _exptl_crystal_size_min
     crystal_size_z = models.FloatField(verbose_name='crystal size min', null=True, blank=True)
+    measurement_temp = models.FloatField(verbose_name='measurement temperature [K]', null=True, blank=True)
     # equivalent to _exptl_crystal_colour
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])
     # equivalent to _exptl_crystal_colour_modifier
