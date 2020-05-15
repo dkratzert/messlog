@@ -270,6 +270,7 @@ class ExperimentListJson(BaseDatatableView):
 
     https://datatables.net/
     https://bitbucket.org/pigletto/django-datatables-view-example/
+    This implementation is also promising: https://github.com/pivotal-energy-solutions/django-datatable-view
     """
     # The model we're going to show
     model = Experiment

@@ -173,12 +173,8 @@ class Experiment(models.Model):
                                 related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, verbose_name="assumed sum formula", blank=True)
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='first unit cell')
-    solvent1 = models.ForeignKey(Solvent, verbose_name='solvent 1', null=True, blank=True,
-                                 related_name='experiment1', on_delete=models.CASCADE, default='')
-    solvent2 = models.ForeignKey(Solvent, verbose_name='solvent 2', null=True, blank=True,
-                                 related_name='experiment2', on_delete=models.CASCADE, default='')
-    solvent3 = models.ForeignKey(Solvent, verbose_name='solvents 3', null=True, blank=True,
-                                 related_name='experiment3', on_delete=models.CASCADE, default='')
+    solvents = models.CharField(verbose_name='solvents used', null=True, blank=True, max_length=256)
+    conditions = models.CharField(verbose_name='reaction conditions', null=True, blank=True, max_length=1024)
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='results sent date', blank=True, null=True)

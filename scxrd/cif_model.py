@@ -101,7 +101,7 @@ class CifFileModel(models.Model):
         try:
             return os.path.basename(self.cif_file_on_disk.url)
         except ValueError:
-            return 'no file'
+            return '# no file found #'
         # data is the cif _data value
         # return self.data
 

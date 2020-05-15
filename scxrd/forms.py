@@ -30,8 +30,6 @@ class CifForm(forms.ModelForm):
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):
-    # solvents_used = forms.ModelMultipleChoiceField(queryset=Solvent.objects.all(),
-    #                                               widget=forms.CheckboxSelectMultiple)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                   label=_("Sample submission date"))
@@ -72,26 +70,26 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
             self.card(self.exp_title, self.backbutton),
             Row(
-                Column('experiment', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column('number', css_class='form-group col-md-4 mb-0 mt-0'),
+                Column('experiment', css_class='form-group col-md-4'),
+                Column('number', css_class='form-group col-md-4'),
                 css_class='form-row'
             ),
             Row(
-                Column(Field('machine', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('operator', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('customer', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('machine', css_class='custom-select'), css_class='form-group col-md-4'),
+                Column(Field('operator', css_class='custom-select'), css_class='form-group col-md-4'),
+                Column(Field('customer', css_class='custom-select'), css_class='form-group col-md-4'),
                 css_class='form-row'
             ),
             Row(
-                Column(Field('base', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
-                Column(Field('glue', css_class='custom-select'), css_class='col-md-4 mb-0 mt-0'),
-                Column('measure_date', css_class='form-group col-md-4 mb-0 mt-0'),
+                Column(Field('base', css_class='custom-select'), css_class='col-md-4'),
+                Column(Field('glue', css_class='custom-select'), css_class='col-md-4'),
+                Column('measure_date', css_class='form-group col-md-4'),
                 css_class='form-row'
             ),
             Row(
-                Column(Field('crystal_size_x', css_class='custom'), css_class='col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_size_y'), css_class='col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_size_z'), css_class='col-md-4 mb-0 mt-0'),
+                Column(Field('crystal_size_x', css_class='custom'), css_class='col-md-4'),
+                Column(Field('crystal_size_y'), css_class='col-md-4'),
+                Column(Field('crystal_size_z'), css_class='col-md-4'),
                 css_class='form-row'
             ),
         )
@@ -100,28 +98,27 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             self.card('Crystal and Results', self.backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
-                Column('sum_formula', css_class='col-12 mb-0'),
-                css_class='form-row ml-0 mb-0'
+                Column(Field('sum_formula', css_class='col-12'), css_class='form-group col-md-12'),
+                css_class='form-row form-sm'
             ),
             Row(
-                Column(Field('solvent1', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('solvent2', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('solvent3', css_class='custom-select'), css_class='form-group col-md-4 mb-0 mt-0'),
-                css_class='form-row mt-0 mb-0 form-sm'
+                Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-md-4'),
+                Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-md-4'),
+                Column(Field('crystal_habit'), css_class='form-group col-md-4'),
+                css_class='form-row form-sm'
             ),
             Row(
                 Column(Field('crystal_colour', css_class='custom-select'),
-                       css_class='form-group col-md-4 mb-0 mt-0'),
+                       css_class='form-group'),
                 Column(Field('crystal_colour_mod', css_class='custom-select'),
-                       css_class='form-group col-md-4 mb-0 mt-0'),
+                       css_class='form-group'),
                 Column(Field('crystal_colour_lustre', css_class='custom-select'),
-                       css_class='form-group col-md-4 mb-0 mt-0'),
+                       css_class='form-group'),
                 css_class='form-row'
             ),
             Row(
-                Column('submit_date', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column('result_date', css_class='form-group col-md-4 mb-0 mt-0'),
-                Column(Field('crystal_habit'), css_class='form-group col-md-4 mb-0 mt-0'),
+                Column('submit_date', css_class='form-group col-md-4'),
+                Column('result_date', css_class='form-group col-md-4'),
                 css_class='form-row'
             ),
             # Row(
@@ -137,15 +134,13 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             self.card(_('File upload')),
             Row(
                 Column(
-                    # HTML('''{% include "scxrd/file_upload.html" %}'''),
-                    HTML('''<a class="btn btn-primary" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
-                            Upload a cif file </a>'''),
                     HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    #Button('cif', 'File uploaded: {{ ciffile }}', css_class='my-2', readonly=True),
-                    css_class='ml-2 mb-2'
+                    HTML('''<a class="btn btn-secondary btn-small" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
+                            Upload a cif file </a>'''),
+                    css_class='ml-2 mb-3 form-sm'
                 ),
                 HTML('</div>'),  # end of card
-                css_class='form-row ml-0 mb-0'
+                css_class='form-row mt-3 form-sm'
             ),
             self.card(_('Miscellaneous'), self.backbutton),
             Row(
