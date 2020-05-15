@@ -23,7 +23,7 @@ from scxrd.models import Person
 class CifUploadView(LoginRequiredMixin, CreateView):
     model = Experiment
     form_class = CifForm
-    template_name = 'scxrd/file_upload.html'
+    template_name = 'scxrd/cif_file_upload.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,6 +1,8 @@
-{% extends 'base.html' %}
+
+{% extends 'base.html' %}  
 
 {% load static %}
+
 
 {% block content %}
     <div class="col-md-6">
@@ -19,7 +21,7 @@
                 </div>
                 <div class="custom-file">
                     <!-- name attribute is essential here: -->
-                    <input type="file" class="custom-file-input" id="id_cif_file_on_disk"
+                    <input type="file" class="custom-file-input form-control-file" id="id_cif_file_on_disk"
                            name="cif_file_on_disk"
                            aria-describedby="inputGroupFileAddon01">
                     <label class="custom-file-label" for="id_cif_file_on_disk">Choose file</label>

@@ -24,6 +24,7 @@ class CustomCheckbox(Field):
 
 
 class CifForm(forms.ModelForm):
+    cif_file_on_disk = forms.FileField(required=True)
     class Meta:
         model = CifFileModel
         fields = ('cif_file_on_disk',)
@@ -135,6 +136,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(
                     HTML('''{% include "scxrd/uploaded_files.html" %}'''),
+                    #HTML('''{% include "scxrd/cif_file_upload.html" %}'''),
                     HTML('''<a class="btn btn-secondary btn-small" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
                             Upload a cif file </a>'''),
                     css_class='ml-2 mb-3 form-sm'
