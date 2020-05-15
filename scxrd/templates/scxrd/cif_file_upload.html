@@ -1,53 +1,54 @@
-
-{% extends 'base.html' %}  
+{% extends 'base.html' %}
 
 {% load static %}
 
 
 {% block content %}
-    <div class="col-md-6">
-        {% if experiment.cif %}
-            <p>File uploaded: <a href="{{ experiment.cif.cif_file_on_disk.url }}">{{ experiment.cif }}</a></p>
-        {% else %}
-            <p>File uploaded: &nbsp; None </p>
-        {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-7 col-sm-6">
+            {% if experiment.cif %}
+                <p>File uploaded: <a href="{{ experiment.cif.cif_file_on_disk.url }}">{{ experiment.cif }}</a></p>
+            {% else %}
+                <p>File uploaded: &nbsp; None </p>
+            {% endif %}
 
-        <form method="post" enctype="multipart/form-data" action="" id="ciffile_form" novalidate>
-            {% csrf_token %}
-            <div class="input-group">
-                <div class="input-group-prepend">
+            <form method="post" enctype="multipart/form-data" action="" id="ciffile_form" novalidate>
+                {% csrf_token %}
+                <div class="input-group">
+                    <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupFileAddon01">
-                        CIF file for experiment &nbsp; <i> {{ experiment }}</i></span>
+                        CIF file for '{{ experiment }}':</span>
+                    </div>
+                    <div class="custom-file">
+                        <!-- name attribute is essential here: -->
+                        <input type="file" class="custom-file-input" id="id_cif_file_on_disk"
+                               name="cif_file_on_disk"
+                               aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="id_cif_file_on_disk">Choose file</label>
+                    </div>
                 </div>
-                <div class="custom-file">
-                    <!-- name attribute is essential here: -->
-                    <input type="file" class="custom-file-input form-control-file" id="id_cif_file_on_disk"
-                           name="cif_file_on_disk"
-                           aria-describedby="inputGroupFileAddon01">
-                    <label class="custom-file-label" for="id_cif_file_on_disk">Choose file</label>
-                </div>
-            </div>
-            <input type="submit" value="Upload" class="btn btn-md btn-primary mt-3" name="_save">
-        </form>
-        <script>
-            // Add the following code if you want the name of the file appear on select
-            $(".custom-file-input").on("change", function () {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-            });
-        </script>
-        <br>
+                <input type="submit" value="Upload" class="btn btn-md btn-primary mt-3" name="_save">
+            </form>
+            <script>
+                // Add the following code if you want the name of the file appear on select
+                $(".custom-file-input").on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                });
+            </script>
+            <br>
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="warning {{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <br>
-        <a class="btn btn-sm btn-outline-secondary" href="{% url "scxrd:edit" pk=experiment.pk %}">
-            Back to experiment {{ experiment }}</a>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="warning {{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <br>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url "scxrd:edit" pk=experiment.pk %}">
+                Back to experiment {{ experiment }}</a>
 
+        </div>
     </div>
 {% endblock %}
