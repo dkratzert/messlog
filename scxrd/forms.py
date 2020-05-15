@@ -1,11 +1,12 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, Button
+from crispy_forms.layout import Field, HTML, Button, ButtonHolder
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
+from django.forms import HiddenInput
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFileModel
@@ -25,6 +26,7 @@ class CustomCheckbox(Field):
 
 class CifForm(forms.ModelForm):
     cif_file_on_disk = forms.FileField(required=True)
+
     class Meta:
         model = CifFileModel
         fields = ('cif_file_on_disk',)
@@ -73,25 +75,25 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column('experiment', css_class='form-group col-md-4'),
                 Column('number', css_class='form-group col-md-4'),
-                css_class='form-row'
+                css_class='form-row mt-0 mb-0'
             ),
             Row(
                 Column(Field('machine', css_class='custom-select'), css_class='form-group col-md-4'),
                 Column(Field('operator', css_class='custom-select'), css_class='form-group col-md-4'),
                 Column(Field('customer', css_class='custom-select'), css_class='form-group col-md-4'),
-                css_class='form-row'
+                css_class='form-row mt-0 mb-0'
             ),
             Row(
                 Column(Field('base', css_class='custom-select'), css_class='col-md-4'),
                 Column(Field('glue', css_class='custom-select'), css_class='col-md-4'),
                 Column('measure_date', css_class='form-group col-md-4'),
-                css_class='form-row'
+                css_class='form-row mt-0 mb-0'
             ),
             Row(
                 Column(Field('crystal_size_x', css_class='custom'), css_class='col-md-4'),
                 Column(Field('crystal_size_y'), css_class='col-md-4'),
                 Column(Field('crystal_size_z'), css_class='col-md-4'),
-                css_class='form-row'
+                css_class='form-row mt-0 mb-0'
             ),
         )
 
@@ -136,9 +138,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(
                     HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    #HTML('''{% include "scxrd/cif_file_upload.html" %}'''),
                     HTML('''<a class="btn btn-secondary btn-small" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
-                            Upload a cif file </a>'''),
+                            Upload a CIF</a>'''),
                     css_class='ml-2 mb-3 form-sm'
                 ),
                 HTML('</div>'),  # end of card
@@ -157,16 +158,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 Column(CustomCheckbox('publishable'), css_class='form-group col-md-4 ml-2 mt-0'),
                 css_class='form-row ml-0 mb-0'
             ),
-            Row(
-                FormActions(
-                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    # Button('cancel', 'Cancel', css_class='btn btn-default'),
-                    HTML('''<a name="cancel" class="btn btn-warning" id="button-id-cancel"
-                            href="{% url 'scxrd:index' %}"/>Cancel</a>'''),
-                ),
-                css_class='form-row ml-0 mb-0'
-            ),
-
         )
 
         self.crystal_colour_layout = Layout(
@@ -206,8 +197,8 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             ),
             Row(
                 FormActions(
-                    Submit('submit', 'Save', css_class='btn-primary mr-2'),
-                    Button('cancel', 'Cancel', css_class='btn btn-default'),
+                    Submit('submit', 'Save', css_class='btn-primary mr-2 ml-2'),
+                    Submit('cancel', 'Cancel', css_class='btn btn-danger', formnovalidate='formnovalidate'),
                 ),
                 css_class='form-row ml-0 mb-0'
             ),
@@ -234,6 +225,14 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             # Files ########
             self.files_layout,
             HTML('</div>'),  # end of card
+            ButtonHolder(
+                Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
+                # This cancel button works in combination with the FormActionMixin in views.py
+                # the view is redirected to the index page if the request contains 'cancel'
+                Submit('cancel', 'Cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
+                HTML('<br>'),
+                HTML('<br>'),
+            ),
         )
 
     class Meta:

@@ -114,20 +114,6 @@ class Machine(models.Model):
         return self.diffrn_measurement_device_type
 
 
-class Solvent(models.Model):
-    """
-    A solvent to be used in the reaction or for crystallisation.
-    """
-    fixtures = ['solvents.json']
-    name = models.CharField(verbose_name="solvents name", max_length=200, unique=True)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
-
 class CrystalSupport(models.Model):
     """
     The support where the crystal was mounted on the diffraktometer.
@@ -204,15 +190,6 @@ class Experiment(models.Model):
 
     class Meta:
         ordering = ["-number"]
-
-    def solvents_list(self):
-        slist = ''
-        for x in [str(self.solvent1), str(self.solvent2), str(self.solvent3)]:
-            if x != 'None' and slist:
-                slist += ', <wbr>' + x
-            if x != 'None' and not slist:
-                slist += x
-        return slist
 
     def was_measured_recently(self) -> bool:
         now = timezone.now()

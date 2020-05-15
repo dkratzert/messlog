@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from scxrd.cif_model import Atom
-from scxrd.models import CifFileModel, Machine, Solvent, Experiment, WorkGroup
+from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup
 from scxrd.models import CrystalSupport, CrystalShape, CrystalGlue
 from scxrd.models import Person
 
@@ -79,7 +79,7 @@ admin.site.register(CifFileModel, CifAdmin)
 admin.site.register(Person)
 admin.site.register(WorkGroup)
 admin.site.register(Machine)
-admin.site.register(Solvent)
+#admin.site.register(Solvent)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalShape)
 admin.site.register(CrystalGlue)

@@ -16,7 +16,7 @@
                     <td> Experiment Number </td><td> {{ object.number }} </td>
                 </tr>
                 <tr>
-                    <td> Solvents </td> <td> {{ object.solvents_used.all |join:", " }}</td>
+                    <td> Solvents </td> <td> {{ object.solvents }}</td>
                 </tr>
                 <tr>
                     <td>Sum Formula</td> <td>{{ object.sum_formula}}</td>
@@ -30,7 +30,7 @@
                     <td>Results sent</td> <td> {{ object.result_date|date:'Y-m-d' }}</td>
                 </tr>
                 <tr>
-                    <td>owner</td> <td> {{ object.owner.get_username }} </td>
+                    <td>owner</td> <td> {{ object.operator.get_username }} </td>
                 </tr>
                 </tbody>
             </table>

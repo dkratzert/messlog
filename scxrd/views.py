@@ -75,6 +75,8 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
+        if 'upload_cif' in request.POST:
+            return HttpResponseRedirect(reverse_lazy('scxrd:upload_cif_file', ))
         if 'submit' in request.POST:
             form = self.form_class(request.POST)
             if form.is_valid():
@@ -84,9 +86,8 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
             else:
                 print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
                 return super().post(request, *args, **kwargs)
-        else:
-            print('else reached')
-            return super().post(request, *args, **kwargs)
+        print('else reached')
+        return super().post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -109,7 +110,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentEditView(LoginRequiredMixin, UpdateView):
+class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
     """
     Edit an experiment
     """
@@ -152,12 +153,6 @@ class DetailsTable(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        """try:
-            exp_id = self.kwargs['pk']
-            context['sumform'] = SumFormula.objects.get(pk=exp_id)
-        except SumFormula.DoesNotExist as e:
-            print(e, '#-DetailsTable view #')
-            pass"""
         return context
 
 

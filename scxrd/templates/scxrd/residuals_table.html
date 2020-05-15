@@ -1,13 +1,9 @@
-
-
 {% comment %}
 
 This table is used to display details about a selected structure on the main page when
 a certain structure is selected in the experiment table.
 
 {% endcomment %}
-
-
 
 
 <table class="table table-condensed table-sm table-borderless">
@@ -23,17 +19,17 @@ a certain structure is selected in the experiment table.
     </tr>
     <tr class="d-flex">
         <td class="col-4"> Solvents</td>
-        {% if experiment.solvent1 %}
-            <td class="col-8 ScrollBarsY" id="t_solents"> {{ experiment.solvents_list| safe }} </td>
+        {% if experiment.solvents %}
+            <td class="col-8 ScrollBarsY" id="t_solents"> {{ experiment.solvents|safe }} </td>
         {% else %}
-            <td class="col-8 ScrollBarsY" id="t_solents"> ----- </td>
+            <td class="col-8 ScrollBarsY" id="t_solents"> -----</td>
         {% endif %}
     </tr>
-    {% if sumform %}
-    <tr class="d-flex">
-        <td class="col-4">Sum Formula</td>
-        <td class="col-8" id="t_sumform"> {{ sumform|safe }} </td>
-    </tr>
+    {% if experiment.sum_formula %}
+        <tr class="d-flex">
+            <td class="col-4">Sum Formula</td>
+            <td class="col-8" id="t_sumform"> {{ experiment.sum_formula|safe }} </td>
+        </tr>
     {% endif %}
     <tr class="d-flex">
         <td class="col-4">Measured by</td>
@@ -46,21 +42,21 @@ a certain structure is selected in the experiment table.
     </tr>
     <tr class="d-flex">
         <td class="col-4">Cif _data</td>
-        <td class="col-8" id="t_cif"> {{ experiment.cif.data|default_if_none:"-----"  }} </td>
+        <td class="col-8" id="t_cif"> {{ experiment.cif.data|default_if_none:"-----" }} </td>
     </tr>
     <tr class="d-flex">
         <td class="col-4"><i>wR</i><sub>2</sub></td>
-        <td class="col-8" > {{ object.cif.wr2_in_percent|default_if_none:"-----"  }} % </td>
+        <td class="col-8"> {{ object.cif.wr2_in_percent|default_if_none:"-----" }} %</td>
     </tr>
     <tr class="d-flex">
         <td class="col-4"><i>R</i><sub>int</sub></td>
-        <td class="col-8" > {{ object.cif.rint_in_percent|default_if_none:"-----"  }} % </td>
+        <td class="col-8"> {{ object.cif.rint_in_percent|default_if_none:"-----" }} %</td>
     </tr>
     <tr class="d-flex">
         <td class="col-4">Completeness</td>
-        <td class="col-8" > {{ object.cif.completeness_in_percent|default_if_none:"-----"  }} % </td>
+        <td class="col-8"> {{ object.cif.completeness_in_percent|default_if_none:"-----" }} %</td>
     </tr>
     </tbody>
 </table>
 
-    {# {{ object.cif.shelx_res_file|linebreaks }}  #}
+{# {{ object.cif.shelx_res_file|linebreaks }}  #}
