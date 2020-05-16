@@ -45,18 +45,11 @@ $(document).ready(function () {
         "scrollY": "350px",     // This defines the height of the table!
         "scrollCollapse": true,
         "paging": false,
-        "order": [[2, "desc"]],
+        "order": [[1, "desc"]],
         columns: [
             {  // title and name are important, otherwise the server-side processing does not work.
                 title: 'id',
                 name: 'id',
-                visible: false,
-                searchable: false,
-                orderable: true,
-            },
-            {
-                title: 'cif_id',
-                name: 'cif_id',
                 visible: false,
                 searchable: false,
                 orderable: true,
@@ -75,12 +68,9 @@ $(document).ready(function () {
             },
             {
                 title: "Date",
-                name: 'date',
+                name: 'measure_date',
                 searchable: false,
                 orderable: true,
-                render: function (d) {
-                    return moment(d).format("DD:MM:YYYY, HH:mm");
-                },
             },
             {
                 title: "Machine",
@@ -95,17 +85,28 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
-                title: "Publishable",
+                title: "Publ.",
                 name: 'publishable',
                 searchable: false,
                 orderable: false,
             },
             {
-                title: '',
+                title: 'CIF',
+                name: 'cif',
+                visible: true,
+                searchable: false,
+                orderable: true,
+                /*render: function (d) {
+                    if (d === '') {
+                        return '';
+                    } else {
+                        return check;
+                    }
+                },*/
+            },
+            {
+                title: 'Edit',
                 name: 'edit_button',
-                mRender: function (data, type, full) {
-                    return '<a class="badge badge-danger m-0 justify-content-center" href=edit/' + full[0] + '>' + 'Edit' + '</a>';
-                },
                 searchable: false,
                 orderable: false,
             },
@@ -172,7 +173,7 @@ $(document).ready(function () {
     display_molecule('');
 
 
-    $('#growStruct').click(function(){
+    $('#growStruct').click(function () {
         var jsmolcol = $("#molcard");
         grow_struct = !!this.checked;
         // Get molecule data and display the molecule:

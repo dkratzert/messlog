@@ -1,7 +1,6 @@
 import datetime
 import textwrap
 
-import gemmi
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
@@ -15,20 +14,20 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- save should not redirect to start if something fails. 
 - decide which cif resuduals do I really need? 
-  wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
+  wR2, R1, Space group, symmcards, atoms, cell, sumformula, 
+  completeness, Goof, temperature, Z, Rint, Peak/hole
 - Add pdf/word upload for reaction conditions
 - check checksum for correctness
-- Measurement temperatue to experiment start page
-- Upload save two files?
-- Make upload work
+- Measurement temperatue to experiment start page -> done?
 - addd delete experiment
-- improve details page
+
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
 - cif is deleted from experiment when saving again!!
 - Check for existing unit cell during cif upload.
-- upload cif without input throws exception.
+
 """
 
 
@@ -240,5 +239,3 @@ class Experiment(models.Model):
             return "'{}'".format(string)
         else:
             return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
-
-

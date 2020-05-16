@@ -1,3 +1,4 @@
+from datetime import datetime
 from pprint import pprint
 
 from django.contrib import messages
@@ -6,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.timezone import make_naive
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
@@ -50,7 +52,6 @@ class CifUploadView(LoginRequiredMixin, CreateView):
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
             exp.cif = CifFileModel.objects.get(pk=ciffile.pk)
             exp.save(update_fields=['cif'])
-            print('cif worked?')
             if not ciffile.pk:
                 messages.warning(request, 'That cif file was invalid.')
                 # try:
@@ -83,11 +84,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
                 form.save()
                 print('The form is valid!!')
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
-            else:
-                print('#### Form is not valid. Use "self.helper.render_unmentioned_fields = True" to see all.')
-                return super().post(request, *args, **kwargs)
-        print('else reached')
-        return super().post(request, *args, **kwargs)
+        return super(FormActionMixin, self).post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -141,7 +138,7 @@ class ExperimentDetailView(LoginRequiredMixin, DetailView):
     Show details of an experiment
     """
     model = Experiment
-    template_name = 'scxrd/experiment_detail.html'
+    template_name = 'scxrd/unused/experiment_detail.html'
 
 
 class DetailsTable(DetailView):
@@ -155,7 +152,7 @@ class DetailsTable(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
-
+'''
 class DeleteView(LoginRequiredMixin, CreateView):
     """
     A file upload view.
@@ -172,7 +169,7 @@ class DeleteView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
-
+'''
 
 class DragAndDropUploadView(DetailView):
     model = Experiment
@@ -273,41 +270,13 @@ class ExperimentListJson(BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    # columns = ['id', 'cif_id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
-    column_defs = [
-        {
-            'name'   : 'id',
-            'visible': False,
-            'orderable': False,
-        }, {
-            'name': 'cif_id',
-            'orderable': True,
-        }, {
-            'name': 'number',
-            'orderable': True,
-        }, {
-            'name': 'experiment',
-            'orderable': True,
-        }, {
-            'name': 'measure_date',
-            'orderable': True,
-        }, {
-            'name': 'machine',
-            'orderable': True,
-        }, {
-            'name': 'operator',
-            'orderable': True,
-        }, {
-            'name': 'publishable',
-            'orderable': True,
-        }
-    ]
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif.id', 'edit']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    #order_columns = ['', '', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable']
+    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif.id', '']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
@@ -325,6 +294,14 @@ class ExperimentListJson(BaseDatatableView):
                 return '<span class="badge badge-success ml-4">ok</span>'
             else:
                 return '<span class="badge badge-warning ml-4">no</span>'
+        if column == 'edit':
+            return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>Edit</a>'.format(row.id)
+        if column == 'cif.id' and row.cif_id:
+            return """<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                    </svg>"""
+        if column == 'measure_date':
+            return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:
             return super(ExperimentListJson, self).render_column(row, column)
 
