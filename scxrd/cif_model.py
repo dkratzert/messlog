@@ -8,6 +8,7 @@ from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.utils import generate_sha256
 from scxrd.utils import get_float
@@ -180,6 +181,10 @@ class CifFileModel(models.Model):
     def completeness_in_percent(self) -> float:
         if self.diffrn_measured_fraction_theta_max:
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
+
+    def get_cif_instance(self) -> CifContainer:
+        cif = CifContainer(Path(MEDIA_ROOT).joinpath(self.cif_file_on_disk.name))
+        return cif
 
     @staticmethod
     def get_cif_item(file: str, item: str) -> List[str]:
