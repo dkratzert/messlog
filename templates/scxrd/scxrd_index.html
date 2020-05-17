@@ -25,42 +25,16 @@
                     More Information
                 </div>
                 <div class="card-body">
-                    Here will be the list of running experiments and other status information.
+                    Here will be the list of running experiments and other status information or statistics.
                 </div>
             </div>
         </div>
 
-        <!-- Right column with details ---------------   -->
         <div class="col-4">
-            <div class="row">
-                {% comment %}<a role="button" class="btn btn-primary" href="{% url 'scxrd:new' %}">New Experiment</a> {% endcomment %}
-                <div class="card w-100 mr-2">
-                    <div class="card-header">Structure View</div>
-                    <div class="card-body p-0 pb-1 pr-0">
-                        <div id="molcard" class="card border-0">
-                            {# This card inside the card is a hack to overcome the too large molecule view #}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="growStruct">
-                            <label class="form-check-label" for="growStruct">Grow Structure</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="card mt-3 w-100 mr-2">
-                    <div class="card-header">Details</div>
-                    <div class="card-body pt-1 pl-3 pr-1 pb-2">
-                        <!-- insert details_table.html -->
-                        <div id="ttable"></div>
-                    </div>
-                </div>
-                <br>
-            </div>
+            {# Right column with structure and details table #}
+            {% include 'scxrd/details_struct_table.html' %}
         </div>
-    </div>
 
+    </div>
 
 {% endblock content %}

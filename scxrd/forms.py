@@ -58,6 +58,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.attrs = {'novalidate': 'novalidate'}
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
+        self.helper.use_custom_control = True
+        self.helper.render_required_fields = True
         # Turn this off to see only mentioned form fields:
         self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
@@ -139,7 +141,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(
                     HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    HTML('''<a class="btn btn-secondary btn-small" href="{% url "scxrd:upload_cif_file" object.pk %}"> 
+                    HTML('''<a class="btn btn-secondary btn-small" 
+                            href="{% url "scxrd:upload_cif_file" object.pk %}"> 
                             Upload a CIF</a>'''),
                     css_class='ml-2 mb-3 form-sm'
                 ),

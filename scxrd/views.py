@@ -31,7 +31,6 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
         exp_id = self.kwargs['pk']
-        print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
         context['ciffile'] = exp.cif
         context['experiment'] = exp
@@ -47,8 +46,6 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             ciffile = form.save()
             self.model.cif.cif_file_on_disk = ciffile
-            print('exp pk is:', self.kwargs['pk'])
-            print('cif pk is:', ciffile.pk, ciffile.cif_file_on_disk.url)
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
             exp.cif = CifFileModel.objects.get(pk=ciffile.pk)
             exp.save(update_fields=['cif'])
@@ -152,6 +149,7 @@ class DetailsTable(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+
 '''
 class DeleteView(LoginRequiredMixin, CreateView):
     """
@@ -170,6 +168,7 @@ class DeleteView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
 '''
+
 
 class DragAndDropUploadView(DetailView):
     model = Experiment

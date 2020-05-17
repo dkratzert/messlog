@@ -12,7 +12,9 @@
                 <p>File uploaded: &nbsp; None </p>
             {% endif %}
 
-            <form method="post" enctype="multipart/form-data" action="" id="ciffile_form" novalidate>
+            <form method="post" enctype="multipart/form-data"
+                  action="{% url 'scxrd:upload_cif_file' pk=experiment.pk %}"
+                  id="ciffile_form" novalidate>
                 {% csrf_token %}
                 <div class="input-group">
                     <div class="input-group-prepend">
