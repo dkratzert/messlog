@@ -14,6 +14,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- CIF upload saves cif two times?
 - save should not redirect to start if something fails. 
 - decide which cif resuduals do I really need? 
   wR2, R1, Space group, symmcards, atoms, cell, sumformula, 
