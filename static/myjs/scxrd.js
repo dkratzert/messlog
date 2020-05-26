@@ -96,13 +96,16 @@ $(document).ready(function () {
                 visible: true,
                 searchable: false,
                 orderable: true,
-                /*render: function (d) {
+                render: function (d) {
                     if (d === '') {
+                        // A svg check mark:
                         return '';
                     } else {
-                        return check;
+                        return '<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
+                            '<path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>\n' +
+                            '</svg>';
                     }
-                },*/
+                },
             },
             {
                 title: 'Edit',
@@ -128,9 +131,9 @@ $(document).ready(function () {
         var row = dtable.row(this);
         //var row0 = $('#exptable tbody tr:eq(0)');
         var tdata = row.data();
-        //console.log(tdata);
+        // console.log(tdata);
         var tab_url = 'table/' + tdata[0];
-        cif_id = tdata[1];
+        cif_id = tdata[7];
         // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
             //console.log(result);

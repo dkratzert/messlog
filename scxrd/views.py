@@ -68,7 +68,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
         print('The post request:')
-        #pprint(request.POST)
+        # pprint(request.POST)
         print('end request ----------------')
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
@@ -222,9 +222,12 @@ class MoleculeView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         molfile = ''
+        # print('# Molecule request:')
+        # pprint(request.POST)
         atoms = None
         cif_id = request.POST.get('cif_id')
         if cif_id:
+            print('cif id:', cif_id)
             atoms = Atom.objects.all().filter(cif_id=cif_id)
         if atoms:
             grow = request.POST.get('grow')
@@ -295,10 +298,11 @@ class ExperimentListJson(BaseDatatableView):
                 return '<span class="badge badge-warning ml-4">no</span>'
         if column == 'edit':
             return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>Edit</a>'.format(row.id)
-        if column == 'cif.id' and row.cif_id:
-            return """<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-                    </svg>"""
+        # I need the id in the table! Therefore I add the check in javascript later.
+        # if column == 'cif.id' and row.cif_id:
+        #    return """<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        #            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+        #            </svg>"""
         if column == 'measure_date':
             return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:

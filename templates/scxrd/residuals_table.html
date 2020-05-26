@@ -10,8 +10,8 @@ a certain structure is selected in the experiment table.
     <div class="col-5">Machine</div>
     <div class="col-7" id="t_machine">  {{ experiment.machine }} </div>
     {% if experiment.solvents %}
-        <div class="col-4">Solvents</div>
-        <div class="col-8 " id="t_solvents">  {{ experiment.solvents|safe }} </div>
+        <div class="col-5">Solvents</div>
+        <div class="col-7 " id="t_solvents">  {{ experiment.solvents|safe }} </div>
     {% else %}
         <div class="col-5">Solvents</div>
         <div class="col-7 " id="t_solvents"> -----</div>
