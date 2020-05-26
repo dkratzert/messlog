@@ -94,7 +94,8 @@ class CifFileModel(models.Model):
         if not self.date_created:
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
-        super(CifFileModel, self).save(*args, **kwargs)
+        # TODO: one super() call should be enough?
+        # super(CifFileModel, self).save(*args, **kwargs)
 
     def __str__(self):
         try:
@@ -194,6 +195,11 @@ class CifFileModel(models.Model):
         doc = gemmi.cif.read_file(file)
         pair = doc.sole_block().find_pair(item)
         return pair
+
+    def get_cif_model(self):
+        """Reads the current cif file from tzhe model"""
+        cif = CifContainer(Path(self.cif_file_on_disk.name))
+        print(cif.cell)
 
 
 class Atom(models.Model):
