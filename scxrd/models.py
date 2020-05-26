@@ -135,16 +135,6 @@ class CrystalGlue(models.Model):
         return self.glue
 
 
-class CrystalShape(models.Model):
-    """
-    A description of the quality and habit of the crystal.
-    """
-    habitus = models.CharField(verbose_name='crystal shape', max_length=200, unique=True)
-
-    def __str__(self):
-        return self.habitus
-
-
 class Experiment(models.Model):
     fixtures = ['experiment']
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)

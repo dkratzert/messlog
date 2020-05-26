@@ -68,7 +68,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
         print('The post request:')
-        pprint(request.POST)
+        #pprint(request.POST)
         print('end request ----------------')
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
