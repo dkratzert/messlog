@@ -70,13 +70,6 @@ class CifFileModel(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
 
-    # shelx_res_file = models.TextField(null=True, blank=True, max_length=10000000)
-    # shelx_res_checksum = models.PositiveIntegerField(null=True, blank=True)
-    # shelx_hkl_file = models.TextField(null=True, blank=True)
-    # shelx_hkl_checksum = models.IntegerField(null=True, blank=True)
-
-    #################################
-
     def save(self, *args, **kwargs):
         super(CifFileModel, self).save(*args, **kwargs)
         try:

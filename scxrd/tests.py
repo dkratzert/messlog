@@ -3,6 +3,7 @@ import sys
 import tempfile
 import unittest
 from datetime import datetime
+from io import BytesIO
 from pathlib import Path
 from wsgiref.handlers import SimpleHandler
 
@@ -13,10 +14,9 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse, reverse_lazy
-from django.utils.six import BytesIO
 
 from scxrd.cif_model import CifFileModel
-from scxrd.models import Experiment, Machine, Person, WorkGroup, Solvent, CrystalSupport, CrystalGlue, CrystalShape
+from scxrd.models import Experiment, Machine, Person, WorkGroup, CrystalSupport, CrystalGlue
 
 """
 TODO:      
@@ -144,10 +144,6 @@ class CifFileTest(TestCase):
         ex.cif.save()
         first_atom = CifFileModel.objects.first().atom_set.first()
         self.assertEqual(0.63951, first_atom.x)
-        # Test the calculated sum formula:
-        self.assertEqual(
-            'C<sub>34</sub><wbr>H<sub>24</sub><wbr>O<sub>4</sub><wbr>F<sub>36</sub>'
-            '<wbr>Al<sub>1</sub><wbr>Ga<sub>1</sub><wbr>', str(ex.cif.sumform_from_atoms))
         self.assertEqual(str(c.experiments.glue), 'grease')
         self.assertEqual(str(c.experiments), 'test1')
         self.assertEqual(str(c.experiments.customer.work_group), 'AK Sorglos')
@@ -157,7 +153,6 @@ class CifFileTest(TestCase):
         ex.save_base()
         self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
         self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
-        self.assertEqual(-0.194, ex.cif.atoms.x)
         self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
                          'TITL p21c in P2(1)/c    p21c.r')
         # self.assertEqual(ex.cif.atoms.x, '')
@@ -170,16 +165,9 @@ class CifFileTest(TestCase):
     def test_read_cif_content_by_gemmi(self):
         self.assertEqual(['_diffrn_reflns_number', '42245'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
                                                                                   '_diffrn_reflns_number'))
-        # set new number
-        s = CifFileModel.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '22246'])
-        self.assertEqual(s, True)
         # check
         self.assertEqual(['_diffrn_reflns_number', '22246'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
                                                                                   '_diffrn_reflns_number'))
-        # set back
-        s = CifFileModel.set_cif_item(file='scxrd/testfiles/p21c.cif', pair=['_diffrn_reflns_number', '42245'])
-        self.assertEqual(s, True)
-
 
 class WorkGroupTest(TestCase):
 
@@ -227,10 +215,6 @@ class OtherTablesTest(TestCase):
         glue = CrystalGlue(glue='perfluor ether oil')
         glue.save()
         self.assertEqual(str(glue), 'perfluor ether oil')
-
-        shape = CrystalShape(habitus='block')
-        shape = save()
-        self.assertEqual(str(shape), 'block')
 
 
 def hello_app(environ, start_response):

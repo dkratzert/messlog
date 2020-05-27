@@ -29,7 +29,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
+        #self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
         exp_id = self.kwargs['pk']
         exp = Experiment.objects.get(pk=exp_id)
         context['ciffile'] = exp.cif
@@ -54,7 +54,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
                 # try:
                 #    ciffile.delete()
                 # except Exception as e:
-                #    print('can not delede file:', e)
+                #    print('can not delete file:', e)
             # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
             # data = {'is_valid': False}
