@@ -5,6 +5,7 @@ from typing import List
 import gemmi
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.db.models import FileField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -21,17 +22,12 @@ def validate_cif_file_extension(value):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
 
-class MyFileField(models.FileField):
-    def __init__(self, *args, **kwargs):
-        super(MyFileField, self).__init__(*args, **kwargs)
-
-
 class CifFileModel(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    cif_file_on_disk = MyFileField(upload_to='cifs', null=True, blank=True,
+    cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
                                    validators=[validate_cif_file_extension],
                                    verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
