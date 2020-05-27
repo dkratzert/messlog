@@ -4,6 +4,7 @@ from pprint import pprint
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -43,6 +44,10 @@ class CifUploadView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = CifForm(self.request.POST, self.request.FILES)
+        pprint(self.request.POST)
+        pprint(self.request.FILES)
+        pprint(args)
+        pprint(kwargs)
         if form.is_valid():
             ciffile = form.save()
             self.model.cif.cif_file_on_disk = ciffile
@@ -225,6 +230,11 @@ class MoleculeView(LoginRequiredMixin, View):
         # print('# Molecule request:')
         # pprint(request.POST)
         cif_id = request.POST.get('cif_id')
+        exp_id = request.POST.get('experiment_id')
+        if not cif_id:
+            print('Experiment with id {} has no cif file.'.format(exp_id))
+            # Makes structure view blank:
+            return HttpResponse(' ')
         cif = CifFileModel.objects.get(pk=cif_id).get_cif_model()
         grow = request.POST.get('grow')
         if cif.atoms_fract:
@@ -233,19 +243,19 @@ class MoleculeView(LoginRequiredMixin, View):
                 try:
                     needsymm = sdm.calc_sdm()
                     atoms = sdm.packer(sdm, needsymm)
-                except IndexError as e:
+                except Exception as e:
                     print('Error in SDM:', e)
-                    atoms = []
-                    raise
+                    return HttpResponse(' ')
             else:
                 atoms = cif.atoms_orth
             try:
-                molfile = ' '
                 molfile = MolFile(atoms)
                 molfile = molfile.make_mol()
             except (TypeError, KeyError):
                 print("Error while writing mol file.")
-        return HttpResponse(molfile)
+            return HttpResponse(molfile)
+        print('Cif file with id {} of experiment {} has no atoms!'.format(cif_id, exp_id))
+        return HttpResponse(' ')
 
     # always reload complete molecule:
     @never_cache

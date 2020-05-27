@@ -58,7 +58,10 @@ class CifAdmin(admin.ModelAdmin):
 
     def number_of_atoms(self, obj):
         # TODO: Make this work again
-        cif = self.model.objects.get(pk=obj.id).get_cif_model()
+        try:
+            cif = self.model.objects.get(pk=obj.id).get_cif_model()
+        except RuntimeError:
+            return 'no atoms'
         return cif.natoms()
 
 

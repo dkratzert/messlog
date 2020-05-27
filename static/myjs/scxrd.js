@@ -134,6 +134,7 @@ $(document).ready(function () {
         // console.log(tdata);
         var tab_url = 'table/' + tdata[0];
         cif_id = tdata[7];
+        experiment_id = tdata[0];
         // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
             //console.log(result);
@@ -154,6 +155,7 @@ $(document).ready(function () {
             url = 'molecule/',
             data = {
                 cif_id: cif_id,
+                experiment_id: experiment_id,
                 grow: grow_struct,
                 'csrfmiddlewaretoken': csrftoken
             },
