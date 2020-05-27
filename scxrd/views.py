@@ -4,6 +4,7 @@ from pprint import pprint
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -16,7 +17,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.cif_model import Atom, CifFileModel
+from scxrd.cif_model import CifFileModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, CifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -29,7 +30,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
+        #self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
         exp_id = self.kwargs['pk']
         exp = Experiment.objects.get(pk=exp_id)
         context['ciffile'] = exp.cif
@@ -43,6 +44,10 @@ class CifUploadView(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         form = CifForm(self.request.POST, self.request.FILES)
+        pprint(self.request.POST)
+        pprint(self.request.FILES)
+        pprint(args)
+        pprint(kwargs)
         if form.is_valid():
             ciffile = form.save()
             self.model.cif.cif_file_on_disk = ciffile
@@ -54,7 +59,7 @@ class CifUploadView(LoginRequiredMixin, CreateView):
                 # try:
                 #    ciffile.delete()
                 # except Exception as e:
-                #    print('can not delede file:', e)
+                #    print('can not delete file:', e)
             # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
         else:
             # data = {'is_valid': False}
@@ -176,8 +181,8 @@ class DragAndDropUploadView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        exp_id = self.kwargs['pk']
-        context['absfiles'] = CifFileModel.objects.get(pk=exp_id)
+        # exp_id = self.kwargs['pk']
+        # context['ciffile'] = CifFileModel.objects.get(pk=exp_id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -224,34 +229,35 @@ class MoleculeView(LoginRequiredMixin, View):
         molfile = ''
         # print('# Molecule request:')
         # pprint(request.POST)
-        atoms = None
         cif_id = request.POST.get('cif_id')
-        if cif_id:
-            print('cif id:', cif_id)
-            atoms = Atom.objects.all().filter(cif_id=cif_id)
-        if atoms:
-            grow = request.POST.get('grow')
+        exp_id = request.POST.get('experiment_id')
+        if not cif_id:
+            print('Experiment with id {} has no cif file.'.format(exp_id))
+            # Makes structure view blank:
+            return HttpResponse(' ')
+        cif = CifFileModel.objects.get(pk=cif_id).get_cif_model()
+        grow = request.POST.get('grow')
+        if cif.atoms_fract:
             if grow == 'true':
-                # Grow atoms here
-                print('growing atoms')
-                # TODO: Make this clean with atom objects and use x, y, z, xc, yc, zc:
-                cif = CifFileModel.objects.get(pk=cif_id)
-                cell = [cif.cell_length_a, cif.cell_length_b, cif.cell_length_c, cif.cell_angle_alpha,
-                        cif.cell_angle_beta, cif.cell_angle_gamma]
-                atoms = [[at.name, at.element, at.x, at.y, at.z, at.part] for at in atoms]
-                sdm = SDM(atoms, cif.space_group_symop_operation_xyz, cell)
-                needsymm = sdm.calc_sdm()
-                atoms = sdm.packer(sdm, needsymm)
+                sdm = SDM(list(cif.atoms_fract), cif.symmops, cif.cell[:6], centric=cif.is_centrosymm)
+                try:
+                    needsymm = sdm.calc_sdm()
+                    atoms = sdm.packer(sdm, needsymm)
+                except Exception as e:
+                    print('Error in SDM:', e)
+                    return HttpResponse(' ')
             else:
-                print('growing is false:', grow)
+                atoms = cif.atoms_orth
             try:
-                m = MolFile(atoms)
-                molfile = m.make_mol()
-            except(KeyError, TypeError) as e:
-                print('Exception in jsmol_request: {}'.format(e))
-        return HttpResponse(molfile)
+                molfile = MolFile(atoms)
+                molfile = molfile.make_mol()
+            except (TypeError, KeyError):
+                print("Error while writing mol file.")
+            return HttpResponse(molfile)
+        print('Cif file with id {} of experiment {} has no atoms!'.format(cif_id, exp_id))
+        return HttpResponse(' ')
 
-    # alsways reload complete molecule:
+    # always reload complete molecule:
     @never_cache
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)

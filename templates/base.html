@@ -21,12 +21,13 @@
     <script src="{% static 'flatpickr/flatpickr-4.5.2.js' %}"></script>
     <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/scxrd.js' %}"></script>
-{#    <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script>#}
+    {# <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script> #}
     <script>
-    var table_url;
-    var csrftoken;
-    var cif_id;  {# The id of the current sturcture #}
-    var grow_struct;
+        var table_url;
+        var csrftoken;
+        var cif_id;  // The id of the current CIF
+        var experiment_id;
+        var grow_struct;
     </script>
     <title>
         {% block title %}Messlog Main Page{% endblock title %}
@@ -61,17 +62,17 @@
     </ul>
     <!-- login TODO: only show login if not logged in. Only show log off if logged in. -->
     {% if user.is_authenticated %}
-        {% if user.first_name %}
-            <button class="btn btn-outline-secondary btn-sm mr-3">
-                User: {{ user.first_name }} {{ user.last_name }} </button>
-        {% else %}
-            <button class="btn btn-outline-secondary btn-sm mr-3"> User: {{ user.username }} </button>
-        {% endif %}
+    {% if user.first_name %}
+    <button class="btn btn-outline-secondary btn-sm mr-3">
+        User: {{ user.first_name }} {{ user.last_name }} </button>
+    {% else %}
+    <button class="btn btn-outline-secondary btn-sm mr-3"> User: {{ user.username }} </button>
+    {% endif %}
     {% endif %}
     {% if not user.is_authenticated %}
-        <a class="btn btn-success btn-sm" role="button" href="{% url 'login' %}">Login</a>
+    <a class="btn btn-success btn-sm" role="button" href="{% url 'login' %}">Login</a>
     {% else %}
-        <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Log Off</a>
+    <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Log Off</a>
     {% endif %}
     <a class="btn btn-outline-primary btn-sm ml-2" role="button" href="{% url 'signup' %}">New User</a>
 </nav>

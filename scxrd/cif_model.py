@@ -5,6 +5,7 @@ from typing import List
 import gemmi
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
+from django.db.models import FileField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -26,9 +27,9 @@ class CifFileModel(models.Model):
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
-                                        validators=[validate_cif_file_extension],
-                                        verbose_name='cif file')
+    cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
+                                   validators=[validate_cif_file_extension],
+                                   verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -65,13 +66,6 @@ class CifFileModel(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
 
-    # shelx_res_file = models.TextField(null=True, blank=True, max_length=10000000)
-    # shelx_res_checksum = models.PositiveIntegerField(null=True, blank=True)
-    # shelx_hkl_file = models.TextField(null=True, blank=True)
-    # shelx_hkl_checksum = models.IntegerField(null=True, blank=True)
-
-    #################################
-
     def save(self, *args, **kwargs):
         super(CifFileModel, self).save(*args, **kwargs)
         try:
@@ -81,7 +75,7 @@ class CifFileModel(models.Model):
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
             # raise ValidationError('Unable to parse cif file:', e)
             return False
-        Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
+        # Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
             # self.cif_file_on_disk.file.name
@@ -95,6 +89,17 @@ class CifFileModel(models.Model):
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
         super(CifFileModel, self).save(*args, **kwargs)
+        # Do not do this:
+        #print('Duplicates:', self.duplicates)
+        #for d in self.duplicates:
+        #    d.delete()
+
+    def find_duplicates(self):
+        return [i for i in CifFileModel.objects.exclude(pk=self.pk).filter(sha256=self.sha256)]
+
+    @property
+    def duplicates(self):
+        return self.find_duplicates()
 
     def __str__(self):
         try:
@@ -111,9 +116,11 @@ class CifFileModel(models.Model):
         return False
 
     def delete(self, *args, **kwargs):
+        if not self.exists:
+            return 
         cf = Path(self.cif_file_on_disk.path)
-        if DEBUG:
-            print('deleting', cf.name, 'in', cf.absolute())
+        #if DEBUG:
+        print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)
 
@@ -129,13 +136,13 @@ class CifFileModel(models.Model):
         >>> cell.orthogonalize(gemmi.Fractional(0.5, 0.5, 0.5))
         <gemmi.Position(12.57, 19.75, 22.535)>
         """
-        with transaction.atomic():
-            for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
-                self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
-                                  x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
-                                  xc=at_orth['x'], yc=at_orth['y'], zc=at_orth['z'],
-                                  occupancy=at_orth['occ'], part=at_orth['part'], asym=True)
-                self.atoms.save()
+        # with transaction.atomic():
+        #    for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
+        #        self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
+        #                          x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
+        #                          xc=at_orth['x'], yc=at_orth['y'], zc=at_orth['z'],
+        #                          occupancy=at_orth['occ'], part=at_orth['part'], asym=True)
+        #        self.atoms.save()
         self.data = cif.block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cif.cell
@@ -195,7 +202,15 @@ class CifFileModel(models.Model):
         pair = doc.sole_block().find_pair(item)
         return pair
 
+    def get_cif_model(self):
+        """Reads the current cif file from tzhe model"""
+        filepth = Path(MEDIA_ROOT).joinpath(self.cif_file_on_disk.name)
+        print('loadinf cif:', filepth)
+        cif = CifContainer(filepth)
+        return cif
 
+
+'''
 class Atom(models.Model):
     """
     This table holds the atoms of a cif file.
@@ -223,3 +238,4 @@ class Atom(models.Model):
                                                               self.occupancy, self.part)
         """
         return self.name
+'''

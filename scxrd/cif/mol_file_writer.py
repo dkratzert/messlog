@@ -1,44 +1,26 @@
 """
 MOl V3000 format
 """
+
 import os
 
-from django.db.models import QuerySet
-
 from scxrd.cif.tools.atoms import get_radius_from_element
-from scxrd.cif_model import Atom
-
-
-def distance(x1, y1, z1, x2, y2, z2, round_out=False):
-    """
-    distance between two points in space for orthogonal axes.
-    >>> distance(1, 1, 1, 2, 2, 2, 4)
-    1.7321
-    >>> distance(1, 0, 0, 2, 0, 0, 4)
-    1.0
-    """
-    from math import sqrt
-    d = sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
-    if round_out:
-        return round(d, round_out)
-    else:
-        return d
+from scxrd.cif.tools.dsrmath import distance
 
 
 class MolFile(object):
     """
-    This mol file writer is only to use the file with JSmol_lite.
-    It does not to implement the standard exactly!
+    This mol file writer is only to use the file with JSmol, not to implement the standard exactly!
     """
 
-    def __init__(self, atoms: QuerySet(Atom), bonds=None):
-        self.atoms = atoms
-        self.atomscount = 0
+    def __init__(self, atoms: list, bonds=None):
+        self.atoms = list(atoms)
         if bonds:
             self.bonds = bonds
         else:
             self.bonds = self.get_conntable_from_atoms()
         self.bondscount = len(self.bonds)
+        self.atomscount = len(self.atoms)
 
     def header(self) -> str:
         """
@@ -59,8 +41,8 @@ class MolFile(object):
         X Y Z Element
         """
         atoms = []
-        for num, at in enumerate(self.atoms):
-            atoms.append("{:>10.4f}{:>10.4f}{:>10.4f} {:<2s}".format(at.xc, at.yc, at.zc, at.element))
+        for at in list(self.atoms):
+            atoms.append("{:>10.4f}{:>10.4f}{:>10.4f} {:<2s}".format(at[2], at[3], at[4], at[1]))
         return '\n'.join(atoms)
 
     def get_bonds_string(self) -> str:
@@ -82,28 +64,33 @@ class MolFile(object):
         :param extra_param: additional distance to the covalence radius
         :type extra_param: float
         """
+        # t1 = perf_counter()
         conlist = []
+        h = ('H', 'D')
         for num1, at1 in enumerate(self.atoms, 1):
-            self.atomscount += 1
-            at1_part = at1.part
-            rad1 = get_radius_from_element(at1.element)
+            at1_part = at1[5]
+            rad1 = get_radius_from_element(at1[1])
             for num2, at2 in enumerate(self.atoms, 1):
-                at2_part = at2.part
+                at2_part = at2[5]
                 if at1_part * at2_part != 0 and at1_part != at2_part:
                     continue
-                if at1.name == at2.name:  # name1 = name2
+                if at1[0] == at2[0]:  # name1 = name2
                     continue
-                d = distance(at1.xc, at1.yc, at1.zc, at2.xc, at2.yc, at2.zc)
+                d = distance(at1[2], at1[3], at1[4], at2[2], at2[3], at2[4])
                 if d > 4.0:  # makes bonding faster (longer bonds do not exist)
                     continue
-                rad2 = get_radius_from_element(at2.element)
+                rad2 = get_radius_from_element(at2[1])
                 if (rad1 + rad2) + extra_param > d:
-                    if at1.element == 'H' and at2.element == 'H':
+                    if at1[1] in h and at2[1] in h:
                         continue
+                    # print(num1, num2, d)
                     # The extra time for this is not too much:
                     if [num2, num1] in conlist:
                         continue
                     conlist.append([num1, num2])
+        # t2 = perf_counter()
+        # print('Bondzeit:', round(t2-t1, 3), 's')
+        # print('len:', len(conlist))
         return conlist
 
     def footer(self) -> str:
