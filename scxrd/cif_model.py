@@ -21,14 +21,19 @@ def validate_cif_file_extension(value):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
 
+class MyFileField(models.FileField):
+    def __init__(self, *args, **kwargs):
+        super(MyFileField, self).__init__(*args, **kwargs)
+
+
 class CifFileModel(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
-                                        validators=[validate_cif_file_extension],
-                                        verbose_name='cif file')
+    cif_file_on_disk = MyFileField(upload_to='cifs', null=True, blank=True,
+                                   validators=[validate_cif_file_extension],
+                                   verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -81,7 +86,7 @@ class CifFileModel(models.Model):
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
             # raise ValidationError('Unable to parse cif file:', e)
             return False
-        #Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
+        # Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
             # self.cif_file_on_disk.file.name
@@ -129,7 +134,7 @@ class CifFileModel(models.Model):
         >>> cell.orthogonalize(gemmi.Fractional(0.5, 0.5, 0.5))
         <gemmi.Position(12.57, 19.75, 22.535)>
         """
-        #with transaction.atomic():
+        # with transaction.atomic():
         #    for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
         #        self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
         #                          x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
