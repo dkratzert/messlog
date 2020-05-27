@@ -10,26 +10,23 @@
 # ----------------------------------------------------------------------------
 #
 
+
 import time
 from math import sqrt, cos, radians, sin
 
 from scxrd.cif.tools.atoms import get_radius_from_element
-from scxrd.cif.tools.dsrmath import Array, SymmetryElement, frac_to_cart
+from scxrd.cif.tools.dsrmath import SymmetryElement, Array, frac_to_cart
 
 DEBUG = False
 
 
-class SDMAtom():
+class Atom():
     def __init__(self, name, element, x, z, y, part):
         self._dict = {'name': name, 'element': element, 'x': x, 'y': y, 'z': z,
-                      'xc': x, 'yc': y, 'zc': z,
                       'part': part, 'molindex': None}
 
     def __getitem__(self, key):
         return self._dict[key]
-
-    def __getattr__(self, item):
-        return self._dict[item]
 
     def __repr__(self):
         return "Atom: " + repr(self._dict)
@@ -37,6 +34,8 @@ class SDMAtom():
     def __setitem__(self, key, val):
         self._dict[key] = val
 
+    def __iter__(self):
+        return iter(['name', 'element', 'x', 'y', 'z', 'part', 'molindex'])
 
 
 class SymmCards():
@@ -63,6 +62,9 @@ class SymmCards():
         for x in self._symmcards:
             yield x
 
+    def __len__(self):
+        return len(self._symmcards)
+
     def append(self, symmData: list) -> None:
         """
         Add the content of a Shelxl SYMM command to generate the appropriate SymmetryElement instance.
@@ -70,7 +72,8 @@ class SymmCards():
         :return: None
         """
         newSymm = SymmetryElement(symmData)
-        self._symmcards.append(newSymm)
+        if not newSymm in self._symmcards:
+            self._symmcards.append(newSymm)
 
 
 class SDMItem(object):
@@ -101,18 +104,21 @@ class SDMItem(object):
 
 
 class SDM():
-    def __init__(self, atoms: list, symmcards: list, cell: list):
+    def __init__(self, atoms: list, symmlist: list, cell: list, centric=False):
         """
         Calculates the shortest distance matrix
                         0      1      2  3  4   5     6          7
         :param atoms: [Name, Element, X, Y, Z, Part, ocuupancy, molindex -> (later)]
-        :param symmcards:
+        :param symmlist:
         :param cell:
         """
         self.atoms = atoms
         self.symmcards = SymmCards()
-        for s in symmcards:
-            self.symmcards.append(s)
+        if centric:
+            self.symmcards.append(['-X', '-Y', '-Z'])
+            self.symmcards[-1].centric = True
+        for s in symmlist:
+            self.symmcards.append(s.split(','))
         self.cell = cell
         self.cosal = cos(radians(cell[3]))
         self.cosbe = cos(radians(cell[4]))
@@ -126,31 +132,21 @@ class SDM():
         self.sdm_list = []  # list of sdmitems
         self.maxmol = 1
         self.sdmtime = 0
-        self.bondlist = []
-
-    def orthogonal_matrix(self):
-        """
-        Converts von fractional to cartesian by .
-        Invert the matrix to do the opposite.
-        """
-        return Matrix([[self.cell[0], self.cell[1] * cos(self.cell[5]), self.cell[2] * cos(self.cell[4])],
-                       [0, self.cell[1] * sin(self.cell[5]),
-                        (self.cell[2] * (cos(self.cell[3]) - cos(self.cell[4]) * cos(self.cell[5])) / sin(
-                            self.cell[5]))],
-                       [0, 0, self.cell[6] / (self.cell[0] * self.cell[1] * sin(self.cell[5]))]])
 
     def calc_sdm(self) -> list:
         t1 = time.perf_counter()
-        self.bondlist.clear()
+        h = ('H', 'D')
+        nlen = len(self.symmcards)
+        at2_plushalf = [Array([j + 0.5 for j in x[2:5]]) for x in self.atoms]
         for i, at1 in enumerate(self.atoms):
             prime_array = [Array(at1[2:5]) * symop.matrix + symop.trans for symop in self.symmcards]
             for j, at2 in enumerate(self.atoms):
                 mind = 1000000
                 hma = False
-                at2_plushalf = Array(at2[2:5]) + 0.5
+                atp = at2_plushalf[j]
                 sdmItem = SDMItem()
-                for n, symop in enumerate(self.symmcards):
-                    D = prime_array[n] - at2_plushalf
+                for n in range(nlen):
+                    D = prime_array[n] - atp
                     dp = [v - 0.5 for v in D - D.floor]
                     dk = self.vector_length(*dp)
                     if n:
@@ -169,7 +165,7 @@ class SDM():
                 if not sdmItem.atom1:
                     # Do not grow grown atoms:
                     continue
-                if (not sdmItem.atom1[1] in ['H', 'D'] and not sdmItem.atom2[1] in ['H', 'D']) and \
+                if (not sdmItem.atom1[1] in h and not sdmItem.atom2[1] in h) and \
                         sdmItem.atom1[5] * sdmItem.atom2[5] == 0 or sdmItem.atom1[5] == sdmItem.atom2[5]:
                     dddd = (get_radius_from_element(at1[1]) + get_radius_from_element(at2[1])) * 1.2
                     sdmItem.dddd = dddd
@@ -188,7 +184,7 @@ class SDM():
         # if DEBUG:
         print('Time for sdm:', round(self.sdmtime, 3), 's')
         self.sdm_list.sort()
-        self.calc_molindex(self.atoms)
+        self.calc_molindex(list(self.atoms))
         need_symm = self.collect_needed_symmetry()
         if DEBUG:
             print("The asymmetric unit contains {} fragments.".format(self.maxmol))
@@ -196,18 +192,18 @@ class SDM():
 
     def collect_needed_symmetry(self) -> list:
         need_symm = []
+        h = ('H', 'D')
         # Collect needsymm list:
         for sdmItem in self.sdm_list:
             if sdmItem.covalent:
                 if sdmItem.atom1[-1] < 1 or sdmItem.atom1[-1] > 6:
                     continue
                 for n, symop in enumerate(self.symmcards):
-                    if sdmItem.atom1[5] != 0 and sdmItem.atom2[5] != 0 \
-                            and sdmItem.atom1[5] != sdmItem.atom2[5]:
-                        # both not part 0 and different part numbers
+                    if sdmItem.atom1[5] * sdmItem.atom2[5] != 0 and \
+                            sdmItem.atom1[5] != sdmItem.atom2[5]:
                         continue
                     # Both the same atomic number and number 0 (hydrogen)
-                    if sdmItem.atom1[1] == sdmItem.atom2[1] and sdmItem.atom1[1] in ['H', 'D']:
+                    if sdmItem.atom1[1] == sdmItem.atom2[1] and sdmItem.atom1[1] in h:
                         continue
                     prime = Array(sdmItem.atom1[2:5]) * symop.matrix + symop.trans
                     D = prime - Array(sdmItem.atom2[2:5]) + Array([0.5, 0.5, 0.5])
@@ -220,7 +216,7 @@ class SDM():
                     # Idea for fast bon list:
                     # self.bondlist.append((sdmItem.a1, sdmItem.a2, sdmItem.atom1[0] + '<',
                     #                      sdmItem.atom2[0] + '<', sdmItem.dist))
-                    if sdmItem.atom1[1] in ['H', 'D'] and sdmItem.atom2[1] in ['H', 'D']:
+                    if sdmItem.atom1[1] in h and sdmItem.atom2[1] in h:
                         dddd = 1.8
                     if (dk > 0.001) and (dddd >= dk):
                         bs = [n + 1, (5 - floorD[0]), (5 - floorD[1]), (5 - floorD[2]), sdmItem.atom1[-1]]
@@ -265,6 +261,7 @@ class SDM():
         Packs atoms of the asymmetric unit to real molecules.
         """
         showatoms = self.atoms[:]
+        new_atoms = []
         for symm in need_symm:
             s, h, k, l, symmgroup = symm
             h -= 5
@@ -276,8 +273,10 @@ class SDM():
                     coords = Array(atom[2:5]) * self.symmcards[s].matrix \
                              + Array(self.symmcards[s].trans) + Array([h, k, l])
                     # The new atom:
-                    new = [atom[0], atom[1]] + list(coords) + [atom[5]]
+                    new = [atom[0], atom[1]] + list(coords) + [atom[5], atom[6], atom[7], 'symmgen']
+                    new_atoms.append(new)
                     isthere = False
+                    # Only add atom if its occupancy (new[5]) is greater zero:
                     if new[5] >= 0:
                         for atom in showatoms:
                             if atom[5] != new[5]:
@@ -297,28 +296,44 @@ class SDM():
         return cart_atoms
 
     def to_cartesian(self, at):
-        x, y, z = frac_to_cart([at[2], at[3], at[4]], self.cell[:6])
-        return SDMAtom(name=at[0], element=at[1], x=x, y=y, z=z, part=at[5])
+        return list(at[:2]) + frac_to_cart([at[2], at[3], at[4]], self.cell[:6]) + list(at[5:])
 
 
 if __name__ == "__main__":
-    structureId = 32
-    structures = database_handler.StructureTable('../structurefinder.sqlite')
-    cell = structures.get_cell_by_id(structureId)
-    atoms = structures.get_atoms_table(structureId, cell, cartesian=False, as_list=True)
-    symmcards = [x.split(',') for x in structures.get_row_as_dict(structureId)['_space_group_symop_operation_xyz'] \
-        .replace("'", "").replace(" ", "").split("\n")]
-    sdm = SDM(atoms, symmcards, cell)
+    import sys
+    from pathlib import Path
+    from shutil import copy2
+    from tempfile import TemporaryDirectory
+
+    from PyQt5.QtCore import QUrl
+    from PyQt5.QtWebEngineWidgets import QWebEngineView
+    from PyQt5.QtWidgets import QApplication
+    from cif.cif_file_io import CifContainer
+    from displaymol import mol_file_writer, write_html
+
+    import displaymol
+
+    cif = CifContainer(Path('test-data/p21c.cif'))
+
+    app = QApplication(sys.argv)
+    # w = QWidget()
+    w = QWebEngineView()
+    w.heightForWidth(1)
+    app.setActiveWindow(w)
+    jsmoldir = TemporaryDirectory()
+    atoms = list(cif.atoms_fract)
+    sdm = SDM(atoms, cif.symmops, cif.cell[:6], centric=cif.is_centrosymm)
     needsymm = sdm.calc_sdm()
-    # print(needsymm)
-    # sys.exit()
-    packed_atoms = sdm.packer(sdm, needsymm)
-    # print(needsymm)
-    # [[8, 5, 5, 5, 1], [16, 5, 5, 5, 1], [7, 4, 5, 5, 3]]
-    # print(len(shx.atoms))
-    # print(len(packed_atoms))
+    atoms = sdm.packer(sdm, needsymm)
+    mol = mol_file_writer.MolFile(atoms, bonds=[])
+    mol = mol.make_mol()
+    content = write_html.write(mol, 250, 250)
+    Path(jsmoldir.name).joinpath("./jsmol.htm").write_text(data=content, encoding="utf-8", errors='ignore')
+    copy2(Path(displaymol.__file__).parent.joinpath('jquery.min.js'), jsmoldir.name)
+    copy2(Path(displaymol.__file__).parent.joinpath('JSmol_dk.nojq.lite.js'), jsmoldir.name)
+    print(Path(jsmoldir.name).joinpath("./jsmol.htm").absolute())
+    w.load(QUrl.fromLocalFile(str(Path(jsmoldir.name).joinpath("./jsmol.htm").absolute())))
+    w.show()
+    w.reload()
 
-    # for at in packed_atoms:
-    #    print(at)
-
-    print('Zeit für sdm:', round(sdm.sdmtime, 3), 's')
+    sys.exit(app.exec_())

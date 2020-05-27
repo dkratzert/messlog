@@ -81,7 +81,7 @@ class CifFileModel(models.Model):
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
             # raise ValidationError('Unable to parse cif file:', e)
             return False
-        Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
+        #Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
         try:
             # self.cif_file_on_disk.file.name
@@ -94,8 +94,7 @@ class CifFileModel(models.Model):
         if not self.date_created:
             self.date_created = timezone.now()
         self.date_updated = timezone.now()
-        # TODO: one super() call should be enough?
-        # super(CifFileModel, self).save(*args, **kwargs)
+        super(CifFileModel, self).save(*args, **kwargs)
 
     def __str__(self):
         try:
@@ -130,13 +129,13 @@ class CifFileModel(models.Model):
         >>> cell.orthogonalize(gemmi.Fractional(0.5, 0.5, 0.5))
         <gemmi.Position(12.57, 19.75, 22.535)>
         """
-        with transaction.atomic():
-            for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
-                self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
-                                  x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
-                                  xc=at_orth['x'], yc=at_orth['y'], zc=at_orth['z'],
-                                  occupancy=at_orth['occ'], part=at_orth['part'], asym=True)
-                self.atoms.save()
+        #with transaction.atomic():
+        #    for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
+        #        self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
+        #                          x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
+        #                          xc=at_orth['x'], yc=at_orth['y'], zc=at_orth['z'],
+        #                          occupancy=at_orth['occ'], part=at_orth['part'], asym=True)
+        #        self.atoms.save()
         self.data = cif.block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cif.cell
@@ -198,10 +197,13 @@ class CifFileModel(models.Model):
 
     def get_cif_model(self):
         """Reads the current cif file from tzhe model"""
-        cif = CifContainer(Path(self.cif_file_on_disk.name))
-        print(cif.cell)
+        filepth = Path(MEDIA_ROOT).joinpath(self.cif_file_on_disk.name)
+        print('loadinf cif:', filepth)
+        cif = CifContainer(filepth)
+        return cif
 
 
+'''
 class Atom(models.Model):
     """
     This table holds the atoms of a cif file.
@@ -229,3 +231,4 @@ class Atom(models.Model):
                                                               self.occupancy, self.part)
         """
         return self.name
+'''

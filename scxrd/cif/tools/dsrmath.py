@@ -566,7 +566,7 @@ class SymmetryElement(object):
         lines = []
         trans = []
         for symm in self.symms:
-            line, t = self._parse_line(', '.join(symm))
+            line, t = self._parse_line(symm)
             lines.append(line)
             trans.append(t)
         self.matrix = Matrix(lines).transpose()
@@ -682,7 +682,7 @@ class SymmetryElement(object):
             return float(string)
         except ValueError:
             if '/' in string:
-                string = string.replace(r'/', r'./') + r'.'
+                string = string.replace('/', './') + '.'
                 return eval('{}'.format(string))
 
     def _partition(self, symm, char):

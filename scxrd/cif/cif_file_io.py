@@ -253,6 +253,19 @@ class CifContainer():
     @property
     def atoms_fract(self) -> List:
         for at in self.atomic_struct.sites:
+            yield [at.label, at.type_symbol, at.fract.x, at.fract.y, at.fract.z, at.disorder_group, at.occ, at.u_iso]
+
+    @property
+    def atoms_orth(self):
+        cell = self.atomic_struct.cell
+        for at in self.atomic_struct.sites:
+            x, y, z = at.orth(cell)
+            yield [at.label, at.type_symbol, x, y, z, at.disorder_group, at.occ, at.u_iso]
+
+    """    
+    @property
+    def atoms_fract(self) -> List:
+        for at in self.atomic_struct.sites:
             yield {'name': at.label, 'symbol': at.type_symbol, 'x': at.fract.x, 'y': at.fract.y, 'z': at.fract.z,
                    'part': at.disorder_group, 'occ': at.occ, 'uiso': at.u_iso}
 
@@ -262,7 +275,7 @@ class CifContainer():
         for at in self.atomic_struct.sites:
             x, y, z = at.orth(cell)
             yield {'name': at.label, 'symbol': at.type_symbol, 'x': x, 'y': y, 'z': z,
-                   'part': at.disorder_group, 'occ': at.occ, 'uiso': at.u_iso}
+                   'part': at.disorder_group, 'occ': at.occ, 'uiso': at.u_iso}"""
 
     @property
     def hydrogen_atoms_present(self) -> bool:

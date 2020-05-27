@@ -16,7 +16,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.cif_model import Atom, CifFileModel
+from scxrd.cif_model import CifFileModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm, CifForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -176,8 +176,8 @@ class DragAndDropUploadView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        exp_id = self.kwargs['pk']
-        context['absfiles'] = CifFileModel.objects.get(pk=exp_id)
+        # exp_id = self.kwargs['pk']
+        # context['ciffile'] = CifFileModel.objects.get(pk=exp_id)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -224,34 +224,30 @@ class MoleculeView(LoginRequiredMixin, View):
         molfile = ''
         # print('# Molecule request:')
         # pprint(request.POST)
-        atoms = None
         cif_id = request.POST.get('cif_id')
-        if cif_id:
-            print('cif id:', cif_id)
-            atoms = Atom.objects.all().filter(cif_id=cif_id)
-        if atoms:
-            grow = request.POST.get('grow')
+        cif = CifFileModel.objects.get(pk=cif_id).get_cif_model()
+        grow = request.POST.get('grow')
+        if cif.atoms_fract:
             if grow == 'true':
-                # Grow atoms here
-                print('growing atoms')
-                # TODO: Make this clean with atom objects and use x, y, z, xc, yc, zc:
-                cif = CifFileModel.objects.get(pk=cif_id)
-                cell = [cif.cell_length_a, cif.cell_length_b, cif.cell_length_c, cif.cell_angle_alpha,
-                        cif.cell_angle_beta, cif.cell_angle_gamma]
-                atoms = [[at.name, at.element, at.x, at.y, at.z, at.part] for at in atoms]
-                sdm = SDM(atoms, cif.space_group_symop_operation_xyz, cell)
-                needsymm = sdm.calc_sdm()
-                atoms = sdm.packer(sdm, needsymm)
+                sdm = SDM(list(cif.atoms_fract), cif.symmops, cif.cell[:6], centric=cif.is_centrosymm)
+                try:
+                    needsymm = sdm.calc_sdm()
+                    atoms = sdm.packer(sdm, needsymm)
+                except IndexError as e:
+                    print('Error in SDM:', e)
+                    atoms = []
+                    raise
             else:
-                print('growing is false:', grow)
+                atoms = cif.atoms_orth
             try:
-                m = MolFile(atoms)
-                molfile = m.make_mol()
-            except(KeyError, TypeError) as e:
-                print('Exception in jsmol_request: {}'.format(e))
+                molfile = ' '
+                molfile = MolFile(atoms)
+                molfile = molfile.make_mol()
+            except (TypeError, KeyError):
+                print("Error while writing mol file.")
         return HttpResponse(molfile)
 
-    # alsways reload complete molecule:
+    # always reload complete molecule:
     @never_cache
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)

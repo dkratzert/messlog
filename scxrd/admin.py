@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from django.contrib import admin
 
-from scxrd.cif_model import Atom
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup
 from scxrd.models import CrystalSupport, CrystalGlue
 from scxrd.models import Person
@@ -25,7 +24,7 @@ class ExperimentAdmin(admin.ModelAdmin):
             form.base_fields['number'].initial = 1
         return form
 
-
+"""
 class AtomsInline(admin.TabularInline):
     model = Atom
     extra = 0
@@ -37,7 +36,7 @@ class AtomsInline(admin.TabularInline):
         }),
     )
 
-
+"""
 """class SumFormInline(admin.TabularInline):
     model = SumFormula
     extra = 0
@@ -58,7 +57,9 @@ class CifAdmin(admin.ModelAdmin):
         return Experiment.objects.get(cif_id=obj.pk)
 
     def number_of_atoms(self, obj):
-        return Atom.objects.filter(cif_id=obj.pk).count()
+        # TODO: Make this work again
+        cif = self.model.objects.get(pk=obj.id).get_cif_model()
+        return cif.natoms()
 
 
 """class MyUserChangeForm(UserChangeForm):
