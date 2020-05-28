@@ -6,7 +6,7 @@
 #  Dr. Daniel Kratzert
 #  ----------------------------------------------------------------------------
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Iterator
 
 import gemmi
 
@@ -16,21 +16,27 @@ class CifContainer():
     This class holds the content of a cif file, independent of the file parser used.
     """
 
-    def __init__(self, file: Path):
+    def __init__(self, file: Path = None, chunks: Iterator = None):
         self.fileobj = file
         # I do this in small steps instead of gemmi.cif.read_file() in order to
         # leave out the check_for_missing_values. This was gemmi reads cif files
         # with missing values.
-        self.doc = self.read_file(str(self.fileobj.absolute()))
-        self.block = self.doc.sole_block()
-        # will not ok with non-ascii characters in the res file:
-        self.chars_ok = True
-        try:
-            self.resdata = self.block.find_value('_shelx_res_file')
-        except UnicodeDecodeError:
-            # This is a fallback in case _shelx_res_file has non-ascii characters.
-            print('File has non-ascii characters. Switching to compatible mode.')
-            self.doc = self.read_string(self.fileobj.read_text(encoding='cp1250', errors='ignore'))
+        if file:
+            self.doc = self.read_file(str(self.fileobj.absolute()))
+            self.block = self.doc.sole_block()
+            # will not ok with non-ascii characters in the res file:
+            self.chars_ok = True
+            try:
+                self.resdata = self.block.find_value('_shelx_res_file')
+            except UnicodeDecodeError:
+                # This is a fallback in case _shelx_res_file has non-ascii characters.
+                print('File has non-ascii characters. Switching to compatible mode.')
+                self.doc = self.read_string(self.fileobj.read_text(encoding='cp1250', errors='ignore'))
+                self.block = self.doc.sole_block()
+                self.resdata = self.block.find_value('_shelx_res_file')
+                self.chars_ok = False
+        else:
+            self.doc = self.read_string(str(chunks))
             self.block = self.doc.sole_block()
             self.resdata = self.block.find_value('_shelx_res_file')
             self.chars_ok = False

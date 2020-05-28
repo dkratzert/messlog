@@ -67,9 +67,10 @@ class CifFileModel(models.Model):
                                                          verbose_name='CCDC number')
 
     def save(self, *args, **kwargs):
-        super(CifFileModel, self).save(*args, **kwargs)
+        #super(CifFileModel, self).save(*args, **kwargs)
+        print(str(self.cif_file_on_disk.chunks()))
         try:
-            cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+            cif = CifContainer(chunks = self.cif_file_on_disk.chunks())
         except Exception as e:
             print(e)
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
