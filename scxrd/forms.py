@@ -46,7 +46,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
-    cif = forms.FileField(required=False)
+    #cif = forms.FileField(required=False)
 
 
 class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):

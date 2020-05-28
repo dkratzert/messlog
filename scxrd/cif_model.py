@@ -4,7 +4,7 @@ from typing import List
 
 import gemmi
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
+from django.db import models
 from django.db.models import FileField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -68,9 +68,11 @@ class CifFileModel(models.Model):
 
     def save(self, *args, **kwargs):
         #super(CifFileModel, self).save(*args, **kwargs)
-        print(str(self.cif_file_on_disk.chunks()))
+        #print('chunks:', '\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
         try:
-            cif = CifContainer(chunks = self.cif_file_on_disk.chunks())
+            #cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+            cif = CifContainer(chunks='\n'.join(
+                [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
         except Exception as e:
             print(e)
             print('Unable to parse cif file:', self.cif_file_on_disk.file.name)

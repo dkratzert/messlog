@@ -48,13 +48,16 @@ class CifUploadView(LoginRequiredMixin, CreateView):
         pprint(self.request.FILES)
         pprint(args)
         pprint(kwargs)
+
         if form.is_valid():
-            ciffile = form.save()
-            self.model.cif.cif_file_on_disk = ciffile
+            #ciffile = form.save()
+            #self.model.cif.cif_file_on_disk = ciffile
+            cifdoc = CifFileModel(cif_file_on_disk=request.FILES['cif_file_on_disk'])
+            cifdoc.save()
             exp = Experiment.objects.get(pk=self.kwargs['pk'])
-            exp.cif = CifFileModel.objects.get(pk=ciffile.pk)
+            exp.cif = cifdoc
             exp.save(update_fields=['cif'])
-            if not ciffile.pk:
+            if not exp.cif.pk:
                 messages.warning(request, 'That cif file was invalid.')
                 # try:
                 #    ciffile.delete()
