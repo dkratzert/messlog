@@ -1,16 +1,19 @@
 import datetime
 import textwrap
+from pathlib import Path
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
+from django.db.models import FileField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.cif_model import CifFileModel
-from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from scxrd.cif.cif_file_io import CifContainer
+from scxrd.cif_model import CifFileModel, validate_cif_file_extension
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, generate_sha256
 
 """
 TODO:
@@ -156,8 +159,6 @@ class Experiment(models.Model):
                              on_delete=models.DO_NOTHING)
     glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='+', blank=True, null=True,
                              on_delete=models.DO_NOTHING)
-    cif = models.OneToOneField(CifFileModel, null=True, blank=True, related_name="experiments",
-                               verbose_name='cif file', on_delete=models.CASCADE)
     # equivalent to _exptl_crystal_size_max
     crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
     # equivalent to _exptl_crystal_size_mid
@@ -178,6 +179,11 @@ class Experiment(models.Model):
     # _exptl_special_details:
     exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
                                              default='')
+    cif = models.OneToOneField(CifFileModel, null=True, blank=True, related_name="experiments",
+                               verbose_name='cif file', on_delete=models.CASCADE)
+    cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
+                                 validators=[validate_cif_file_extension],
+                                 verbose_name='cif file')
 
     class Meta:
         ordering = ["-number"]
@@ -209,6 +215,49 @@ class Experiment(models.Model):
                 return choices[value][1]
         else:
             return choices[value][1]
+
+    """
+    TODO: Instead, call super().save() then open CifContainer on file and call fill_residuals_table to update
+    CifFileModel from within Experiment model.
+    
+    def save(self, *args, **kwargs):
+        #super(CifFileModel, self).save(*args, **kwargs)
+        #print('chunks:', '\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
+        try:
+            #cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+            cif = CifContainer(chunks='\n'.join(
+                [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
+        except Exception as e:
+            print(e)
+            print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
+            # raise ValidationError('Unable to parse cif file:', e)
+            return False
+        # Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
+        # save cif content to db table:
+        try:
+            # self.cif_file_on_disk.file.name
+            self.fill_residuals_table(cif)
+        except RuntimeError as e:
+            print('Error while saving cif file:', e)
+            return False
+        self.sha256 = generate_sha256(self.cif_file_on_disk)
+        self.filesize = self.cif_file_on_disk.size
+        if not self.date_created:
+            self.date_created = timezone.now()
+        self.date_updated = timezone.now()
+        super().save(*args, **kwargs)"""
+
+    def get_cif_model(self):
+        """Reads the current cif file from the Experiment and returns a gemmi instance"""
+        filepth = Path(self.cif_file_on_disk.path)
+        print('loading cif:', filepth)
+        return CifContainer(filepth)
+
+    @property
+    def cif_exists(self):
+        if Path(self.cif_file_on_disk.path).exists():
+            return True
+        return False
 
     @staticmethod
     def quote_string(string):

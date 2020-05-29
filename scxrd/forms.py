@@ -46,7 +46,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
-    #cif = forms.FileField(required=False)
+    cif = forms.FileField(required=False, label=_("CIF file"))
 
 
 class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
@@ -61,7 +61,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.use_custom_control = True
         self.helper.render_required_fields = True
         # Turn this off to see only mentioned form fields:
-        self.helper.render_unmentioned_fields = False
+        self.helper.render_unmentioned_fields = True
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
@@ -140,11 +140,12 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             self.card(_('File upload')),
             Row(
                 Column(
-                    HTML('''{% include "scxrd/uploaded_files.html" %}'''),
+                    Field('cif'), css_class='col-12'
+                    """HTML('''{% include "scxrd/uploaded_files.html" %}'''),
                     HTML('''<a class="btn btn-secondary btn-small" 
                             href="{% url "scxrd:upload_cif_file" object.pk %}"> 
                             Upload a CIF</a>'''),
-                    css_class='ml-2 mb-3 form-sm'
+                    css_class='ml-2 mb-3 form-sm'"""
                 ),
                 HTML('</div>'),  # end of card
                 css_class='form-row mt-3 form-sm'

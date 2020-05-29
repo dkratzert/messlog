@@ -48,12 +48,13 @@ class AtomsInline(admin.TabularInline):
 
 class CifAdmin(admin.ModelAdmin):
     model = CifFileModel
-    list_display = ['edit_file', 'cif_file_on_disk', 'related_experiment']
+    list_display = ['edit_file', 'data', 'related_experiment']
 
     def edit_file(self, obj):
         return self.model.objects.get(id=obj.id)
 
-    def related_experiment(self, obj):
+    @staticmethod
+    def related_experiment(obj):
         return Experiment.objects.get(cif_id=obj.pk)
 
     def number_of_atoms(self, obj):

@@ -27,9 +27,6 @@ class CifFileModel(models.Model):
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
-                                   validators=[validate_cif_file_extension],
-                                   verbose_name='cif file')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
@@ -66,37 +63,6 @@ class CifFileModel(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
 
-    def save(self, *args, **kwargs):
-        #super(CifFileModel, self).save(*args, **kwargs)
-        #print('chunks:', '\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
-        try:
-            #cif = CifContainer(Path(self.cif_file_on_disk.file.name))
-            cif = CifContainer(chunks='\n'.join(
-                [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
-        except Exception as e:
-            print(e)
-            print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
-            # raise ValidationError('Unable to parse cif file:', e)
-            return False
-        # Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
-        # save cif content to db table:
-        try:
-            # self.cif_file_on_disk.file.name
-            self.fill_residuals_table(cif)
-        except RuntimeError as e:
-            print('Error while saving cif file:', e)
-            return False
-        self.sha256 = generate_sha256(self.cif_file_on_disk)
-        self.filesize = self.cif_file_on_disk.size
-        if not self.date_created:
-            self.date_created = timezone.now()
-        self.date_updated = timezone.now()
-        super(CifFileModel, self).save(*args, **kwargs)
-        # Do not do this:
-        #print('Duplicates:', self.duplicates)
-        #for d in self.duplicates:
-        #    d.delete()
-
     def find_duplicates(self):
         return [i for i in CifFileModel.objects.exclude(pk=self.pk).filter(sha256=self.sha256)]
 
@@ -106,23 +72,17 @@ class CifFileModel(models.Model):
 
     def __str__(self):
         try:
-            return os.path.basename(self.cif_file_on_disk.url)
+            return os.path.basename(self.data)
         except ValueError:
             return '# no file found #'
         # data is the cif _data value
         # return self.data
 
-    @property
-    def exists(self):
-        if Path(self.cif_file_on_disk.path).exists():
-            return True
-        return False
-
     def delete(self, *args, **kwargs):
         if not self.exists:
-            return 
+            return
         cf = Path(self.cif_file_on_disk.path)
-        #if DEBUG:
+        # if DEBUG:
         print('deleting', cf.name, 'in', cf.absolute())
         cf.unlink()
         super().delete(*args, **kwargs)
@@ -204,13 +164,6 @@ class CifFileModel(models.Model):
         doc = gemmi.cif.read_file(file)
         pair = doc.sole_block().find_pair(item)
         return pair
-
-    def get_cif_model(self):
-        """Reads the current cif file from tzhe model"""
-        filepth = Path(MEDIA_ROOT).joinpath(self.cif_file_on_disk.name)
-        print('loadinf cif:', filepth)
-        cif = CifContainer(filepth)
-        return cif
 
 
 '''
