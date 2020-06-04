@@ -114,3 +114,4 @@ dmypy.json
 .pyre/
 .idea/
 media/
+.DS_Store
