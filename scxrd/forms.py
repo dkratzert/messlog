@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, ButtonHolder
+from crispy_forms.layout import Field, HTML, ButtonHolder, MultiField, Fieldset
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
@@ -66,8 +66,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
-        self.helper.label_class = 'p-2'  # 'font-weight-bold'
-        self.helper.field_class = 'p-2'
+        self.helper.label_class = 'pl-2 pr-2 pt-2'  # 'font-weight-bold'
+        self.helper.field_class = 'pl-2 pr-2 pb-1'
         self.backbutton = """
             <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
                 href="{% url "scxrd:index"%}">Back to start</a>
@@ -85,59 +85,48 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
             self.card(self.exp_title, self.backbutton),
             Row(
-                Column('experiment', css_class='col-4'),
-                Column('number', css_class='col-4'),
-                Column('measurement_temp', css_class='col-4'),
-                css_class='mt-0 mb-0'
+                Column('experiment'),
+                Column('number'),
+                Column('measurement_temp'),
             ),
             Row(
-                Column(Field('machine'), css_class='col-4'),
-                Column(Field('operator'), css_class='col-4'),
-                Column(Field('customer'), css_class='col-4'),
-                css_class='mt-0 mb-0'
+                Column('machine'),
+                Column('operator'),
+                Column('customer'),
             ),
             Row(
-                Column(Field('base'), css_class='col-4'),
-                Column(Field('glue'), css_class='col-4'),
-                Column(Field('measure_date'), css_class='col-4'),
-                css_class='mt-0 mb-0'
+                Column('base'),
+                Column('glue'),
+                Column('measure_date'),
             ),
             Row(
-                Column(Field('crystal_size_z'), css_class='col-4'),
-                Column(Field('crystal_size_y'), css_class='col-4'),
-                Column(Field('crystal_size_x'), css_class='col-4'),
-                css_class='form-row mt-0 mb-0'
+                Column('crystal_size_z'),
+                Column('crystal_size_y'),
+                Column('crystal_size_x'),
             ),
-            # HTML('</div>'),  # end of card
+            # HTML('</div>'),  # end of card, done later
         )
 
         self.crystal_layout = Layout(
             self.card('Crystal and Results', self.backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
-                Column(Field('sum_formula'), css_class='col-8'),
-                Column(Field('submit_date'), css_class='col-4'),
-                css_class='form-row form-sm'
+                Column('sum_formula', css_class='col-8'),
+                Column('submit_date', css_class='col-4'),
             ),
             Row(
-                Column(Field('prelim_unit_cell'), css_class='col-8'),
-                Column(Field('result_date'), css_class='col-4'),
-                css_class='form-row ml-0 mb-0'
+                Column('prelim_unit_cell', css_class='col-8'),
+                Column('result_date', css_class='col-4'),
             ),
             Row(
-                Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-4'),
-                Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-4'),
-                Column(Field('crystal_habit'), css_class='form-group col-4'),
-                css_class='form-row form-sm'
+                Column('solvents'),
+                Column('conditions'),
+                Column('crystal_habit'),
             ),
             Row(
-                Column(Field('crystal_colour', css_class='custom-select'),
-                       css_class='form-group'),
-                Column(Field('crystal_colour_mod', css_class='custom-select'),
-                       css_class='form-group'),
-                Column(Field('crystal_colour_lustre', css_class='custom-select'),
-                       css_class='form-group'),
-                css_class='form-row'
+                Column('crystal_colour'),
+                Column('crystal_colour_mod'),
+                Column('crystal_colour_lustre'),
             ),
             HTML('</div>'),  # end of card
         )
@@ -149,7 +138,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                     # Field('cif'), css_class='col-12'
                     Field('cif_file_on_disk'), css_class='col-8'
                 ),
-                css_class='form-row mt-3 form-sm'
             ),
             HTML('</div>'),  # end of card
         )
@@ -157,31 +145,26 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.misc_layout = Layout(
             self.card(_('Miscellaneous'), self.backbutton),
             Row(
-                Column('exptl_special_details', css_class='col-12 mb-0'),
-                css_class='ml-0 mb-0'
+                Column('exptl_special_details'),
             ),
             Row(
                 # Column(CustomCheckbox('publishable'), css_class='col-4 ml-3 mt-0'),
-                Column(Field('publishable'), css_class='col-4 ml-2'),
+                Column('publishable'),
             ),
             HTML('</div>'),  # end of card
         )
 
         self.crystal_colour_layout = Layout(
             Row(
-                Column(Field('crystal_colour', css_class='custom-select'), css_class='form-group col-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_mod', css_class='custom-select'), css_class='form-group '
-                                                                                         'col-4 mb-0 mt-0'),
-                Column(Field('crystal_colour_lustre', css_class='custom-select'),
-                       css_class='form-group col-4 mb-0 mt-0'),
-                css_class='form-row'
+                Column('crystal_colour'),
+                Column('crystal_colour_mod'),
+                Column('crystal_colour_lustre'),
             ),
         )
 
         self.sumform_row = Row(
-            Column(Field('sum_formula'), css_class='col-8 mb-0'),
-            Column(Field('submit_date'), css_class='col-4 mb-0'),
-            css_class='ml-0 mb-0'
+            Column('sum_formula'),
+            Column('submit_date'),
         )
 
     def card(self, header_title, button=''):

@@ -13,9 +13,10 @@ a div, a:hover {
   background-color:#28a745;
 }
 
-/*.asteriskField {
-    display: none;
-}*/
+.asteriskField {
+    /*display: none;*/
+    color: #b3b3b3;
+}
 
 form .alert ul li {
     list-style: none;
