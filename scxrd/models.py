@@ -222,9 +222,6 @@ class Experiment(models.Model):
             return choices[value][1]
 
     def save(self, *args, **kwargs):
-        #if self.cif:
-        #    print('previous found', self.cif.pk)
-        #    CifFileModel.objects.get(pk=self.cif.pk).delete(keep_parents=True)
         super().save(*args, **kwargs)
         if not self.cif_file_on_disk.chunks():
             print('returning from file check')
@@ -254,8 +251,8 @@ class Experiment(models.Model):
         if not cif_model.date_created:
             cif_model.date_created = timezone.now()
         cif_model.date_updated = timezone.now()
-        cif_model.save()
         self.cif = cif_model
+        cif_model.save()
         self.save(update_fields=['cif'])
 
     @property

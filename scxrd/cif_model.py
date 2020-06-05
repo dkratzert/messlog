@@ -49,28 +49,12 @@ class CifFileModel(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
 
-    '''def find_duplicates(self):
-        return [i for i in CifFileModel.objects.exclude(pk=self.pk).filter(sha256=self.sha256)]
-
-    @property
-    def duplicates(self):
-        return self.find_duplicates()'''
-
     def __str__(self):
         try:
             return self.data
         except ValueError:
             return '# no file found #'
         # data is the cif data_ value
-
-    # def delete(self, *args, **kwargs):
-    #    if not self.exists:
-    #        return
-    #    cf = Path(self.cif_file_on_disk.path)
-    #    # if DEBUG:
-    #   print('deleting', cf.name, 'in', cf.absolute())
-    #   cf.unlink()
-    #   super().delete(*args, **kwargs)
 
     def fill_residuals_table(self, cif: CifContainer):
         """
