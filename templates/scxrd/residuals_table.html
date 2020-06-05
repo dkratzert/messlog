@@ -1,7 +1,7 @@
 {% comment %}
 
-This table is used to display details about a selected structure on the main page when
-a certain structure is selected in the experiment table.
+    This table is used to display details about a selected structure on the main page when
+    a certain structure is selected in the experiment table.
 
 {% endcomment %}
 <div class="form-row">
@@ -16,18 +16,19 @@ a certain structure is selected in the experiment table.
         <div class="col-5">Solvents</div>
         <div class="col-7 " id="t_solvents"> -----</div>
     {% endif %}
-    {% if experiment.sum_formula %}
-        <div class="col-5">Sum Formula</div>
-        <div class="col-7" id="t_sumform">  {{ experiment.sum_formula|safe }} </div>
+    <div class="col-5">Sum Formula</div>
+    {% if experiment.cif %}
+        <div class="col-7" id="t_sumform">  {{ experiment.cif.chemical_formula_sum|safe|default:"-----" }} </div>
     {% else %}
-        <div class="col-5">Sum Formula</div>
-        <div class="col-7" id="t_sumform"> -----</div>
+        <div class="col-7" id="t_sumform">  {{ experiment.sum_formula|safe|default:"-----" }} </div>
     {% endif %}
     <div class="col-5">Measured by</div>
     <div class="col-7" id="t_operator">  {{ experiment.operator.get_username }} </div>
     <div class="col-5">Results sent</div>
     <div class="col-7" id="t_sent">  {{ experiment.result_date|date|default:"-----"  }} </div>
-    <div class="col-5">CIF name</div>
+    <div class="col-5">CIF File</div>
+    <div class="col-7" id="t_data_">  {{ experiment.cif_name_only|default:"-----"  }} </div>
+    <div class="col-5">CIF data_</div>
     <div class="col-7" id="t_data_">  {{ experiment.cif.data|default:"-----"  }} </div>
     <div class="col-5"><i>R</i><sub>1</sub></div>
     <div class="col-7" id="t_r1">  {{ experiment.cif.refine_ls_R_factor_gt|default:"-----"  }} </div>

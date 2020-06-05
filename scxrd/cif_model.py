@@ -1,25 +1,11 @@
-import os
-from pathlib import Path
-from typing import List
-
-import gemmi
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import FileField
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
-from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.utils import generate_sha256
 from scxrd.utils import get_float
 
-DEBUG = True
+# from django.utils.translation import gettext_lazy as _
 
-
-def validate_cif_file_extension(value):
-    if not value.name.endswith('.cif'):
-        raise ValidationError(_('Only .cif files are allowed to upload here.'))
+DEBUG = False
 
 
 class CifFileModel(models.Model):
@@ -63,49 +49,33 @@ class CifFileModel(models.Model):
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name='CCDC number')
 
-    def find_duplicates(self):
+    '''def find_duplicates(self):
         return [i for i in CifFileModel.objects.exclude(pk=self.pk).filter(sha256=self.sha256)]
 
     @property
     def duplicates(self):
-        return self.find_duplicates()
+        return self.find_duplicates()'''
 
     def __str__(self):
         try:
-            return os.path.basename(self.data)
+            return self.data
         except ValueError:
             return '# no file found #'
-        # data is the cif _data value
-        # return self.data
+        # data is the cif data_ value
 
-    def delete(self, *args, **kwargs):
-        if not self.exists:
-            return
-        cf = Path(self.cif_file_on_disk.path)
-        # if DEBUG:
-        print('deleting', cf.name, 'in', cf.absolute())
-        cf.unlink()
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #    if not self.exists:
+    #        return
+    #    cf = Path(self.cif_file_on_disk.path)
+    #    # if DEBUG:
+    #   print('deleting', cf.name, 'in', cf.absolute())
+    #   cf.unlink()
+    #   super().delete(*args, **kwargs)
 
     def fill_residuals_table(self, cif: CifContainer):
         """
         Fill the table with residuals of the refinement.
-
-        >>> cell = gemmi.UnitCell(25.14, 39.50, 45.07, 90, 90, 90)
-        >>> cell
-        <gemmi.UnitCell(25.14, 39.5, 45.07, 90, 90, 90)>
-        >>> cell.fractionalize(gemmi.Position(10, 10, 10))
-        <gemmi.Fractional(0.397772, 0.253165, 0.221877)>
-        >>> cell.orthogonalize(gemmi.Fractional(0.5, 0.5, 0.5))
-        <gemmi.Position(12.57, 19.75, 22.535)>
         """
-        # with transaction.atomic():
-        #    for at_orth, at_frac in zip(cif.atoms_orth, cif.atoms_fract):
-        #        self.atoms = Atom(cif=self, name=at_orth['name'], element=at_orth['symbol'],
-        #                          x=at_frac['x'], y=at_frac['y'], z=at_frac['z'],
-        #                          xc=at_orth['x'], yc=at_orth['y'], zc=at_orth['z'],
-        #                          occupancy=at_orth['occ'], part=at_orth['part'], asym=True)
-        #        self.atoms.save()
         self.data = cif.block.name
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cif.cell
@@ -151,47 +121,3 @@ class CifFileModel(models.Model):
     def completeness_in_percent(self) -> float:
         if self.diffrn_measured_fraction_theta_max:
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
-
-    def get_cif_instance(self) -> CifContainer:
-        cif = CifContainer(Path(MEDIA_ROOT).joinpath(self.cif_file_on_disk.name))
-        return cif
-
-    @staticmethod
-    def get_cif_item(file: str, item: str) -> List[str]:
-        """
-        "testfiles/p21c.cif"
-        """
-        doc = gemmi.cif.read_file(file)
-        pair = doc.sole_block().find_pair(item)
-        return pair
-
-
-'''
-class Atom(models.Model):
-    """
-    This table holds the atoms of a cif file.
-    """
-    cif = models.ForeignKey(CifFileModel, null=True, blank=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=16)
-    # Element as element symbol:
-    element = models.CharField(max_length=2)
-    # Fractional coordinates:
-    x = models.FloatField()
-    y = models.FloatField()
-    z = models.FloatField()
-    # Cartesian coordinates:
-    xc = models.FloatField(default=0)
-    yc = models.FloatField(default=0)
-    zc = models.FloatField(default=0)
-    occupancy = models.FloatField()
-    part = models.IntegerField()
-    # incicates wether the atom belongs to the asymmetric unit:
-    asym = models.BooleanField(default=False)
-
-    def __str__(self):
-        """
-        return "{} {} {:8.6f}{:8.6f}{:8.6f} {} {}".format(self.name, self.element, self.x, self.y, self.z,
-                                                              self.occupancy, self.part)
-        """
-        return self.name
-'''

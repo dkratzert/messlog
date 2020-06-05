@@ -6,7 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
-from django.forms import HiddenInput
+from django.forms import HiddenInput, FileField
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFileModel
@@ -46,7 +46,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
-    cif = forms.FileField(required=False, label=_("CIF file"))
+    cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
 
 
 class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
@@ -61,7 +61,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.use_custom_control = True
         self.helper.render_required_fields = True
         # Turn this off to see only mentioned form fields:
-        self.helper.render_unmentioned_fields = True
+        self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'p-2'  # 'font-weight-bold'
@@ -108,6 +108,10 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row form-sm'
             ),
             Row(
+                Column('prelim_unit_cell', css_class='col-12 mb-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
+            Row(
                 Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-4'),
                 Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-4'),
                 Column(Field('crystal_habit'), css_class='form-group col-4'),
@@ -140,15 +144,17 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             self.card(_('File upload')),
             Row(
                 Column(
-                    Field('cif'), css_class='col-12'
-                    """HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    HTML('''<a class="btn btn-secondary btn-small" 
-                            href="{% url "scxrd:upload_cif_file" object.pk %}"> 
-                            Upload a CIF</a>'''),
-                    css_class='ml-2 mb-3 form-sm'"""
+                    Field('cif_file_on_disk'), css_class='col-6'
                 ),
                 HTML('</div>'),  # end of card
                 css_class='form-row mt-3 form-sm'
+            ),
+            Row(
+                FormActions(
+                    Submit('submit', 'Save', css_class='btn-primary mr-2 ml-2'),
+                    Submit('cancel', 'Cancel', css_class='btn btn-danger', formnovalidate='formnovalidate'),
+                ),
+                css_class='form-row ml-0 mb-0'
             ),
             self.card(_('Miscellaneous'), self.backbutton),
             Row(

@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.cif_model import CifFileModel, validate_cif_file_extension
+from scxrd.cif_model import CifFileModel
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, generate_sha256
 
 """
@@ -32,6 +32,11 @@ TODO:
 - Check for existing unit cell during cif upload.
 
 """
+
+
+def validate_cif_file_extension(value):
+    if not value.name.endswith('.cif'):
+        raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
 
 def validate_email(value):
@@ -180,7 +185,7 @@ class Experiment(models.Model):
     exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
                                              default='')
     cif = models.OneToOneField(CifFileModel, null=True, blank=True, related_name="experiments",
-                               verbose_name='cif file', on_delete=models.CASCADE)
+                               verbose_name='cif file data', on_delete=models.CASCADE)
     cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
                                  validators=[validate_cif_file_extension],
                                  verbose_name='cif file')
@@ -216,42 +221,43 @@ class Experiment(models.Model):
         else:
             return choices[value][1]
 
-    """
-    TODO: Instead, call super().save() then open CifContainer on file and call fill_residuals_table to update
-    CifFileModel from within Experiment model.
-    
     def save(self, *args, **kwargs):
-        #super(CifFileModel, self).save(*args, **kwargs)
-        #print('chunks:', '\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
+        super().save(*args, **kwargs)
+        if not self.cif_file_on_disk.chunks():
+            print('returning from file check')
+            return
+        if 'update_fields' in kwargs:
+            print('returning from update save()')
+            return
         try:
-            #cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+            # cif = CifContainer(Path(self.cif_file_on_disk.file.name))
             cif = CifContainer(chunks='\n'.join(
                 [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
         except Exception as e:
             print(e)
-            print('Unable to parse cif file:', self.cif_file_on_disk.file.name)
+            print('Unable to parse cif file')
             # raise ValidationError('Unable to parse cif file:', e)
             return False
-        # Atom.objects.filter(cif_id=self.pk).delete()  # delete previous atoms version
         # save cif content to db table:
+        cif_model = CifFileModel()  # .objects.get(pk=self.cif_id)
         try:
             # self.cif_file_on_disk.file.name
-            self.fill_residuals_table(cif)
+            cif_model.fill_residuals_table(cif)
         except RuntimeError as e:
             print('Error while saving cif file:', e)
             return False
-        self.sha256 = generate_sha256(self.cif_file_on_disk)
-        self.filesize = self.cif_file_on_disk.size
-        if not self.date_created:
-            self.date_created = timezone.now()
-        self.date_updated = timezone.now()
-        super().save(*args, **kwargs)"""
+        cif_model.sha256 = generate_sha256(self.cif_file_on_disk)
+        cif_model.filesize = self.cif_file_on_disk.size
+        if not cif_model.date_created:
+            cif_model.date_created = timezone.now()
+        cif_model.date_updated = timezone.now()
+        cif_model.save()
+        self.cif = cif_model
+        self.save(update_fields=['cif'])
 
-    def get_cif_model(self):
-        """Reads the current cif file from the Experiment and returns a gemmi instance"""
-        filepth = Path(self.cif_file_on_disk.path)
-        print('loading cif:', filepth)
-        return CifContainer(filepth)
+    @property
+    def cif_name_only(self):
+        return Path(self.cif_file_on_disk.name).name
 
     @property
     def cif_exists(self):

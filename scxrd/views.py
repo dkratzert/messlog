@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from pprint import pprint
 
 from django.contrib import messages
@@ -15,6 +16,8 @@ from django.views.generic import CreateView, UpdateView, DetailView, TemplateVie
 from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
+from mysite.settings import MEDIA_ROOT
+from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
@@ -76,7 +79,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
     def post(self, request, *args, **kwargs):
         """Add 'Cancel' button redirect."""
         print('The post request:')
-        # pprint(request.POST)
+        pprint(request.POST)
         print('end request ----------------')
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
@@ -89,7 +92,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
                 form.save()
                 print('The form is valid!!')
                 return HttpResponseRedirect(reverse_lazy('scxrd:index'))
-        return super(FormActionMixin, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -124,18 +127,27 @@ class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
     # def get_success_url(self):
     #    return reverse_lazy('scxrd:index')
 
-    def get_context_data(self, **kwargs):
-        exp = Experiment.objects.get(pk=self.kwargs['pk'])
-        cifid = exp.cif_id
+    """def get_context_data(self, **kwargs):
+        #exp = Experiment.objects.get(pk=self.kwargs['pk'])
+        #cifid = exp.cif_id
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
         # print('#edit#', exp_id, '###')
         context['expid'] = exp_id
-        context['ciffile'] = exp.cif
-        # This tries to preserve the cif id, but somewhere it gets deleted during save()
-        state = exp.save(update_fields=["cif"])
-        print('state:', state, cifid)
+        #context['ciffile'] = exp.cif_file_on_disk
+        #state = exp.save(update_fields=["cif"])
+        #print('state:', state, cifid)
         return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        file = request.FILES.get('upload_cif')
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)"""
 
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
@@ -211,7 +223,7 @@ class FilesUploadedView(ListView):
         exp_id = self.kwargs['pk']
         print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
-        context['ciffile'] = exp.cif
+        context['ciffile'] = exp.cif_file_on_disk
         return context
 
 
@@ -230,15 +242,15 @@ class MoleculeView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         molfile = ''
-        # print('# Molecule request:')
-        # pprint(request.POST)
-        cif_id = request.POST.get('cif_id')
+        print('# Molecule request:')
+        pprint(request.POST)
+        cif_file = request.POST.get('cif_file')
         exp_id = request.POST.get('experiment_id')
-        if not cif_id:
+        if not cif_file:
             print('Experiment with id {} has no cif file.'.format(exp_id))
             # Makes structure view blank:
             return HttpResponse(' ')
-        cif = CifFileModel.objects.get(pk=cif_id).get_cif_model()
+        cif = CifContainer(Path(MEDIA_ROOT).joinpath(Path(cif_file)))
         grow = request.POST.get('grow')
         if cif.atoms_fract:
             if grow == 'true':
@@ -257,7 +269,7 @@ class MoleculeView(LoginRequiredMixin, View):
             except (TypeError, KeyError):
                 print("Error while writing mol file.")
             return HttpResponse(molfile)
-        print('Cif file with id {} of experiment {} has no atoms!'.format(cif_id, exp_id))
+        print('Cif file with id {} of experiment {} has no atoms!'.format(cif_file, exp_id))
         return HttpResponse(' ')
 
     # always reload complete molecule:
@@ -281,13 +293,13 @@ class ExperimentListJson(BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif.id', 'edit']
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk', 'edit']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif.id', '']
+    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk', '']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data

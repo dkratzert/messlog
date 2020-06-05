@@ -92,7 +92,7 @@ $(document).ready(function () {
             },
             {
                 title: 'CIF',
-                name: 'cif',
+                name: 'cif_file_on_disk',
                 visible: true,
                 searchable: false,
                 orderable: true,
@@ -133,7 +133,7 @@ $(document).ready(function () {
         var tdata = row.data();
         // console.log(tdata);
         var tab_url = 'table/' + tdata[0];
-        cif_id = tdata[7];
+        cif_file = tdata[7];
         experiment_id = tdata[0];
         // Load the details table for the respective experiment:
         $.get(url = tab_url, function (result) {
@@ -154,7 +154,7 @@ $(document).ready(function () {
         $.post(
             url = 'molecule/',
             data = {
-                cif_id: cif_id,
+                cif_file: cif_file,
                 experiment_id: experiment_id,
                 grow: grow_struct,
                 'csrfmiddlewaretoken': csrftoken
