@@ -104,11 +104,13 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             self.card('Crystal and Results', self.backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
-                Column(Field('sum_formula', css_class='col-12'), css_class='form-group col-md-12'),
+                Column(Field('sum_formula'), css_class='col-8'),
+                Column(Field('submit_date'), css_class='col-4'),
                 css_class='form-row form-sm'
             ),
             Row(
-                Column('prelim_unit_cell', css_class='col-12 mb-0'),
+                Column(Field('prelim_unit_cell'), css_class='col-8'),
+                Column(Field('result_date'), css_class='col-4'),
                 css_class='form-row ml-0 mb-0'
             ),
             Row(
@@ -134,7 +136,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(
                     # Field('cif'), css_class='col-12'
-                    Field('cif_file_on_disk', css_class='custom-file'),
+                    Field('cif_file_on_disk'),
                     css_class='col-12'
                 ),
                 css_class='form-row mt-3 form-sm'
@@ -151,13 +153,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(CustomCheckbox('publishable'), css_class='col-4 ml-3 mt-0'),
             ),
-            Row(
-                Column(Field('result_date'),
-                       css_class='col-4 ml-2'),
-                Column(Field('submit_date'),
-                       css_class='col-4'),
-                css_class='form-row'
-            ),
             HTML('</div>'),  # end of card
         )
 
@@ -173,8 +168,9 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.sumform_row = Row(
-            Column('sum_formula', css_class='col-12 mb-0'),
-            css_class='form-row ml-0 mb-0'
+            Column(Field('sum_formula'), css_class='col-8 mb-0'),
+            Column(Field('submit_date'), css_class='col-4 mb-0'),
+            css_class='ml-0 mb-0'
         )
 
     def card(self, header_title, button=''):

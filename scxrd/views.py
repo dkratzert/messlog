@@ -2,11 +2,9 @@ from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.timezone import make_naive
@@ -20,7 +18,6 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.cif_model import CifFileModel
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -36,9 +33,9 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         if "cancel" in request.POST:
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
-        #if 'upload_cif' in request.POST:
+        # if 'upload_cif' in request.POST:
         #    return HttpResponseRedirect(reverse_lazy('scxrd:upload_cif_file', ))
-        #if 'submit' in request.POST:
+        # if 'submit' in request.POST:
         #    form = self.form_class(request.POST)
         #    if form.is_valid():
         #        form.save()
