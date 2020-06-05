@@ -126,18 +126,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                        css_class='form-group'),
                 css_class='form-row'
             ),
-            Row(
-                Column('submit_date', css_class='form-group col-4'),
-                Column('result_date', css_class='form-group col-4'),
-                css_class='form-row'
-            ),
-            # Row(
-            #    FormActions(
-            #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
-            #        Submit('cancel', 'Cancel', css_class='btn-danger'),
-            #    ),
-            #    css_class='form-row ml-0 mb-0'
-            # ),
         )
 
         self.files_layout = Layout(
@@ -149,12 +137,13 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 HTML('</div>'),  # end of card
                 css_class='form-row mt-3 form-sm'
             ),
-            Row(
-                FormActions(
-                    Submit('submit', 'Save', css_class='btn-primary mr-2 ml-2'),
-                    Submit('cancel', 'Cancel', css_class='btn btn-danger', formnovalidate='formnovalidate'),
-                ),
-                css_class='form-row ml-0 mb-0'
+            ButtonHolder(
+                Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
+                # This cancel button works in combination with the FormActionMixin in views.py
+                # the view is redirected to the index page if the request contains 'cancel'
+                Submit('cancel', 'Cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
+                HTML('<br>'),
+                HTML('<br>'),
             ),
             self.card(_('Miscellaneous'), self.backbutton),
             Row(

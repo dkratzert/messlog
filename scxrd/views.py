@@ -26,54 +26,6 @@ from scxrd.models import Experiment
 from scxrd.models import Person
 
 
-class CifUploadView(LoginRequiredMixin, CreateView):
-    model = Experiment
-    form_class = CifForm
-    template_name = 'scxrd/cif_file_upload.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #self.success_url = reverse_lazy('scxrd:edit', self.kwargs['pk'])
-        exp_id = self.kwargs['pk']
-        exp = Experiment.objects.get(pk=exp_id)
-        context['ciffile'] = exp.cif
-        context['experiment'] = exp
-        context['pk'] = exp_id
-        return context
-
-    def get_success_url(self, **kwargs):
-        # obj = form.instance or self.object
-        return reverse_lazy("scxrd:upload_cif_file", kwargs={'pk': self.kwargs['pk']})
-
-    def post(self, request, *args, **kwargs):
-        form = CifForm(self.request.POST, self.request.FILES)
-        pprint(self.request.POST)
-        pprint(self.request.FILES)
-        pprint(args)
-        pprint(kwargs)
-
-        if form.is_valid():
-            #ciffile = form.save()
-            #self.model.cif.cif_file_on_disk = ciffile
-            cifdoc = CifFileModel(cif_file_on_disk=request.FILES['cif_file_on_disk'])
-            cifdoc.save()
-            exp = Experiment.objects.get(pk=self.kwargs['pk'])
-            exp.cif = cifdoc
-            exp.save(update_fields=['cif'])
-            if not exp.cif.pk:
-                messages.warning(request, 'That cif file was invalid.')
-                # try:
-                #    ciffile.delete()
-                # except Exception as e:
-                #    print('can not delete file:', e)
-            # data = {'is_valid': True, 'name': ciffile.cif_file_on_disk.name, 'url': ciffile.cif_file_on_disk.url}
-        else:
-            # data = {'is_valid': False}
-            messages.warning(request, 'That cif file was invalid.')
-        # return JsonResponse(data)  # for js upload
-        return super(CifUploadView, self).post(request, *args, **kwargs)
-
-
 class FormActionMixin(LoginRequiredMixin, FormMixin):
 
     def post(self, request, *args, **kwargs):
@@ -124,31 +76,6 @@ class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
-    # def get_success_url(self):
-    #    return reverse_lazy('scxrd:index')
-
-    """def get_context_data(self, **kwargs):
-        #exp = Experiment.objects.get(pk=self.kwargs['pk'])
-        #cifid = exp.cif_id
-        context = super().get_context_data(**kwargs)
-        exp_id = self.kwargs['pk']
-        # print('#edit#', exp_id, '###')
-        context['expid'] = exp_id
-        #context['ciffile'] = exp.cif_file_on_disk
-        #state = exp.save(update_fields=["cif"])
-        #print('state:', state, cifid)
-        return context
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        file = request.FILES.get('upload_cif')
-        if form.is_valid():
-            form.save()
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)"""
-
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
     """
@@ -168,26 +95,6 @@ class DetailsTable(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-
-
-'''
-class DeleteView(LoginRequiredMixin, CreateView):
-    """
-    A file upload view.
-    """
-    model = Experiment
-    # template_name = "scxrd/upload.html"
-    # success_url = reverse_lazy('scxrd:index')
-    # form_class = ExperimentEditForm
-
-    """def delete_file(self, pk):
-        document = self.model.objects.get(pk)
-        document.delete()
-        os.remove(os.path.join(settings.MEDIA_ROOT, self.docfile.name))"""
-
-    def get_success_url(self):
-        return reverse_lazy('scxrd:upload', kwargs=dict(pk=self.object.pk))
-'''
 
 
 class DragAndDropUploadView(DetailView):
@@ -221,7 +128,6 @@ class FilesUploadedView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         exp_id = self.kwargs['pk']
-        print(exp_id, '###')
         exp = Experiment.objects.get(pk=exp_id)
         context['ciffile'] = exp.cif_file_on_disk
         return context
@@ -293,13 +199,15 @@ class ExperimentListJson(BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk', 'edit']
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk',
+               'edit']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk', '']
+    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable',
+                     'cif_file_on_disk', '']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
     # and make it return huge amount of data
@@ -314,9 +222,9 @@ class ExperimentListJson(BaseDatatableView):
         # We want to render user as a custom column
         if column == 'publishable':
             if row.publishable:
-                return '<span class="badge badge-success ml-4">ok</span>'
+                return '<span class="badge badge-success ml-1">ok</span>'
             else:
-                return '<span class="badge badge-warning ml-4">no</span>'
+                return '<span class="badge badge-warning ml-1">no</span>'
         if column == 'edit':
             return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>Edit</a>'.format(row.id)
         # I need the id in the table! Therefore I add the check in javascript later.
@@ -328,30 +236,3 @@ class ExperimentListJson(BaseDatatableView):
             return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:
             return super(ExperimentListJson, self).render_column(row, column)
-
-    '''
-    def filter_queryset(self, qs):
-        """ If search['value'] is provided then filter all searchable columns using filter_method (istartswith
-            by default).
-
-            Automatic filtering only works for Datatables 1.10+. For older versions override this method
-        """
-        columns = self._columns
-        if not self.pre_camel_case_notation:
-            # get global search value
-            search = self._querydict.get('search[value]', None)
-            q = Q()
-            filter_method = self.get_filter_method()
-            for col_no, col in enumerate(self.columns_data):
-                print(col_no, col, '##')
-                # apply global search to all searchable columns
-                if search and col['searchable']:
-                    q |= Q(**{'{0}__{1}'.format(columns[col_no].replace('.', '__'), filter_method): search})
-                    print(search, '######')
-                # column specific filter
-                if col['search.value']:
-                    qs = qs.filter(**{
-                        '{0}__{1}'.format(columns[col_no].replace('.', '__'), filter_method): col['search.value']})
-            qs = qs.filter(q)
-        return qs
-    '''

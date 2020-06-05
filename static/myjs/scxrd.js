@@ -67,7 +67,7 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
-                title: "Date",
+                title: "Date Measured",
                 name: 'measure_date',
                 searchable: false,
                 orderable: true,
@@ -88,7 +88,7 @@ $(document).ready(function () {
                 title: "Publ.",
                 name: 'publishable',
                 searchable: false,
-                orderable: false,
+                orderable: true,
             },
             {
                 title: 'CIF',
