@@ -222,6 +222,9 @@ class Experiment(models.Model):
             return choices[value][1]
 
     def save(self, *args, **kwargs):
+        #if self.cif:
+        #    print('previous found', self.cif.pk)
+        #    CifFileModel.objects.get(pk=self.cif.pk).delete(keep_parents=True)
         super().save(*args, **kwargs)
         if not self.cif_file_on_disk.chunks():
             print('returning from file check')
