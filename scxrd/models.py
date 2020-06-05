@@ -239,7 +239,7 @@ class Experiment(models.Model):
             # raise ValidationError('Unable to parse cif file:', e)
             return False
         # save cif content to db table:
-        cif_model = CifFileModel()  # .objects.get(pk=self.cif_id)
+        cif_model = CifFileModel()
         try:
             # self.cif_file_on_disk.file.name
             cif_model.fill_residuals_table(cif)
