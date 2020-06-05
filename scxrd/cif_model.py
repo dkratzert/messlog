@@ -64,12 +64,12 @@ class CifFileModel(models.Model):
         self.cell_length_a, self.cell_length_b, self.cell_length_c, \
         self.cell_angle_alpha, self.cell_angle_beta, self.cell_angle_gamma, self.cell_volume = cif.cell
         self.cell_formula_units_Z = cif["_cell_formula_units_Z"] if cif["_cell_formula_units_Z"] else 99
-        self.space_group_name_H_M_alt = cif["_space_group_name_H-M_alt"]
+        self.space_group_name_H_M_alt = cif.space_group
         self.space_group_name_Hall = cif["_space_group_name_Hall"]
         self.space_group_IT_number = cif.spgr_number_from_symmops
-        self.space_group_crystal_system = cif["_space_group_crystal_system"]
-        self.space_group_symop_operation_xyz = cif["_space_group_symop_operation_xyz"]
-        self.shelx_res_file = cif["_shelx_res_file"]
+        self.space_group_crystal_system = cif.crystal_system
+        self.space_group_symop_operation_xyz = cif.symmops
+        self.shelx_res_file = cif.resdata
         self.shelx_res_checksum = cif['_shelx_res_checksum']
         # self.shelx_hkl_file = cif['_shelx_hkl_file']
         # self.shelx_hkl_checksum = cif['_shelx_hkl_checksum']

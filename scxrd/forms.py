@@ -5,6 +5,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.models import Experiment, Machine, CrystalSupport
@@ -32,7 +33,7 @@ class MyDecimalField(forms.DecimalField):
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):
-    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
+    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True, initial=timezone.now)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                   label=_("Sample submission date"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
@@ -66,8 +67,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
         # self.helper.error_text_inline = True  # both can not have the same value
-        self.helper.label_class = 'pl-2 pr-2 pt-2'  # 'font-weight-bold'
-        self.helper.field_class = 'pl-2 pr-2 pb-1'
+        self.helper.label_class = 'pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0'  # 'font-weight-bold'
+        self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
         self.backbutton = """
             <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
                 href="{% url "scxrd:index"%}">Back to start</a>
@@ -163,8 +164,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.sumform_row = Row(
-            Column('sum_formula'),
-            Column('submit_date'),
+            Column('sum_formula', css_class='col-4'),
+            Column('submit_date', css_class='col-4'),
         )
 
     def card(self, header_title, button=''):
@@ -172,14 +173,12 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
-    try:
-        number = forms.IntegerField(min_value=1, initial=Experiment.objects.first().number + 1)
-    except (AttributeError, OperationalError):
-        number = 1
+    number = forms.IntegerField(min_value=1)
 
     def __init__(self, *args, **kwargs):
         self.exp_title = 'New Experiment'
         super().__init__(*args, **kwargs)
+        self.fields['number'].initial=Experiment.objects.first().number + 1
         self.helper.render_unmentioned_fields = False
 
         self.helper.layout = Layout(
@@ -188,7 +187,6 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            # AppendedText('sum_formula', 'assumed formula', active=True),
             self.save_button,
             # HTML('</div>'),  # end of card
         )

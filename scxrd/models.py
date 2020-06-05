@@ -240,6 +240,8 @@ class Experiment(models.Model):
             cif = CifContainer(chunks='\n'.join(
                 [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
         except Exception as e:
+            if previous_cif:
+                self.remove_cif_row(previous_cif)
             print(e)
             print('Unable to parse cif file')
             # raise ValidationError('Unable to parse cif file:', e)
@@ -259,11 +261,14 @@ class Experiment(models.Model):
         cif_model.date_updated = timezone.now()
         self.cif = cif_model
         cif_model.save()
+        self.remove_cif_row(previous_cif)
+        self.save(update_fields=['cif'])
+
+    def remove_cif_row(self, previous_cif):
         if previous_cif:
             print('deleting prevous:', previous_cif)
             c = CifFileModel.objects.get(pk=previous_cif.pk)
             c.delete(keep_parents=True)
-        self.save(update_fields=['cif'])
 
     @property
     def cif_name_only(self):
