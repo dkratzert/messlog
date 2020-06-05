@@ -1,6 +1,10 @@
+from pathlib import Path
+
 from django.conf.urls import url
 from django.contrib import admin
 
+from mysite.settings import MEDIA_ROOT
+from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup
 from scxrd.models import CrystalSupport, CrystalGlue
 from scxrd.models import Person
@@ -11,7 +15,7 @@ from scxrd.models import Person
 
 
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'cif')
+    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'cif_file_on_disk')
     list_filter = ['measure_date']
     search_fields = ['experiment', 'number', 'sum_formula']
     ordering = ['-number']
@@ -24,42 +28,23 @@ class ExperimentAdmin(admin.ModelAdmin):
             form.base_fields['number'].initial = 1
         return form
 
-"""
-class AtomsInline(admin.TabularInline):
-    model = Atom
-    extra = 0
-    readonly_fields = ('name', 'element', 'x', 'y', 'z', 'part', 'occupancy')
-    fieldsets = (
-        ('Atoms in cif file', {
-            'fields': ('name', 'element', 'x', 'y', 'z'),
-            'classes': ('collapse',),
-        }),
-    )
-
-"""
-"""class SumFormInline(admin.TabularInline):
-    model = SumFormula
-    extra = 0
-    can_delete = False
-
-    def get_sumf(self, obj):
-        return obj.__str__"""
-
 
 class CifAdmin(admin.ModelAdmin):
     model = CifFileModel
-    list_display = ['edit_file', 'cif_file_on_disk', 'related_experiment']
+    list_display = ['edit_file', 'data', 'related_experiment', 'number_of_atoms']
 
     def edit_file(self, obj):
         return self.model.objects.get(id=obj.id)
 
-    def related_experiment(self, obj):
-        return Experiment.objects.get(cif_id=obj.pk)
+    @staticmethod
+    def related_experiment(obj):
+        return Experiment.objects.get(cif=obj.pk)
 
     def number_of_atoms(self, obj):
-        # TODO: Make this work again
         try:
-            cif = self.model.objects.get(pk=obj.id).get_cif_model()
+            exp = Experiment.objects.get(cif=obj.pk)
+            # Path(MEDIA_ROOT).joinpath()
+            cif = CifContainer(Path(exp.cif_file_on_disk.name))
         except RuntimeError:
             return 'no atoms'
         return cif.natoms()

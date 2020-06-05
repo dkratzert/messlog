@@ -6,7 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.db import OperationalError
-from django.forms import HiddenInput
+from django.forms import HiddenInput, FileField
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif_model import CifFileModel
@@ -46,7 +46,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
-    cif = forms.FileField(required=False)
+    cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
 
 
 class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
@@ -108,6 +108,10 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='form-row form-sm'
             ),
             Row(
+                Column('prelim_unit_cell', css_class='col-12 mb-0'),
+                css_class='form-row ml-0 mb-0'
+            ),
+            Row(
                 Column(Field('solvents', css_class='col-12 mb-0'), css_class='form-group col-4'),
                 Column(Field('conditions', css_class='col-12 mb-0'), css_class='form-group col-4'),
                 Column(Field('crystal_habit'), css_class='form-group col-4'),
@@ -122,32 +126,24 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                        css_class='form-group'),
                 css_class='form-row'
             ),
-            Row(
-                Column('submit_date', css_class='form-group col-4'),
-                Column('result_date', css_class='form-group col-4'),
-                css_class='form-row'
-            ),
-            # Row(
-            #    FormActions(
-            #        Submit('submit', 'Save', css_class='btn-primary mr-2'),
-            #        Submit('cancel', 'Cancel', css_class='btn-danger'),
-            #    ),
-            #    css_class='form-row ml-0 mb-0'
-            # ),
         )
 
         self.files_layout = Layout(
             self.card(_('File upload')),
             Row(
                 Column(
-                    HTML('''{% include "scxrd/uploaded_files.html" %}'''),
-                    HTML('''<a class="btn btn-secondary btn-small" 
-                            href="{% url "scxrd:upload_cif_file" object.pk %}"> 
-                            Upload a CIF</a>'''),
-                    css_class='ml-2 mb-3 form-sm'
+                    Field('cif_file_on_disk'), css_class='col-6'
                 ),
                 HTML('</div>'),  # end of card
                 css_class='form-row mt-3 form-sm'
+            ),
+            ButtonHolder(
+                Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
+                # This cancel button works in combination with the FormActionMixin in views.py
+                # the view is redirected to the index page if the request contains 'cancel'
+                Submit('cancel', 'Cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
+                HTML('<br>'),
+                HTML('<br>'),
             ),
             self.card(_('Miscellaneous'), self.backbutton),
             Row(
