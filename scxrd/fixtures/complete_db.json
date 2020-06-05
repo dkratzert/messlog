@@ -162,7 +162,6 @@
         "result_date": null,
         "base": 5,
         "glue": 1,
-        "cif": null,
         "crystal_size_x": 0.1,
         "crystal_size_y": 0.1,
         "crystal_size_z": 0.1,
@@ -171,7 +170,9 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "crystal_habit": "block",
-        "exptl_special_details": ""
+        "exptl_special_details": "",
+        "cif": null,
+        "cif_file_on_disk": ""
     }
 },
 {
@@ -193,7 +194,6 @@
         "result_date": null,
         "base": 5,
         "glue": 1,
-        "cif": null,
         "crystal_size_x": 0.11,
         "crystal_size_y": 0.12,
         "crystal_size_z": 0.12,
@@ -202,7 +202,41 @@
         "crystal_colour_mod": 0,
         "crystal_colour_lustre": 0,
         "crystal_habit": null,
-        "exptl_special_details": ""
+        "exptl_special_details": "",
+        "cif": null,
+        "cif_file_on_disk": ""
+    }
+},
+{
+    "model": "scxrd.experiment",
+    "pk": 3,
+    "fields": {
+        "experiment": "ML_7_66",
+        "number": 3,
+        "publishable": false,
+        "customer": 1,
+        "operator": 1,
+        "machine": 5,
+        "sum_formula": "",
+        "prelim_unit_cell": "",
+        "solvents": null,
+        "conditions": null,
+        "measure_date": "2020-06-05T09:13:00Z",
+        "submit_date": null,
+        "result_date": null,
+        "base": 1,
+        "glue": 1,
+        "crystal_size_x": 0.1,
+        "crystal_size_y": 0.2,
+        "crystal_size_z": 0.2,
+        "measurement_temp": null,
+        "crystal_colour": 1,
+        "crystal_colour_mod": 0,
+        "crystal_colour_lustre": 0,
+        "crystal_habit": null,
+        "exptl_special_details": "",
+        "cif": null,
+        "cif_file_on_disk": ""
     }
 }
 ]
