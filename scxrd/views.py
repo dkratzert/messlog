@@ -30,7 +30,8 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         print('The post request:')
         pprint(request.POST)
         print('end request ----------------')
-        if "cancel" in request.POST:
+        c = request.POST.get("cancel")
+        if c and c == 'cancel':
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         # if 'upload_cif' in request.POST:
@@ -52,7 +53,7 @@ class ExperimentIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'scxrd/scxrd_index.html'
 
 
-class ExperimentCreateView(LoginRequiredMixin, CreateView):
+class ExperimentCreateView(FormActionMixin, LoginRequiredMixin, CreateView):
     """
     Start a new experiment
     """
@@ -103,9 +104,9 @@ class FilesUploadedView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        exp_id = self.kwargs['pk']
-        exp = Experiment.objects.get(pk=exp_id)
-        context['ciffile'] = exp.cif_file_on_disk
+        #exp_id = self.kwargs['pk']
+        #exp = Experiment.objects.get(pk=exp_id)
+        #context['ciffile'] = exp.cif_file_on_disk
         return context
 
 

@@ -1,6 +1,7 @@
 import datetime
 import textwrap
 from pathlib import Path
+from pprint import pprint
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
@@ -223,12 +224,16 @@ class Experiment(models.Model):
             return choices[value][1]
 
     def save(self, *args, **kwargs):
+        try:
+            previous_cif = CifFileModel.objects.get(experiments=self.pk)
+        except Exception as e:
+            print('No previous cif:', e)
+            previous_cif = None
         super().save(*args, **kwargs)
         if not self.cif_file_on_disk.chunks():
             print('returning from file check')
             return
         if 'update_fields' in kwargs:
-            print('returning from update save()')
             return
         try:
             # cif = CifContainer(Path(self.cif_file_on_disk.file.name))
@@ -254,6 +259,10 @@ class Experiment(models.Model):
         cif_model.date_updated = timezone.now()
         self.cif = cif_model
         cif_model.save()
+        if previous_cif:
+            print('deleting prevous:', previous_cif)
+            c = CifFileModel.objects.get(pk=previous_cif.pk)
+            c.delete(keep_parents=True)
         self.save(update_fields=['cif'])
 
     @property

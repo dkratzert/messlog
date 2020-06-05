@@ -61,7 +61,7 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
-                title: "Experiment",
+                title: "Project Name",
                 name: 'experiment',
                 searchable: true,
                 orderable: true,

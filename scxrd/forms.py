@@ -8,7 +8,7 @@ from django.db import OperationalError
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.models import Experiment, Machine, CrystalSupport
-from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
+from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
 class ExperimentTableForm(forms.ModelForm):
@@ -21,6 +21,16 @@ class CustomCheckbox(Field):
     template = 'custom_checkbox.html'
 
 
+class MyDecimalField(forms.DecimalField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        attrs['step'] = '0.01'
+        return attrs
+
+
 class ExperimentFormfieldsMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
@@ -28,13 +38,15 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
                                   label=_("Results sent date"))
     measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=False)
-    crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour modifier'))
-    crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label=_('Colour lustre'))
+    crystal_colour = forms.TypedChoiceField(choices=COLOUR_CHOICES, label=_('Crystal Color'), required=True)
+    crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour Modifier'), required=False)
+    crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label=_('Colour Lustre'),
+                                                   required=False)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
-    crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
-    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
-    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size max"))
+    crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
+    crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
+    crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
 
@@ -65,8 +77,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
             # This cancel button works in combination with the FormActionMixin in views.py
             # the view is redirected to the index page if the request contains 'cancel'
-            Submit('cancel', 'Cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
-            HTML('<br>'),
+            Submit('cancel', 'cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
             HTML('<br>'),
         )
 
@@ -195,7 +206,6 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.sumform_row,
             HTML('</div>'),  # end of card
             # AppendedText('sum_formula', 'assumed formula', active=True),
-
             self.save_button,
             # HTML('</div>'),  # end of card
         )
