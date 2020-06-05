@@ -38,13 +38,14 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
                                   label=_("Sample submission date"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
                                   label=_("Results sent date"))
+    measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=False)
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour modifier'))
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label=_('Colour lustre'))
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
-    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size max"))
-    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
     crystal_size_z = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size min"))
+    crystal_size_y = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size mid"))
+    crystal_size_x = forms.DecimalField(required=True, min_value=0, decimal_places=2, label=_("Crystal size max"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
 
@@ -93,9 +94,9 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='mt-0 mb-0'
             ),
             Row(
-                Column(Field('crystal_size_x'), css_class='col-4'),
-                Column(Field('crystal_size_y'), css_class='col-4'),
                 Column(Field('crystal_size_z'), css_class='col-4'),
+                Column(Field('crystal_size_y'), css_class='col-4'),
+                Column(Field('crystal_size_x'), css_class='col-4'),
                 css_class='form-row mt-0 mb-0'
             ),
         )
