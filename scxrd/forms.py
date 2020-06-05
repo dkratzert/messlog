@@ -77,7 +77,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
             # This cancel button works in combination with the FormActionMixin in views.py
             # the view is redirected to the index page if the request contains 'cancel'
-            Submit('cancel', 'cancel', css_class='btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
+            Submit('cancel', 'Cancel', css_class='btn-outline-danger ml-2 mb-3', formnovalidate='formnovalidate'),
             HTML('<br>'),
         )
 
@@ -147,8 +147,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column(
                     # Field('cif'), css_class='col-12'
-                    Field('cif_file_on_disk'),
-                    css_class='col-12'
+                    Field('cif_file_on_disk'), css_class='col-8'
                 ),
                 css_class='form-row mt-3 form-sm'
             ),
@@ -162,7 +161,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 css_class='ml-0 mb-0'
             ),
             Row(
-                Column(CustomCheckbox('publishable'), css_class='col-4 ml-3 mt-0'),
+                # Column(CustomCheckbox('publishable'), css_class='col-4 ml-3 mt-0'),
+                Column(Field('publishable'), css_class='col-4 ml-2'),
             ),
             HTML('</div>'),  # end of card
         )

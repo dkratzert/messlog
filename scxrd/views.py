@@ -31,7 +31,7 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         pprint(request.POST)
         print('end request ----------------')
         c = request.POST.get("cancel")
-        if c and c == 'cancel':
+        if c and c.lower() == 'cancel':
             url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
             return HttpResponseRedirect(url)
         # if 'upload_cif' in request.POST:
