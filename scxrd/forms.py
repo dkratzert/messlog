@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, ButtonHolder
+from crispy_forms.layout import Field, HTML, ButtonHolder, Button
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
@@ -79,7 +79,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
             # This cancel button works in combination with the FormActionMixin in views.py
             # the view is redirected to the index page if the request contains 'cancel'
-            Submit('cancel', 'Cancel', css_class='btn-outline-danger ml-2 mb-3', formnovalidate='formnovalidate'),
+            Submit('cancel', 'Cancel', css_class='btn btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
             HTML('<br>'),
         )
 
