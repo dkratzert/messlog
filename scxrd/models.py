@@ -266,7 +266,7 @@ class Experiment(models.Model):
 
     def remove_cif_row(self, previous_cif):
         if previous_cif:
-            print('deleting prevous:', previous_cif)
+            print('deleting previous cif row:', previous_cif)
             c = CifFileModel.objects.get(pk=previous_cif.pk)
             c.delete(keep_parents=True)
 

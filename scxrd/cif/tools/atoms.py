@@ -611,7 +611,7 @@ def get_radius_from_element(element: str) -> float:
     >>> get_radius_from_element('F')
     0.71
     """
-    return element2cov[element.capitalize()]
+    return element2cov[element[:2].capitalize()]
 
 
 def get_atomic_number(element: str) -> int:
@@ -650,8 +650,8 @@ def get_atomlabel(input_atom: str) -> str:
         else:  # now we have atoms like C, Ca, but also Caaa
             break
     try:
-        if atom[0:2].capitalize() in atoms:  # fixes names like Caaa to be just Ca
-            return atom[0:2].capitalize()  # atoms first, search for all two-letter atoms
+        if atom[:2].capitalize() in atoms:  # fixes names like Caaa to be just Ca
+            return atom[:2].capitalize()  # atoms first, search for all two-letter atoms
         elif atom[0].upper() in atoms:
             return atom[0]  # then for all one-letter atoms
         else:
