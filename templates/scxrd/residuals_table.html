@@ -24,20 +24,28 @@
     {% endif %}
     <div class="col-5">Measured by</div>
     <div class="col-7" id="t_operator">  {{ experiment.operator.get_username }} </div>
+    {% if experiment.customer %}
+    <div class="col-5">Measure Date</div>
+    <div class="col-7" id="t_measure_date">  {{ experiment.measure_date|date|default:"-----"  }} </div>
     <div class="col-5">Results sent</div>
     <div class="col-7" id="t_sent">  {{ experiment.result_date|date|default:"-----"  }} </div>
+    {% endif %}
     <div class="col-5">CIF File</div>
     <div class="col-7" id="t_filen">  {{ experiment.cif_name_only|default:"-----"  }} </div>
+    {% comment %}
     <div class="col-5">CIF data_</div>
-    <div class="col-7" id="t_data_">  {{ experiment.cif.data|default:"-----"  }} </div>
+    <div class="col-7" id="t_data_">  {% experiment.cif.data|default:"-----"  %} </div>
+    {% endcomment %}
     <div class="col-5">Space Group</div>
     <div class="col-7" id="t_spgr">  {{ experiment.cif.space_group_name_H_M_alt|default:"-----"  }} </div>
     <div class="col-5"><i>R</i><sub>1</sub></div>
-    <div class="col-7" id="t_r1">  {{ experiment.cif.refine_ls_R_factor_gt|default:"-----"  }} </div>
+    <div class="col-7" id="t_r1">  {{ experiment.cif.r1_in_percent|default:"-----"  }}&nbsp;% </div>
     <div class="col-5"><i>wR</i><sub>2</sub></div>
-    <div class="col-7" id="t_wr2">  {{ experiment.cif.refine_ls_wR_factor_ref|default:"-----"  }} </div>
+    <div class="col-7" id="t_wr2">  {{ experiment.cif.wr2_in_percent|default:"-----"  }}&nbsp;% </div>
     <div class="col-5">Completeness</div>
-    <div class="col-7" id="t_compl">  {{ experiment.cif.completeness_in_percent|default:"-----"  }} </div>
+    <div class="col-7" id="t_compl">  {{ experiment.cif.completeness_in_percent|default:"-----"  }}&nbsp;% </div>
+    <div class="col-5">Temperature</div>
+    <div class="col-7" id="t_temp">  {{ experiment.temperature|default:"-----" }}&nbsp;K </div>
 </div>
 
 

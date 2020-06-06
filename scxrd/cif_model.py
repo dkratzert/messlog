@@ -91,16 +91,22 @@ class CifFileModel(models.Model):
         self.database_code_depnum_ccdc_archive = cif["_database_code_depnum_ccdc_archive"]
 
     def wr2_in_percent(self):
+        if self.refine_ls_R_factor_gt:
+            return round(self.refine_ls_R_factor_gt * 100, 1)
+        else:
+            return ''
+
+    def r1_in_percent(self):
         if self.refine_ls_wR_factor_ref:
             return round(self.refine_ls_wR_factor_ref * 100, 1)
         else:
-            return '---'
+            return ''
 
     def rint_in_percent(self):
         if self.diffrn_reflns_av_R_equivalents:
             return round(self.diffrn_reflns_av_R_equivalents * 100, 1)
         else:
-            return '---'
+            return ''
 
     def completeness_in_percent(self) -> float:
         if self.diffrn_measured_fraction_theta_max:

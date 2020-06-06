@@ -3,6 +3,7 @@ import textwrap
 from pathlib import Path
 from pprint import pprint
 
+from django import template
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
@@ -18,13 +19,10 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- CIF upload saves cif two times?
-- save should not redirect to start if something fails. 
-- decide which cif resuduals do I really need? 
-  wR2, R1, Space group, symmcards, atoms, cell, sumformula, 
-  completeness, Goof, temperature, Z, Rint, Peak/hole
-- Add pdf/word upload for reaction conditions
-- check checksum for correctness
+- Add a sample submission page:
+  - Add pdf/word upload for reaction conditions
+  - 
+- check checksum for correctness during file upload and download
 - Measurement temperatue to experiment start page -> done?
 - addd delete experiment
 
@@ -299,3 +297,18 @@ class Experiment(models.Model):
             return "'{}'".format(string)
         else:
             return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
+
+    @property
+    def temperature(self):
+        if not self.cif_file_on_disk:
+            return ''
+        return CifContainer(Path(self.cif_file_on_disk.file.name))['_diffrn_ambient_temperature']
+
+    register = template.Library()
+
+    @register.simple_tag
+    def get_cif_file_parameter(self, param):
+        if not isinstance(param, str):
+            return ''
+        cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+        return cif[param]

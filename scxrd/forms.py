@@ -1,14 +1,13 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, ButtonHolder, MultiField, Fieldset
+from crispy_forms.layout import Field, HTML, ButtonHolder
 from crispy_forms.layout import Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
-from django.db import OperationalError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models import Experiment, Machine, CrystalSupport
+from scxrd.models import Experiment, Machine, CrystalSupport, Person
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
@@ -33,11 +32,12 @@ class MyDecimalField(forms.DecimalField):
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):
-    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True, initial=timezone.now)
+    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True,
+                                       initial=timezone.now)
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
-                                  label=_("Sample submission date"))
+                                  label=_("Sample submission date (for service)"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
-                                  label=_("Results sent date"))
+                                  label=_("Results sent date (for service)"))
     measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=False)
     crystal_colour = forms.TypedChoiceField(choices=COLOUR_CHOICES, label=_('Crystal Color'), required=True)
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour Modifier'), required=False)
@@ -45,6 +45,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
                                                    required=False)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
+    customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
     crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
     crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
@@ -149,7 +150,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
                 Column('exptl_special_details'),
             ),
             Row(
-                # Column(CustomCheckbox('publishable'), css_class='col-4 ml-3 mt-0'),
                 Column('publishable'),
             ),
             HTML('</div>'),  # end of card
@@ -178,7 +178,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.exp_title = 'New Experiment'
         super().__init__(*args, **kwargs)
-        self.fields['number'].initial=Experiment.objects.first().number + 1
+        self.fields['number'].initial = Experiment.objects.first().number + 1
         self.helper.render_unmentioned_fields = False
 
         self.helper.layout = Layout(
