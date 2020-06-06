@@ -33,6 +33,8 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,  // without serverside=true, the list is only 10 items long!
         select: true,
+        //keys: true,
+        renderer: 'bootstrap4',
         full_row_select: true,
         ajax: {
             url: table_url,
@@ -143,6 +145,18 @@ $(document).ready(function () {
         get_mol_and_display();
         //row0.removeClass('selected');
     });
+
+    /* //Trying keyboard navigation:
+    dtable.on('key-focus', function() {
+      $('#exptable').DataTable().row(getRowIdx()).select();
+      console.log('selected', getRowIdx())
+    })
+
+    function getRowIdx() {
+        return $('#exptable').DataTable().cell({
+            focused: true
+        }).index().row;
+    }*/
 
     dtable.ajax.reload(function (json) {
         var row = $('#exptable tbody tr:eq(0)');
