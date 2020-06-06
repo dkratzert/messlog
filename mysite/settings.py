@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'bootstrapform',
+    # 'django_extensions',
     'bootstrap_datepicker_plus',
     'crispy_forms',
     'django_cleanup.apps.CleanupConfig',

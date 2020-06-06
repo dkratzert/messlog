@@ -74,6 +74,11 @@ class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
+    '''def form_valid(self, form):
+        pprint(form.instance) # instance of current Experiment model
+        pprint(self.request.POST) # POST request dictionary
+        return super().form_valid(form)'''
+
 
 class ExperimentDetailView(LoginRequiredMixin, DetailView):
     """
@@ -101,13 +106,6 @@ class FilesUploadedView(ListView):
     """
     model = Experiment
     template_name = 'scxrd/uploaded_files.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #exp_id = self.kwargs['pk']
-        #exp = Experiment.objects.get(pk=exp_id)
-        #context['ciffile'] = exp.cif_file_on_disk
-        return context
 
 
 class Customers(LoginRequiredMixin, ListView):
