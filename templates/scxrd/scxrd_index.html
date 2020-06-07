@@ -10,8 +10,11 @@
         <div class="col-8">
             <div class="card mb-3">
                 <div class="card-header pb-2 pl-3">Experiments List
-                    <a role="button" class="btn btn-outline-primary btn-sm float-right p-1"
+                    <a role="button" class="btn btn-outline-primary btn-sm float-right p-1 ml-2"
                        href="{% url 'scxrd:new' %}">New Experiment</a>
+
+                    <a role="button" class="btn btn-outline-primary btn-sm float-right p-1"
+                       href="{% url 'scxrd:submit_experiment' %}">New Sample</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">

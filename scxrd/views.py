@@ -5,6 +5,7 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.timezone import make_naive
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -90,7 +91,23 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
     template_name = 'scxrd/new_exp_by_customer.html'
     # TODO: Make this the url of the users experiments list later:
     success_url = reverse_lazy('scxrd:index')
-    #fields = '__all__'
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
+        if form.is_valid():
+            sample = form.save(commit=False)
+            # Assigns the currently logged in user to the submetted sample:
+            sample.customer_samp = request.user
+            # Assigns the current date to the sample submission date field
+            sample.submit_date_samp = timezone.now()
+            sample.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

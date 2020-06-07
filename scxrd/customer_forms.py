@@ -5,18 +5,19 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.customer_models import SCXRDSample
-from scxrd.form_utils import save_button
-from scxrd.models import Person
-from scxrd.form_utils import card
+from scxrd.form_utils import save_button, card
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
     submit_date_samp = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
-                                  label=_("Sample submission date"))
-    customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('Customer'))
-    sum_formula_samp = forms.CharField(label=_("Assumed Sum Formula"), required=True)
-    crystal_cond_samp = forms.CharField(label=_('crystallized from and method'), required=True)
-    desired_struct_samp = forms.CharField(label=_('crystallized from and method'), required=True)
+                                       label=_("Sample submission date"))
+    # TODO: do this during view save()
+    # customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('customer'))
+    # customer_samp = CurrentUserField(default=get_current_authenticated_user())
+    sum_formula_samp = forms.CharField(label=_("Assumed sum formula"), required=True)
+    crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
+    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=True)
+    special_remarks_samp = forms.TextInput()
 
 
 class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
@@ -47,22 +48,23 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Sample')
         super().__init__(*args, **kwargs)
-        self.helper.render_unmentioned_fields = True
+        self.helper.render_unmentioned_fields = False
         self.helper.layout = Layout(
             card(self.exp_title, self.backbutton),
             Row(
-                Column('sample_name_samp'),
-                Column('customer_samp'),
-                #Column('measurement_temp'),
+                Column('sample_name_samp', css_class='col-6'),
+                Column('sum_formula_samp', css_class='col-6'),
+                # Column('customer_samp'),  # not needed, because inherited by the login
+                # Column('measurement_temp'),
             ),
             Row(
                 Column('stable_samp'),
                 Column('solve_refine_selv_samp'),
             ),
-            Row(
-                Column('sum_formula_samp'),
-                #Column('solve_refine_selv_samp'),
-            ),
+            # Row(
+
+            # Column('solve_refine_selv_samp'),
+            # ),
             Row(
                 Column('reaction_path_samp')
             ),
@@ -77,6 +79,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             ),
             HTML('</div>'),  # end of card
             save_button,
+            HTML('</br>'),
+            HTML('</br>'),
+            HTML('</br>'),
         )
 
     class Meta:

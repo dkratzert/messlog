@@ -1,17 +1,19 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from scxrd.models import Person
 
 
 class SCXRDSample(models.Model):
     sample_name_samp = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, default='',
                                         unique=True)
-    submit_date_samp = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)
-    customer_samp = models.ForeignKey(verbose_name=_('Submitter'), to=Person, on_delete=models.DO_NOTHING, null=True,
+    # The date when the sample is submitted to the facility:
+    submit_date_samp = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True,
+                                        default=timezone.now)
+    customer_samp = models.ForeignKey(verbose_name=_('Submitter'), to=User, on_delete=models.SET_NULL, null=True,
                                       blank=True,
                                       related_name='SCXRDSample')
-    stable_samp = models.BooleanField(verbose_name=_('Sample is unstable'),
+    stable_samp = models.BooleanField(verbose_name=_('sample is unstable'),
                                       help_text=_("Indicate whether the sample needs special "
                                                   "care in order to keep it stable. Tell us more in the "
                                                   "'special remarks' field."))

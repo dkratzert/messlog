@@ -1,13 +1,13 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, ButtonHolder, Layout, Submit, Row, Column
+from crispy_forms.layout import Field, HTML, Layout, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton, save_button
-from scxrd.models import Experiment, Machine, CrystalSupport, Person
+from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
@@ -35,8 +35,8 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True,
                                        initial=timezone.now)
     # TODO: remove this here:
-    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
-                                  label=_("Sample submission date (for service)"))
+    #submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
+    #                              label=_("Sample submission date (for service)"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
                                   label=_("Results sent date (for service)"))
     measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=False)
@@ -47,7 +47,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
     # TODO: remove this here:
-    customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
+    #customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
     crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
     crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
