@@ -18,6 +18,7 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
+from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.models import Person
@@ -67,7 +68,7 @@ class ExperimentCreateView(FormActionMixin, LoginRequiredMixin, CreateView):
 
 class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
     """
-    Edit an experiment
+    Edit an experiment as Operator.
     """
     model = Experiment
     form_class = ExperimentEditForm
@@ -80,17 +81,20 @@ class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
         return super().form_valid(form)'''
 
 
-class ExperimentDetailView(LoginRequiredMixin, DetailView):
+class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
     """
-    Show details of an experiment
+    Add a new experiment in order to submit it to the X-ray facility.
     """
-    model = Experiment
-    template_name = 'scxrd/unused/experiment_detail.html'
+    model = SCXRDSample
+    template_name = 'scxrd/new_exp_by_customer.html'
+    # TODO: Make this the url of the users experiments list later:
+    success_url = reverse_lazy('scxrd:index')
+    fields = '__all__'
 
 
-class DetailsTable(DetailView):
+class ResidualsTable(DetailView):
     """
-    Show rediduals of the in-table selected experiment by ajax request.
+    Show residuals of the in-table selected experiment by ajax request.
     """
     model = Experiment
     template_name = 'scxrd/residuals_table.html'
@@ -102,7 +106,8 @@ class DetailsTable(DetailView):
 
 class FilesUploadedView(ListView):
     """
-    creates a list of the uploaded files fore the respective experiment.
+    creates a list of the uploaded files for the respective experiment.
+    # TODO: This is not used at the moment.
     """
     model = Experiment
     template_name = 'scxrd/uploaded_files.html'
