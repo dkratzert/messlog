@@ -2,11 +2,9 @@ from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.utils.timezone import make_naive
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -19,6 +17,7 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
+from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment, Person
@@ -87,10 +86,11 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
     Add a new experiment in order to submit it to the X-ray facility.
     """
     model = SCXRDSample
+    form_class = SubmitNewForm
     template_name = 'scxrd/new_exp_by_customer.html'
     # TODO: Make this the url of the users experiments list later:
     success_url = reverse_lazy('scxrd:index')
-    fields = '__all__'
+    #fields = '__all__'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -180,8 +180,7 @@ class MoleculeView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
 
-@method_decorator(login_required, name='dispatch')
-class ExperimentListJson(BaseDatatableView):
+class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     """
     The view to show the datatabes table for the list of experiments.
 

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from scxrd.form_utils import card, backbutton, save_button
 from scxrd.models import Experiment, Machine, CrystalSupport, Person
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
@@ -33,6 +34,7 @@ class MyDecimalField(forms.DecimalField):
 class ExperimentFormfieldsMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True,
                                        initial=timezone.now)
+    # TODO: remove this here:
     submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                   label=_("Sample submission date (for service)"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
@@ -44,6 +46,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
                                                    required=False)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
+    # TODO: remove this here:
     customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
     crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
@@ -69,22 +72,11 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0'  # 'font-weight-bold'
         self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
-        self.backbutton = """
-            <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
-                href="{% url "scxrd:index"%}">Back to start</a>
-            """
 
-        self.save_button = ButtonHolder(
-            Submit('Save', 'Save', css_class='btn-primary mr-2 ml-0 mb-3'),
-            # This cancel button works in combination with the FormActionMixin in views.py
-            # the view is redirected to the index page if the request contains 'cancel'
-            Submit('cancel', 'Cancel', css_class='btn btn-danger ml-2 mb-3', formnovalidate='formnovalidate'),
-            HTML('<br>'),
-        )
 
         self.experiment_layout = Layout(
 
-            self.card(self.exp_title, self.backbutton),
+            card(self.exp_title, backbutton),
             Row(
                 Column('experiment'),
                 Column('number'),
@@ -109,7 +101,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.crystal_layout = Layout(
-            self.card(_('Crystal and Results'), self.backbutton),
+            card(_('Crystal and Results'), backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-8'),
@@ -133,7 +125,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.files_layout = Layout(
-            self.card(_('File upload')),
+            card(_('File upload')),
             Row(
                 Column(
                     # Field('cif'), css_class='col-12'
@@ -144,7 +136,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.misc_layout = Layout(
-            self.card(_('Miscellaneous'), self.backbutton),
+            card(_('Miscellaneous'), backbutton),
             Row(
                 Column('exptl_special_details'),
             ),
@@ -167,9 +159,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Column('submit_date', css_class='col-4'),
         )
 
-    def card(self, header_title, button=''):
-        return HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}</div>'.format(header_title, button))
-
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
@@ -186,7 +175,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            self.save_button,
+            save_button,
             # HTML('</div>'),  # end of card
         )
 
@@ -204,14 +193,14 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             self.experiment_layout,
             HTML('</div>'),  # end of card
-            self.save_button,
+            save_button,
             # Crystal ######
             self.crystal_layout,
             # HTML('</div>'),  # end of card
             # Files ########
             self.files_layout,
             # HTML('</div>'),  # end of card
-            self.save_button,
+            save_button,
             # HTML('</div>'),  # end of card
             self.misc_layout,
         )
