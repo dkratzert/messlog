@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_extensions',
+    # 'django_extensions',  # extensions for manage console
     'bootstrap_datepicker_plus',
     'crispy_forms',
     'django_cleanup.apps.CleanupConfig',
+    'django_robohash',
     # 'debug_toolbar',
 ]
 
@@ -59,10 +60,10 @@ ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'BACKEND' : 'django.template.backends.django.DjangoTemplates',
+        'DIRS'    : [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
-        'OPTIONS': {
+        'OPTIONS' : {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME'  : os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -138,7 +139,7 @@ INTERNAL_IPS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
@@ -146,10 +147,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CRISPY_FAIL_SILENTLY = not DEBUG
 
-#AUTH_USER_MODEL = 'myuser.MyUser'
+# AUTH_USER_MODEL = 'myuser.MyUser'
 
 BOOTSTRAP4 = {
     # Using extra jquery, not the one in bootstrap
     'include_jquery': False,
 }
-

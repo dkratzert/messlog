@@ -13,6 +13,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
+from django_robohash.robotmaker import make_robot_svg
 
 from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
@@ -20,8 +21,8 @@ from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
-from scxrd.models import Experiment
-from scxrd.models import Person
+from scxrd.models import Experiment, Person
+from scxrd.utils import randstring
 
 
 class FormActionMixin(LoginRequiredMixin, FormMixin):
@@ -91,6 +92,11 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
     fields = '__all__'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['randstring'] = randstring()
+        return context
+
 
 class ResidualsTable(DetailView):
     """
@@ -135,7 +141,8 @@ class MoleculeView(LoginRequiredMixin, View):
         if not cif_file:
             print('Experiment with id {} has no cif file.'.format(exp_id))
             # Makes structure view blank:
-            return HttpResponse(' ')
+            robot = make_robot_svg(randstring(), width=300, height=300)
+            return HttpResponse(robot[1:])
         cif = CifContainer(Path(MEDIA_ROOT).joinpath(Path(cif_file)))
         grow = request.POST.get('grow')
         if cif.atoms_fract:
@@ -156,7 +163,7 @@ class MoleculeView(LoginRequiredMixin, View):
                 print("Error while writing mol file.")
             return HttpResponse(molfile)
         print('Cif file with id {} of experiment {} has no atoms!'.format(cif_file, exp_id))
-        return HttpResponse(' ')
+        return HttpResponse('')
 
     # always reload complete molecule:
     @never_cache

@@ -1,9 +1,6 @@
-from django.conf.urls.static import static
-from django.urls import path, reverse_lazy, include
+from django.urls import path
 
-from mysite import settings
 from . import views
-
 
 app_name = 'scxrd'
 
@@ -16,8 +13,6 @@ urlpatterns = [
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('customers/', views.Customers.as_view(), name='customers'),
     path('molecule/', views.MoleculeView.as_view(), name='molecule'),
-    #path('uploadcif/<int:pk>/', views.CifUploadView.as_view(), name='upload_cif_file'),
+    # path('uploadcif/<int:pk>/', views.CifUploadView.as_view(), name='upload_cif_file'),
 
 ]
-
-

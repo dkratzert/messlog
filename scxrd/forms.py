@@ -1,7 +1,6 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, ButtonHolder, Button
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Field, HTML, ButtonHolder, Layout, Submit, Row, Column
 from django import forms
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -110,7 +109,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.crystal_layout = Layout(
-            self.card('Crystal and Results', self.backbutton),
+            self.card(_('Crystal and Results'), self.backbutton),
             # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-8'),
@@ -176,7 +175,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
 
     def __init__(self, *args, **kwargs):
-        self.exp_title = 'New Experiment'
+        self.exp_title = _('New Experiment')
         super().__init__(*args, **kwargs)
         self.fields['number'].initial = Experiment.objects.first().number + 1
         self.helper.render_unmentioned_fields = False
@@ -199,7 +198,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
 class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.exp_title = 'Experiment'
+        self.exp_title = _('Experiment')
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
             # Experiment ###

@@ -8,3 +8,5 @@ sqlparse
 gemmi
 django-cleanup
 django-crispy-forms
+# just for fun:
+django-robohash-svg

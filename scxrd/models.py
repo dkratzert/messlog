@@ -1,7 +1,6 @@
 import datetime
 import textwrap
 from pathlib import Path
-from pprint import pprint
 
 from django import template
 from django.contrib.auth.models import User, AbstractUser

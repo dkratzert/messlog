@@ -1,9 +1,8 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.utils import get_float
-
-# from django.utils.translation import gettext_lazy as _
 
 DEBUG = False
 
@@ -14,8 +13,8 @@ class CifFileModel(models.Model):
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
     sha256 = models.CharField(max_length=256, blank=True, null=True)
-    date_created = models.DateTimeField(verbose_name='upload date', null=True, blank=True)
-    date_updated = models.DateTimeField(verbose_name='change date', null=True, blank=True)
+    date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)
+    date_updated = models.DateTimeField(verbose_name=_('change date'), null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     #########################################
     data = models.CharField(null=True, blank=True, max_length=256)
@@ -47,7 +46,7 @@ class CifFileModel(models.Model):
     refine_diff_density_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
-                                                         verbose_name='CCDC number')
+                                                         verbose_name=_('CCDC number'))
 
     def __str__(self):
         try:

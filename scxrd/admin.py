@@ -1,13 +1,9 @@
 from pathlib import Path
 
-from django.conf.urls import url
 from django.contrib import admin
 
-from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup
-from scxrd.models import CrystalSupport, CrystalGlue
-from scxrd.models import Person
+from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Person
 
 
 # Register your models here.

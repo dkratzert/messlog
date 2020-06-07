@@ -174,7 +174,13 @@ $(document).ready(function () {
                 'csrfmiddlewaretoken': csrftoken
             },
             function (result) {
-                display_molecule(result);
+                if (result.toString().startsWith('<svg', 0)) {
+                    console.log('replacing');
+                    document.getElementById("molcard").innerHTML = result.toString();
+                } else {
+                    console.log('jmol');
+                    display_molecule(result);
+                }
             });
     }
 
