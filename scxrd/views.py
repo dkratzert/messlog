@@ -4,6 +4,7 @@ from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
@@ -45,6 +46,11 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         #        print('The form is valid!!')
         #        return HttpResponseRedirect(reverse_lazy('scxrd:index'))
         return super().post(request, *args, **kwargs)
+
+
+def ketcher(request):
+    req = render(request, 'scxrd/ketcher.html')
+    return req
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):

@@ -72,7 +72,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('crystal_cond_samp')
             ),
             Row(
-                Column('desired_struct_samp')
+                # Column('desired_struct_samp'),
+                Column(HTML('<iframe id="ifKetcher" src="ketcher.html" width="400" height="300"></iframe>'),
+                       css_class='p-3 m-2')
             ),
             Row(
                 Column('special_remarks_samp')
