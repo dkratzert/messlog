@@ -4,8 +4,8 @@ from crispy_forms.layout import Layout, Row, Column, HTML
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.customer_models import SCXRDSample
 from scxrd.form_utils import save_button, card
+from scxrd.models import SCXRDSample
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
@@ -16,7 +16,8 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
     sum_formula_samp = forms.CharField(label=_("Assumed sum formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
-    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=True)
+    # TODO: get this from ketcher:
+    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
     special_remarks_samp = forms.TextInput()
 
 
@@ -48,7 +49,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Sample')
         super().__init__(*args, **kwargs)
-        self.helper.render_unmentioned_fields = False
         self.helper.layout = Layout(
             card(self.exp_title, self.backbutton),
             Row(
@@ -73,7 +73,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             ),
             Row(
                 # Column('desired_struct_samp'),
-                Column(HTML('<iframe id="ifKetcher" src="ketcher.html" width="400" height="300"></iframe>'),
+                Column(HTML('''<div><label for="ifKetcher" class="pl-0 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0">
+                            Desired structure</label></div>
+                            <iframe id="ifKetcher" src="ketcher.html" width="750" height="550"></iframe>'''),
                        css_class='p-3 m-2')
             ),
             Row(

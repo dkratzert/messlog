@@ -103,6 +103,9 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
+        super().post(request, *args, **kwargs)
+        print('request from new sample:')
+        pprint(request.POST)
         form = self.get_form()
         if form.is_valid():
             sample = form.save(commit=False)
