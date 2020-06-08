@@ -102,7 +102,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
         self.crystal_layout = Layout(
             card(_('Crystal and Results'), backbutton),
-            # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
+            # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-8'),
                 Column('submit_date', css_class='col-4'),

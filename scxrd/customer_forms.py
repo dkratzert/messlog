@@ -5,7 +5,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import save_button, card
-from scxrd.models import SCXRDSample
+from scxrd.customer_models import SCXRDSample
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
@@ -14,7 +14,7 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # TODO: do this during view save()
     # customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('customer'))
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
-    sum_formula_samp = forms.CharField(label=_("Assumed sum formula"), required=True)
+    sum_formula_samp = forms.CharField(label=_("Presumed empirical formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
     # TODO: get this from ketcher:
     desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
