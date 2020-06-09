@@ -4,7 +4,7 @@ from crispy_forms.layout import Layout, Row, Column, HTML
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import save_button, card
+from scxrd.form_utils import save_button, card, save_button2
 from scxrd.customer_models import SCXRDSample
 
 
@@ -16,7 +16,7 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
     sum_formula_samp = forms.CharField(label=_("Presumed empirical formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
-    # TODO: get this from ketcher:
+    # TODO: get this from jsme:
     desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
     special_remarks_samp = forms.TextInput()
 
@@ -72,17 +72,15 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('crystal_cond_samp')
             ),
             Row(
-                # Column('desired_struct_samp'),
-                Column(HTML('''<div><label for="ifKetcher" class="pl-0 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0">
-                            Desired structure</label></div>
-                            <iframe id="ifKetcher" src="ketcher.html" width="750" height="550"></iframe>'''),
-                       css_class='p-3 m-2')
+                Column('desired_struct_samp'),
+                #Column('',
+                #       css_class='p-3 m-2')
             ),
             Row(
                 Column('special_remarks_samp')
             ),
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             HTML('</br>'),
             HTML('</br>'),
             HTML('</br>'),

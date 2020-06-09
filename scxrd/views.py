@@ -3,8 +3,8 @@ from pathlib import Path
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
@@ -28,7 +28,7 @@ from scxrd.utils import randstring
 
 class FormActionMixin(LoginRequiredMixin, FormMixin):
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: WSGIRequest, *args, **kwargs):
         """Add 'Cancel' button redirect."""
         print('The post request:')
         pprint(request.POST)
@@ -48,11 +48,6 @@ class FormActionMixin(LoginRequiredMixin, FormMixin):
         return super().post(request, *args, **kwargs)
 
 
-def ketcher(request):
-    req = render(request, 'scxrd/ketcher.html')
-    return req
-
-
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
     """
     The view for the main scxrd page.
@@ -61,7 +56,7 @@ class ExperimentIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'scxrd/scxrd_index.html'
 
 
-class ExperimentCreateView(FormActionMixin, LoginRequiredMixin, CreateView):
+class ExperimentCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new experiment
     """
@@ -73,7 +68,7 @@ class ExperimentCreateView(FormActionMixin, LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentEditView(FormActionMixin, LoginRequiredMixin, UpdateView):
+class ExperimentEditView(LoginRequiredMixin, UpdateView):
     """
     Edit an experiment as Operator.
     """
@@ -98,7 +93,7 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
     # TODO: Make this the url of the users experiments list later:
     success_url = reverse_lazy('scxrd:index')
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         """
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
@@ -158,7 +153,7 @@ class MoleculeView(LoginRequiredMixin, View):
     View to get atom data as .mol file.
     """
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: WSGIRequest, *args, **kwargs):
         print('# Molecule request:')
         pprint(request.POST)
         cif_file = request.POST.get('cif_file')

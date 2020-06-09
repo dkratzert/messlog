@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import card, backbutton, save_button
+from scxrd.form_utils import card, backbutton, save_button2
 from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
@@ -175,7 +175,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # HTML('</div>'),  # end of card
         )
 
@@ -193,14 +193,14 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             self.experiment_layout,
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # Crystal ######
             self.crystal_layout,
             # HTML('</div>'),  # end of card
             # Files ########
             self.files_layout,
             # HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # HTML('</div>'),  # end of card
             self.misc_layout,
         )

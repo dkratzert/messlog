@@ -24,6 +24,6 @@ class SCXRDSample(models.Model):
     reaction_path_samp = models.TextField(verbose_name=_('reaction pathway'), blank=True, null=True, default='')
     crystal_cond_samp = models.CharField(verbose_name=_('crystallized from and method'), blank=True, null=True,
                                          default='', max_length=500)
-    # TODO: make this with Ketcher:
+    # TODO: make this with jsme:
     desired_struct_samp = models.CharField(verbose_name=_('desired structure'), blank=True, default='', max_length=500)
     special_remarks_samp = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='')

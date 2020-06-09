@@ -1,5 +1,4 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
 from . import views
 
@@ -10,11 +9,7 @@ urlpatterns = [
     path('new/', views.ExperimentCreateView.as_view(), name='new'),
     path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit'),
     path('submit/', views.NewExperimentByCustomer.as_view(), name='submit_experiment'),
-    #path('submit/ketcher.html', views.ketcher, name='ketcher.html'),
-    path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher.html")),
-    path('submit/library.sdf', TemplateView.as_view(template_name="scxrd/library.sdf")),
-    path('submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher.svg")),
-    path('submit/library.svg', TemplateView.as_view(template_name="scxrd/library.svg")),
+    # path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher.html")),
     path('table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('customers/', views.Customers.as_view(), name='customers'),
