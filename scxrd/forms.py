@@ -166,7 +166,10 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
         super().__init__(*args, **kwargs)
-        self.fields['number'].initial = Experiment.objects.first().number + 1
+        try:
+            self.fields['number'].initial = Experiment.objects.first().number + 1
+        except AttributeError:
+            self.fields['number'].initial = 1
         self.helper.render_unmentioned_fields = False
 
         self.helper.layout = Layout(
