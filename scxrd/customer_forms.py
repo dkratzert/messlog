@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, HTML
+from crispy_forms.layout import Layout, Row, Column, HTML, Hidden, Field
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
@@ -65,16 +65,16 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
 
             # Column('solve_refine_selv_samp'),
             # ),
-            Row(
-                Column('reaction_path_samp')
-            ),
+            #Row(
+            #    Column('reaction_path_samp')
+            #),
             Row(
                 Column('crystal_cond_samp')
             ),
             Row(
-                #Column('desired_struct_samp'),
-                Column(HTML("""<div id="jsme_container"></div>""")),
-                       #css_class='p-3 m-2')
+                HTML('<input type="hidden" id="id_desired_struct_samp" value="" name="desired_struct_samp">'),
+                Column(HTML("""<div id="jsme_container" class='p-3'> </div>
+                """)),
             ),
             Row(
                 Column('special_remarks_samp')

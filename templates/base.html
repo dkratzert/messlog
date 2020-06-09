@@ -34,6 +34,14 @@
         var cif_file;  // The id of the current CIF
         var experiment_id;
         var grow_struct;
+        var jsmeApplet;
+
+        //this function will be called after the JavaScriptApplet code has been loaded.
+        function jsmeOnLoad() {
+            jsmeApplet = new JSApplet.JSME("jsme_container", "700px", "540px");
+            jsmeApplet.setCallBack("AfterStructureModified", setSmiles);
+        }
+
     </script>
     <title>
         {% block title %}Messlog Main Page{% endblock title %}
