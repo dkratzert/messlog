@@ -4,8 +4,8 @@ from crispy_forms.layout import Layout, Row, Column, HTML
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from scxrd.form_utils import save_button, card, save_button2
 from scxrd.customer_models import SCXRDSample
-from scxrd.form_utils import save_button, card
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
@@ -14,9 +14,10 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # TODO: do this during view save()
     # customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('customer'))
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
-    sum_formula_samp = forms.CharField(label=_("Assumed sum formula"), required=True)
+    sum_formula_samp = forms.CharField(label=_("Presumed empirical formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
-    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=True)
+    # TODO: get this from jsme:
+    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
     special_remarks_samp = forms.TextInput()
 
 
@@ -48,7 +49,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Sample')
         super().__init__(*args, **kwargs)
-        self.helper.render_unmentioned_fields = False
         self.helper.layout = Layout(
             card(self.exp_title, self.backbutton),
             Row(
@@ -72,15 +72,15 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('crystal_cond_samp')
             ),
             Row(
-                # Column('desired_struct_samp'),
-                Column(HTML('<iframe id="ifKetcher" src="ketcher.html" width="400" height="300"></iframe>'),
-                       css_class='p-3 m-2')
+                Column('desired_struct_samp'),
+                #Column('',
+                #       css_class='p-3 m-2')
             ),
             Row(
                 Column('special_remarks_samp')
             ),
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             HTML('</br>'),
             HTML('</br>'),
             HTML('</br>'),

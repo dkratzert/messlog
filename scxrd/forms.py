@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import card, backbutton, save_button
+from scxrd.form_utils import card, backbutton, save_button2
 from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
@@ -102,7 +102,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
         self.crystal_layout = Layout(
             card(_('Crystal and Results'), backbutton),
-            # AppendedText('prelim_unit_cell', 'assumed formula', active=True),
+            # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-8'),
                 Column('submit_date', css_class='col-4'),
@@ -178,7 +178,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # HTML('</div>'),  # end of card
         )
 
@@ -196,14 +196,14 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             self.experiment_layout,
             HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # Crystal ######
             self.crystal_layout,
             # HTML('</div>'),  # end of card
             # Files ########
             self.files_layout,
             # HTML('</div>'),  # end of card
-            save_button,
+            save_button2,
             # HTML('</div>'),  # end of card
             self.misc_layout,
         )
