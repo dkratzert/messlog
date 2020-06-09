@@ -3,7 +3,14 @@
 {{ form.media }}
 {% load crispy_forms_tags %}
 
+
 {% block content %}
+    <script>
+        //this function will be called after the JavaScriptApplet code has been loaded.
+        function jsmeOnLoad() {
+            jsmeApplet = new JSApplet.JSME("jsme_container", "380px", "340px");
+        }
+    </script>
     {% load crispy_forms_tags %}
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-7 col-sm-6">

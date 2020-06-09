@@ -72,9 +72,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('crystal_cond_samp')
             ),
             Row(
-                Column('desired_struct_samp'),
-                #Column('',
-                #       css_class='p-3 m-2')
+                #Column('desired_struct_samp'),
+                Column(HTML("""<div id="jsme_container"></div>""")),
+                       #css_class='p-3 m-2')
             ),
             Row(
                 Column('special_remarks_samp')
