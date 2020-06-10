@@ -3,7 +3,17 @@
 {{ form.media }}
 {% load crispy_forms_tags %}
 
+
 {% block content %}
+    {% comment %}
+    <script>
+        //this function will be called after the JavaScriptApplet code has been loaded.
+        function jsmeOnLoad() {
+            jsmeApplet = new JSApplet.JSME("jsme_container", "380px", "340px");
+
+        }
+    </script>
+    {% endcomment %}
     {% load crispy_forms_tags %}
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-7 col-sm-6">
@@ -12,21 +22,12 @@
             {% crispy form %}
         </div>
     </div>
+    <script>
+        function setSmiles() {
+            document.getElementById("id_desired_struct_samp").value = jsmeApplet.smiles();
+            // FOR DEBUG:
+            /*document.getElementById("id_crystal_cond_samp").value = jsmeApplet.molFile()*/;
+        }
+    </script>
 {% endblock content %}
 
-{% comment %}
-<script type="text/javascript" language="javascript" src="jsme/jsme.nocache.js"></script>
-
-<script>
-    //this function will be called after the JavaScriptApplet code has been loaded.
-    function jsmeOnLoad() {
-        jsmeApplet = new JSApplet.JSME("jsme_container", "380px", "340px");
-   }
-</script>
-</head>
-
-<body>
-<div id="jsme_container"></div>
-
-</body>
-{% endcomment %}
