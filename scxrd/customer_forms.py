@@ -1,11 +1,11 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, HTML, Hidden, Field
+from crispy_forms.layout import Layout, Row, Column, HTML
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import save_button, card, save_button2
 from scxrd.customer_models import SCXRDSample
+from scxrd.form_utils import card, save_button2, backbutton
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
@@ -14,9 +14,16 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # TODO: do this during view save()
     # customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('customer'))
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
-    sum_formula_samp = forms.CharField(label=_("Presumed empirical formula"), required=True)
-    crystal_cond_samp = forms.CharField(label=_('Crystallized from and method'), required=True)
-    # TODO: get this from jsme:
+    sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
+    crystal_cond_samp = forms.CharField(label=_('Crystallized from, method and conditions'), required=True)
+    reaction_path_samp = forms.FileField(label=_('Document with reaction pathway desired molecule and conditions'),
+                                         required=True,
+                                         help_text=_("Please upload a document (.docx, .cdx or .pdf) showing the "
+                                                     "reaction path with the "
+                                                     "desired product including all used solvents and other reagents. "
+                                                     "<br>The solvents are important information for us if they crystallize "
+                                                     "along with the main molecule.")
+                                         )
     desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
     special_remarks_samp = forms.TextInput()
 
@@ -38,10 +45,6 @@ class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0'  # 'font-weight-bold'
         self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
-        self.backbutton = """
-            <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
-                href="{% url "scxrd:index"%}">Back to start</a>
-            """
 
 
 class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
@@ -50,7 +53,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
         self.exp_title = _('New Sample')
         super().__init__(*args, **kwargs)
         self.helper.layout = Layout(
-            card(self.exp_title, self.backbutton),
+            card(self.exp_title, backbutton),
             Row(
                 Column('sample_name_samp', css_class='col-6'),
                 Column('sum_formula_samp', css_class='col-6'),
@@ -59,28 +62,29 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             ),
             Row(
                 Column('stable_samp'),
+                # Column('solve_refine_selv_samp'),
+            ),
+            Row(
                 Column('solve_refine_selv_samp'),
             ),
+            Row(
+                Column('reaction_path_samp')
+            ),
             # Row(
-
-            # Column('solve_refine_selv_samp'),
+            #    jsme_frame,
+            #    Column(HTML("""<div id="jsme_container" class='pl-3 pb-3'> </div>""")),
             # ),
-            #Row(
-            #    Column('reaction_path_samp')
-            #),
             Row(
                 Column('crystal_cond_samp')
             ),
             Row(
-                HTML('<input type="hidden" id="id_desired_struct_samp" value="" name="desired_struct_samp">'),
-                Column(HTML("""<div id="jsme_container" class='p-3'> </div>
-                """)),
-            ),
-            Row(
                 Column('special_remarks_samp')
             ),
+            Row(
+                save_button2,
+            ),
             HTML('</div>'),  # end of card
-            save_button2,
+
             HTML('</br>'),
             HTML('</br>'),
             HTML('</br>'),

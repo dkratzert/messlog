@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    // some options for JSmol:
+
+    // some options for JSmol_lite:
     var bgcolor = $(this.body).css("background-color");
     var jsmol_options;
     jsmol_options = {

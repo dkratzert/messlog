@@ -17,31 +17,17 @@
     <script src="{% static 'DataTables/datatables.min.js' %}"></script>
     <script src="{% static 'moment/moment.js' %}"></script>
     <script src="{% static "jsme/jsme.nocache.js" %}"></script>
-
-    {# JQUERY FILE UPLOAD SCRIPTS #}
-    {% comment %}
-    <script src="{% static 'jquery-file-upload-9.28.0/vendor/jquery.ui.widget.js' %}"></script>
-    <script src="{% static 'jquery-file-upload-9.28.0/jquery.iframe-transport.js' %}"></script>
-    <script src="{% static 'jquery-file-upload-9.28.0/jquery.fileupload.js' %}"></script>
-    {% endcomment %}
     <script src="{% static 'flatpickr/flatpickr-4.5.2.js' %}"></script>
     <script src="{% static 'jsmol/JSmol_dk.nojq.lite.js' %}"></script>
     <script src="{% static 'myjs/scxrd.js' %}"></script>
     {# <script src="{% static 'myjs/drag-and-drop-upload.js' %}"></script> #}
     <script>
+        // some global variables:
         var table_url;
         var csrftoken;
         var cif_file;  // The id of the current CIF
         var experiment_id;
         var grow_struct;
-        var jsmeApplet;
-
-        //this function will be called after the JavaScriptApplet code has been loaded.
-        function jsmeOnLoad() {
-            jsmeApplet = new JSApplet.JSME("jsme_container", "700px", "540px");
-            jsmeApplet.setCallBack("AfterStructureModified", setSmiles);
-        }
-
     </script>
     <title>
         {% block title %}Messlog Main Page{% endblock title %}

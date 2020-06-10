@@ -37,7 +37,6 @@ def validate_cif_file_extension(value):
     if not value.name.endswith('.cif'):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
-
 def validate_email(value):
     """
     Validate that a username is email like.
