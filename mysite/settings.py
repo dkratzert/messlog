@@ -52,12 +52,12 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Use this to control iframe options:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+# allow iframes:
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'mysite.urls'

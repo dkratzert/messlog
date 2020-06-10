@@ -70,10 +70,17 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             Row(
                 Column('reaction_path_samp')
             ),
-            # Row(
-            #    jsme_frame,
-            #    Column(HTML("""<div id="jsme_container" class='pl-3 pb-3'> </div>""")),
-            # ),
+            Row(
+                # jsme_frame,
+                Column(
+                    HTML("""
+                        <label for="id_reaction_path" class="pr-3 pt-2 pb-0 mt-1 mb-1 ml-0 requiredField"></label>
+                            Reaction pathway to desired molecule<span class="asteriskField">*</span>
+                            <div class='ml-3 mr-3 mb-3'> 
+                            <iframe id="ifKetcher" src='ketcher.html' width="700" height="500"  frameborder='0'></iframe>
+                            </div>
+                        """)),
+            ),
             Row(
                 Column('crystal_cond_samp')
             ),
