@@ -16,7 +16,7 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     # customer_samp = CurrentUserField(default=get_current_authenticated_user())
     sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from, method and conditions'), required=True)
-    reaction_path_samp = forms.FileField(label=_('Document with reaction pathway desired molecule and conditions'),
+    reaction_path_samp = forms.FileField(label=_('Document with reaction pathway, desired molecule and conditions'),
                                          required=True,
                                          help_text=_("Please upload a document (.docx, .cdx or .pdf) showing the "
                                                      "reaction path with the "
@@ -74,8 +74,8 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 # jsme_frame,
                 Column(
                     HTML("""
-                        <label for="id_reaction_path" class="pr-3 pt-2 pb-0 mt-1 mb-1 ml-0 requiredField"></label>
-                            Reaction pathway to desired molecule<span class="asteriskField">*</span>
+                        <label for="id_reaction_path" class="pr-3 pt-2 pb-0 mt-1 mb-1 ml-0 requiredField"></label>Reaction pathway, desired molecule and conditions<span class="asteriskField">*</span>
+                            <small id="hint_id_reaction_path" class="form-text text-muted ml-3">Alternatively draw the reaction here.</small>
                             <div class='ml-3 mr-3 mb-3'> 
                             <iframe id="ifKetcher" src='ketcher.html' width="700" height="500"  frameborder='0'></iframe>
                             </div>

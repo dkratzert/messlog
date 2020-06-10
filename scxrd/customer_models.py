@@ -31,7 +31,7 @@ class SCXRDSample(models.Model):
                                                              'refine the structure yourselves.'))
     sum_formula_samp = models.CharField(max_length=300, verbose_name=_("assumed sum formula"), blank=True)
     reaction_path_samp = models.FileField(
-        verbose_name=_('Document with reaction pathway desired molecule and conditions'),
+        verbose_name=_('Document with reaction pathway, desired molecule and conditions'),
         validators=[validate_reaction_file_extension],
         upload_to='reactions',
         blank=True,
