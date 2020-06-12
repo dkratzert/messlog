@@ -77,8 +77,8 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                         <label for="id_reaction_path" class="pr-3 pt-2 pb-0 mt-3 mb-1 ml-0 requiredField"></label>Reaction pathway, desired molecule and conditions<span class="asteriskField">*</span>
                             <small id="hint_id_reaction_path" class="form-text text-muted ml-3">Alternatively draw the reaction here:</small>
                             <div class='card-body  border ml-3 mr-3 mb-3 p-3' style='height: 500px'> 
-                            <iframe id="ifKetcher" src='ketcher.html' 
-                            style='overflow:hidden; border: 0px; width: 100%; height: 100%; margin: 0 0 0 1%' scrolling='no'></iframe>
+                            <iframe id="ketcher-frame" src='ketcher.html' 
+                            style='overflow:hidden; border: 0; width: 100%; height: 100%; margin: 0 0 0 1%'></iframe>
                             </div>
                         """)),
             ),
