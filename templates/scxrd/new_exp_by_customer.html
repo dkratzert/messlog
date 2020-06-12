@@ -5,31 +5,39 @@
 
 
 {% block content %}
-    {% comment %}
-    <script>
-        //this function will be called after the JSME JavaScriptApplet code has been loaded.
-        function jsmeOnLoad() {
-            jsmeApplet = new JSApplet.JSME("jsme_container", "700px", "540px");
-            jsmeApplet.setCallBack("AfterStructureModified", setSmiles);
-        }
-    </script>
-    {% endcomment %}
+{% comment %}
+<script>
+    //this function will be called after the JSME JavaScriptApplet code has been loaded.
+    /*function jsmeOnLoad() {
+        jsmeApplet = new JSApplet.JSME("jsme_container", "700px", "540px");
+        jsmeApplet.setCallBack("AfterStructureModified", setSmiles);
+    }*/
 
-    {% load crispy_forms_tags %}
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-7 col-sm-6">
-            {% crispy form %}
-        </div>
+    alert('foo');
+    var ketcherFrame = document.getElementById('ifKetcher');
+    ketcher = ketcherFrame.contentWindow.ketcher;
+    ketcher.setCallBack("onchange", setSmiles());
+
+
+</script>
+{% endcomment %}
+
+{% load crispy_forms_tags %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-7 col-sm-6">
+        {% crispy form %}
     </div>
+</div>
 
-    <script>
-        function setSmiles() {
-            //document.getElementById("id_desired_struct_samp").value = jsmeApplet.smiles();
-            // A 'true' parameter returns Mol3000 file, otherwise mol file:
-            //document.getElementById("id_desired_struct_samp").value = jsmeApplet.molFile();
-            // returns an SVG file:
-            document.getElementById("id_desired_struct_samp").value = jsmeApplet.getMolecularAreaGraphicsString();
-        }
-    </script>
+<script>
+    function setSmiles() {
+        //document.getElementById("id_desired_struct_samp").value = jsmeApplet.smiles();
+        // A 'true' parameter returns Mol3000 file, otherwise mol file:
+        //document.getElementById("id_desired_struct_samp").value = jsmeApplet.molFile();
+        // returns an SVG file:
+        //document.getElementById("id_desired_struct_samp").value = jsmeApplet.getMolecularAreaGraphicsString();
+        //document.getElementById("div_id_sample_name_samp").value = ketcher.getSmiles();
+    }
+</script>
 {% endblock content %}
 

@@ -13,6 +13,7 @@ urlpatterns = [
     # path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher.html")),
     path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
     path('submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
+    path('submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
     path('submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
     path('table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
