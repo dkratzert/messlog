@@ -12,13 +12,6 @@
         jsmeApplet = new JSApplet.JSME("jsme_container", "700px", "540px");
         jsmeApplet.setCallBack("AfterStructureModified", setSmiles);
     }*/
-
-    alert('foo');
-    var ketcherFrame = document.getElementById('ifKetcher');
-    ketcher = ketcherFrame.contentWindow.ketcher;
-    ketcher.setCallBack("onchange", setSmiles());
-
-
 </script>
 {% endcomment %}
 
@@ -29,18 +22,17 @@
         </div>
     </div>
 
-
     <script>
+        var ketcher_svg;
         jQuery(function ($) {
             $('#ketcher-frame').on('load', function () {
-                var ketcher = this.contentWindow.ketcher,
-                    source = $('#id_sample_name_samp'),
-                    show = $('#show');
+                var ketcher = this.contentWindow.ketcher;
+                //var sample = $('#id_desired_struct_samp');
 
                 ketcher.editor.on('change', function () {
-                    //alert('foochange');
-                    source.val(ketcher.getMolfile());
-                    //source.val($('canvas').data().toString());
+                    //source.val(ketcher.getMolfile())
+                    ketcher_svg = ketcher.editor.render.clientArea.innerHTML;
+                     $('#id_desired_struct_samp').val = ketcher_svg;
                 });
             })
         });
