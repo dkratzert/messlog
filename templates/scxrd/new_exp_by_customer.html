@@ -28,8 +28,6 @@
         jQuery(function ($) {
             $('#ketcher-frame').on('load', function () {
                 var ketcher = this.contentWindow.ketcher;
-                //var sample = $('#id_desired_struct_samp');
-
                 ketcher.editor.on('change', function () {
                     //source.val(ketcher.getMolfile())  // to get the mol file
                     ketcher_svg = ketcher.editor.render.clientArea.innerHTML;
