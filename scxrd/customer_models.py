@@ -23,8 +23,9 @@ class SCXRDSample(models.Model):
                                       blank=True,
                                       related_name='SCXRDSample')
     stable_samp = models.BooleanField(verbose_name=_('sample is unstable'),
-                                      help_text=_("Indicate whether the sample needs special "
-                                                  "care in order to keep it stable. Tell us more in the "
+                                      help_text=_("Indicate if the sample requires special care "
+                                                  "to keep it stable until the measurement. "
+                                                  "Tell us more in the "
                                                   "'special remarks' field."))
     solve_refine_selv_samp = models.BooleanField(verbose_name=_('I want to solve/refine'),
                                                  help_text=_('Indicate whether you want to solve and '

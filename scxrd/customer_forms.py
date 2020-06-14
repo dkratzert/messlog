@@ -2,6 +2,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, HTML
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.customer_models import SCXRDSample
@@ -17,7 +18,7 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from, method and conditions'), required=True)
     reaction_path_samp = forms.FileField(label=_('Document with reaction pathway, desired molecule and conditions'),
-                                         required=True,
+                                         required=False,
                                          help_text=_("Please upload a document (.docx, .cdx or .pdf) showing the "
                                                      "reaction path with the "
                                                      "desired product including all used solvents and other reagents. "
@@ -75,9 +76,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column(
                     HTML("""<div id="div_id_reaction_path" class="form-group">
                         <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3 requiredField">
-                            Reaction pathway, desired molecule and conditions<span class="asteriskField">*</span> 
+                            Draw the desired structure<span class="asteriskField">*</span> 
                         </label>
-                        <small id="hint_id_reaction_path" class="form-text text-muted ml-3">Alternatively draw the reaction here:</small>
+                        <small id="hint_id_reaction_path" class="form-text text-muted ml-3">This field is an alternative to the file upload above:</small>
                         <div class='card-body  border ml-3 mr-3 mb-3 p-3' style='height: 500px'> \n
                             <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">
                             <iframe id="ketcher-frame" src='ketcher.html' class='m-0'
@@ -102,6 +103,16 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             HTML('</br>'),
             HTML('</br>'),
         )
+
+    def clean(self):
+        # desired_struct_samp = models.CharField(verbose_name=_('desired structure'), blank=True, default='', max_length=500)
+        # TODO: make a custom form where the model is coupled to the form field and the html template
+        cleaned_data = super().clean()
+        figure_document = cleaned_data.get('reaction_path_samp')
+        svg_sample = cleaned_data.get('desired_struct_samp')
+        if not any([figure_document, svg_sample]):
+            raise ValidationError(_('You need to either upload a document with the desired structure '
+                                    'or draw it in the field below.'))
 
     class Meta:
         model = SCXRDSample
