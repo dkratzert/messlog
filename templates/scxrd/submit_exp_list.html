@@ -7,27 +7,39 @@
 
 
 {% block content %}
-
-    <div class="col-8">
+<div class="row justify-content-center">
+    <div class="col-8 align-center">
+        
         <div class="card mb-3">
             <div class="card-header pb-2 pl-3">Experiments List
 
             </div>
             <div class="card-body p-0">
-                <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
+                <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">{% load django_listing %}
+
                     <table id="samples" class="table table-sm table-condensed table-hover">
-                    <thead><tr><td>Sample</td><td>Selv-Refine</td><td>Submitted at</td><td>Sum Formula</td></tr></thead>
+                    <thead><tr><td><b>Sample</b></td>
+                        <td><b>Selv-Refine</b></td>
+                        <td><b>Submitted at</b></td>
+                        <td><b>Sum Formula</b></td>
+                        <td><b>Picture</b></td>
+                    </tr></thead>
                     {% for sample in object_list %}
                         <tr><td>{{ sample.sample_name_samp }}</td>
                             <td>{{ sample.solve_refine_selv_samp }}</td>
                             <td>{{ sample.submit_date_samp }}</td>
-                            <td>{{ sample.sum_formula_samp }}</td></tr>
+                            <td>{{ sample.sum_formula_samp }}</td>
+                            {% autoescape off %}
+                            <td><div class="svg" style="width: 4cm; height: 4cm">{{ sample.desired_struct_samp }} </div></td>
+                            {% endautoescape %}
+                        </tr>
                     {% endfor %}
                     </table>
+
                 </div>
             </div>
         </div>
     </div>
-
+</div>
 
 {% endblock content %}

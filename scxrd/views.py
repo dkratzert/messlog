@@ -118,6 +118,7 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
         context['randstring'] = randstring()
         return context
 
+
 class MySamplesList(LoginRequiredMixin, ListView):
     """
     'sample_name_samp', 'submit_date_samp', 'sum_formula_samp'

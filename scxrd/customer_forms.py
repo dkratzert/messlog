@@ -75,7 +75,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 # jsme_frame,
                 Column(
                     HTML("""<div id="div_id_reaction_path" class="form-group">
-                        <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3 requiredField">
+                        <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">
                             Draw the desired structure<span class="asteriskField">*</span> 
                         </label>
                         <small id="hint_id_reaction_path" class="form-text text-muted ml-3">This field is an alternative to the file upload above:</small>
@@ -109,7 +109,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
         # TODO: make a custom form where the model is coupled to the form field and the html template
         cleaned_data = super().clean()
         figure_document = cleaned_data.get('reaction_path_samp')
-        svg_sample = cleaned_data.get('id_svg_struct_samp')
+        svg_sample = cleaned_data.get('desired_struct_samp')
         if not any([figure_document, svg_sample]):
             raise ValidationError(_('You need to either upload a document with the desired structure '
                                     'or draw it in the field below.'))

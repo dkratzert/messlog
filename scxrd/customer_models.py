@@ -42,6 +42,6 @@ class SCXRDSample(models.Model):
                                          null=True,
                                          default='', max_length=500)
     # TODO: make this with jsme:
-    desired_struct_samp = models.CharField(verbose_name=_('desired structure'), blank=True, default='', max_length=500)
+    desired_struct_samp = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
     special_remarks_samp = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
                                             help_text=_('Any additional information we should know.'))
