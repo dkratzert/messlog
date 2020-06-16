@@ -225,8 +225,7 @@ class Experiment(models.Model):
         except Exception as e:
             print('No previous cif:', e)
             previous_cif = None
-        if not previous_cif:
-            super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
         if not self.cif_file_on_disk.chunks():
             print('returning from file check')
             return
