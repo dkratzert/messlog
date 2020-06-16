@@ -41,7 +41,11 @@ class SCXRDSample(models.Model):
     crystal_cond_samp = models.CharField(verbose_name=_('crystallized from, method and conditions'), blank=True,
                                          null=True,
                                          default='', max_length=500)
-    # TODO: make this with jsme:
     desired_struct_samp = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
     special_remarks_samp = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
                                             help_text=_('Any additional information we should know.'))
+    was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False)
+    not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True, default='')
+
+    class Meta:
+        ordering = ["-submit_date_samp"]

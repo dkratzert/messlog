@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="row justify-content-center">
-        <div class="col-8 align-center">
+        <div class="col-10 align-center">
 
             <div class="card mb-3">
                 <div class="card-header pb-2 pl-3">Experiments List
@@ -21,24 +21,59 @@
                             <thead>
                             <tr>
                                 <td><b>Sample</b></td>
-                                <td><b>Selv-Refine</b></td>
+                                <td><b>Selv Service</b></td>
                                 <td><b>Submitted at</b></td>
                                 <td><b>Sum Formula</b></td>
                                 <td><b>Picture</b></td>
+                                <td><b>Measured</b></td>
+                                <td><b></b></td>
                             </tr>
                             </thead>
                             {% for sample in object_list %}
                                 <tr>
                                     <td>{{ sample.sample_name_samp }}</td>
-                                    <td>{{ sample.solve_refine_selv_samp }}</td>
+                                    {% if sample.solve_refine_selv_samp %}
+                                        <td><span class="text-success">
+                                            <svg class="bi bi-check-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                              <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                              <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                                            </svg>
+                                        </span></td>
+                                        {% else %}
+                                        <td><span class="text-warning">
+                                            <svg class="bi bi-x-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                              <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                              <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                              <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                                            </svg>
+                                        </span></td>
+                                    {% endif %}
                                     <td>{{ sample.submit_date_samp }}</td>
                                     <td>{{ sample.sum_formula_samp }}</td>
-                                    {% autoescape off %}
-                                        <td>
-                                            <div class="svg card"
-                                                 style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
-                                        </td>
-                                    {% endautoescape %}
+                                    {% if sample.desired_struct_samp %}
+                                        {% autoescape off %}
+                                            <td>
+                                                <div class="svg card"
+                                                     style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
+                                            </td>
+                                        {% endautoescape %}
+                                    {% else %}
+                                        {% if sample.reaction_path_samp %}
+                                            <td>
+                                                <a href="{{ sample.reaction_path_samp.url }}">Reaction</a>
+                                            </td>
+                                        {% else %}
+                                            <td> File not found</td>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if sample.was_measured %}
+                                        <td><span class="badge badge-success m-1 p-2">Yes</span></td>
+                                    {% elif not sample.was_measured and sample.not_measured_cause %}
+                                        <td><span class="badge badge-danger m-1 p-2">&thinsp;No&thinsp;</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-warning m-1 p-2">&thinsp;No&thinsp;</span></td>
+                                    {% endif %}
+                                    <td>{{ sample.not_measured_cause }}</td>
                                 </tr>
                             {% endfor %}
                         </table>
