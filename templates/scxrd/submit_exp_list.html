@@ -53,7 +53,7 @@
                                     {% if sample.desired_struct_samp %}
                                         {% autoescape off %}
                                             <td>
-                                                <div class="svg card"
+                                                <div class="svg card" id="id_{{ sample.id }}"
                                                      style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
                                             </td>
                                         {% endautoescape %}
