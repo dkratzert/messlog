@@ -6,7 +6,7 @@ from django import template
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
-from django.db import models
+from django.db import models, DatabaseError
 # Create your models here.
 from django.db.models import FileField
 from django.utils import timezone
@@ -225,14 +225,15 @@ class Experiment(models.Model):
         except Exception as e:
             print('No previous cif:', e)
             previous_cif = None
-        super().save(*args, **kwargs)
+        if not previous_cif:
+            super().save(*args, **kwargs)
         if not self.cif_file_on_disk.chunks():
             print('returning from file check')
             return
         if 'update_fields' in kwargs:
             return
         try:
-            # cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+            # cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
             cif = CifContainer(chunks='\n'.join(
                 [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
         except Exception as e:
@@ -258,6 +259,8 @@ class Experiment(models.Model):
         self.cif = cif_model
         cif_model.save()
         self.remove_cif_row(previous_cif)
+        #self.save(update_fields=['cif'])
+        #if previous_cif:
         self.save(update_fields=['cif'])
 
     def remove_cif_row(self, previous_cif):
@@ -308,5 +311,5 @@ class Experiment(models.Model):
     def get_cif_file_parameter(self, param):
         if not isinstance(param, str):
             return ''
-        cif = CifContainer(Path(self.cif_file_on_disk.file.name))
+        cif = CifContainer(Path(str(self.cif_file_on_disk.file)))
         return cif[param]

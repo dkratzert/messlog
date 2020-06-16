@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.core.files import File
 from django.db import models
-from django.forms import FileField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -49,3 +47,6 @@ class SCXRDSample(models.Model):
 
     class Meta:
         ordering = ["-submit_date_samp"]
+
+    def __str__(self):
+        return self.sample_name_samp

@@ -3,6 +3,7 @@ from pathlib import Path
 from django.contrib import admin
 
 from scxrd.cif.cif_file_io import CifContainer
+from scxrd.customer_models import SCXRDSample
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Person
 
 
@@ -40,9 +41,11 @@ class CifAdmin(admin.ModelAdmin):
         try:
             exp = Experiment.objects.get(cif=obj.pk)
             # Path(MEDIA_ROOT).joinpath()
-            cif = CifContainer(Path(exp.cif_file_on_disk.name))
+            cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
         except RuntimeError:
             return 'no atoms'
+        # Example:
+        # return exp.get_cif_file_parameter('_audit_creation_method')
         return cif.natoms()
 
 
@@ -61,6 +64,7 @@ class CifAdmin(admin.ModelAdmin):
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
+admin.site.register(SCXRDSample)
 admin.site.register(Person)
 admin.site.register(WorkGroup)
 admin.site.register(Machine)
