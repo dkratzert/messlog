@@ -92,45 +92,49 @@
                                        href="{% url "scxrd:index" %}">Back to start</a> {% endcomment %}
                                 </div>
                                 <div class="card-body p-0">
-                                    <table id="sample_{{ sample.id }}"
-                                           class="table table-sm table-condensed table-hover table-borderless">
-                                        <tr>
-                                            <td>{{ sample.sum_formula_samp }}</td>
-                                            <td>{% if sample.solve_refine_selv_samp %}Selv-Service{% endif %}</td>
-                                        </tr>
-                                        <tr>
+                                    <div class="d-flex flex-row bd-highlight mb-3">
+                                        <div class="p-2">
                                             {% if sample.was_measured %}
-                                                <td>Measured:<span class="badge badge-success m-1 p-1">Yes</span></td>
+                                                Measured:<span class="badge badge-success m-1 p-1">Yes</span>
                                             {% elif not sample.was_measured and sample.not_measured_cause %}
-                                                <td>Measured:<span
-                                                        class="badge badge-danger m-1 p-1">&thinsp;No&thinsp;</span>
-                                                    {{ sample.not_measured_cause }}
-                                                </td>
+                                                Measured:<span
+                                                    class="badge badge-danger m-1 p-1">&thinsp;No&thinsp;</span>
                                             {% else %}
-                                                <td>Measured:<span class="badge badge-warning m-1 p-1">&thinsp;No&thinsp;</span>
-                                                </td>
+                                                Measured:
+                                                <span class="badge badge-warning m-1 p-1">&thinsp;No&thinsp;</span>
                                             {% endif %}
+                                        </div>
+                                        <div class="p-2">
+                                            {{ sample.sum_formula_samp }}
+                                        </div>
+                                        <div class="p-2">
+                                            {% if sample.solve_refine_selv_samp %}Selv-Service{% endif %}
 
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row bd-highlight mb-3">
+                                        <div class="p-2">
                                             {% if sample.desired_struct_samp %}
                                                 {% autoescape off %}
-                                                    <td colspan="3" rowspan="3">
-                                                        <div class="svg card" id="id_{{ sample.id }}"
-                                                             style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
-                                                    </td>
+                                                    <div class="svg card" id="id_{{ sample.id }}"
+                                                         style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
                                                 {% endautoescape %}
                                             {% else %}
                                                 {% if sample.reaction_path_samp %}
-                                                    <td colspan="3" rowspan="3">
-                                                        <a href="{{ sample.reaction_path_samp.url }}">Reaction</a>
-                                                    </td>
+                                                    <a href="{{ sample.reaction_path_samp.url }}">Reaction</a>
                                                 {% else %}
-                                                    <td colspan="3" rowspan="3"> File not found</td>
+                                                    <span class="text-muted">File not found</span>
                                                 {% endif %}
                                             {% endif %}
-
-                                        </tr>
-
-                                    </table>
+                                        </div>
+                                        <div class="p-2">
+                                            {% if sample.not_measured_cause %}
+                                                <td>{{ sample.not_measured_cause }}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
