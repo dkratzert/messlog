@@ -12,21 +12,22 @@
             {% crispy form %}
         </div>
     </div>
-
     <script>
         var ketcher_svg;
         var svg_field = document.getElementById('id_svg_struct_samp');
+        var svgval;
+        //var molecule;
         jQuery(function ($) {
             $('#ketcher-frame').on('load', function () {
                 var ketcher = this.contentWindow.ketcher;
                 ketcher.editor.on('change', function () {
-                    //source.val(ketcher.getMolfile())  // to get the mol file
+                    //molecule = ketcher.getMolfile();  // to get the mol file
                     ketcher_svg = ketcher.editor.render.clientArea.getElementsByTagName('svg').item(0).outerHTML;
-                    svg_field.value = ketcher_svg.toString().replace(/<svg\sheight="[0-9]+"\sversion="1.1"\swidth="[0-9]+"/g,
+                    svgval = ketcher_svg.toString().replace(/<svg\sheight="[0-9]+"\sversion="1.1"\swidth="[0-9]+"/g,
                         '<svg height="100%" version="1.1" width="100%"');
+                    svg_field.setAttribute('value', svgval);
                 });
             })
         });
     </script>
-
 {% endblock content %}
