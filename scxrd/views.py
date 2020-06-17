@@ -121,14 +121,22 @@ class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
 
 class MySamplesList(LoginRequiredMixin, ListView):
     """
-    'sample_name_samp', 'submit_date_samp', 'sum_formula_samp'
+    The view for the samples list of a customer submitted for measurement by an operator.
     """
     model = SCXRDSample
-    template_name = 'scxrd/submitted_samples_list.html'
+    template_name = 'scxrd/submitted_samples_list_by_customer.html'
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()
         return SCXRDSample.objects.filter(customer_samp_id=self.request.user)
+
+
+class OperatorSamplesList(LoginRequiredMixin, ListView):
+    """
+    The list of all samples submitted by customers.
+    """
+    model = SCXRDSample
+    template_name = 'scxrd/submitted_samples_list_operator.html'
 
 
 class ResidualsTable(DetailView):

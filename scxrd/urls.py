@@ -11,6 +11,7 @@ urlpatterns = [
     path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit'),
     path('submit/', views.NewExperimentByCustomer.as_view(), name='submit_experiment'),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
+    path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
     path('table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('customers/', views.Customers.as_view(), name='customers'),
