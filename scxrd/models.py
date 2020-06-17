@@ -60,8 +60,7 @@ class Person(models.Model):
     A Person is a Human that has no authentication.
     A Person does not need to have a User account.
     """
-    # TODO: Check if this is a good idea:
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     company = models.CharField(max_length=200, verbose_name='company', blank=True)
@@ -146,7 +145,7 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
     number = models.PositiveIntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
-    customer = models.ForeignKey(to=Person, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
+    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
