@@ -124,7 +124,11 @@ class MySamplesList(LoginRequiredMixin, ListView):
     'sample_name_samp', 'submit_date_samp', 'sum_formula_samp'
     """
     model = SCXRDSample
-    template_name = 'scxrd/submit_exp_list.html'
+    template_name = 'scxrd/submitted_samples_list.html'
+
+    def get_queryset(self):
+        super(MySamplesList, self).get_queryset()
+        return SCXRDSample.objects.filter(customer_samp_id=self.request.user)
 
 
 class ResidualsTable(DetailView):
