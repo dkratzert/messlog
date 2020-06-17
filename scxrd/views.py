@@ -5,6 +5,7 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
@@ -12,6 +13,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django.views.generic.edit import FormMixin
+from django.views.generic.list import MultipleObjectMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django_robohash.robotmaker import make_robot_svg
 
@@ -66,6 +68,31 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     # Fields are defined in form_class:
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
+
+
+class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
+    """
+    Start a new experiment from a prior sample
+    TODO: This view does not work. I need a mix of createview and listview
+    """
+    model = Experiment
+    form_class = ExperimentNewForm
+    template_name = 'scxrd/experiment_new.html'
+    # Fields are defined in form_class:
+    # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
+    success_url = reverse_lazy('scxrd:index')
+
+    def get(self, request, *args, **kwargs):
+        pprint(request.POST)
+        pprint(args)
+        pprint(kwargs)
+        #self.fields['sum_formula'] = SCXRDSample.objects.get(pk=kwargs['pk']).sum_formula_samp
+        return super().get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        pprint(kwargs)
+        super().get_context_data(**kwargs)
+
 
 
 class ExperimentEditView(LoginRequiredMixin, UpdateView):

@@ -10,9 +10,9 @@
         <div class="col-sm-11 col-md-10 col-lg-9 align-center">
 
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3">My Samples List
+                <div class="card-header pb-2 pl-3">{% trans "Samples from Customers" %}
                     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
-                       href="{% url "scxrd:index" %}">Back to start</a>
+                       href="{% url "scxrd:index" %}">{% trans "Back to start" %}</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
@@ -30,7 +30,10 @@
                             </thead>
                             {% for sample in object_list %}
                                 <tr>
-                                    <td>{{ sample.sample_name_samp }}</td>
+                                    <td><b>{{ sample.sample_name_samp }}</b><br>
+                                        <a role="button" class="btn btn-sm btn-outline-secondary my-0 py-0"
+                                           href="{% url "scxrd:new_exp_from_sample" pk=sample.id %}">{% trans "Measure Sample" %}</a>
+                                    </td>
                                     {% if sample.solve_refine_selv_samp %}
                                         <td><span class="text-success">
                                             <svg class="bi bi-check-circle" width="1em" height="1em" viewBox="0 0 16 16"
@@ -73,11 +76,11 @@
                                         {% endif %}
                                     {% endif %}
                                     {% if sample.was_measured %}
-                                        <td><span class="badge badge-success m-1 p-1">Yes</span></td>
+                                        <td><span class="badge badge-success m-1 p-1">{% trans "Yes" %}</span></td>
                                     {% elif not sample.was_measured and sample.not_measured_cause %}
-                                        <td><span class="badge badge-danger m-1 p-1">&thinsp;No&thinsp;</span></td>
+                                        <td><span class="badge badge-danger m-1 p-1">{% trans "Not possible" %}&thinsp;</span></td>
                                     {% else %}
-                                        <td><span class="badge badge-warning m-1 p-1">&thinsp;No&thinsp;</span></td>
+                                        <td><span class="badge badge-warning m-1 p-1">{% trans "No " %}</span></td>
                                     {% endif %}
                                     <td>{{ sample.not_measured_cause }}</td>
                                 </tr>

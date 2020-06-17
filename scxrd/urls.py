@@ -7,8 +7,9 @@ app_name = 'scxrd'
 
 urlpatterns = [
     path('', views.ExperimentIndexView.as_view(), name='index'),
-    path('new/', views.ExperimentCreateView.as_view(), name='new'),
-    path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit'),
+    path('newexp/', views.ExperimentCreateView.as_view(), name='new_exp'),
+    path('newexp/<int:pk>/', views.ExperimentFromSampleCreateView.as_view(), name='new_exp_from_sample'),
+    path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit-exp'),
     path('submit/', views.NewExperimentByCustomer.as_view(), name='submit_experiment'),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
     path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
