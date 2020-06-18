@@ -88,11 +88,6 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         pprint(kwargs)
         #self.fields['sum_formula'] = SCXRDSample.objects.get(pk=kwargs['pk']).sum_formula_samp
         return super().get(request, *args, **kwargs)
-    
-    def get_context_data(self, **kwargs):
-        pprint(kwargs)
-        super().get_context_data(**kwargs)
-
 
 
 class ExperimentEditView(LoginRequiredMixin, UpdateView):
