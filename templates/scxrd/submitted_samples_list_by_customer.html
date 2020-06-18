@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 
 {% csrf_token %}
@@ -10,37 +10,43 @@
         <div class="col-7 align-center">
 
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3">My Samples List
+                <div class="card-header pb-2 pl-3">{% trans "My Samples List" %}
                     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
-                       href="{% url "scxrd:index" %}">Back to start</a>
+                       href="{% url "scxrd:index" %}">{% trans "Back to start" %}</a>
                 </div>
                 <div class="card-body p-3">
                     {% for sample in object_list %}
                         <div class="card mb-3">
-                            <div class="card-header p-2 badge-dark">{{ sample.sample_name_samp }} <span
-                                    class="float-right">Submitted: {{ sample.submit_date_samp }}</span>
-                                {% comment %}<a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
-                                       href="{% url "scxrd:index" %}">Back to start</a> {% endcomment %}
+                            <div class="card-header p-2 badge-dark">
+                                <span class="ml-2">
+                                    {{ sample.sample_name_samp }}
+                                </span>
+                                <span class="ml-4">
+                                    {% if sample.was_measured %}
+                                        <span class="badge badge-success mb-1 p-1">{% trans "Measured" %}</span>
+                                    {% elif not sample.was_measured and sample.not_measured_cause %}
+                                        <span class="badge badge-danger mb-1 p-1">{% trans "Not measureable" %}</span>
+                                    {% else %}
+                                        <span class="badge badge-warning mb-1">{% trans "Awaiting measurement" %}</span>
+                                    {% endif %}
+                                </span>
+                                <span class="float-right">
+                                    Submitted: {{ sample.submit_date_samp }}
+                                </span>
                             </div>
                             <div class="card-body p-2">
                                 <div class="form-row  m-0 p-0 border-dark border-1">
-                                    <div class="col-3 p-2">
-                                        {% if sample.was_measured %}
-                                            <span class="badge badge-success m-1 p-1">Measured</span>
-                                        {% elif not sample.was_measured and sample.not_measured_cause %}
-                                            <span class="badge badge-danger m-1 p-1">&thinsp;Not measureable&thinsp;</span>
-                                        {% else %}
-                                            <span class="badge badge-warning m-1 p-1">&thinsp;Awaiting measurement&thinsp;</span>
-                                        {% endif %}
-                                    </div>
+
                                     <div class="col-3 p-2">
                                         {{ sample.sum_formula_samp }}
                                     </div>
+
+                                    <div class="col-3 p-2">
+                                    </div>
+
                                     <div class="col-6 p-2">
                                         {% if sample.solve_refine_selv_samp %}
-                                            Selv-Service
-                                        {% else %}
-                                            Will be sent to you
+                                            {% trans "I refine it myself" %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -49,28 +55,35 @@
                                         {% if sample.desired_struct_samp %}
                                             {% autoescape off %}
                                                 <div class="svg p-0 m-0" id="id_{{ sample.id }}"
-                                                     style="max-width: 6cm">{{ sample.desired_struct_samp }} </div>
+                                                     style="max-width: 7cm">{{ sample.desired_struct_samp }}
+                                                </div>
                                             {% endautoescape %}
                                         {% else %}
                                             {% if sample.reaction_path_samp %}
-                                                <a href="{{ sample.reaction_path_samp.url }}">Reaction</a>
+                                                <a href="{{ sample.reaction_path_samp.url }}">{% trans "Reaction" %}</a>
                                             {% else %}
-                                                <span class="text-muted">File not found</span>
+                                                <span class="text-muted">{% trans "File not found" %}</span>
                                             {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-6 p-2">
                                         {% if sample.not_measured_cause %}
-                                            {{ sample.not_measured_cause }}
+                                            <div class="font-weight-bold"> {% trans "Not measured, because:" %}</div>
+                                            <div style="min-height: 2.5cm">{{ sample.not_measured_cause }}</div>
                                         {% else %}
-                                            <td></td>
+                                            <div style="min-height: 2.5cm" class="">
+                                            </div>
                                         {% endif %}
+                                    {% if sample.special_remarks_samp %}
+                                        {% trans "Special remarks:" %}
+                                        {{ sample.special_remarks_samp }}
+                                    {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     {% empty %}
-                        No samples found
+                        {% trans "No samples found" %}
                     {% endfor %}
 
                 </div>
