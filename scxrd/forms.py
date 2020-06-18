@@ -45,7 +45,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     crystal_colour_lustre = forms.TypedChoiceField(choices=COLOUR_LUSTRE_COICES, label=_('Colour Lustre'),
                                                    required=False)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
-    operator = forms.ModelChoiceField(queryset=User.objects.all(), required=True)
+    operator = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     # TODO: remove this here:
     #customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
@@ -84,13 +84,14 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             ),
             Row(
                 Column('machine'),
-                Column('operator'),
+                #Column('operator'),
+                Column('measure_date'),
                 Column('customer'),
             ),
             Row(
                 Column('base'),
                 Column('glue'),
-                Column('measure_date'),
+                Column('submit_date'),
             ),
             Row(
                 Column('crystal_size_z'),
@@ -105,7 +106,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
             Row(
                 Column('sum_formula', css_class='col-8'),
-                Column('submit_date', css_class='col-4'),
             ),
             Row(
                 Column('prelim_unit_cell', css_class='col-8'),
@@ -155,8 +155,8 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         )
 
         self.sumform_row = Row(
-            Column('sum_formula', css_class='col-4'),
-            Column('submit_date', css_class='col-4'),
+            Column('sum_formula', css_class='col-8'),
+            # Column('submit_date', css_class='col-4'),
         )
 
 

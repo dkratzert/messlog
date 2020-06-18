@@ -13,7 +13,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django.views.generic.edit import FormMixin
-from django.views.generic.list import MultipleObjectMixin
+from django.views.generic.list import MultipleObjectMixin, BaseListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django_robohash.robotmaker import make_robot_svg
 
@@ -70,7 +70,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
+class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new experiment from a prior sample
     TODO: This view does not work. I need a mix of createview and listview
@@ -82,12 +82,40 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
-    def get(self, request, *args, **kwargs):
+    def get_initial(self) -> dict:
+        """
+        Initial data for the form.
+        """
+        pk = self.kwargs.get('pk')
+        return {
+            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            # dont need this:
+            #'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
+            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+        }
+
+    def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        super().post(request, *args, **kwargs)
+        print('request from new measurement:')
         pprint(request.POST)
-        pprint(args)
-        pprint(kwargs)
-        #self.fields['sum_formula'] = SCXRDSample.objects.get(pk=kwargs['pk']).sum_formula_samp
-        return super().get(request, *args, **kwargs)
+        form = self.get_form()
+        if form.is_valid():
+            exp = form.save(commit=False)
+            # Assigns the currently logged in user to the submetted sample:
+            exp.operator = request.user
+            # Assigns the current date to the sample submission date field
+            exp.submit_date_samp = timezone.now()
+            exp.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class ExperimentEditView(LoginRequiredMixin, UpdateView):
@@ -105,15 +133,14 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)'''
 
 
-class NewExperimentByCustomer(LoginRequiredMixin, CreateView):
+class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     """
     Add a new experiment in order to submit it to the X-ray facility.
     """
     model = SCXRDSample
     form_class = SubmitNewForm
     template_name = 'scxrd/new_exp_by_customer.html'
-    # TODO: Make this the url of the users experiments list later:
-    success_url = reverse_lazy('scxrd:index')
+    success_url = reverse_lazy('scxrd:my_samples_page')
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         """
