@@ -35,23 +35,20 @@
                                 </span>
                             </div>
                             <div class="card-body p-2">
-                                <div class="form-row  m-0 p-0 border-dark border-1">
+                                <div class="form-row mt-2 m-0 p-0 border-dark border-1">
 
-                                    <div class="col-3 p-2">
+                                    <div class="col-6 p-0">
                                         {{ sample.sum_formula_samp }}
                                     </div>
 
-                                    <div class="col-3 p-2">
-                                    </div>
-
-                                    <div class="col-6 p-2">
+                                    <div class="col-4 p-0">
                                         {% if sample.solve_refine_selv_samp %}
                                             {% trans "I refine it myself" %}
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="form-row m-0 p-0">
-                                    <div class="col-6 p-2">
+                                <div class="form-row mt-2 m-0 p-0">
+                                    <div class="col-6 p-0">
                                         {% if sample.desired_struct_samp %}
                                             {% autoescape off %}
                                                 <div class="svg p-0 m-0" id="id_{{ sample.id }}"
@@ -66,7 +63,7 @@
                                             {% endif %}
                                         {% endif %}
                                     </div>
-                                    <div class="col-6 p-2">
+                                    <div class="col-6 p-0">
                                         {% if sample.not_measured_cause %}
                                             <div class="font-weight-bold"> {% trans "Not measured, because:" %}</div>
                                             <div style="min-height: 2.5cm">{{ sample.not_measured_cause }}</div>
@@ -74,10 +71,16 @@
                                             <div style="min-height: 2.5cm" class="">
                                             </div>
                                         {% endif %}
-                                    {% if sample.special_remarks_samp %}
-                                        {% trans "Special remarks:" %}
-                                        {{ sample.special_remarks_samp }}
-                                    {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-row mt-2 m-0 p-0 row-cols-sm-1">
+                                    <div class="col-6 p-0">
+                                    </div>
+                                    <div class="col-6 p-0">
+                                        {% if sample.special_remarks_samp %}
+                                            <div class="font-italic"><em>{% trans "Special remarks:" %}</em></div>
+                                            {{ sample.special_remarks_samp }}
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
