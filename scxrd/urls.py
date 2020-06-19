@@ -6,12 +6,14 @@ from . import views
 app_name = 'scxrd'
 
 urlpatterns = [
-    path('', views.ExperimentIndexView.as_view(), name='index'),
+    path('', views.MySamplesList.as_view(), name=''),
+    path('submit/mysamples/', views.MySamplesList.as_view(), name='index'),
+    path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
+    path('experiments/', views.ExperimentIndexView.as_view(), name='all_experiments'),
     path('newexp/', views.ExperimentCreateView.as_view(), name='new_exp'),
     path('newexp/<int:pk>/', views.ExperimentFromSampleCreateView.as_view(), name='new_exp_from_sample'),
     path('edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit-exp'),
-    path('submit/', views.NewSampleByCustomer.as_view(), name='submit_experiment'),
-    path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
+    path('submit/', views.NewSampleByCustomer.as_view(), name='submit_sample'),
     path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
     path('table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),

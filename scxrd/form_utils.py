@@ -2,7 +2,7 @@ from crispy_forms.layout import ButtonHolder, Submit, HTML
 
 backbutton = """
     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0" 
-        href="{% url "scxrd:index"%}">Back to start</a>
+        href="{% url "index" %}">Back to start</a>
     """
 
 save_button = ButtonHolder(
@@ -15,7 +15,9 @@ save_button = ButtonHolder(
 
 save_button2 = ButtonHolder(
     Submit('Save', 'Save', css_class='btn-primary mr-2'),
-    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" formnovalidate="formnovalidate">Cancel</a>'''),
+    HTML('''<a href="{% url 'scxrd:my_samples_page' %}" class="btn btn-outline-danger" 
+            formnovalidate="formnovalidate">Cancel</a>
+            '''),
     css_class=' ml-3 mb-3'
 )
 

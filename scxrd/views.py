@@ -139,7 +139,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     """
     model = SCXRDSample
     form_class = SubmitNewForm
-    template_name = 'scxrd/new_exp_by_customer.html'
+    template_name = 'scxrd/new_sample_by_customer.html'
     success_url = reverse_lazy('scxrd:my_samples_page')
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:

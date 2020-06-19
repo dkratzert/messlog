@@ -49,6 +49,9 @@ class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
 
 
 class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
+    """
+    For to submit a new sample to be measured by an expert.
+    """
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Sample')
@@ -59,7 +62,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('sample_name_samp', css_class='col-6'),
                 Column('sum_formula_samp', css_class='col-6'),
                 # Column('customer_samp'),  # not needed, because inherited by the login
-                # Column('measurement_temp'),
             ),
             Row(
                 Column('stable_samp'),
@@ -67,6 +69,9 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
             ),
             Row(
                 Column('solve_refine_selv_samp'),
+            ),
+            Row(
+                Column('crystal_cond_samp')
             ),
             Row(
                 Column('reaction_path_samp')
@@ -91,9 +96,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                         """)),
             ),
             Row(
-                Column('crystal_cond_samp')
-            ),
-            Row(
                 Column('special_remarks_samp')
             ),
             Row(
@@ -107,7 +109,10 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
         )
 
     def clean(self):
-        # desired_struct_samp = models.CharField(verbose_name=_('desired structure'), blank=True, default='', max_length=500)
+        """
+        This runs after submitting the form. It makes sure at least one of the form reaction_path_samp or
+        desired_struct_samp has content.
+        """
         # TODO: make a custom form where the model is coupled to the form field and the html template
         cleaned_data = super().clean()
         figure_document = cleaned_data.get('reaction_path_samp')
