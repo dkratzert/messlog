@@ -1,12 +1,12 @@
 {# This is the right column with the structure representation and details table #}
-
+{% load i18n %}
 {% block content %}
 
 
     {# The structure viewer card: #}
     <div class="row">
         <div class="card w-100 mr-2">
-            <div class="card-header">Structure View</div>
+            <div class="card-header">{% trans "Structure View" %}</div>
             <div class="card-body p-0">
                 <div id="molcard" class="card border-0 p-1 align-items-center">
                     {# This card inside the card is a hack to overcome the too large molecule view #}
@@ -15,7 +15,7 @@
             <div class="card-footer">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="growStruct">
-                    <label class="form-check-label" for="growStruct">Grow Structure</label>
+                    <label class="form-check-label" for="growStruct">{% trans "Grow Structure" %}</label>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
     {# The details table: #}
     <div class="row">
         <div class="card mt-3 w-100 mr-2">
-            <div class="card-header">Details</div>
+            <div class="card-header">{% trans "Details" %}</div>
             <div class="card-body pt-1 pl-3 pr-1 pb-2">
                 <div id="ttable"></div>
             </div>

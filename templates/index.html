@@ -5,40 +5,44 @@
 {% block content %}
 
     <div class="row justify-content-center">
+
         <!-- Left column -->
-        <div class="col-4 mt-4">
-            <a href="{% url 'scxrd:all_experiments' %}">
-                <div class="card mb-4 text-center p-4 bg-light h-50">
-                    <h1 class="display-3 font-weight-normal">
-                        All Experiments
-                    </h1>
-                </div>
-            </a>
+        <div class="col-5 mt-4">
             <a href="{% url 'scxrd:submit_sample' %}">
                 <div class="card mb-4 text-center p-4 bg-light h-50">
-                    <h1 class="display-3 font-weight-normal">
+                    <h1 class="display-4 font-weight-normal">
                         Submit Sample
                     </h1>
                 </div>
             </a>
-        </div>
 
-
-        <div class="col-4 mt-4">
             <a href="{% url 'scxrd:my_samples_page' %}">
                 <div class="card mb-4 text-center p-4 bg-light h-50">
-                    <h1 class="display-3 font-weight-normal">
+                    <h1 class="display-4 font-weight-normal">
                         My Samples
+                    </h1>
+                </div>
+            </a>
+
+        </div>
+        {% if user.is_authenticated %}
+            <div class="col-5 mt-4">
+            <!-- right column -->
+            <a href="{% url 'scxrd:all_experiments' %}">
+                <div class="card mb-4 text-center p-4 bg-light h-50">
+                    <h1 class="display-4 font-weight-normal">
+                        All Experiments
                     </h1>
                 </div>
             </a>
             <a href="{% url 'scxrd:op_samples_page' %}">
                 <div class="card mb-4 text-center p-4 bg-light h-50">
-                    <h1 class="display-3 font-weight-normal">
-                        Measure a Sample
+                    <h1 class="display-4 font-weight-normal">
+                        Measure Samples
                     </h1>
                 </div>
             </a>
+        {% endif %}
         </div>
     </div>
 

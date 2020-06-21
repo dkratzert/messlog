@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% block title %}SC-XRD{% endblock title %}
 
 {% block content %}
@@ -9,16 +10,15 @@
         <!-- Left column with experiment table --------- -->
         <div class="col-8">
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3">Experiments List
+                <div class="card-header pb-2 pl-3">{% trans "Experiments List" %}
                     <a role="button" class="btn btn-outline-primary btn-sm float-right p-1 ml-2"
-                       href="{% url 'scxrd:new_exp' %}">New Experiment</a>
-
+                       href="{% url 'scxrd:new_exp' %}">{% trans "New Experiment" %}</a>
                     <a role="button" class="btn btn-outline-primary btn-sm float-right p-1"
-                       href="{% url 'scxrd:submit_sample' %}">New Sample</a>
+                       href="{% url 'scxrd:submit_sample' %}">{% trans "New Sample" %}</a>
                     <a role="button" class="btn btn-outline-primary btn-sm float-right p-1 mr-1"
-                       href="{% url 'scxrd:my_samples_page' %}">My Samples</a>
+                       href="{% url 'scxrd:my_samples_page' %}">{% trans "My Samples" %}</a>
                     <a role="button" class="btn btn-outline-primary btn-sm float-right p-1 mr-1"
-                       href="{% url 'scxrd:op_samples_page' %}">All Samples</a>
+                       href="{% url 'scxrd:op_samples_page' %}">{% trans "All Samples" %}</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
@@ -29,10 +29,10 @@
             </div>
             <div class="card w-100">
                 <div class="card-header">
-                    More Information
+                    {% trans "More Information" %}
                 </div>
                 <div class="card-body">
-                    Here will be the list of running experiments and other status information or statistics.
+                    Here will be status information or statistics.
                 </div>
             </div>
         </div>
