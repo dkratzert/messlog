@@ -72,7 +72,7 @@ class Person(models.Model):
     town = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=200, blank=True)
     postal_code = models.CharField(max_length=200, blank=True)
-    email_adress = models.EmailField(max_length=250, blank=True, validators=[validate_email])
+    email_address = models.EmailField(max_length=250, blank=True, validators=[validate_email])
     phone_number = models.CharField(max_length=17, blank=True
                                     # validators=[phone_validator],
                                     )
