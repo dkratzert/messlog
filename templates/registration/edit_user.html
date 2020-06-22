@@ -11,7 +11,7 @@
         <h3>User Profile</h3>
     </div>
     <div class="card-body mb-3">
-        <form method="post" novalidate>
+        <form method="post">
             {% csrf_token %}
             {{ user_form |crispy }}
             {{ profile_form |crispy }}

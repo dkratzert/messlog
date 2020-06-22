@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.customer_models import SCXRDSample
-from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Person
+from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
 
 
 # Register your models here.
@@ -54,7 +54,7 @@ class CifAdmin(admin.ModelAdmin):
 
 
 class PersonInline(StackedInline):
-    model = Person
+    model = Profile
     can_delete = False
 
 

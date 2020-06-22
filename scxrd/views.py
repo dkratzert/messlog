@@ -24,7 +24,7 @@ from scxrd.cif.sdm import SDM
 from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
-from scxrd.models import Experiment, Person
+from scxrd.models import Experiment, Profile
 from scxrd.utils import randstring
 
 
@@ -213,7 +213,7 @@ class Customers(LoginRequiredMixin, ListView):
     """
     The customers list view.
     """
-    model = Person
+    model = Profile
     template_name = 'scxrd/customers.html'
 
 

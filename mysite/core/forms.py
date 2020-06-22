@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from scxrd.models import Person
+from scxrd.models import Profile
 
 
 class UserChangeForm(ModelForm):
@@ -22,13 +22,15 @@ class UserChangeForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
+        field_classes = {'user_form': User,
+                         'profile_form': Profile}
         fields = ('username', 'first_name', 'last_name', 'email')
-        # fields = ('__all__')
+        #fields = ('__all__')
 
 
-class PersonForm(ModelForm):
+class ProfileForm(ModelForm):
     class Meta:
-        model = Person
-        fields = ('company', 'street', 'house_number', 'building', 'town', 'country', 'postal_code', 'email_address',
+        model = Profile
+        fields = ('company', 'street', 'house_number', 'building', 'town', 'country', 'postal_code',
                   'phone_number', 'comment')
         #fields = ('__all__')

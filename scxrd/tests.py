@@ -16,7 +16,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 
 from scxrd.cif_model import CifFileModel
-from scxrd.models import Experiment, Machine, Person, WorkGroup, CrystalSupport, CrystalGlue
+from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue
 
 """
 TODO:      
@@ -38,11 +38,11 @@ def create_experiment(number, cif=None, save_related=False):
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
-    head = Person(first_name='Susi', last_name='Sorglos')
+    head = Profile(first_name='Susi', last_name='Sorglos')
     head.save()
     group = WorkGroup(group_head=head)
     group.save()
-    pers = Person(first_name='Hans', last_name='Meyerhof', work_group=group)
+    pers = Profile(first_name='Hans', last_name='Meyerhof', work_group=group)
     mach = Machine(diffrn_measurement_device_type='FobarMachine')
     op = User(username='foouser')
     glue = CrystalGlue(glue='grease')
@@ -176,15 +176,15 @@ class WorkGroupTest(TestCase):
         Create the Person of a group first. Then the group itselv and finally
         define the group as work_group of the heads Person instance.
         """
-        head = Person(first_name='Susi', last_name='Sorglos', email_adress='foo@bar.de')
+        head = Profile(first_name='Susi', last_name='Sorglos', email_adress='foo@bar.de')
         head.save()  # important
         group1 = WorkGroup(group_head=head)
         group1.save()  # important
         head.work_group = group1
         head.save()
         self.assertEqual(str(group1.group_head), 'Susi Sorglos*')
-        dokt1 = Person(first_name='Sandra', last_name='Superschlau', email_adress='foo@bar.de', work_group=group1)
-        dokt2 = Person(first_name='Heiner', last_name='Hirni', email_adress='foo@bar.de', work_group=group1)
+        dokt1 = Profile(first_name='Sandra', last_name='Superschlau', email_adress='foo@bar.de', work_group=group1)
+        dokt2 = Profile(first_name='Heiner', last_name='Hirni', email_adress='foo@bar.de', work_group=group1)
         dokt1.save()
         dokt2.save()
         group1.save()
@@ -192,7 +192,7 @@ class WorkGroupTest(TestCase):
 
     def test_validate_email(self):
         # TODO: why is it not evaluating?
-        pers = Person(first_name='DAniel', last_name='Kratzert', email_adress='-!ß\/()')
+        pers = Profile(first_name='DAniel', last_name='Kratzert', email_adress='-!ß\/()')
         pers.save()
         # print(pers.email_adress)
 

@@ -20,17 +20,15 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- Add a sample submission page:
-  - Add pdf/word upload for reaction conditions
-  - 
+- While adding a new user, add also Profile data. 
+- cif is deleted from experiment when saving again?
 - check checksum for correctness during file upload and download
 - Measurement temperatue to experiment start page -> done?
 - addd delete experiment
-
+- Check for existing unit cell during cif upload.
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
-- cif is deleted from experiment when saving again!!
-- Check for existing unit cell during cif upload.
+
 
 """
 
@@ -57,29 +55,25 @@ phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                          "'+999999999'. Up to 15 digits allowed.")
 
 
-class Person(models.Model):
+class Profile(models.Model):
     """
     Persons where samples belong to.
     A Person is a Human that has no authentication.
     A Person does not need to have a User account.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # first_name = models.CharField(max_length=200, blank=True)
-    # last_name = models.CharField(max_length=200, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     company = models.CharField(max_length=200, verbose_name='company', blank=True)
+    # TODO: Find a solution for workgroups: Maybe just a simple model like "Machine"
     # work_group = models.ForeignKey('WorkGroup', related_name='person', max_length=200, blank=True, null=True,
     #                               on_delete=models.DO_NOTHING)
-    street = models.CharField(max_length=250, blank=True)
-    house_number = models.CharField(max_length=200, blank=True)
-    building = models.CharField(max_length=200, blank=True)
-    town = models.CharField(max_length=200, blank=True)
-    country = models.CharField(max_length=200, blank=True)
-    postal_code = models.CharField(max_length=200, blank=True)
-    email_address = models.EmailField(max_length=250, blank=True, validators=[validate_email])
-    phone_number = models.CharField(max_length=17, blank=True
-                                    # validators=[phone_validator],
-                                    )
-    comment = models.TextField(blank=True)
+    street = models.CharField(max_length=250, blank=True, null=True)
+    house_number = models.CharField(max_length=200, blank=True, null=True)
+    building = models.CharField(max_length=200, blank=True, null=True)
+    town = models.CharField(max_length=200, blank=True, null=True)
+    country = models.CharField(max_length=200, blank=True, null=True)
+    postal_code = models.CharField(max_length=200, blank=True, null=True)
+    phone_number = models.CharField(max_length=17, blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
@@ -96,7 +90,7 @@ class Person(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            Person.objects.create(user=instance)
+            Profile.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
@@ -108,7 +102,7 @@ class WorkGroup(models.Model):
     """
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
-    group_head = models.OneToOneField(Person, related_name='group', on_delete=models.DO_NOTHING)
+    group_head = models.OneToOneField(Profile, related_name='group', on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return "AK {}".format(self.group_head.user.last_name)
