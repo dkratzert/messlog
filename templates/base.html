@@ -77,7 +77,7 @@
             <div class="dropdown-menu" aria-labelledby="NavbarMethodsDropdown">
                 <a class="dropdown-item" href="{% url 'scxrd:index' %}">My Samples</a>
                 <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">Submit a Sample</a>
-                <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">Edit my Address</a>
+                <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">Edit my Profile</a>
 
                 {% if user.isadmin %}
                     <a class="dropdown-item" href="{% url 'scxrd:index' %}">Customer Samples</a>
