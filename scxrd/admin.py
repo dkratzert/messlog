@@ -1,6 +1,10 @@
 from pathlib import Path
 
 from django.contrib import admin
+from django.contrib.admin import StackedInline
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.customer_models import SCXRDSample
@@ -49,23 +53,22 @@ class CifAdmin(admin.ModelAdmin):
         return cif.natoms()
 
 
-"""class MyUserChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
-        model = MyUser"""
+class PersonInline(StackedInline):
+    model = Person
+    can_delete = False
 
-# class MyUserAdmin(UserAdmin):
-#    form = MyUserChangeForm
-#
-# fieldsets = UserAdmin.fieldsets + (
-#        (None, {'fields': ('some_extra_data',)}),
-# )
+
+class UserAdmin(BaseUserAdmin):
+    inlines = (PersonInline,)
 
 
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 admin.site.register(SCXRDSample)
-admin.site.register(Person)
+# admin.site.register(Person)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(WorkGroup)
 admin.site.register(Machine)
 admin.site.register(CrystalSupport)

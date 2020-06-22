@@ -1,9 +1,13 @@
+from pprint import pprint
+
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView
-
-from mysite.core.forms import UserChangeForm
+from django.utils.translation import gettext_lazy as _
+from mysite.core.forms import UserChangeForm, PersonForm, UserForm
 
 
 class SignUp(CreateView):
@@ -18,6 +22,27 @@ class UserEdit(UpdateView):
     model = User
     template_name = 'registration/edit_user.html'
 
+    def post(self, request, *args, **kwargs):
+        user_form = UserChangeForm(request.POST, instance=request.user)
+        profile_form = PersonForm(request.POST, instance=request.user.person)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, _('Your profile was successfully updated!'))
+            return redirect('index')
+        else:
+            messages.error(request, _('Please correct the error below.'))
+        return super().post(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        user_form = UserForm(instance=request.user)
+        pprint(request.user)
+        profile_form = PersonForm(instance=request.user)
+
+        return render(request, 'registration/edit_user.html', {
+            'user_form': user_form,
+            'profile_form': profile_form
+        })
 
 class OptionsView(TemplateView):
     """

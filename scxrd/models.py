@@ -6,9 +6,11 @@ from django import template
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
-from django.db import models, DatabaseError
+from django.db import models
 # Create your models here.
 from django.db.models import FileField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -37,6 +39,7 @@ def validate_cif_file_extension(value):
     if not value.name.endswith('.cif'):
         raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
+
 def validate_email(value):
     """
     Validate that a username is email like.
@@ -60,12 +63,12 @@ class Person(models.Model):
     A Person is a Human that has no authentication.
     A Person does not need to have a User account.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=200, blank=True)
-    last_name = models.CharField(max_length=200, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # first_name = models.CharField(max_length=200, blank=True)
+    # last_name = models.CharField(max_length=200, blank=True)
     company = models.CharField(max_length=200, verbose_name='company', blank=True)
-    work_group = models.ForeignKey('WorkGroup', related_name='person', max_length=200, blank=True, null=True,
-                                   on_delete=models.DO_NOTHING)
+    # work_group = models.ForeignKey('WorkGroup', related_name='person', max_length=200, blank=True, null=True,
+    #                               on_delete=models.DO_NOTHING)
     street = models.CharField(max_length=250, blank=True)
     house_number = models.CharField(max_length=200, blank=True)
     building = models.CharField(max_length=200, blank=True)
@@ -79,17 +82,27 @@ class Person(models.Model):
     comment = models.TextField(blank=True)
 
     def __str__(self):
-        name = '{} {}'.format(self.first_name, self.last_name)
+        name = '{} {}'.format(self.user.first_name, self.user.last_name)
         try:
-            self.work_group.group_head
+            self.group.group_head
         except AttributeError:
             return name
         else:
-            if self.work_group.group_head == self:
+            if self.group.group_head == self:
                 return name + '*'
             else:
                 return name
 
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Person.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
+
+    # post_save.connect(create_user_profile, sender='users.Person')
 
 class WorkGroup(models.Model):
     """
@@ -98,7 +111,7 @@ class WorkGroup(models.Model):
     group_head = models.OneToOneField(Person, related_name='group', on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return "AK {}".format(self.group_head.last_name)
+        return "AK {}".format(self.group_head.user.last_name)
 
 
 class Machine(models.Model):
@@ -257,8 +270,8 @@ class Experiment(models.Model):
         self.cif = cif_model
         cif_model.save()
         self.remove_cif_row(previous_cif)
-        #self.save(update_fields=['cif'])
-        #if previous_cif:
+        # self.save(update_fields=['cif'])
+        # if previous_cif:
         self.save(update_fields=['cif'])
 
     def remove_cif_row(self, previous_cif):

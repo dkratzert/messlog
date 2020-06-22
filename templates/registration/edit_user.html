@@ -1,6 +1,7 @@
 {% extends 'registration/registration_base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load crispy_forms_field %}
 
 {# TODO: create view for this page #}
 
@@ -9,10 +10,11 @@
     <div class="card-header">
         <h3>User Profile</h3>
     </div>
-    <div class="card-body">
+    <div class="card-body mb-3">
         <form method="post" novalidate>
             {% csrf_token %}
-            {{ form |crispy }}
+            {{ user_form |crispy }}
+            {{ profile_form |crispy }}
             <button class="btn btn-primary mr-2" type="submit"> Save </button>
         </form>
     </div>
