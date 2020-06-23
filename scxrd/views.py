@@ -73,7 +73,6 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
 class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new experiment from a prior sample
-    TODO: This view does not work. I need a mix of createview and listview
     """
     model = Experiment
     form_class = ExperimentNewForm
@@ -102,7 +101,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
-        super().post(request, *args, **kwargs)
+        #super().post(request, *args, **kwargs)
         print('request from new measurement:')
         pprint(request.POST)
         form = self.get_form()
