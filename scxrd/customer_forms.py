@@ -86,7 +86,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                             </label>\n
                             <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
                                 This field is an alternative to the file upload above:</small>\n
-                            <div class='card-body  border ml-3 mr-3 mb-3 p-3' style='height: 500px'> \n
+                            <div class='card  border ml-3 mr-3 mb-3 p-3' style='height: 500px'> \n
                                 <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
                                 <iframe id="ketcher-frame" src='ketcher.html' class='m-0'\n
                                     style='overflow: hidden; border: 0; width: 100%; height: 100%'>\n
@@ -102,10 +102,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 save_button2,
             ),
             HTML('</div>'),  # end of card
-
-            HTML('</br>'),
-            HTML('</br>'),
-            HTML('</br>'),
+            # HTML('<div onLoad="self.scrollTo(0,0)"></div>'),
         )
 
     def clean(self):

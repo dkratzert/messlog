@@ -9,8 +9,8 @@ a div, a:hover {
     color: #007bff;
 }
 
-.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
-  background-color:#28a745;
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #28a745;
 }
 
 .asteriskField {
@@ -23,8 +23,8 @@ form .alert ul li {
 }
 
 .ScrollBarsY {
-  height: 3rem;
-  overflow-y: auto;
+    height: 3rem;
+    overflow-y: auto;
 }
 
 .card-header {
