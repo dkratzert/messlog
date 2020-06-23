@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-
+{% load i18n %}
 
 <head>
     {% load static %}
@@ -30,7 +30,7 @@
         var grow_struct;
     </script>
     <title>
-        {% block title %}Messlog Main Page{% endblock title %}
+        {% block title %}Messlog {% trans "Main Page" %}{% endblock title %}
     </title>
 </head>
 <body>
@@ -59,7 +59,7 @@
         </li>
         {% endcomment %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin:index' %}">Administration</a>
+            <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
         </li>
     </ul>
     {% if user.is_authenticated %}
@@ -75,23 +75,24 @@
 
             </a>
             <div class="dropdown-menu" aria-labelledby="NavbarMethodsDropdown">
-                <a class="dropdown-item" href="{% url 'scxrd:index' %}">My Samples</a>
-                <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">Submit a Sample</a>
-                <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">Edit my Profile</a>
+                <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">{% trans "Submit a Sample" %}</a>
+                <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "My Samples" %}</a>
+                <a class="dropdown-item" href=#>-----</a>
+                <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">{% trans "Edit my Profile" %}</a>
 
                 {% if user.isadmin %}
-                    <a class="dropdown-item" href="{% url 'scxrd:index' %}">Customer Samples</a>
-                    <a class="dropdown-item" href="{% url 'admin:index' %}">Administration</a>
+                    <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "Customer Samples" %}</a>
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
                 {% endif %}
             </div>
         </div>
     {% endif %}
     {% if not user.is_authenticated %}
-        <a class="btn btn-success btn-sm" role="button" href="{% url 'login' %}">Login</a>
+        <a class="btn btn-success btn-sm" role="button" href="{% url 'login' %}">{% trans "Login" %}</a>
     {% else %}
-        <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">Log Off</a>
+        <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">{% trans "Log Off" %}</a>
     {% endif %}
-    <a class="btn btn-outline-primary btn-sm ml-2" role="button" href="{% url 'signup' %}">New User</a>
+    <a class="btn btn-outline-primary btn-sm ml-2" role="button" href="{% url 'signup' %}">{% trans "New User" %}</a>
 </nav>
 
 
