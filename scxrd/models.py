@@ -101,6 +101,7 @@ class Profile(models.Model):
 
     # post_save.connect(create_user_profile, sender='users.Person')
 
+
 class WorkGroup(models.Model):
     """
     A work group is a group of Person()s with a leading group_head (which is also a Person).

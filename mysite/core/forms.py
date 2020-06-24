@@ -6,6 +6,28 @@ from django.utils.translation import gettext_lazy as _
 from scxrd.models import Profile
 
 
+class ProfileNewForm(forms.ModelForm):
+    phone_number = forms.CharField(required=True)
+
+    class Meta:
+        model = Profile
+        fields = ('phone_number',
+                  'company', 'street', 'house_number', 'building', 'town',
+                  'country', 'postal_code',
+                  'comment')
+        # fields = ('__all__')
+
+
+class ProfileEditForm(forms.ModelForm):
+    phone_number = forms.CharField(required=True)
+
+    class Meta:
+        model = Profile
+        fields = ('phone_number', 'company', 'street', 'house_number', 'building', 'town',
+                  'country', 'postal_code', 'comment')
+        # fields = ('__all__')
+
+
 class UserForm(UserCreationForm):
     """The form to create a new user"""
     email = forms.EmailField(label=_('email address'), required=True)
@@ -15,7 +37,7 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         field_classes = {'user_form'   : User,
-                         'profile_form': Profile}
+                         'profile_form': ProfileNewForm}
         fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'email')
         # fields = ('__all__')
 
@@ -28,26 +50,4 @@ class UserEditForm(forms.ModelForm):
         field_classes = {'user_form'   : User,
                          'profile_form': Profile}
         fields = ('username', 'first_name', 'last_name', 'email')
-        # fields = ('__all__')
-
-
-class ProfileNewForm(forms.ModelForm):
-    phone_number = forms.CharField(required=True)
-
-    class Meta:
-        model = Profile
-        fields = ('phone_number',
-                  #'company', 'street', 'house_number', 'building', 'town',
-                  #'country', 'postal_code',
-                  'comment')
-        # fields = ('__all__')
-
-
-class ProfileEditForm(forms.ModelForm):
-    phone_number = forms.CharField(required=True)
-
-    class Meta:
-        model = Profile
-        fields = ('phone_number', 'company', 'street', 'house_number', 'building', 'town',
-                  'country', 'postal_code', 'comment')
         # fields = ('__all__')
