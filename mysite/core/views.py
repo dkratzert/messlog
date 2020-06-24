@@ -9,6 +9,7 @@ from mysite.core.forms import UserForm, UserEditForm, ProfileNewForm, ProfileEdi
 
 
 class SignUp(CreateView):
+    """Create a new user"""
     form_class = UserForm
     success_url = reverse_lazy('index')
     template_name = 'registration/new_user.html'
@@ -30,6 +31,9 @@ class SignUp(CreateView):
         profile_form = ProfileNewForm(request.POST)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
+            profile_form.save()
+            user = user_form.save()
+            profile_form.user = user.user
             profile_form.save()
             messages.success(request, _('Your profile was successfully created!'))
             return redirect('index')

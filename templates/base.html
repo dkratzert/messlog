@@ -58,8 +58,13 @@
             <a class="nav-link" href="{% url 'scxrd:customers' %}">Customers</a>
         </li>
         {% endcomment %}
+        {% if user.is_superuser %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
+            </li>
+        {% endif %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
+            <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">Institut für Anorganische und Analytische Chemie</a>
         </li>
     </ul>
     {% if user.is_authenticated %}
@@ -97,9 +102,9 @@
 
 
 <div class="container-fluid"> {# px-lg-5 px-md-3 px-sm-0"> #}
-    {% block content %}
+                              {% block content %}
 
-    {% endblock content %}
+                              {% endblock content %}
 </div>
 
 {% block javascript %}

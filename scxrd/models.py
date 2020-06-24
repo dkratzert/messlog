@@ -20,7 +20,6 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- While adding a new user, add also Profile data. 
 - "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit and special remarks
     - rename "experimental special details" in "edit exp"
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted
