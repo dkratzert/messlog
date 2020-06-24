@@ -1,7 +1,9 @@
 {% extends 'registration/registration_base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_field %}
+{% load crispy_forms_filters %}
 
 {# TODO: create view for this page #}
 
@@ -9,6 +11,7 @@
 
     <div class="card-header">
         <h3>User Profile</h3>
+    {% trans "You only need to fill the required fields (with *)" %}
     </div>
     <div class="card-body mb-3">
         <form method="post">

@@ -1,16 +1,20 @@
 {% extends 'registration/registration_base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
 
 {% block inner_content %}
 
     <div class="card-header">
         <h3>New User</h3>
+{#    {% trans "You only need to fill the required forms (with *)" %}#}
     </div>
     <div class="card-body">
         <form method="post" novalidate>
             {% csrf_token %}
-            {{ form |crispy }}
+            {{ user_form |crispy }}
+            {{ profile_form |crispy }}
             <button class="btn btn-primary mr-2" type="submit"> Sign Up </button>
         </form>
     </div>
