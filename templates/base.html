@@ -64,7 +64,8 @@
             </li>
         {% endif %}
         <li class="nav-item">
-            <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">Institut für Anorganische und Analytische Chemie</a>
+            <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">Institut für Anorganische und
+                Analytische Chemie</a>
         </li>
     </ul>
     {% if user.is_authenticated %}
@@ -102,9 +103,20 @@
 
 
 <div class="container-fluid"> {# px-lg-5 px-md-3 px-sm-0"> #}
-                              {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-                              {% endblock content %}
+    {% block content %}
+
+    {% endblock content %}
 </div>
 
 {% block javascript %}

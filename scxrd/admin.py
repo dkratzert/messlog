@@ -11,10 +11,6 @@ from scxrd.customer_models import SCXRDSample
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
 
 
-# Register your models here.
-# from myuser.models import MyUser
-
-
 class ExperimentAdmin(admin.ModelAdmin):
     list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'cif_file_on_disk')
     list_filter = ['measure_date']
@@ -44,7 +40,6 @@ class CifAdmin(admin.ModelAdmin):
     def number_of_atoms(self, obj):
         try:
             exp = Experiment.objects.get(cif=obj.pk)
-            # Path(MEDIA_ROOT).joinpath()
             cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
         except RuntimeError:
             return _('no atoms found')

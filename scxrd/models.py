@@ -105,7 +105,7 @@ class WorkGroup(models.Model):
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
     fixtures = ['work_groups']
-    group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, null=True)
+    group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, null=True, unique=True)
 
     def __str__(self):
         return "AK {}".format(self.group_head)
@@ -157,7 +157,8 @@ class Experiment(models.Model):
     publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
     customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
     # Operator has to be an authenticated User:
-    operator = models.ForeignKey(User, verbose_name='operator', related_name='experiments', on_delete=models.CASCADE)
+    operator = models.ForeignKey(User, verbose_name='operator', null=True, related_name='experiments',
+                                 on_delete=models.SET_NULL)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, verbose_name="presumed empirical formula", blank=True)

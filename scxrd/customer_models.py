@@ -12,8 +12,8 @@ def validate_reaction_file_extension(value):
 
 
 class SCXRDSample(models.Model):
-    sample_name_samp = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, default='',
-                                        unique=True, help_text=_(''))
+    sample_name_samp = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, null=False,
+                                        unique=True, help_text=_('A unique nae of your sample'))
     # The date when the sample is submitted to the facility:
     submit_date_samp = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True,
                                         default=timezone.now)

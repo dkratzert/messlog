@@ -22,7 +22,7 @@ from scxrd.cif.sdm import SDM
 from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
-from scxrd.models import Experiment, Profile
+from scxrd.models import Experiment
 from scxrd.utils import randstring
 
 
@@ -68,7 +68,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('scxrd:index')
 
 
-class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
+class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     """
     Start a new experiment from a prior sample
     """
@@ -85,13 +85,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
         """
         pk = self.kwargs.get('pk')
         return {
-            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
             # dont need this:
             # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'was_measured': True #SCXRDSample.objects.get(pk=pk).was_measured,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
@@ -103,6 +104,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
         print('request from new measurement:')
         pprint(request.POST)
         form = self.get_form()
+        self.object = self.get_object()
         if form.is_valid():
             exp = form.save(commit=False)
             # Assigns the currently logged in user to the submetted sample:
@@ -124,10 +126,23 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:index')
 
-    '''def form_valid(self, form):
-        pprint(form.instance) # instance of current Experiment model
-        pprint(self.request.POST) # POST request dictionary
-        return super().form_valid(form)'''
+    """
+    # TODO: make this work and make cif file model a separate model like the Person for User model:
+    def post(self, request, *args, **kwargs):
+        print('request from new measurement:')
+        pprint(request.POST)
+        cif_model = CifFileModel()
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            exp = form.save(commit=False)
+            cif_model.sha256 = generate_sha256(self.model.cif_file_on_disk)
+            print('foo')
+            exp.cif = request.cif
+            exp.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)"""
 
 
 class NewSampleByCustomer(LoginRequiredMixin, CreateView):
@@ -204,14 +219,6 @@ class FilesUploadedView(ListView):
     """
     model = Experiment
     template_name = 'scxrd/uploaded_files.html'
-
-
-class Customers(LoginRequiredMixin, ListView):
-    """
-    The customers list view.
-    """
-    model = Profile
-    template_name = 'scxrd/customers.html'
 
 
 class MoleculeView(LoginRequiredMixin, View):

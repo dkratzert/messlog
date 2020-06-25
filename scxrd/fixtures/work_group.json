@@ -1,0 +1,79 @@
+[
+{
+    "model": "scxrd.workgroup",
+    "pk": 1,
+    "fields": {
+        "group_head": "Krossing"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 2,
+    "fields": {
+        "group_head": "Breit"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 3,
+    "fields": {
+        "group_head": "Hillebrecht"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 4,
+    "fields": {
+        "group_head": "R\u00f6hr"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 5,
+    "fields": {
+        "group_head": "Fischer"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 6,
+    "fields": {
+        "group_head": "Kurz"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 7,
+    "fields": {
+        "group_head": "B\u00f6ttcher"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 8,
+    "fields": {
+        "group_head": "Butschke"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 11,
+    "fields": {
+        "group_head": "Jessen"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 12,
+    "fields": {
+        "group_head": "Streuff"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 13,
+    "fields": {
+        "group_head": "Br\u00fcckner"
+    }
+}
+]
