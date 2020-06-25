@@ -47,7 +47,7 @@ class CifAdmin(admin.ModelAdmin):
             # Path(MEDIA_ROOT).joinpath()
             cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
         except RuntimeError:
-            return 'no atoms'
+            return _('no atoms found')
         # Example:
         # return exp.get_cif_file_parameter('_audit_creation_method')
         return cif.natoms()
@@ -56,6 +56,10 @@ class CifAdmin(admin.ModelAdmin):
 class PersonInline(StackedInline):
     model = Profile
     can_delete = False
+
+
+class WorkGroupAdmin(admin.ModelAdmin):
+    ordering = ('group_head',)
 
 
 class UserAdmin(BaseUserAdmin):
@@ -69,7 +73,7 @@ admin.site.register(SCXRDSample)
 # admin.site.register(Person)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-admin.site.register(WorkGroup)
+admin.site.register(WorkGroup, WorkGroupAdmin)
 admin.site.register(Machine)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalGlue)

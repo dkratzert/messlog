@@ -11,9 +11,10 @@ class ProfileNewForm(forms.ModelForm):
 
     class Meta:
         model = Profile
+        #'work_group',
         fields = ('phone_number',
-                  'company', 'street', 'house_number', 'building', 'town',
-                  'country', 'postal_code',
+                  #'company', 'street', 'house_number', 'building', 'town',
+                  #'country', 'postal_code',
                   'comment')
         # fields = ('__all__')
 
@@ -23,6 +24,7 @@ class ProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
+        #'work_group',
         fields = ('phone_number', 'company', 'street', 'house_number', 'building', 'town',
                   'country', 'postal_code', 'comment')
         # fields = ('__all__')
@@ -36,10 +38,19 @@ class UserForm(UserCreationForm):
 
     class Meta:
         model = User
-        field_classes = {'user_form'   : User,
-                         'profile_form': ProfileNewForm}
+        #field_classes = {'user_form'   : User,
+        #                 'profile_form': ProfileNewForm}
         fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'email')
         # fields = ('__all__')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email')
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        if commit:
+            user.save()
+        return user
 
 
 class UserEditForm(forms.ModelForm):

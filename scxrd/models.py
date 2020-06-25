@@ -64,11 +64,9 @@ class Profile(models.Model):
     A Person is a Human that has no authentication.
     A Person does not need to have a User account.
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.CharField(max_length=200, verbose_name='company', blank=True)
-    # TODO: Find a solution for workgroups: Maybe just a simple model like "Machine"
-    # work_group = models.ForeignKey('WorkGroup', related_name='person', max_length=200, blank=True, null=True,
-    #                               on_delete=models.DO_NOTHING)
+    # work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.DO_NOTHING)
     street = models.CharField(max_length=250, blank=True, null=True)
     house_number = models.CharField(max_length=200, blank=True, null=True)
     building = models.CharField(max_length=200, blank=True, null=True)
@@ -79,16 +77,19 @@ class Profile(models.Model):
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
+        return self.user.username
+    
+    '''def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
         try:
-            self.group.group_head
+            self.work_group.group_head
         except AttributeError:
             return name
         else:
-            if self.group.group_head == self:
+            if self.work_group.group_head == self:
                 return name + '*'
             else:
-                return name
+                return name'''
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -106,10 +107,11 @@ class WorkGroup(models.Model):
     """
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
-    group_head = models.OneToOneField(Profile, related_name='group', on_delete=models.DO_NOTHING)
+    fixtures = ['work_groups']
+    group_head = models.CharField(Profile, max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return "AK {}".format(self.group_head.user.last_name)
+        return "AK {}".format(self.group_head)
 
 
 class Machine(models.Model):
