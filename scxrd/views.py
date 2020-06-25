@@ -5,7 +5,6 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
@@ -13,7 +12,6 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
 from django.views.generic.edit import FormMixin
-from django.views.generic.list import MultipleObjectMixin, BaseListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django_robohash.robotmaker import make_robot_svg
 
@@ -87,13 +85,13 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
         """
         pk = self.kwargs.get('pk')
         return {
-            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             # dont need this:
-            #'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
@@ -101,7 +99,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, CreateView):
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
-        #super().post(request, *args, **kwargs)
+        # super().post(request, *args, **kwargs)
         print('request from new measurement:')
         pprint(request.POST)
         form = self.get_form()

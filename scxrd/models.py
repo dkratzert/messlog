@@ -78,7 +78,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
     '''def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
         try:

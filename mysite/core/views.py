@@ -12,7 +12,6 @@ from scxrd.models import Profile
 
 class SignUp(CreateView):
     """Create a new user
-    https://django.cowhite.com/blog/adding-and-editing-model-objects-using-django-class-based-views-and-forms/
     """
     form_class = UserForm
     success_url = reverse_lazy('index')
@@ -28,12 +27,13 @@ class SignUp(CreateView):
         }
         return render(request, 'registration/new_user.html', context)
 
-    '''def form_valid(self, form):
-        form.save(self.request.user)
-        return super().form_valid(form)'''
+    def form_invalid(self, context):
+        """If the form is invalid, render the invalid form."""
+        return self.render_to_response(context=context)
 
     def post(self, request, *args, **kwargs):
         user_form = UserForm(request.POST)
+        profile_form = ProfileNewForm(request.POST)
         if user_form.is_valid():
             user = user_form.save()
             profile, created = Profile.objects.get_or_create(user=user)
@@ -49,28 +49,10 @@ class SignUp(CreateView):
             return redirect('index')
         else:
             messages.error(request, _('Please correct the error below.'))
-        return self.form_invalid(user_form)
-
-    # def get_success_url(self, *args, **kwargs):
-    #   return reverse("index")
-
-    '''def post(self, request, *args, **kwargs):
-        """
-        Saving new user.
-        """
-        user_form = UserForm(request.POST)
-        profile_form = ProfileNewForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
-            profile_instance = profile_form.save(commit=False)
-            user_instance = user_form.save()
-            profile_instance.user = user_instance
-            profile_instance.user_id = user_instance.id
-            profile_form.save()
-            messages.success(request, _('Your profile was successfully created!'))
-            return HttpResponseRedirect('/')
-        else:
-            messages.error(request, _('Please correct the error below.'))
-        return super().post(request, *args, **kwargs)'''
+        return self.form_invalid(context={
+            'user_form'   : user_form,
+            'profile_form': profile_form
+        })
 
 
 class UserEdit(UpdateView):
