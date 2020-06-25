@@ -19,11 +19,12 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
+from scxrd.cif_model import CifFileModel
 from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment
-from scxrd.utils import randstring
+from scxrd.utils import randstring, generate_sha256
 
 
 class FormActionMixin(LoginRequiredMixin, FormMixin):
@@ -124,25 +125,38 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     model = Experiment
     form_class = ExperimentEditForm
     template_name = 'scxrd/experiment_edit.html'
-    success_url = reverse_lazy('scxrd:index')
+    success_url = reverse_lazy('scxrd:all_experiments')
 
-    """
+    def get_initial(self) -> dict:
+        """
+        Initial data for the form.
+        """
+        pk = self.kwargs.get('pk')
+        cif = Experiment.objects.get(pk=pk).ciffilemodel.cif_file_on_disk
+        return {
+            'cif_file_on_disk': cif,
+        }
+
     # TODO: make this work and make cif file model a separate model like the Person for User model:
     def post(self, request, *args, **kwargs):
         print('request from new measurement:')
         pprint(request.POST)
-        cif_model = CifFileModel()
         self.object = self.get_object()
-        form = self.get_form()
+        form: ExperimentEditForm = self.get_form()
         if form.is_valid():
-            exp = form.save(commit=False)
-            cif_model.sha256 = generate_sha256(self.model.cif_file_on_disk)
-            print('foo')
-            exp.cif = request.cif
+            cif_model = CifFileModel()
+            exp: Experiment = form.save(commit=False)
+            if form.files.get('cif_file_on_disk'):
+                cif_model.sha256 = generate_sha256(form.files['cif_file_on_disk'])
+                cif_model.cif_file_on_disk = form.files['cif_file_on_disk']
+                exp.ciffilemodel = cif_model
+            elif exp.ciffilemodel.cif_file_on_disk.readable():
+                exp.ciffilemodel.delete()
             exp.save()
+            cif_model.save()
             return self.form_valid(form)
         else:
-            return self.form_invalid(form)"""
+            return self.form_invalid(form)
 
 
 class NewSampleByCustomer(LoginRequiredMixin, CreateView):

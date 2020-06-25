@@ -63,7 +63,7 @@ class CifFileModel(models.Model):
 
     def __str__(self):
         try:
-            return self.data
+            return self.cif_file_on_disk.name
         except ValueError:
             return '# no file found #'
         # data is the cif data_ value

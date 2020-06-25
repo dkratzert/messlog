@@ -42,12 +42,12 @@ class CifAdmin(admin.ModelAdmin):
 
     @staticmethod
     def related_experiment(obj):
-        return Experiment.objects.get(cif=obj.pk)
+        return Experiment.objects.get(ciffilemodel=obj.pk)
 
     def number_of_atoms(self, obj):
         try:
-            exp = Experiment.objects.get(cif=obj.pk)
-            cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
+            #cif = CifFileModel.objects.get(cif_file_on_disk=obj.pk)
+            cif = CifContainer(Path(str(obj.cif_file_on_disk.file)))
         except RuntimeError:
             return _('no atoms found')
         # Example:
@@ -93,6 +93,7 @@ class GluesAdmin(admin.ModelAdmin):
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
+#admin.site.register(CifFileModel)
 admin.site.register(SCXRDSample)
 # admin.site.register(Person)
 admin.site.unregister(User)
