@@ -65,8 +65,8 @@ class Profile(models.Model):
     A Person does not need to have a User account.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    company = models.CharField(max_length=200, verbose_name='company', blank=True)
-    # work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.DO_NOTHING)
+    company = models.CharField(max_length=200, verbose_name=_('company'), blank=True)
+    work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.SET_NULL)
     street = models.CharField(max_length=250, blank=True, null=True)
     house_number = models.CharField(max_length=200, blank=True, null=True)
     building = models.CharField(max_length=200, blank=True, null=True)
@@ -77,9 +77,6 @@ class Profile(models.Model):
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
-
-    '''def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
         try:
             self.work_group.group_head
@@ -89,7 +86,7 @@ class Profile(models.Model):
             if self.work_group.group_head == self:
                 return name + '*'
             else:
-                return name'''
+                return name
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -108,7 +105,7 @@ class WorkGroup(models.Model):
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
     fixtures = ['work_groups']
-    group_head = models.CharField(Profile, max_length=50, blank=True, null=True)
+    group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, null=True)
 
     def __str__(self):
         return "AK {}".format(self.group_head)
@@ -123,7 +120,7 @@ class Machine(models.Model):
     diffrn_measurement_device_type = models.CharField(verbose_name="machine model name", max_length=200)
     # The general class of goniometer or device used to support and orient the specimen:
     # e.g. 'three-circle diffractometer'
-    diffrn_measurement_device = models.CharField(verbose_name="machine type", max_length=200, null=True, blank=True)
+    diffrn_measurement_device = models.CharField(verbose_name=_("machine type"), max_length=200, null=True, blank=True)
     # A description of special aspects of the device used to measure the diffraction intensities:
     diffrn_measurement_device_details = models.CharField(verbose_name="machine special aspects",
                                                          max_length=2000, null=True, blank=True)

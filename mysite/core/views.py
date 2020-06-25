@@ -47,8 +47,6 @@ class SignUp(CreateView):
             user = authenticate(username=username, password=password)
             login(request, user)
             return redirect('index')
-        else:
-            messages.error(request, _('Please correct the error below.'))
         return self.form_invalid(context={
             'user_form'   : user_form,
             'profile_form': profile_form

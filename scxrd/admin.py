@@ -58,9 +58,11 @@ class PersonInline(StackedInline):
     can_delete = False
 
 
-class WorkGroupAdmin(admin.ModelAdmin):
+class WorkGroupInline(admin.TabularInline):
+    fields = ('group_head',)
     ordering = ('group_head',)
-
+    model = WorkGroup
+    extra = 3
 
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
@@ -73,7 +75,7 @@ admin.site.register(SCXRDSample)
 # admin.site.register(Person)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-admin.site.register(WorkGroup, WorkGroupAdmin)
+admin.site.register(WorkGroup)
 admin.site.register(Machine)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalGlue)
