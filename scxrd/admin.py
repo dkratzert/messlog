@@ -12,11 +12,17 @@ from scxrd.customer_models import SCXRDSample
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
 
 
+class ExperimentInline(StackedInline):
+    model = CifFileModel
+    can_delete = True
+
+
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'cif_file_on_disk')
+    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula')
     list_filter = ['measure_date']
     search_fields = ['experiment', 'number', 'sum_formula']
     ordering = ['-number']
+    inlines = (ExperimentInline,)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)

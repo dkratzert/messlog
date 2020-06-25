@@ -33,28 +33,20 @@ class SignUp(CreateView):
 
     def post(self, request, *args, **kwargs):
         user_form = UserForm(request.POST)
-        profile_form = ProfileNewForm(request.POST)
         if user_form.is_valid():
             user = user_form.save()
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile_form = ProfileNewForm(request.POST, instance=profile)
-            if profile_form.is_valid():
-                profile_form.save()
-            else:
-                messages.error(request, _('Please correct the error below.'))
-                return self.form_invalid(context={
-                    'user_form': user_form,
-                    'profile_form': profile_form
-                })
-            username = user_form.cleaned_data.get('username')
-            password = user_form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
+            user.refresh_from_db()  # load the profile instance created by the signal
+            user.profile.phone_number = user_form.cleaned_data.get('phone_number')
+            user.profile.work_group = user_form.cleaned_data.get('work_group')
+            user.profile.comment = user_form.cleaned_data.get('comment')
+            user.save()
+            raw_password = user_form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
             login(request, user)
             return redirect('index')
-        return self.form_invalid(context={
-            'user_form'   : user_form,
-            'profile_form': profile_form
-        })
+        else:
+            form = UserForm()
+        return render(request, 'registration/new_user.html', {'form': form})
 
 
 class UserEdit(UpdateView):

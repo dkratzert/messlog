@@ -8,13 +8,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
-from django.db.models import FileField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
-from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, generate_sha256
+from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
@@ -32,11 +33,6 @@ TODO:
 
 
 """
-
-
-def validate_cif_file_extension(value):
-    if not value.name.endswith('.cif'):
-        raise ValidationError(_('Only .cif files are allowed to upload here.'))
 
 
 def validate_email(value):
@@ -143,7 +139,8 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
     number = models.PositiveIntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
-    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True, related_name='customer_experiments')
+    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True,
+                                 related_name='customer_experiments')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(to=User, verbose_name='operator', null=True, related_name='operator_experiments',
                                  on_delete=models.SET_NULL)
@@ -180,11 +177,6 @@ class Experiment(models.Model):
     # _exptl_special_details:
     exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
                                              default='')
-    cif = models.OneToOneField(CifFileModel, null=True, blank=True, related_name="experiments",
-                               verbose_name='cif file data', on_delete=models.CASCADE)
-    cif_file_on_disk = FileField(upload_to='cifs', null=True, blank=True,
-                                 validators=[validate_cif_file_extension],
-                                 verbose_name='cif file')
 
     class Meta:
         ordering = ["-number"]
@@ -200,24 +192,7 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-    def get_choice(self, choices, attibute, na_0=True):
-        """
-        Get the choice value from a choices field.
-        :param choices: The choice dictionary
-        :param attibute: the attribute to retrieve from the choice
-        :param na_0: Decide wether 0 should be translated to '?' or not.
-        :return: Choice value
-        """
-        value = getattr(self, attibute)
-        if na_0:
-            if value == 0:
-                return '?'
-            else:
-                return choices[value][1]
-        else:
-            return choices[value][1]
-
-    def save(self, *args, **kwargs):
+    '''def save(self, *args, **kwargs):
         try:
             previous_cif = CifFileModel.objects.get(experiments=self.pk)
         except Exception as e:
@@ -258,9 +233,9 @@ class Experiment(models.Model):
         self.remove_cif_row(previous_cif)
         # self.save(update_fields=['cif'])
         # if previous_cif:
-        self.save(update_fields=['cif'])
+        self.save(update_fields=['cif'])'''
 
-    def remove_cif_row(self, previous_cif):
+    """def remove_cif_row(self, previous_cif):
         if previous_cif:
             print('deleting previous cif row:', previous_cif)
             c = CifFileModel.objects.get(pk=previous_cif.pk)
@@ -268,13 +243,13 @@ class Experiment(models.Model):
 
     @property
     def cif_name_only(self):
-        return Path(self.cif_file_on_disk.name).name
+        return Path(self.cif_file_on_disk.name).name"""
 
-    @property
+    """@property
     def cif_exists(self):
         if Path(self.cif_file_on_disk.path).exists():
             return True
-        return False
+        return False"""
 
     @staticmethod
     def quote_string(string):
@@ -296,7 +271,7 @@ class Experiment(models.Model):
         else:
             return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
 
-    @property
+    """@property
     def temperature(self):
         if not self.cif_file_on_disk:
             return ''
@@ -309,4 +284,17 @@ class Experiment(models.Model):
         if not isinstance(param, str):
             return ''
         cif = CifContainer(Path(str(self.cif_file_on_disk.file)))
-        return cif[param]
+        return cif[param]"""
+
+
+'''@receiver(post_save, sender=User)
+def update_cif_file(sender, instance, created, **kwargs):
+    if created:
+        CifFileModel.objects.create(cif=instance)
+    instance.profile.save()'''
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()

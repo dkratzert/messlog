@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -7,11 +8,20 @@ from scxrd.utils import get_float
 DEBUG = False
 
 
+def validate_cif_file_extension(value):
+    error = ValidationError(_('Only .cif files are allowed to upload here.'))
+    if not isinstance(value.name, str):
+        raise error
+    if not value.name.lower().endswith('.cif'):
+        raise error
+
+
 class CifFileModel(models.Model):
     """
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
+    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='cif file data')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name=_('change date'), null=True, blank=True)
@@ -47,6 +57,9 @@ class CifFileModel(models.Model):
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
     database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
                                                          verbose_name=_('CCDC number'))
+    cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
+                                        validators=[validate_cif_file_extension],
+                                        verbose_name='cif file')
 
     def __str__(self):
         try:
