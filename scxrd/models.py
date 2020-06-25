@@ -9,8 +9,6 @@ from django.core.validators import MinValueValidator, EmailValidator, RegexValid
 from django.db import models
 # Create your models here.
 from django.db.models import FileField
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -66,7 +64,8 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company = models.CharField(max_length=200, verbose_name=_('company'), blank=True)
-    work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.SET_NULL)
+    work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.SET_NULL,
+                                   related_name='profiles')
     street = models.CharField(max_length=250, blank=True, null=True)
     house_number = models.CharField(max_length=200, blank=True, null=True)
     building = models.CharField(max_length=200, blank=True, null=True)
@@ -87,17 +86,6 @@ class Profile(models.Model):
                 return name + '*'
             else:
                 return name
-
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
-
-    # post_save.connect(create_user_profile, sender='users.Person')
 
 
 class WorkGroup(models.Model):
@@ -155,9 +143,9 @@ class Experiment(models.Model):
     experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
     number = models.PositiveIntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
-    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True, related_name='experiment')
+    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True, related_name='customer_experiments')
     # Operator has to be an authenticated User:
-    operator = models.ForeignKey(User, verbose_name='operator', null=True, related_name='experiments',
+    operator = models.ForeignKey(to=User, verbose_name='operator', null=True, related_name='operator_experiments',
                                  on_delete=models.SET_NULL)
     machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
@@ -168,9 +156,9 @@ class Experiment(models.Model):
     measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
     result_date = models.DateField(verbose_name='results sent date', blank=True, null=True)
-    base = models.ForeignKey(CrystalSupport, verbose_name='sample base', related_name='+', blank=True, null=True,
-                             on_delete=models.DO_NOTHING)
-    glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='+', blank=True, null=True,
+    base = models.ForeignKey(CrystalSupport, verbose_name='sample base', blank=True, null=True,
+                             on_delete=models.DO_NOTHING, related_name='experiments')
+    glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='experiments', blank=True, null=True,
                              on_delete=models.DO_NOTHING)
     # equivalent to _exptl_crystal_size_max
     crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)

@@ -186,6 +186,7 @@ class MySamplesList(LoginRequiredMixin, ListView):
     """
     model = SCXRDSample
     template_name = 'scxrd/submitted_samples_list_by_customer.html'
+    ordering = '-submit_date_samp'
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()

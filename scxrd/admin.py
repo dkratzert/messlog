@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin import StackedInline
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
@@ -59,8 +60,28 @@ class WorkGroupInline(admin.TabularInline):
     model = WorkGroup
     extra = 3
 
+
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
+
+
+class GluesAdmin(admin.ModelAdmin):
+    model = CrystalGlue
+    list_display = ['glue', 'used_by']
+
+    def get_queryset(self, request):
+        """Method to do the sorting for the admin_order_field"""
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(
+            _used_by=Count('experiments', distinct=True),
+        )
+        return queryset
+
+    def used_by(self, obj):
+        """Returns the number of experiment that use this glue"""
+        return obj.experiments.count()
+
+    used_by.admin_order_field = '_used_by'
 
 
 # admin.site.register(MyUser)
@@ -73,4 +94,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(WorkGroup)
 admin.site.register(Machine)
 admin.site.register(CrystalSupport)
-admin.site.register(CrystalGlue)
+admin.site.register(CrystalGlue, GluesAdmin)
