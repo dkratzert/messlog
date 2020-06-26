@@ -45,6 +45,22 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:all_experiments')
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)  # Pop the user off the kwargs passed in
+        super().__init__(*args, **kwargs)
+        
+    def something():
+        pass
+        # user self.user to save it in the model
+
+    """def save(self, force_insert=False, force_update=False, commit=True):
+        m = super().save(commit=False)
+        m.updated_by = self.user
+
+        if commit:
+            m.save()
+        return m"""
+
 
 class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     """

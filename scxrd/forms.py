@@ -1,6 +1,6 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, HTML, Layout, Row, Column
+from crispy_forms.layout import Field, HTML, Layout, Row, Column, Submit
 from django import forms
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -178,12 +178,17 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            # HTML('</div>'),  # end of card
             Submit('Save', 'Save', css_class='btn-primary mr-2'),
             HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
                         formnovalidate="formnovalidate">Cancel</a>
                         ''')
         )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        # Update the existing form kwargs dict with the request's user.
+        kwargs.update({"operator": self.request.user})
+        return kwargs
 
     class Meta:
         model = Experiment
