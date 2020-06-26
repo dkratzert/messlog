@@ -80,20 +80,20 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 # jsme_frame,
                 Column(
                     HTML("""
-                        <div id="div_id_reaction_path" class="form-group">\n
-                            <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
-                                Draw the desired structure<span class="asteriskField">*</span>\n
-                            </label>\n
-                            <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                                This field is an alternative to the file upload above:</small>\n
-                            <div class='card  border ml-3 mr-3 mb-3 p-3' style='height: 500px'> \n
-                                <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
-                                <iframe id="ketcher-frame" src='ketcher.html' class='m-0'\n
-                                    style='overflow: hidden; border: 0; width: 100%; height: 100%'>\n
-                                </iframe>\n
-                            </div>\n
-                        </div>\n
-                        """)),
+                    <div id="div_id_reaction_path" class="form-group">\n
+                        <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
+                            Draw the desired structure<span class="asteriskField">*</span>\n
+                        </label>\n
+                        <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
+                            This field is an alternative to the file upload above:
+                        </small>\n
+                        <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
+                        <div class="p-3">
+                            <iframe id="ketcher-frame" src="ketcher.html">\n
+                            </iframe>\n
+                        </div>
+                    </div>\n
+                    """)),
             ),
             Row(
                 Column('special_remarks_samp')

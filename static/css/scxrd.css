@@ -1,8 +1,15 @@
 
-html {
+body {
     /* make font a bit smaller in general: */
     font-size: 0.95rem;
 }
+
+iframe {
+    height: 500px;
+    width: 100%;
+    border-style: unset;
+}
+
 
 a div, a:hover {
     text-decoration: none;
