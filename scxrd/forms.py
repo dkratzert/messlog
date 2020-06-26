@@ -178,8 +178,11 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_layout,
             self.sumform_row,
             HTML('</div>'),  # end of card
-            save_button2,
             # HTML('</div>'),  # end of card
+            Submit('Save', 'Save', css_class='btn-primary mr-2'),
+            HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
+                        formnovalidate="formnovalidate">Cancel</a>
+                        ''')
         )
 
     class Meta:

@@ -17,6 +17,8 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 TODO:
 - "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit 
     and special remarks
+- Save current user during save of "new experiment
+- "new experiment does not need the customer field
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download

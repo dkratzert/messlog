@@ -43,7 +43,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
-    success_url = reverse_lazy('scxrd:index')
+    success_url = reverse_lazy('scxrd:all_experiments')
 
 
 class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
@@ -63,14 +63,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         pk = self.kwargs.get('pk')
         return {
-            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
             # dont need this:
             # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'was_measured'         : True  # SCXRDSample.objects.get(pk=pk).was_measured,
+            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'was_measured': True  # SCXRDSample.objects.get(pk=pk).was_measured,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
