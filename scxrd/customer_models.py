@@ -47,7 +47,7 @@ class SCXRDSample(models.Model):
                                           help_text=_('The cause why the sample could not be measured'))
 
     class Meta:
-        ordering = ["-submit_date_samp"]
+        ordering = ["-id"]
 
     def __str__(self):
         return self.sample_name_samp

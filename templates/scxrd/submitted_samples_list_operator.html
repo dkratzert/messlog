@@ -22,9 +22,9 @@
                                 <td><b>{% trans "Sample" %}</b></td>
                                 <td><b>{% trans "Submitted at" %}</b></td>
                                 <td><b>{% trans "Sum Formula" %}</b></td>
-                                <td><b>{% trans "Figure" %}</b></td>
+                                <td><b>{% trans "Reaction Conditions" %}</b></td>
                                 <td><b>{% trans "Measured" %}</b></td>
-                                <td><b></b></td>
+                                <td><b>{% trans "Special Remarks" %}</b></td>
                             </tr>
                             </thead>
                             {% for sample in object_list %}
@@ -77,9 +77,9 @@
 
                                     <td style="max-width: 8cm">
                                         {% if sample.special_remarks_samp %}
-                                            <div class="font-weight-bold">
+                                            {% comment %}<div class="font-weight-bold">
                                                 {% trans "Special remarks:" %}
-                                            </div>
+                                            </div>{% endcomment %}
                                             <div class="text-break text-sm-left">
                                                 {{ sample.special_remarks_samp }}
                                             </div>
