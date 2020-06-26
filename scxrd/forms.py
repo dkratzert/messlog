@@ -165,12 +165,13 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
+        # pop the current user in orde to save him as operator in Experiment model:
+        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         try:
             self.fields['number'].initial = Experiment.objects.first().number + 1
         except AttributeError:
             self.fields['number'].initial = 1
-        self.helper.render_unmentioned_fields = False
 
         self.helper.layout = Layout(
             # Experiment ###
@@ -183,12 +184,6 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
                         formnovalidate="formnovalidate">Cancel</a>
                         ''')
         )
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        # Update the existing form kwargs dict with the request's user.
-        kwargs.update({"operator": self.request.user})
-        return kwargs
 
     class Meta:
         model = Experiment

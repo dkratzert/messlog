@@ -45,21 +45,18 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:all_experiments')
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop("user", None)  # Pop the user off the kwargs passed in
-        super().__init__(*args, **kwargs)
-        
-    def something():
-        pass
-        # user self.user to save it in the model
+    def form_valid(self, form):
+        """Save the current user from the request into the experiment"""
+        self.object: Experiment = form.save(commit=False)
+        self.object.operator = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-    """def save(self, force_insert=False, force_update=False, commit=True):
-        m = super().save(commit=False)
-        m.updated_by = self.user
-
-        if commit:
-            m.save()
-        return m"""
+    def get_form_kwargs(self):
+        """Add current user to form kwargs"""
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
@@ -79,14 +76,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         pk = self.kwargs.get('pk')
         return {
-            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             # dont need this:
             # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'was_measured': True  # SCXRDSample.objects.get(pk=pk).was_measured,
+            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'was_measured'         : True  # SCXRDSample.objects.get(pk=pk).was_measured,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
