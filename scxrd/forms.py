@@ -35,7 +35,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True,
                                        initial=timezone.now)
     # TODO: remove this here:
-    #submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
+    # submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
     #                              label=_("Sample submission date (for service)"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
                                   label=_("Results sent date (for service)"))
@@ -47,7 +47,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     # TODO: remove this here:
-    #customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
+    # customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
     crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
     crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
@@ -73,7 +73,6 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         self.helper.label_class = 'pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0'  # 'font-weight-bold'
         self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
 
-
         self.experiment_layout = Layout(
 
             card(self.exp_title, backbutton),
@@ -84,7 +83,7 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             ),
             Row(
                 Column('machine'),
-                #Column('operator'),
+                # Column('operator'), # done automatically in the view
                 Column('measure_date'),
                 Column('customer'),
             ),

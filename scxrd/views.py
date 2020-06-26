@@ -77,8 +77,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         pk = self.kwargs.get('pk')
         return {
             'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            # dont need this:
-            # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'number'               : Experiment.objects.first().number + 1,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
@@ -106,6 +105,12 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def get_form_kwargs(self):
+        """Add current user to form kwargs"""
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class ExperimentEditView(LoginRequiredMixin, UpdateView):
