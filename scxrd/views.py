@@ -4,14 +4,13 @@ from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView, TemplateView, ListView
-from django.views.generic.edit import FormMixin
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django_robohash.robotmaker import make_robot_svg
 
@@ -25,28 +24,6 @@ from scxrd.customer_models import SCXRDSample
 from scxrd.forms import ExperimentEditForm, ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.utils import randstring, generate_sha256
-
-
-class FormActionMixin(LoginRequiredMixin, FormMixin):
-
-    def post(self, request: WSGIRequest, *args, **kwargs):
-        """Add 'Cancel' button redirect."""
-        print('The post request:')
-        pprint(request.POST)
-        print('end request ----------------')
-        c = request.POST.get("cancel")
-        if c and c.lower() == 'cancel':
-            url = reverse_lazy('scxrd:index')  # or e.g. reverse(self.get_success_url())
-            return HttpResponseRedirect(url)
-        # if 'upload_cif' in request.POST:
-        #    return HttpResponseRedirect(reverse_lazy('scxrd:upload_cif_file', ))
-        # if 'submit' in request.POST:
-        #    form = self.form_class(request.POST)
-        #    if form.is_valid():
-        #        form.save()
-        #        print('The form is valid!!')
-        #        return HttpResponseRedirect(reverse_lazy('scxrd:index'))
-        return super().post(request, *args, **kwargs)
 
 
 class ExperimentIndexView(LoginRequiredMixin, TemplateView):
@@ -86,14 +63,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         pk = self.kwargs.get('pk')
         return {
-            'experiment': SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             # dont need this:
             # 'operator': self.object.user,#SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'was_measured': True #SCXRDSample.objects.get(pk=pk).was_measured,
+            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'was_measured'         : True  # SCXRDSample.objects.get(pk=pk).was_measured,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
@@ -132,12 +109,15 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         Initial data for the form.
         """
         pk = self.kwargs.get('pk')
-        cif = Experiment.objects.get(pk=pk).ciffilemodel.cif_file_on_disk
+        exp = Experiment.objects.get(pk=pk)
+        cif = None
+        if hasattr(exp, 'ciffilemodel'):
+            # noinspection PyUnresolvedReferences
+            cif = exp.ciffilemodel.cif_file_on_disk
         return {
             'cif_file_on_disk': cif,
         }
 
-    # TODO: make this work and make cif file model a separate model like the Person for User model:
     def post(self, request, *args, **kwargs):
         print('request from new measurement:')
         pprint(request.POST)
@@ -146,14 +126,29 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
-            if form.files.get('cif_file_on_disk'):
-                cif_model.sha256 = generate_sha256(form.files['cif_file_on_disk'])
-                cif_model.cif_file_on_disk = form.files['cif_file_on_disk']
-                exp.ciffilemodel = cif_model
-            elif exp.ciffilemodel.cif_file_on_disk.readable():
+            if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
+            if form.files.get('cif_file_on_disk'):
+                if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists():
+                    exp.ciffilemodel.delete()
+                cif_file = form.files['cif_file_on_disk']
+                try:
+                    cif = CifContainer(
+                        chunks='\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in cif_file.chunks()]))
+                    cif_model.fill_residuals_table(cif)
+                except Exception as e:
+                    print('Error during CIF parsing:', e)
+                    # TODO: handle bad cif parsing
+                cif_model.cif_file_on_disk = cif_file
+                cif_model.sha256 = generate_sha256(cif_file)
+                cif_model.filesize = cif_file.size
+                if not cif_model.date_created:
+                    cif_model.date_created = timezone.now()
+                cif_model.date_updated = timezone.now()
+                exp.ciffilemodel = cif_model
             exp.save()
-            cif_model.save()
+            if form.files.get('cif_file_on_disk'):
+                cif_model.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -303,7 +298,7 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'cif_file_on_disk',
+    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'ciffilemodel',
                'edit']
 
     # define column names that will be used in sorting

@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     # 'django_extensions',  # extensions for manage console
     'bootstrap_datepicker_plus',
     'crispy_forms',
-    'django_cleanup.apps.CleanupConfig',
     'django_robohash',
     # 'debug_toolbar',
+    'django_cleanup.apps.CleanupConfig',  # should be last
 ]
 
 MIDDLEWARE = [

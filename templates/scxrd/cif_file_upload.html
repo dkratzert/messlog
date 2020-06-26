@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-7 col-sm-6">
             {% if experiment.cif %}
-                <p>File uploaded: <a href="{{ experiment.cif.cif_file_on_disk.url }}">{{ experiment.cif }}</a></p>
+                <p>File uploaded: <a href="{{ experiment.ciffilemodel.cif_name_only }}">{{ experiment.cif }}</a></p>
             {% else %}
                 <p>File uploaded: &nbsp; None </p>
             {% endif %}

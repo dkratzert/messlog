@@ -1,3 +1,6 @@
+import textwrap
+from pathlib import Path
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -21,7 +24,8 @@ class CifFileModel(models.Model):
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='cif file data')
+    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='cif file data',
+                                      related_name='ciffilemodel')
     sha256 = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name=_('change date'), null=True, blank=True)
@@ -123,3 +127,44 @@ class CifFileModel(models.Model):
     def completeness_in_percent(self) -> float:
         if self.diffrn_measured_fraction_theta_max:
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
+
+    def temperature(self):
+        if not self.cif_file_on_disk:
+            return ''
+        return CifContainer(self.cif_file_path)['_diffrn_ambient_temperature']
+
+    @property
+    def cif_file_path(self) -> Path:
+        """The complete absolute path of the CIF file with file name and ending"""
+        return Path(str(self.cif_file_on_disk.file))
+
+    @property
+    def cif_name_only(self) -> str:
+        """The CIF file name without path"""
+        return self.cif_file_path.name
+
+    def cif_exists(self):
+        """Check if the CIF exists"""
+        if self.cif_file_path.exists():
+            return True
+        return False
+
+    @staticmethod
+    def quote_string(string):
+        """
+        Quotes the string value in a way that the line maximum of cif 1.1 with 2048 characters is fulfilled and longer
+        strings are embedded into ; quotes.
+        :param string: The string to save
+        :return: a quoted string
+        """
+        if not string:
+            return '?'
+        if isinstance(string, (int, float)):
+            return str(string)
+        if not isinstance(string, (str)):
+            # To get the string representation of model instances first:
+            string = str(string)
+        if len(string) < 2047 and (not '\n' in string or not '\r' in string):
+            return "'{}'".format(string)
+        else:
+            return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))

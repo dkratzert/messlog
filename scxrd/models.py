@@ -1,8 +1,5 @@
 import datetime
-import textwrap
-from pathlib import Path
 
-from django import template
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
@@ -13,24 +10,20 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit and special remarks
-    - rename "experimental special details" in "edit exp"
+- "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit 
+    and special remarks
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted
     - svg of molecule is not displayed
-- cif is deleted from experiment when saving again?
 - check checksum for correctness during file upload and download
-- Measurement temperatue to experiment start page -> done?
-- addd delete experiment
+- addd delete experiment -> No, this is only for admins
 - Check for existing unit cell during cif upload.
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/2.0
-
 
 """
 
@@ -136,46 +129,48 @@ class CrystalGlue(models.Model):
 
 class Experiment(models.Model):
     fixtures = ['experiment']
-    experiment = models.CharField(verbose_name='experiment name', max_length=200, blank=False, default='', unique=True)
-    number = models.PositiveIntegerField(verbose_name='number', unique=True, validators=[MinValueValidator(1)])
-    publishable = models.BooleanField(verbose_name="structure is publishable", default=False)
+    experiment = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
+                                  unique=True)
+    number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
+    publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True,
                                  related_name='customer_experiments')
     # Operator has to be an authenticated User:
-    operator = models.ForeignKey(to=User, verbose_name='operator', null=True, related_name='operator_experiments',
+    operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_experiments',
                                  on_delete=models.SET_NULL)
-    machine = models.ForeignKey(Machine, verbose_name='diffractometer', on_delete=models.SET_NULL,
+    machine = models.ForeignKey(Machine, verbose_name=_('diffractometer'), on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
-    sum_formula = models.CharField(max_length=300, verbose_name="presumed empirical formula", blank=True)
-    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name='first unit cell')
-    solvents = models.CharField(verbose_name='solvents used', null=True, blank=True, max_length=256)
-    conditions = models.CharField(verbose_name='reaction conditions', null=True, blank=True, max_length=1024)
-    measure_date = models.DateTimeField(verbose_name='measurement date', default=timezone.now, blank=False)
-    submit_date = models.DateField(verbose_name='sample submission date', blank=True, null=True)
-    result_date = models.DateField(verbose_name='results sent date', blank=True, null=True)
-    base = models.ForeignKey(CrystalSupport, verbose_name='sample base', blank=True, null=True,
+    sum_formula = models.CharField(max_length=300, verbose_name=_("presumed empirical formula"), blank=True)
+    prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
+    solvents = models.CharField(verbose_name=_('solvents used'), null=True, blank=True, max_length=256)
+    conditions = models.CharField(verbose_name=_('reaction conditions'), null=True, blank=True, max_length=1024)
+    measure_date = models.DateTimeField(verbose_name=_('measurement date'), default=timezone.now, blank=False)
+    submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)
+    result_date = models.DateField(verbose_name=_('results sent date'), blank=True, null=True)
+    base = models.ForeignKey(CrystalSupport, verbose_name=_('sample base'), blank=True, null=True,
                              on_delete=models.DO_NOTHING, related_name='experiments')
-    glue = models.ForeignKey(CrystalGlue, verbose_name='sample glue', related_name='experiments', blank=True, null=True,
+    glue = models.ForeignKey(CrystalGlue, verbose_name=_('sample glue'), related_name='experiments', blank=True,
+                             null=True,
                              on_delete=models.DO_NOTHING)
     # equivalent to _exptl_crystal_size_max
-    crystal_size_x = models.FloatField(verbose_name='crystal size max', null=True, blank=True)
+    crystal_size_x = models.FloatField(verbose_name=_('crystal size max'), null=True, blank=True)
     # equivalent to _exptl_crystal_size_mid
-    crystal_size_y = models.FloatField(verbose_name='crystal size mid', null=True, blank=True)
+    crystal_size_y = models.FloatField(verbose_name=_('crystal size mid'), null=True, blank=True)
     # equivalent to _exptl_crystal_size_min
-    crystal_size_z = models.FloatField(verbose_name='crystal size min', null=True, blank=True)
-    measurement_temp = models.FloatField(verbose_name='measurement temperature [K]', null=True, blank=True)
+    crystal_size_z = models.FloatField(verbose_name=_('crystal size min'), null=True, blank=True)
+    measurement_temp = models.FloatField(verbose_name=_('measurement temperature [K]'), null=True, blank=True)
     # equivalent to _exptl_crystal_colour
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])
     # equivalent to _exptl_crystal_colour_modifier
-    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, verbose_name='crystal colour modifier',
+    crystal_colour_mod = models.IntegerField(choices=COLOUR_MOD_CHOICES, verbose_name=_('crystal colour modifier'),
                                              default=COLOUR_MOD_CHOICES[0][0])
     # equivalent to _exptl_crystal_colour_lustre
     crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES,
                                                 default=COLOUR_LUSTRE_COICES[0][0])  # no blank=True here!
     # equivalent to _exptl_crystal_description
-    crystal_habit = models.CharField(max_length=300, blank=True, null=True, verbose_name="crystal habit")
+    crystal_habit = models.CharField(max_length=300, blank=True, null=True, verbose_name=_("crystal habit"))
     # _exptl_special_details:
-    exptl_special_details = models.TextField(verbose_name='experimental special details', blank=True, null=True,
+    exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, null=True,
                                              default='')
 
     class Meta:
@@ -192,106 +187,6 @@ class Experiment(models.Model):
     def __str__(self):
         return self.experiment
 
-    '''def save(self, *args, **kwargs):
-        try:
-            previous_cif = CifFileModel.objects.get(experiments=self.pk)
-        except Exception as e:
-            print('No previous cif:', e)
-            previous_cif = None
-        super().save(*args, **kwargs)
-        if not self.cif_file_on_disk.chunks():
-            print('returning from file check')
-            return
-        if 'update_fields' in kwargs:
-            return
-        try:
-            # cif = CifContainer(Path(str(exp.cif_file_on_disk.file)))
-            cif = CifContainer(chunks='\n'.join(
-                [x.decode(encoding='cp1250', errors='ignore') for x in self.cif_file_on_disk.chunks()]))
-        except Exception as e:
-            if previous_cif:
-                self.remove_cif_row(previous_cif)
-            print(e)
-            print('Unable to parse cif file')
-            # raise ValidationError('Unable to parse cif file:', e)
-            return False
-        # save cif content to db table:
-        cif_model = CifFileModel()
-        try:
-            # self.cif_file_on_disk.file.name
-            cif_model.fill_residuals_table(cif)
-        except RuntimeError as e:
-            print('Error while saving cif file:', e)
-            return False
-        cif_model.sha256 = generate_sha256(self.cif_file_on_disk)
-        cif_model.filesize = self.cif_file_on_disk.size
-        if not cif_model.date_created:
-            cif_model.date_created = timezone.now()
-        cif_model.date_updated = timezone.now()
-        self.cif = cif_model
-        cif_model.save()
-        self.remove_cif_row(previous_cif)
-        # self.save(update_fields=['cif'])
-        # if previous_cif:
-        self.save(update_fields=['cif'])'''
-
-    """def remove_cif_row(self, previous_cif):
-        if previous_cif:
-            print('deleting previous cif row:', previous_cif)
-            c = CifFileModel.objects.get(pk=previous_cif.pk)
-            c.delete(keep_parents=True)
-
-    @property
-    def cif_name_only(self):
-        return Path(self.cif_file_on_disk.name).name"""
-
-    """@property
-    def cif_exists(self):
-        if Path(self.cif_file_on_disk.path).exists():
-            return True
-        return False"""
-
-    @staticmethod
-    def quote_string(string):
-        """
-        Quotes the string value in a way that the line maximum of cif 1.1 with 2048 characters is fulfilled and longer
-        strings are embedded into ; quotes.
-        :param string: The string to save
-        :return: a quoted string
-        """
-        if not string:
-            return '?'
-        if isinstance(string, (int, float)):
-            return str(string)
-        if not isinstance(string, (str)):
-            # To get the string representation of model instances first:
-            string = str(string)
-        if len(string) < 2047 and (not '\n' in string or not '\r' in string):
-            return "'{}'".format(string)
-        else:
-            return ";{}\n;".format('\n'.join(textwrap.wrap(string, width=2047)))
-
-    """@property
-    def temperature(self):
-        if not self.cif_file_on_disk:
-            return ''
-        return CifContainer(Path(self.cif_file_on_disk.file.name))['_diffrn_ambient_temperature']
-
-    register = template.Library()
-
-    @register.simple_tag
-    def get_cif_file_parameter(self, param):
-        if not isinstance(param, str):
-            return ''
-        cif = CifContainer(Path(str(self.cif_file_on_disk.file)))
-        return cif[param]"""
-
-
-'''@receiver(post_save, sender=User)
-def update_cif_file(sender, instance, created, **kwargs):
-    if created:
-        CifFileModel.objects.create(cif=instance)
-    instance.profile.save()'''
 
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):

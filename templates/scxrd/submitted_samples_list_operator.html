@@ -94,8 +94,18 @@
                                             </div>
                                         {% endif %}
                                     </td>
+                                    {% empty %}
+                                    <td colspan="6">
+                                        <div class="card align-items-center m-4 p-4 badge-light font-weight-bold">
+                                            No Samples found
+                                        </div>
+                                    </td>
+
                                 </tr>
+
+
                             {% endfor %}
+
                         </table>
 
                     </div>
