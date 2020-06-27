@@ -62,6 +62,9 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
 class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     """
     Start a new experiment from a prior sample
+    # TODO: do I need sample = models.OneToOneField(SCXRDSample) in Experiment?
+    # This class mus inizialize an experiment or the sample creation must already initialize one (which is not good,
+    because not all samples get measured).
     """
     model = Experiment
     form_class = ExperimentNewForm
@@ -174,7 +177,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
 
 class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     """
-    Add a new experiment in order to submit it to the X-ray facility.
+    Add a new SCXRDSample in order to submit it to the X-ray facility.
     """
     model = SCXRDSample
     form_class = SubmitNewForm
