@@ -3,6 +3,7 @@ from pathlib import Path
 from pprint import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -66,7 +67,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     # This class mus inizialize an experiment or the sample creation must already initialize one (which is not good,
     because not all samples get measured).
     """
-    model = Experiment
+    model = SCXRDSample
     form_class = ExperimentNewForm
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
@@ -80,7 +81,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         pk = self.kwargs.get('pk')
         return {
             'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'number'               : Experiment.objects.first().number + 1,
+            'number'               : Experiment.objects.count() + 1,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
@@ -99,15 +100,25 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         form = self.get_form()
         self.object = self.get_object()
         if form.is_valid():
-            exp = form.save(commit=False)
+            exp: Experiment = Experiment()
             # Assigns the currently logged in user to the submetted sample:
             exp.operator = request.user
+            exp.number = request.POST.get('number')
+            exp.experiment = request.POST.get('experiment')
+            exp.exptl_special_details = request.POST.get('exptl_special_details')
+            exp.customer = User.objects.get(pk=request.POST.get('customer'))
             # Assigns the current date to the sample submission date field
-            exp.submit_date_samp = timezone.now()
-            exp.save()
+            exp.submit_date_samp = request.POST.get('submit_date') #timezone.now()
+            exp.sum_formula = request.POST.get('sum_formula')
+            exp.crystal_colour = request.POST.get('crystal_colour')
+            exp.operator = request.user
+            #exp.save(force_insert=True)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    #def get(self, request, *args, **kwargs):
+
 
     def get_form_kwargs(self):
         """Add current user to form kwargs"""

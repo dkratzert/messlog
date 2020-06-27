@@ -132,10 +132,12 @@ class CrystalGlue(models.Model):
 
 class Experiment(models.Model):
     fixtures = ['experiment']
+    # The name of the current experiment
     experiment = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                   unique=True)
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
+    # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True,
                                  related_name='customer_experiments')
     # Operator has to be an authenticated User:
