@@ -1,38 +1,27 @@
 [
 {
     "model": "scxrd.machine",
-    "pk": 5,
-    "fields": {
-        "diffrn_measurement_device_type": "APEX",
-        "diffrn_measurement_device": "Bruker SMART APEXII QUAZAR",
-        "diffrn_measurement_device_details": null
-    }
-},
-{
-    "model": "scxrd.machine",
-    "pk": 6,
-    "fields": {
-        "diffrn_measurement_device_type": "QUAZAR",
-        "diffrn_measurement_device": "Bruker three circle D8 Machine",
-        "diffrn_measurement_device_details": null
-    }
-},
-{
-    "model": "scxrd.machine",
-    "pk": 7,
-    "fields": {
-        "diffrn_measurement_device_type": "Spider",
-        "diffrn_measurement_device": "Rigaku Spider four circle goniometer with sealed tube",
-        "diffrn_measurement_device_details": null
-    }
-},
-{
-    "model": "scxrd.machine",
-    "pk": 8,
+    "pk": 1,
     "fields": {
         "diffrn_measurement_device_type": "VENTURE",
-        "diffrn_measurement_device": "Bruker three circle dual wavelength micro focus",
-        "diffrn_measurement_device_details": null
+        "diffrn_measurement_device": "Bruker three circle dual wavelength micro focus"
     }
-}
+},
+    {
+    "model": "scxrd.machine",
+    "pk": 2,
+    "fields": {
+        "diffrn_measurement_device_type": "APEXII",
+        "diffrn_measurement_device": "Bruker APEXII QUAZAR"
+    }
+},
+{
+    "model": "scxrd.machine",
+    "pk": 3,
+    "fields": {
+        "diffrn_measurement_device_type": "Spider",
+        "diffrn_measurement_device": "Rigaku Spider four circle goniometer with sealed tube"
+    }
+},
+
 ]

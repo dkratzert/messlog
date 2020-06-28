@@ -13,7 +13,7 @@ from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 class ExperimentTableForm(forms.ModelForm):
     class Meta:
         model = Experiment
-        fields = ('experiment', 'number', 'measure_date')
+        fields = ('experiment_name', 'number', 'measure_date')
 
 
 class CustomCheckbox(Field):

@@ -17,7 +17,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment'),
+                Column('experiment_name'),
                 Column('number'),
                 Column('measurement_temp'),
             ),

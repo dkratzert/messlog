@@ -65,7 +65,7 @@ $(document).ready(function () {
             },
             {
                 title: "Project Name",
-                name: 'experiment',
+                name: 'experiment_name',
                 searchable: true,
                 orderable: true,
             },

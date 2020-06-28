@@ -19,5 +19,19 @@
     "fields": {
         "glue": "Motor Oil"
     }
+},
+    {
+    "model": "scxrd.crystalglue",
+    "pk": 4,
+    "fields": {
+        "glue": "Super Glue"
+    }
+},
+    {
+    "model": "scxrd.crystalglue",
+    "pk": 5,
+    "fields": {
+        "glue": "Two-component glue"
+    }
 }
 ]

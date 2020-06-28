@@ -101,9 +101,6 @@ class Machine(models.Model):
     # The general class of goniometer or device used to support and orient the specimen:
     # e.g. 'three-circle diffractometer'
     diffrn_measurement_device = models.CharField(verbose_name=_("machine type"), max_length=200, null=True, blank=True)
-    # A description of special aspects of the device used to measure the diffraction intensities:
-    diffrn_measurement_device_details = models.CharField(verbose_name="machine special aspects",
-                                                         max_length=2000, null=True, blank=True)
 
     def __str__(self):
         return self.diffrn_measurement_device_type
@@ -131,10 +128,10 @@ class CrystalGlue(models.Model):
 
 
 class Experiment(models.Model):
-    fixtures = ['experiment']
+    fixtures = ['experiment_name']
     # The name of the current experiment
-    experiment = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
-                                  unique=True)
+    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
+                                       unique=True)
     sample = models.ForeignKey('SCXRDSample', on_delete=models.CASCADE, null=True, blank=True,
                                  related_name='experiment_samples')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
@@ -192,7 +189,7 @@ class Experiment(models.Model):
     was_measured_recently.short_description = 'Measured recently?'
 
     def __str__(self):
-        return self.experiment
+        return self.experiment_name
 
 
 @receiver(post_save, sender=User)

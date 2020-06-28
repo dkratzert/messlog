@@ -18,9 +18,9 @@ class ExperimentInline(StackedInline):
 
 
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula')
+    list_display = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula')
     list_filter = ['measure_date']
-    search_fields = ['experiment', 'number', 'sum_formula']
+    search_fields = ['experiment_name', 'number', 'sum_formula']
     ordering = ['-number']
     inlines = (ExperimentInline,)
 

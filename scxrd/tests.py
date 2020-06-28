@@ -96,7 +96,7 @@ class ExperimentCreateTest(TestCase):
 
     def test_string_representation(self):
         entry = Experiment(experiment="My entry title")
-        self.assertEqual(str(entry), entry.experiment)
+        self.assertEqual(str(entry), entry.experiment_name)
 
 
 class ExperimentCreateCif(TestCase):

@@ -9,6 +9,7 @@ from scxrd.models import Experiment
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
+    customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
@@ -32,20 +33,20 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
 
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment'),
+                Column('experiment_name'),
                 Column('number'),
                 Column('measurement_temp'),
             ),
             Row(
                 Column('machine'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date'),  # TODO: make it invisible?
+                Column('measure_date'),
                 Column('customer'),
             ),
             Row(
                 Column('base'),
                 Column('glue'),
-                # Column('submit_date'),
+                Column('crystal_habit'),
             ),
             Row(
                 Column('crystal_size_z'),
@@ -55,18 +56,12 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             # HTML('</div>'),  # end of card, done later
         )
 
-        """self.sumform_row = Row(
-            Column('sum_formula', css_class='col-8'),
-            # Column('submit_date', css_class='col-4'),
-        )"""
-
         self.helper.layout = Layout(
             # Experiment ###
             self.experiment_layout,
             self.crystal_colour_row,
             Row(
                 Column('sum_formula', css_class='col-8'),
-                Column('crystal_habit'),
             ),
             HTML('</div>'),  # end of card
 
@@ -105,7 +100,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
 
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment'),
+                Column('experiment_name'),
                 Column('number'),
                 Column('measurement_temp'),
             ),

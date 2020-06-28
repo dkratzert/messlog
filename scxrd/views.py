@@ -22,7 +22,7 @@ from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
 from scxrd.customer_models import SCXRDSample
-from scxrd.forms.customer_forms import SubmitNewForm
+from scxrd.forms.new_cust_sample import SubmitNewForm
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_experiment import ExperimentNewForm, ExperimentFromSampleForm
 from scxrd.models import Experiment
@@ -45,7 +45,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     form_class = ExperimentNewForm
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
-    # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
+    # fields = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:all_experiments')
 
     def form_valid(self, form):
@@ -71,7 +71,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     form_class = ExperimentFromSampleForm
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
-    # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
+    # fields = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
     def get_initial(self) -> dict:
@@ -81,7 +81,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         initial = super().get_initial()
         pk = self.kwargs.get('pk')
         initial.update({
-            'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'experiment_name'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
             'number'               : Experiment.objects.first().number + 1,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
@@ -101,7 +101,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             # form.instance is Experiment, because of the form class:
             exp: Experiment = form.instance
             exp.number = request.POST.get('number')
-            exp.experiment = request.POST.get('experiment')
+            exp.experiment_name = request.POST.get('experiment_name')
             exp.exptl_special_details = request.POST.get('exptl_special_details')
             exp.customer = User.objects.get(pk=request.POST.get('customer'))
             exp.submit_date_samp = request.POST.get('submit_date')
@@ -296,7 +296,7 @@ class MoleculeView(LoginRequiredMixin, View):
         cif = CifContainer(Path(MEDIA_ROOT).joinpath(Path(cif_file)))
         if cif.atoms_fract:
             return HttpResponse(self.make_molfile(cif, grow))
-        print('Cif file with id {} of experiment {} has no atoms!'.format(cif_file, exp_id))
+        print('Cif file with id {} of experiment_name {} has no atoms!'.format(cif_file, exp_id))
         return HttpResponse('')
 
     def make_molfile(self, cif: CifContainer, grow: str) -> str:
@@ -344,14 +344,14 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     title = 'Experiments'
 
     # define the columns that will be returned
-    columns = ['id', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable', 'ciffilemodel',
+    columns = ['id', 'number', 'experiment_name', 'measure_date', 'machine', 'operator', 'publishable', 'ciffilemodel',
                'edit']
 
     # define column names that will be used in sorting
     # order is important and should be same as order of columns
     # displayed by datatables. For non sortable columns use empty
     # value like ''
-    order_columns = ['', 'number', 'experiment', 'measure_date', 'machine', 'operator', 'publishable',
+    order_columns = ['', 'number', 'experiment_name', 'measure_date', 'machine', 'operator', 'publishable',
                      'cif_file_on_disk', '']
 
     # set max limit of records returned, this is used to protect our site if someone tries to attack our site
