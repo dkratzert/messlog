@@ -32,7 +32,7 @@ class MyDecimalField(forms.DecimalField):
 
 
 class ExperimentFormfieldsMixin(forms.ModelForm):
-    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=True,
+    measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now)
     # TODO: remove this here:
     # submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
@@ -84,13 +84,13 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
             Row(
                 Column('machine'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date'),
+                Column('measure_date'), # TODO: make it invisible?
                 Column('customer'),
             ),
             Row(
                 Column('base'),
                 Column('glue'),
-                Column('submit_date'),
+                #Column('submit_date'),
             ),
             Row(
                 Column('crystal_size_z'),
@@ -176,12 +176,52 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             self.experiment_layout,
             self.crystal_colour_layout,
-            self.sumform_row,
+            Row(
+                Column('sum_formula', css_class='col-8'),
+                Column('crystal_habit'),
+            ),
+            HTML('</div>'),  # end of card
+
+            Submit('Save', 'Save', css_class='btn-primary mr-2'),
+            HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
+                    formnovalidate="formnovalidate">Cancel</a> ''')
+        )
+
+    class Meta:
+        model = Experiment
+        fields = '__all__'
+
+
+class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
+    number = forms.IntegerField(min_value=1)
+
+    def __init__(self, *args, **kwargs):
+        self.exp_title = _('New Experiment')
+        # pop the current user in orde to save him as operator in Experiment model:
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        try:
+            self.fields['number'].initial = Experiment.objects.first().number + 1
+        except AttributeError:
+            self.fields['number'].initial = 1
+
+        self.helper.layout = Layout(
+            # Experiment ###
+            self.experiment_layout,
+            self.crystal_colour_layout,
+            Row(
+                Column('sum_formula', css_class='col-8'),
+                Column('crystal_habit'),
+            ),
+            Row(
+                Column('exptl_special_details'),
+            ),
             HTML('</div>'),  # end of card
             Submit('Save', 'Save', css_class='btn-primary mr-2'),
             HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
                         formnovalidate="formnovalidate">Cancel</a>
-                        ''')
+                        '''),
+
         )
 
     class Meta:

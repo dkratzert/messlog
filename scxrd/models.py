@@ -16,8 +16,8 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 """
 TODO:
 - why does ketcher sometimes miss an atom?
-- "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit 
-    and special remarks and not_measured_cause and unit cell
+- Make a single form for each task with less inheritance.
+- "New Experiment page" from "measure a sample" is missing not_measured_cause and unit cell
 - "new experiment" does not need the customer field
 - "new experiment" needs the preliminary unit cell
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted

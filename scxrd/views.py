@@ -23,7 +23,7 @@ from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
 from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm
+from scxrd.forms import ExperimentEditForm, ExperimentNewForm, ExperimentFromSampleForm
 from scxrd.models import Experiment
 from scxrd.utils import randstring, generate_sha256
 
@@ -67,7 +67,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     form of the customer as possible.
     """
     model = SCXRDSample
-    form_class = ExperimentNewForm
+    form_class = ExperimentFromSampleForm
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
     # fields = ('experiment', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
@@ -106,6 +106,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.submit_date_samp = request.POST.get('submit_date')
             exp.sum_formula = request.POST.get('sum_formula')
             exp.crystal_colour = request.POST.get('crystal_colour')
+            exp.measure_date = timezone.now()
             # I have to save this info in the SCXRDSample, which is self.object:
             self.object.was_measured = True
             # This is important, otherwise 'was_measured' is not saved:
