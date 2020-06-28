@@ -15,11 +15,11 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- why does ketcher sometimes miss an atom?
 - "New Experiment page" from "measure a sample" is missing the sum formula and crystal habit 
-    and special remarks and "not measure cause"
-- measure sample seems to use the wrong pk?
-- Save current user during save of "new experiment
-- "new experiment does not need the customer field
+    and special remarks and not_measured_cause and unit cell
+- "new experiment" does not need the customer field
+- "new experiment" needs the preliminary unit cell
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download
@@ -135,10 +135,12 @@ class Experiment(models.Model):
     # The name of the current experiment
     experiment = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                   unique=True)
+    sample = models.ForeignKey('SCXRDSample', on_delete=models.CASCADE, null=True, blank=True,
+                                 related_name='experiment_samples')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
-    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True,
+    customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
                                  related_name='customer_experiments')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_experiments',

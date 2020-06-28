@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from pprint import pprint
+from symbol import comp_iter
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -62,10 +63,8 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
 
 class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     """
-    Start a new experiment from a prior sample
-    # TODO: do I need sample = models.OneToOneField(SCXRDSample) in Experiment?
-    # This class mus inizialize an experiment or the sample creation must already initialize one (which is not good,
-    because not all samples get measured).
+    Start a new experiment from a prior sample. The experiment gets as much data from the sample submission
+    form of the customer as possible.
     """
     model = SCXRDSample
     form_class = ExperimentNewForm
@@ -78,49 +77,52 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         Initial data for the form.
         """
+        initial = super().get_initial()
         pk = self.kwargs.get('pk')
-        return {
+        initial.update({
             'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'sample'               : pk,
             'number'               : Experiment.objects.count() + 1,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'was_measured'         : True  # SCXRDSample.objects.get(pk=pk).was_measured,
-        }
+            'was_measured'         : True
+        })
+        return initial
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         """
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
-        # super().post(request, *args, **kwargs)
-        print('request from new measurement:')
-        pprint(request.POST)
         form = self.get_form()
         self.object = self.get_object()
         if form.is_valid():
+            # TODO: can I do exp = form.instance
             exp: Experiment = Experiment()
             # Assigns the currently logged in user to the submetted sample:
-            exp.operator = request.user
             exp.number = request.POST.get('number')
             exp.experiment = request.POST.get('experiment')
             exp.exptl_special_details = request.POST.get('exptl_special_details')
             exp.customer = User.objects.get(pk=request.POST.get('customer'))
-            # Assigns the current date to the sample submission date field
-            exp.submit_date_samp = request.POST.get('submit_date') #timezone.now()
+            exp.submit_date_samp = request.POST.get('submit_date')
             exp.sum_formula = request.POST.get('sum_formula')
             exp.crystal_colour = request.POST.get('crystal_colour')
+            # maybe: exp.save(update_fields=['...'])
+            #exp.sample = self.object # request.POST.get('sample') # or SCXRDSample.objects.get(pk=self.object.pk)
+            # I have to save this info in the SCXRDSample, which is self.object:
+            self.object.was_measured = True
             exp.operator = request.user
-            #exp.save(force_insert=True)
+            exp.sample = self.object
+            self.object.save()
+            # TODO: experiment does not save correctly?
+            # exp.save(force_insert=True)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
-    #def get(self, request, *args, **kwargs):
-
-
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> dict:
         """Add current user to form kwargs"""
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -150,7 +152,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             'cif_file_on_disk': cif,
         }
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         print('request from new measurement:')
         pprint(request.POST)
         self.object = self.get_object()
@@ -215,7 +217,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         else:
             return self.form_invalid(form)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         context['randstring'] = randstring()
         return context
