@@ -34,7 +34,7 @@ def format_sum_formula(sumform: dict, break_after: int = 99) -> str:
             times = 1
         if num > 3 and num % break_after == 0:
             pass
-            #l.append("<br>")
+            # l.append("<br>")
         l.append("{}<sub>{:g}</sub><wbr>".format(el, times))
         num += 1
     l.append('')

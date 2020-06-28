@@ -1,4 +1,3 @@
-
 function get_uploaded_files(upload_files) {
     console.log(upload_files);
     $.get(url = upload_files, function (result) {

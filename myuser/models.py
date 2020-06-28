@@ -1,5 +1,3 @@
-from django.contrib.auth.models import AbstractUser
-
 '''
 class MyUserManager(UserManager):
     def get_by_natural_key(self, username):

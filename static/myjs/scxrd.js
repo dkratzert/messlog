@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
     // some options for JSmol_lite:
     var bgcolor = $(this.body).css("background-color");
     var jsmol_options;
@@ -216,8 +216,4 @@ $(document).ready(function () {
         $('[data-toggle="popover"]').popover()
     });
 
-    function topFunction() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
 });

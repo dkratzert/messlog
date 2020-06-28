@@ -12,7 +12,7 @@
 
 
 import time
-from math import sqrt, cos, radians, sin
+from math import sqrt, cos, radians
 
 from scxrd.cif.tools.atoms import get_radius_from_element
 from scxrd.cif.tools.dsrmath import SymmetryElement, Array, frac_to_cart

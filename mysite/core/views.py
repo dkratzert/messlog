@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, UpdateView, CreateView
 
 from mysite.core.forms import UserForm, UserEditForm, ProfileNewForm, ProfileEditForm
-from scxrd.models import Profile
 
 
 class SignUp(CreateView):

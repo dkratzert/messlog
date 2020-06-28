@@ -164,10 +164,11 @@ class CifFileTest(TestCase):
 
     def test_read_cif_content_by_gemmi(self):
         self.assertEqual(['_diffrn_reflns_number', '42245'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
-                                                                                  '_diffrn_reflns_number'))
+                                                                                       '_diffrn_reflns_number'))
         # check
         self.assertEqual(['_diffrn_reflns_number', '22246'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
-                                                                                  '_diffrn_reflns_number'))
+                                                                                       '_diffrn_reflns_number'))
+
 
 class WorkGroupTest(TestCase):
 
