@@ -32,34 +32,37 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('glue'),
                 # Column('submit_date'),
             ),
-            Row(
-                Column('crystal_size_z'),
-                Column('crystal_size_y'),
-                Column('crystal_size_x'),
-            ),
             # HTML('</div>'),  # end of card, done later
         )
 
         self.crystal_layout = Layout(
-            card(_('Crystal and Results'), backbutton),
+            card(_('Crystal and Conditions'), backbutton),
             # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
             Row(
-                Column('sum_formula', css_class='col-8'),
-            ),
-            Row(
-                Column('prelim_unit_cell', css_class='col-8'),
-                Column('result_date', css_class='col-4'),
-            ),
-            Row(
-                Column('solvents'),
-                Column('conditions'),
-                Column('crystal_habit'),
+                Column('crystal_size_z'),
+                Column('crystal_size_y'),
+                Column('crystal_size_x'),
             ),
             Row(
                 Column('crystal_colour'),
                 Column('crystal_colour_mod'),
                 Column('crystal_colour_lustre'),
             ),
+            Row(
+                Column('prelim_unit_cell', css_class='col-8'),
+                Column('result_date', css_class='col-4'),
+            ),
+            Row(
+                Column('sum_formula', css_class='col-8'),
+                Column('crystal_habit'),
+            ),
+
+            Row(
+                Column('solvents'),
+                Column('conditions'),
+
+            ),
+
             HTML('</div>'),  # end of card
         )
 

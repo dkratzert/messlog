@@ -147,7 +147,7 @@ class Experiment(models.Model):
                                  on_delete=models.SET_NULL)
     machine = models.ForeignKey(Machine, verbose_name=_('diffractometer'), on_delete=models.SET_NULL,
                                 related_name='experiments', null=True, blank=True)
-    sum_formula = models.CharField(max_length=300, verbose_name=_("presumed empirical formula"), blank=True)
+    sum_formula = models.CharField(max_length=300, verbose_name=_("empirical formula"), blank=True)
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
     solvents = models.CharField(verbose_name=_('solvents used'), null=True, blank=True, max_length=256)
     conditions = models.CharField(verbose_name=_('reaction conditions'), null=True, blank=True, max_length=1024)
