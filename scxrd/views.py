@@ -241,13 +241,17 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     queryset = SCXRDSample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
 
-    """
-    # TODO: Add a button with "show all samples"
-    # maybe add a second view with all samples and an url to this view
+    def get_queryset(self):
+        """Returns as default the unmeasured samples context."""
+        filter_val = self.request.GET.get('filter', 'False')
+        new_context = SCXRDSample.objects.filter(was_measured=filter_val)
+        return new_context
+
     def get_context_data(self, **kwargs):
+        # TODO: I should use a cookie for the state
         context = super().get_context_data(**kwargs)
-        context['unmeasured_samples'] = SCXRDSample.objects.filter(was_measured=False)
-        return context"""
+        context['filterstate'] = False
+        return context
 
 
 class ResidualsTable(DetailView):
