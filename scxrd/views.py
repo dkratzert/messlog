@@ -82,12 +82,10 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         initial.update({
             'experiment'           : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'sample'               : pk,
-            'number'               : Experiment.objects.count() + 1,
+            'number'               : Experiment.objects.first().number + 1,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
-            'was_measured'         : True
         })
         return initial
 
@@ -97,11 +95,10 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         POST variables and then check if it's valid.
         """
         form = self.get_form()
-        self.object = self.get_object()
+        self.object: SCXRDSample = self.get_object()
         if form.is_valid():
-            # TODO: can I do exp = form.instance
-            exp: Experiment = Experiment()
-            # Assigns the currently logged in user to the submetted sample:
+            # form.instance is Experiment, because of the form class:
+            exp: Experiment = form.instance
             exp.number = request.POST.get('number')
             exp.experiment = request.POST.get('experiment')
             exp.exptl_special_details = request.POST.get('exptl_special_details')
@@ -109,15 +106,15 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.submit_date_samp = request.POST.get('submit_date')
             exp.sum_formula = request.POST.get('sum_formula')
             exp.crystal_colour = request.POST.get('crystal_colour')
-            # maybe: exp.save(update_fields=['...'])
-            #exp.sample = self.object # request.POST.get('sample') # or SCXRDSample.objects.get(pk=self.object.pk)
             # I have to save this info in the SCXRDSample, which is self.object:
             self.object.was_measured = True
-            exp.operator = request.user
-            exp.sample = self.object
+            # This is important, otherwise 'was_measured' is not saved:
             self.object.save()
-            # TODO: experiment does not save correctly?
-            # exp.save(force_insert=True)
+            # Assigns the currently logged in user to the submitted sample:
+            exp.operator = request.user
+            # self.object is an SCXRDSample because of the views model class:
+            exp.sample = self.object
+            exp.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -241,7 +238,16 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     The list of all samples submitted by customers.
     """
     model = SCXRDSample
+    queryset = SCXRDSample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
+
+    """
+    # TODO: Add a button with "show all samples"
+    # maybe add a second view with all samples and an url to this view
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['unmeasured_samples'] = SCXRDSample.objects.filter(was_measured=False)
+        return context"""
 
 
 class ResidualsTable(DetailView):

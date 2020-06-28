@@ -10,7 +10,7 @@
         <div class="col-11 align-center">
 
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3">{% trans "Samples from Customers" %}
+                <div class="card-header pb-2 pl-3">{% trans "Unmeasured Samples from Customers" %}
                     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
                        href="{% url "index" %}">{% trans "Back to start" %}</a>
                 </div>
@@ -23,7 +23,7 @@
                                 <td><b>{% trans "Submitted at" %}</b></td>
                                 <td><b>{% trans "Sum Formula" %}</b></td>
                                 <td><b>{% trans "Reaction Conditions" %}</b></td>
-                                <td><b>{% trans "Measured" %}</b></td>
+{#                                <td><b>{% trans "Measured" %}</b></td>#}
                                 <td><b>{% trans "Special Remarks" %}</b></td>
                             </tr>
                             </thead>
@@ -36,6 +36,9 @@
                                         </div>
                                         <div class="mt-2">
                                             {% trans "Customer: " %}{{ sample.customer_samp }}
+                                        </div>
+                                        <div class="mt-2">
+                                            {% trans "group: " %}{{ sample.customer_samp.profile.work_group }}
                                         </div>
                                         <div class="mt-2">
                                             {% if sample.solve_refine_selv_samp %}
@@ -63,7 +66,7 @@
                                             <td> File not found</td>
                                         {% endif %}
                                     {% endif %}
-                                    {% if sample.was_measured %}
+                                    {% comment %}{% if sample.was_measured %}
                                         <td><span class="badge badge-success m-1 p-1">{% trans "Measured" %}</span></td>
                                     {% elif not sample.was_measured and sample.not_measured_cause %}
                                         <td><span
@@ -73,7 +76,7 @@
                                         <td><span
                                                 class="badge badge-warning m-1 p-1">{% trans "Awaiting Measurement" %}</span>
                                         </td>
-                                    {% endif %}
+                                    {% endif %}{% endcomment %}
 
                                     <td style="max-width: 8cm">
                                         {% if sample.special_remarks_samp %}

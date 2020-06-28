@@ -17,7 +17,7 @@ class SCXRDSample(models.Model):
     # The date when the sample is submitted to the facility:
     submit_date_samp = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True,
                                         default=timezone.now)
-    customer_samp = models.ForeignKey(verbose_name=_('Submitter'), to=User, on_delete=models.SET_NULL, null=True,
+    customer_samp = models.ForeignKey(to=User, verbose_name=_('Submitter'), on_delete=models.SET_NULL, null=True,
                                       blank=True,
                                       related_name='SCXRDSample')
     stable_samp = models.BooleanField(verbose_name=_('sample is unstable'),
@@ -47,7 +47,7 @@ class SCXRDSample(models.Model):
                                           help_text=_('The cause why the sample could not be measured'))
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["id"]
 
     def __str__(self):
         return self.sample_name_samp
