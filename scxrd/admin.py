@@ -90,6 +90,23 @@ class GluesAdmin(admin.ModelAdmin):
     used_by.admin_order_field = '_used_by'
 
 
+class MachinesAdmin(admin.ModelAdmin):
+    model = Machine
+    list_display = ['diffrn_measurement_device_type', 'used_by']
+
+    '''def get_queryset(self, request):
+        """Method to do the sorting for the admin_order_field"""
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(_used_by=Count('diffrn_measurement_device_type', distinct=False),)
+        return queryset'''
+
+    def used_by(self, machine):
+        """Returns the number of experiment that use this glue"""
+        return machine.experiments.count()
+
+    #used_by.admin_order_field = '_used_by'
+
+
 # admin.site.register(MyUser)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
@@ -99,6 +116,6 @@ admin.site.register(SCXRDSample)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(WorkGroup)
-admin.site.register(Machine)
+admin.site.register(Machine, MachinesAdmin)
 admin.site.register(CrystalSupport)
 admin.site.register(CrystalGlue, GluesAdmin)

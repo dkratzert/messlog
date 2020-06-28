@@ -24,7 +24,8 @@ from scxrd.cif_model import CifFileModel
 from scxrd.customer_models import SCXRDSample
 from scxrd.forms.new_cust_sample import SubmitNewForm
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.forms.new_experiment import ExperimentNewForm, ExperimentFromSampleForm
+from scxrd.forms.new_experiment import ExperimentNewForm
+from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.models import Experiment
 from scxrd.utils import randstring, generate_sha256
 

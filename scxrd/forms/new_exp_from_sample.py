@@ -7,9 +7,8 @@ from scxrd.forms.forms import ExperimentFormMixin
 from scxrd.models import Experiment
 
 
-class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
+class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
-    customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
@@ -40,13 +39,13 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 Column('machine'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date'),
+                Column('measure_date'),  # TODO: make it invisible?
                 Column('customer'),
             ),
             Row(
                 Column('base'),
                 Column('glue'),
-                Column('crystal_habit'),
+                # Column('submit_date'),
             ),
             Row(
                 Column('crystal_size_z'),
@@ -62,16 +61,22 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             self.crystal_colour_row,
             Row(
                 Column('sum_formula', css_class='col-8'),
+                Column('crystal_habit'),
+            ),
+            Row(
+                Column('exptl_special_details'),
+            ),
+            Row(
+                Column('not_measured_cause'),
             ),
             HTML('</div>'),  # end of card
-
             Submit('Save', 'Save', css_class='btn-primary mr-2'),
             HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
-                    formnovalidate="formnovalidate">Cancel</a> ''')
+                        formnovalidate="formnovalidate">Cancel</a>
+                        '''),
+
         )
 
     class Meta:
         model = Experiment
         fields = '__all__'
-
-
