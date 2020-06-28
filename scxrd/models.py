@@ -26,7 +26,7 @@ TODO:
 - addd delete experiment -> No, this is only for admins
 - Check for existing unit cell during cif upload.
 - for charts: https://www.chartjs.org/docs/latest/
-- http://ccbv.co.uk/projects/Django/2.0
+- http://ccbv.co.uk/projects/Django/3.0/
 
 """
 

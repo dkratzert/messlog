@@ -21,9 +21,10 @@ from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
-from scxrd.customer_forms import SubmitNewForm
 from scxrd.customer_models import SCXRDSample
-from scxrd.forms import ExperimentEditForm, ExperimentNewForm, ExperimentFromSampleForm
+from scxrd.forms.customer_forms import SubmitNewForm
+from scxrd.forms.edit_experiment import ExperimentEditForm
+from scxrd.forms.new_experiment import ExperimentNewForm, ExperimentFromSampleForm
 from scxrd.models import Experiment
 from scxrd.utils import randstring, generate_sha256
 

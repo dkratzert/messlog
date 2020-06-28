@@ -10,11 +10,11 @@ from scxrd.form_utils import card, save_button2, backbutton
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
+    """
+    Definition of the fields for the customer Sample form.
+    """
     submit_date_samp = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                        label=_("Sample submission date"))
-    # TODO: do this during view save()
-    # customer_samp = forms.ModelChoiceField(queryset=Person.objects.all(), required=True, label=_('customer'))
-    # customer_samp = CurrentUserField(default=get_current_authenticated_user())
     sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
     crystal_cond_samp = forms.CharField(label=_('Crystallized from, method and conditions'), required=True)
     reaction_path_samp = forms.FileField(label=_('Document with reaction pathway, desired molecule and conditions'),
@@ -34,7 +34,6 @@ class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        # self.helper.form_action = reverse_lazy('scxrd:index', )
         self.helper.attrs = {'novalidate': 'novalidate'}
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
@@ -77,7 +76,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('reaction_path_samp')
             ),
             Row(
-                # jsme_frame,
                 Column(
                     HTML("""
                     <div id="div_id_reaction_path" class="form-group">\n
@@ -102,7 +100,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 save_button2,
             ),
             HTML('</div>'),  # end of card
-            # HTML('<div onLoad="self.scrollTo(0,0)"></div>'),
         )
 
     def clean(self):
@@ -110,7 +107,6 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
         This runs after submitting the form. It makes sure at least one of the form reaction_path_samp or
         desired_struct_samp has content.
         """
-        # TODO: make a custom form where the model is coupled to the form field and the html template
         cleaned_data = super().clean()
         figure_document = cleaned_data.get('reaction_path_samp')
         svg_sample = cleaned_data.get('desired_struct_samp')
