@@ -16,12 +16,11 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 """
 TODO:
 - normalize experiment names to bruker APEX format
-- why does ketcher sometimes miss an atom?
-- "New Experiment page" from "measure a sample" is missing unit cell
 - "new experiment" needs the preliminary unit cell
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted:
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download
+- why does ketcher sometimes miss an atom?
 
 - Check for existing unit cell during cif upload and measure experiment.
 - for charts: https://www.chartjs.org/docs/latest/

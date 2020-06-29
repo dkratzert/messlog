@@ -21,16 +21,9 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
         except AttributeError:
             self.fields['number'].initial = 1
 
-        self.crystal_colour_row = Layout(
-            Row(
-                Column('crystal_colour'),
-                Column('crystal_colour_mod'),
-                Column('crystal_colour_lustre'),
-            ),
-        )
 
-        self.experiment_layout = Layout(
-
+        self.helper.layout = Layout(
+            # Experiment ###
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name'),
@@ -53,21 +46,24 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
                 Column('crystal_size_y'),
                 Column('crystal_size_x'),
             ),
-            # HTML('</div>'),  # end of card, done later
-        )
-
-        self.helper.layout = Layout(
-            # Experiment ###
-            self.experiment_layout,
-            self.crystal_colour_row,
             Row(
                 Column('sum_formula', css_class='col-8'),
+                Column('crystal_colour'),
+                #Column('crystal_colour_mod'),
+                #Column('crystal_colour_lustre'),
+            ),
+            Row(
+                Column('prelim_unit_cell', css_class='col-8'),
+            ),
+            Row(
+                Column('exptl_special_details'),
             ),
             HTML('</div>'),  # end of card
 
             Submit('Save', 'Save', css_class='btn-primary mr-2'),
             HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
-                    formnovalidate="formnovalidate">Cancel</a> ''')
+                    formnovalidate="formnovalidate">Cancel</a> '''),
+            HTML("<div class='mb-5'></div>"),
         )
 
     class Meta:

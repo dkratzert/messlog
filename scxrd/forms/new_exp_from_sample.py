@@ -9,12 +9,12 @@ from scxrd.models import Experiment
 
 class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
-    not_measured_cause = forms.CharField(widget=forms.Textarea, required=False)
-    was_measured = forms.BooleanField(label=_('Was not Measured'),
+    not_measured_cause = forms.CharField(widget=forms.Textarea, required=False, label=_('Not measured because'))
+    was_measured = forms.BooleanField(label=_('Sample was not measured'),
                                       required=False,
                                       widget=forms.CheckboxInput(
                                           attrs={'data-toggle': "collapse", 'data-target': "#measurebox",
-                                                 'id'         : "measurecheck"})
+                                                 'id'         : "measure_check"})
                                       )
 
     def __init__(self, *args, **kwargs):
@@ -22,21 +22,14 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
         # pop the current user in order to save him as operator in Experiment model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.helper.render_unmentioned_fields = False
         try:
             self.fields['number'].initial = Experiment.objects.first().number + 1
         except AttributeError:
             self.fields['number'].initial = 1
 
-        self.crystal_colour_row = Layout(
-            Row(
-                Column('crystal_colour'),
-                Column('crystal_colour_mod'),
-                Column('crystal_colour_lustre'),
-            ),
-        )
-
-        self.experiment_layout = Layout(
-
+        self.helper.layout = Layout(
+            # Experiment ###
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name'),
@@ -50,6 +43,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('customer'),
             ),
             Row(
+                Column('crystal_colour'),
                 Column('base'),
                 Column('glue'),
                 # Column('submit_date'),
@@ -59,13 +53,6 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('crystal_size_y'),
                 Column('crystal_size_x'),
             ),
-            # HTML('</div>'),  # end of card, done later
-        )
-
-        self.helper.layout = Layout(
-            # Experiment ###
-            self.experiment_layout,
-            self.crystal_colour_row,
             Row(
                 Column('sum_formula', css_class='col-8'),
                 Column('crystal_habit'),
@@ -74,8 +61,8 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('exptl_special_details'),
             ),
             Row(
-                Column('was_measured',
-                       )
+                Column('prelim_unit_cell', css_class='col-8'),
+                Column('was_measured', css_class='col-4 mt-5'),
             ),
             Row(
                 Column('not_measured_cause', css_id='measurebox', css_class="collapse col-12", ),
@@ -85,6 +72,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
             HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
                         formnovalidate="formnovalidate">Cancel</a>
                         '''),
+            HTML("<div class='mb-5'></div>"),
 
         )
 
