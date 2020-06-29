@@ -13,19 +13,6 @@
                 <div class="card-header pb-2 pl-3">{% trans "Unmeasured Samples from Customers" %}
                     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
                        href="{% url "index" %}">{% trans "Back to start" %}</a>
-                    {% if not filterstate %}
-                        <form action="{% url "scxrd:op_samples_page" %}" method="get" class="float-right my-0 py-0 mr-2">
-                            <input type="hidden" id="filter" name="filter" value="True">
-                            <button class="btn btn-sm btn-outline-secondary float-right my-0 py-0" type="submit">
-                                {% trans "Only measured Samples" %} </button>
-                        </form>
-                    {% else %}
-                        <form action="{% url "scxrd:op_samples_page" %}" method="get" class="float-right my-0 py-0 mr-2">
-                            <input type="hidden" id="filter" name="filter" value="False">
-                            <button class="btn btn-sm btn-outline-secondary float-right my-0 py-0" type="submit">
-                                {% trans "Only unmeasured Samples" %} </button>
-                        </form>
-                    {% endif %}
                 </div>
                 <div class="card-body p-0">
                     <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
@@ -79,11 +66,12 @@
                                             <td> File not found</td>
                                         {% endif %}
                                     {% endif %}
-                                    {% if sample.experiment_samples.was_measured %}
+                                {{ sample.was_measured }}
+                                    {% if sample.was_measured %}
                                         <td><span class="badge badge-success m-1 p-1">{% trans "Measured" %}</span></td>
-                                    {% elif not sample.experiment_samples.was_measured and sample.experiment_samples.not_measured_cause %}
+                                    {% elif not sample.was_measured and sample.not_measured_cause %}
                                         <td><span
-                                                class="badge badge-danger m-1 p-1">{% trans "Not possible" %}&thinsp;</span>
+                                                class="badge badge-danger m-1 p-1">{% trans "Measurement not possible" %}&thinsp;</span>
                                         </td>
                                     {% else %}
                                         <td><span
@@ -101,12 +89,12 @@
                                             </div>
                                             <br>
                                         {% endif %}
-                                        {% if sample.experiment_samples.not_measured_cause %}
+                                        {% if sample.not_measured_cause %}
                                             <div class="font-weight-bold">
                                                 {% trans "Not measured because:" %}
                                             </div>
                                             <div class="text-break text-sm-left">
-                                                {{ sample.experiment_samples.not_measured_cause }}
+                                                {{ sample.not_measured_cause }}
                                             </div>
                                         {% endif %}
                                     </td>

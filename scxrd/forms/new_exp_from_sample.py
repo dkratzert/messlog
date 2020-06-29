@@ -13,7 +13,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
     was_measured = forms.BooleanField(label=_('Sample was not measured'),
                                       required=False,
                                       widget=forms.CheckboxInput(
-                                          attrs={'data-toggle': "collapse", 'data-target': "#measurebox",
+                                          attrs={'data-toggle': "collapse", 'data-target': "#measure_box",
                                                  'id'         : "measure_check"})
                                       )
 
@@ -65,7 +65,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('was_measured', css_class='col-4 mt-5'),
             ),
             Row(
-                Column('not_measured_cause', css_id='measurebox', css_class="collapse col-12", ),
+                Column('not_measured_cause', css_id='measure_box', css_class="collapse col-12", ),
             ),
             HTML('</div>'),  # end of card
             Submit('Save', 'Save', css_class='btn-primary mr-2'),

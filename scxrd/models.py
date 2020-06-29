@@ -17,11 +17,14 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 TODO:
 - normalize experiment names to bruker APEX format
 - "new experiment" needs the preliminary unit cell
+- Add a "currently running experiment" page with status for everyone visible
+   - there should be also the end time visible and who is responsible
+   - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted:
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download
 - why does ketcher sometimes miss an atom?
-
+- make nice looking lists of measurement experiments in the list of samples
 - Check for existing unit cell during cif upload and measure experiment.
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/3.0/
@@ -130,8 +133,9 @@ class Experiment(models.Model):
     # The name of the current experiment
     experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                        unique=True)
+    # Makes the sample measurement status visible through the experiment status:
     sample = models.ForeignKey('SCXRDSample', on_delete=models.CASCADE, null=True, blank=True,
-                               related_name='experiment_samples')
+                               related_name='experiments')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
@@ -172,8 +176,7 @@ class Experiment(models.Model):
     # equivalent to _exptl_crystal_description
     crystal_habit = models.CharField(max_length=300, blank=True, null=True, verbose_name=_("crystal habit"))
     # _exptl_special_details:
-    exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, null=True,
-                                             default='')
+    exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='')
     was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False, null=True,
                                        blank=True)
     not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True, default='', null=True,

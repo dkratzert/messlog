@@ -21,8 +21,9 @@
                                 <span class="ml-2">
                                     {{ sample.sample_name_samp }}
                                 </span>
+                     {% comment %} TODO: Put this behind experiment list below:
                                 <span class="ml-4">
-                                    {% if sample.experiment_samples.was_measured %}
+                                    {% if sample.experiments.was_measured %}
                                         <span class="badge badge-success mb-1 p-1">{% trans "Measured" %}</span>
                                     {% elif not sample.experiment_samples.was_measured and sample.experiment_samples.not_measured_cause %}
                                         <span class="badge badge-danger mb-1 p-1">{% trans "Not measureable" %}</span>
@@ -30,6 +31,7 @@
                                         <span class="badge badge-warning mb-1">{% trans "Awaiting measurement" %}</span>
                                     {% endif %}
                                 </span>
+                                {% endcomment %}
                                 <span class="float-right">
                                     Submitted: {{ sample.submit_date_samp }}
                                 </span>
@@ -64,6 +66,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-6 p-0">
+{#                         TODO: make this work with new ForeignKey in samples: #}
                                         {% if sample.experiment_samples.not_measured_cause %}
                                             <div class="font-weight-bold"> {% trans "Not measured, because:" %}</div>
                                             <div style="min-height: 2.5cm">{{ sample.experiment_samples.not_measured_cause }}</div>
@@ -75,6 +78,17 @@
                                 </div>
                                 <div class="form-row mt-2 m-0 p-0 row-cols-sm-1">
                                     <div class="col-6 p-0">
+
+                                        {% for experiment in sample.experiments.all %}
+                                            <div>{{ experiment }}
+                                                {% if experiment.was_measured %}
+                                                    {% trans "measured" %}
+                                                {% else %}
+                                                    {% trans "could not be measured" %}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+
                                     </div>
                                     <div class="col-6 p-0">
                                         {% if sample.special_remarks_samp %}

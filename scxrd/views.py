@@ -81,10 +81,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         initial = super().get_initial()
         pk = self.kwargs.get('pk')
+        try:
+            expnum = Experiment.objects.first().number + 1
+        except AttributeError as e:
+            expnum = 1
         initial.update({
             'experiment_name'      : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'number'               : Experiment.objects.first().number + 1,
+            'number'               : expnum, 
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
@@ -97,6 +101,8 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         POST variables and then check if it's valid.
         """
         form = self.get_form()
+        pprint(request.POST)
+        # self.object is an SCXRDSample because of the views model class:
         self.object: SCXRDSample = self.get_object()
         if form.is_valid():
             # form.instance is Experiment, because of the form class:
@@ -110,9 +116,9 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.crystal_colour = form.cleaned_data['crystal_colour']
             exp.measure_date = timezone.now()
             exp.was_measured = not form.cleaned_data['was_measured']
+            exp.not_measured_cause = form.cleaned_data['not_measured_cause']
             # Assigns the currently logged in user to the submitted sample:
             exp.operator = request.user
-            # self.object is an SCXRDSample because of the views model class:
             self.object.save()
             exp.sample = self.object
             exp.save()
@@ -239,20 +245,20 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     The list of all samples submitted by customers.
     """
     model = SCXRDSample
-    queryset = SCXRDSample.objects.filter(experiment_samples__was_measured=False)
+    #queryset = SCXRDSample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
 
-    def get_queryset(self):
+    '''def get_queryset(self):
         """Returns as default the unmeasured samples context."""
         filter_val = self.request.GET.get('filter', 'False')
-        new_context = SCXRDSample.objects.filter(experiment_samples__was_measured=filter_val)
+        new_context = SCXRDSample.objects.all()#filter(experiments__was_measured=filter_val)
         return new_context
 
     def get_context_data(self, **kwargs):
         # TODO: I should use a cookie for the state
         context = super().get_context_data(**kwargs)
         context['filterstate'] = False
-        return context
+        return context'''
 
 
 class ResidualsTable(DetailView):

@@ -47,9 +47,10 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     # TODO: remove this here:
     # customer = forms.ModelChoiceField(queryset=Person.objects.all(), required=False, label=_('Customer (for service)'))
-    crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
-    crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
-    crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
+    # I disabled the requirement on the crystal size, because ther could be also no crystals 
+    crystal_size_z = MyDecimalField(required=False, min_value=0, label=_("Crystal size min"))
+    crystal_size_y = MyDecimalField(required=False, min_value=0, label=_("Crystal size mid"))
+    crystal_size_x = MyDecimalField(required=False, min_value=0, label=_("Crystal size max"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
 
