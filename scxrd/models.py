@@ -20,6 +20,7 @@ TODO:
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
    - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
+   - page should have a link to the google calendar (or even embedded into an iframe?)
 - edit experiment: "Solvents used" and "Reaction conditions" must be adapted:
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download
