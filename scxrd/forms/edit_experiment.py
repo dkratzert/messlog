@@ -58,8 +58,24 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             ),
 
             Row(
-                Column('solvents'),
-                Column('conditions'),
+                # Column('solvents'),
+                Column(
+                    HTML("""
+                        <div id="div_id_reaction_path" class="form-group">\n
+                            <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
+                                Draw the desired structure<span class="asteriskField">*</span>\n
+                            </label>\n
+                            <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
+                                This field is an alternative to the file upload above:
+                            </small>\n
+                            <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
+                            <div class="p-3">
+                                <iframe id="ketcher-frame" src="ketcher.html">\n
+                                </iframe>\n
+                            </div>
+                        </div>\n
+                        """)
+                ),
 
             ),
 

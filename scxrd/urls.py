@@ -1,5 +1,5 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from . import views
 
@@ -18,10 +18,13 @@ urlpatterns = [
     path('experiments/table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('experiments/molecule/', views.MoleculeView.as_view(), name='molecule'),
-    path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
     path('submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
     path('submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
     path('submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
+    path('experiments/edit/<int:pk>/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
+    path('experiments/edit/<int:pk>/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
+    path('experiments/edit/<int:pk>/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
+    path('experiments/edit/<int:pk>/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
     # path('uploadcif/<int:pk>/', views.CifUploadView.as_view(), name='upload_cif_file'),
 
 ]

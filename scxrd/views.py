@@ -117,6 +117,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.measure_date = timezone.now()
             exp.was_measured = not form.cleaned_data['was_measured']
             exp.not_measured_cause = form.cleaned_data['not_measured_cause']
+            exp.conditions = form.cleaned_data['crystal_cond_samp']
             # Assigns the currently logged in user to the submitted sample:
             exp.operator = request.user
             self.object.save()
