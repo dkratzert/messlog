@@ -16,9 +16,9 @@ a div, a:hover {
     color: #007bff;
 }
 
-.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+/*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
     background-color: #28a745;
-}
+}*/
 
 .asteriskField {
     /*display: none;*/

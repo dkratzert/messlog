@@ -9,10 +9,17 @@ from scxrd.models import Experiment
 
 class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
+    not_measured_cause = forms.CharField(widget=forms.Textarea, required=False)
+    was_measured = forms.BooleanField(label=_('Was not Measured'),
+                                      required=False,
+                                      widget=forms.CheckboxInput(
+                                          attrs={'data-toggle': "collapse", 'data-target': "#measurebox",
+                                                 'id'         : "measurecheck"})
+                                      )
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
-        # pop the current user in orde to save him as operator in Experiment model:
+        # pop the current user in order to save him as operator in Experiment model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         try:
@@ -67,7 +74,11 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('exptl_special_details'),
             ),
             Row(
-                Column('not_measured_cause'),
+                Column('was_measured',
+                       )
+            ),
+            Row(
+                Column('not_measured_cause', css_id='measurebox', css_class="collapse col-12", ),
             ),
             HTML('</div>'),  # end of card
             Submit('Save', 'Save', css_class='btn-primary mr-2'),

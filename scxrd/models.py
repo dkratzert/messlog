@@ -15,15 +15,15 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- normalize experiment names to bruker APEX format
 - why does ketcher sometimes miss an atom?
-- "New Experiment page" from "measure a sample" is missing not_measured_cause and unit cell
-- "new experiment" does not need the customer field
+- "New Experiment page" from "measure a sample" is missing unit cell
 - "new experiment" needs the preliminary unit cell
-- edit experiment: "Solvents used" and "Reaction conditions" must be adapted
+- edit experiment: "Solvents used" and "Reaction conditions" must be adapted:
     - svg of molecule is not displayed
 - check checksum for correctness during file upload and download
-- addd delete experiment -> No, this is only for admins
-- Check for existing unit cell during cif upload.
+
+- Check for existing unit cell during cif upload and measure experiment.
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/3.0/
 
@@ -132,7 +132,7 @@ class Experiment(models.Model):
     experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                        unique=True)
     sample = models.ForeignKey('SCXRDSample', on_delete=models.CASCADE, null=True, blank=True,
-                                 related_name='experiment_samples')
+                               related_name='experiment_samples')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
@@ -175,6 +175,10 @@ class Experiment(models.Model):
     # _exptl_special_details:
     exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, null=True,
                                              default='')
+    was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False, null=True,
+                                       blank=True)
+    not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True, default='', null=True,
+                                          help_text=_('The cause why the sample could not be measured'))
 
     class Meta:
         ordering = ["-number"]

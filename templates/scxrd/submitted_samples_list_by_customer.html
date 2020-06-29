@@ -22,9 +22,9 @@
                                     {{ sample.sample_name_samp }}
                                 </span>
                                 <span class="ml-4">
-                                    {% if sample.was_measured %}
+                                    {% if sample.experiment_samples.was_measured %}
                                         <span class="badge badge-success mb-1 p-1">{% trans "Measured" %}</span>
-                                    {% elif not sample.was_measured and sample.not_measured_cause %}
+                                    {% elif not sample.experiment_samples.was_measured and sample.experiment_samples.not_measured_cause %}
                                         <span class="badge badge-danger mb-1 p-1">{% trans "Not measureable" %}</span>
                                     {% else %}
                                         <span class="badge badge-warning mb-1">{% trans "Awaiting measurement" %}</span>
@@ -64,9 +64,9 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-6 p-0">
-                                        {% if sample.not_measured_cause %}
+                                        {% if sample.experiment_samples.not_measured_cause %}
                                             <div class="font-weight-bold"> {% trans "Not measured, because:" %}</div>
-                                            <div style="min-height: 2.5cm">{{ sample.not_measured_cause }}</div>
+                                            <div style="min-height: 2.5cm">{{ sample.experiment_samples.not_measured_cause }}</div>
                                         {% else %}
                                             <div style="min-height: 2.5cm" class="">
                                             </div>

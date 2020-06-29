@@ -79,9 +79,9 @@
                                             <td> File not found</td>
                                         {% endif %}
                                     {% endif %}
-                                    {% if sample.was_measured %}
+                                    {% if sample.experiment_samples.was_measured %}
                                         <td><span class="badge badge-success m-1 p-1">{% trans "Measured" %}</span></td>
-                                    {% elif not sample.was_measured and sample.not_measured_cause %}
+                                    {% elif not sample.experiment_samples.was_measured and sample.experiment_samples.not_measured_cause %}
                                         <td><span
                                                 class="badge badge-danger m-1 p-1">{% trans "Not possible" %}&thinsp;</span>
                                         </td>
@@ -101,12 +101,12 @@
                                             </div>
                                             <br>
                                         {% endif %}
-                                        {% if sample.not_measured_cause %}
+                                        {% if sample.experiment_samples.not_measured_cause %}
                                             <div class="font-weight-bold">
                                                 {% trans "Not measured because:" %}
                                             </div>
                                             <div class="text-break text-sm-left">
-                                                {{ sample.not_measured_cause }}
+                                                {{ sample.experiment_samples.not_measured_cause }}
                                             </div>
                                         {% endif %}
                                     </td>

@@ -42,9 +42,6 @@ class SCXRDSample(models.Model):
     desired_struct_samp = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
     special_remarks_samp = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
                                             help_text=_('Any additional information we should know.'))
-    was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False)
-    not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True, default='',
-                                          help_text=_('The cause why the sample could not be measured'))
 
     class Meta:
         ordering = ["id"]
