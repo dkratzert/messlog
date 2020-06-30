@@ -68,6 +68,7 @@ class Profile(models.Model):
     postal_code = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=17, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
+    is_operator = models.BooleanField(verbose_name=_('The user has operator rights'), default=False)
 
     def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)

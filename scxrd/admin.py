@@ -69,6 +69,15 @@ class WorkGroupInline(admin.TabularInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
+    list_display = ['username', 'first_name', 'last_name', 'email', 'work_group', 'is_staff', 'is_operator']
+
+    def is_operator(self, obj: User):
+        return obj.profile.is_operator
+
+    def work_group(self, obj: User):
+        return obj.profile.work_group
+
+    is_operator.boolean = True
 
 
 class GluesAdmin(admin.ModelAdmin):
@@ -104,7 +113,7 @@ class MachinesAdmin(admin.ModelAdmin):
         """Returns the number of experiment that use this glue"""
         return machine.experiments.count()
 
-    #used_by.admin_order_field = '_used_by'
+    # used_by.admin_order_field = '_used_by'
 
 
 # admin.site.register(MyUser)

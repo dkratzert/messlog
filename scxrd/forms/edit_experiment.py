@@ -13,8 +13,8 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         self.exp_title = _('Experiment')
         super().__init__(*args, **kwargs)
 
-        self.experiment_layout = Layout(
-
+        self.helper.layout = Layout(
+            # Experiment ###
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name'),
@@ -28,14 +28,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('customer'),
             ),
             Row(
-                Column('base'),
-                Column('glue'),
+                Column('base', css_class='col-4'),
+                Column('glue', css_class='col-4'),
                 # Column('submit_date'),
             ),
-            # HTML('</div>'),  # end of card, done later
-        )
-
-        self.crystal_layout = Layout(
+            HTML('</div>'),  # end of card
+            save_button2,
+            # Crystal ######
             card(_('Crystal and Conditions'), backbutton),
             # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
             Row(
@@ -57,32 +56,9 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('crystal_habit'),
             ),
 
-            Row(
-                # Column('solvents'),
-                Column(
-                    HTML("""
-                        <div id="div_id_reaction_path" class="form-group">\n
-                            <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
-                                Draw the desired structure<span class="asteriskField">*</span>\n
-                            </label>\n
-                            <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                                This field is an alternative to the file upload above:
-                            </small>\n
-                            <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
-                            <div class="p-3">
-                                <iframe id="ketcher-frame" src="ketcher.html">\n
-                                </iframe>\n
-                            </div>
-                        </div>\n
-                        """)
-                ),
-
-            ),
-
             HTML('</div>'),  # end of card
-        )
-
-        self.files_layout = Layout(
+            # HTML('</div>'),  # end of card
+            # Files ########
             card(_('File upload')),
             Row(
                 Column(
@@ -91,9 +67,9 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 ),
             ),
             HTML('</div>'),  # end of card
-        )
-
-        self.misc_layout = Layout(
+            # HTML('</div>'),  # end of card
+            save_button2,
+            # HTML('</div>'),  # end of card
             card(_('Miscellaneous'), backbutton),
             Row(
                 Column('exptl_special_details'),
@@ -102,22 +78,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('publishable'),
             ),
             HTML('</div>'),  # end of card
-        )
-
-        self.helper.layout = Layout(
-            # Experiment ###
-            self.experiment_layout,
-            HTML('</div>'),  # end of card
             save_button2,
-            # Crystal ######
-            self.crystal_layout,
-            # HTML('</div>'),  # end of card
-            # Files ########
-            self.files_layout,
-            # HTML('</div>'),  # end of card
-            save_button2,
-            # HTML('</div>'),  # end of card
-            self.misc_layout,
         )
 
     class Meta:

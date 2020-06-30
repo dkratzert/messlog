@@ -8,14 +8,12 @@
 
     <div class="card-header">
         <h3>New User</h3>
-{#    {% trans "You only need to fill the required forms (with *)" %}#}
     </div>
     <div class="card-body">
         <form method="post" novalidate>
             {% csrf_token %}
             {{ user_form |crispy }}
-            {{ profile_form |crispy }}
-            <button class="btn btn-primary mr-2" type="submit"> Sign Up </button>
+            <button class="btn btn-primary mr-2" type="submit"> Sign Up</button>
             <a href="{% url 'index' %}" class="btn btn-outline-danger">Cancel</a>
         </form>
     </div>

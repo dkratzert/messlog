@@ -6,13 +6,13 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, UpdateView, CreateView
 
-from mysite.core.forms import UserForm, UserEditForm, ProfileNewForm, ProfileEditForm
+from mysite.core.forms import UserEditForm, ProfileEditForm, SignupForm
 
 
 class SignUp(CreateView):
     """Create a new user
     """
-    form_class = UserForm
+    form_class = SignupForm
     success_url = reverse_lazy('index')
     template_name = 'registration/new_user.html'
 
@@ -21,8 +21,7 @@ class SignUp(CreateView):
         Initializing empty Forms:
         """
         context = {
-            'user_form'   : UserForm(),
-            'profile_form': ProfileNewForm()
+            'user_form': SignupForm(),
         }
         return render(request, 'registration/new_user.html', context)
 
@@ -31,9 +30,9 @@ class SignUp(CreateView):
         return self.render_to_response(context=context)
 
     def post(self, request, *args, **kwargs):
-        user_form = UserForm(request.POST)
+        user_form = SignupForm(request.POST)
         if user_form.is_valid():
-            user = user_form.save()
+            user: User = user_form.save()
             user.refresh_from_db()  # load the profile instance created by the signal
             user.profile.phone_number = user_form.cleaned_data.get('phone_number')
             user.profile.work_group = user_form.cleaned_data.get('work_group')
@@ -44,7 +43,7 @@ class SignUp(CreateView):
             login(request, user)
             return redirect('index')
         else:
-            form = UserForm()
+            form = SignupForm()
         return render(request, 'registration/new_user.html', {'form': form})
 
 

@@ -1,7 +1,6 @@
 from datetime import datetime
 from pathlib import Path
 from pprint import pprint
-from symbol import comp_iter
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -22,10 +21,10 @@ from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
 from scxrd.customer_models import SCXRDSample
-from scxrd.forms.new_cust_sample import SubmitNewForm
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.forms.new_experiment import ExperimentNewForm
+from scxrd.forms.new_cust_sample import SubmitNewForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
+from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.utils import randstring, generate_sha256
 
@@ -88,7 +87,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         initial.update({
             'experiment_name'      : SCXRDSample.objects.get(pk=pk).sample_name_samp,
             'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'number'               : expnum, 
+            'number'               : expnum,
             'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
             'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
@@ -108,16 +107,17 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             # form.instance is Experiment, because of the form class:
             exp: Experiment = form.instance
             exp.number = form.cleaned_data['number']
-            exp.experiment_name = form.cleaned_data['experiment_name']
-            exp.exptl_special_details = form.cleaned_data['exptl_special_details']
-            exp.customer = User.objects.get(pk=form.cleaned_data['customer'].pk)
-            exp.submit_date_samp = form.cleaned_data['submit_date']
-            exp.sum_formula = form.cleaned_data['sum_formula']
-            exp.crystal_colour = form.cleaned_data['crystal_colour']
+            exp.experiment_name = form.cleaned_data.get('experiment_name')
+            exp.exptl_special_details = form.cleaned_data.get('exptl_special_details')
+            # TODO: is form.cleaned_data.get('customer') sufficient?
+            exp.customer = User.objects.get(pk=form.cleaned_data.get('customer').pk)
+            exp.submit_date_samp = form.cleaned_data.get('submit_date')
+            exp.sum_formula = form.cleaned_data.get('sum_formula')
+            exp.crystal_colour = form.cleaned_data.get('crystal_colour')
             exp.measure_date = timezone.now()
-            exp.was_measured = not form.cleaned_data['was_measured']
-            exp.not_measured_cause = form.cleaned_data['not_measured_cause']
-            exp.conditions = form.cleaned_data['crystal_cond_samp']
+            exp.was_measured = not form.cleaned_data.get('was_measured')
+            exp.not_measured_cause = form.cleaned_data.get('not_measured_cause')
+            exp.conditions = form.cleaned_data.get('crystal_cond_samp')
             # Assigns the currently logged in user to the submitted sample:
             exp.operator = request.user
             self.object.save()
@@ -246,7 +246,7 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     The list of all samples submitted by customers.
     """
     model = SCXRDSample
-    #queryset = SCXRDSample.objects.filter(was_measured=False)
+    # queryset = SCXRDSample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
 
     '''def get_queryset(self):
@@ -291,6 +291,7 @@ class MoleculeView(LoginRequiredMixin, View):
     def post(self, request: WSGIRequest, *args, **kwargs):
         print('# Molecule request:')
         pprint(request.POST)
+        # TODO: use cleaned data:
         cif_file = request.POST.get('cif_file')
         exp_id = request.POST.get('experiment_id')
         if not cif_file:
