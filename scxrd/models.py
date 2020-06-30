@@ -30,6 +30,12 @@ TODO:
 - for charts: https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/3.0/
 
+
+<a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+
+def get_absolute_url(self):
+    return reverse('company_details', kwargs={'pk': self.id})
+
 """
 
 
