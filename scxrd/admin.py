@@ -5,6 +5,7 @@ from django.contrib.admin import StackedInline
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User, Group
 from django.db.models import Count
+from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
@@ -115,20 +116,22 @@ class CrystalSupportAdmin(admin.ModelAdmin):
 
 class MachinesAdmin(admin.ModelAdmin):
     model = Machine
-    list_display = ['diffrn_measurement_device_type', 'measurements', 'measurements_last_year']
-
-    '''def get_queryset(self, request):
-        """Method to do the sorting for the admin_order_field"""
-        queryset = super().get_queryset(request)
-        queryset = queryset.annotate(_used_by=Count('diffrn_measurement_device_type', distinct=False),)
-        return queryset'''
+    list_display = ['diffrn_measurement_device_type', 'measurements', 'measurements_last_year',
+                    'measurements_this_year']
 
     def measurements(self, machine):
         """Returns the number of experiment that use this machine"""
         return machine.experiments.count()
 
     def measurements_last_year(self, machine: Machine):
-        return machine.experiments
+        today = datetime.now()
+        return machine.experiments.filter(measure_date__gt=str(today.year - 1) + '-1-1',
+                                          measure_date__lt=str(today.year) + '-1-1').count()
+
+    def measurements_this_year(self, machine: Machine):
+        today = datetime.now()
+        return machine.experiments.filter(measure_date__gt=str(today.year) + '-1-1').count()
+
 
 admin.site.unregister(Group)
 admin.site.register(Experiment, ExperimentAdmin)
