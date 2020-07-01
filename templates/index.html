@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load myfilters %}
 
 {% block content %}
-
     <div class="row justify-content-center">
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user|is_operator or user|is_superuser %}
             <!-- Left column -->
             <div class="col-5 mt-4">
                 <a href="{% url 'scxrd:submit_sample' %}">
@@ -43,12 +43,30 @@
                     </div>
                 </a>
             </div>
-        {% else %}
+        {% elif user.is_authenticated %}
+            <div class="col-5 mt-4">
+                <a href="{% url 'scxrd:submit_sample' %}">
+                    <div class="card mb-4 text-center p-4 bg-light h-50">
+                        <h1 class="display-4 font-weight-normal">
+                            Submit Sample
+                        </h1>
+                    </div>
+                </a>
 
-            <div class="col-8 justify-content-center mb-5 mt-4">
-                <h2>{% trans "Single-Crystal X-ray diffraction Analysis" %}</h2>
+                <a href="{% url 'scxrd:my_samples_page' %}">
+                    <div class="card mb-4 text-center p-4 bg-light h-50">
+                        <h1 class="display-4 font-weight-normal">
+                            My Samples
+                        </h1>
+                    </div>
+                </a>
+
             </div>
-            
+        {% else %}
+            <div class="col-8 justify-content-center mb-5 mt-4">
+                <h2>{% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }} </h2>
+            </div>
+
             <div class="col-8 justify-content-center">
                 <h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a href="{% url 'signup' %}">new user</a> to begin</h3>
 

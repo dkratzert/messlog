@@ -46,7 +46,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
     # fields = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
-    success_url = reverse_lazy('scxrd:all_experiments')
+    success_url = reverse_lazy('scxrd:index')
 
     def form_valid(self, form):
         """Save the current user from the request into the experiment"""
@@ -200,7 +200,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     model = SCXRDSample
     form_class = SubmitNewForm
     template_name = 'scxrd/new_sample_by_customer.html'
-    success_url = reverse_lazy('scxrd:my_samples_page')
+    success_url = reverse_lazy('scxrd:index')
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         """
