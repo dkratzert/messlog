@@ -197,6 +197,10 @@ class Experiment(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=2) <= self.measure_date <= now
 
+    def measured_last_year(self):
+        now = timezone.now()
+        return now - datetime.timedelta(days=365) <= self.measure_date <= now
+
     was_measured_recently.admin_order_field = 'measure_date'
     was_measured_recently.boolean = True
     was_measured_recently.short_description = 'Measured recently?'

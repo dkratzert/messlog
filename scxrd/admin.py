@@ -3,13 +3,25 @@ from pathlib import Path
 from django.contrib import admin
 from django.contrib.admin import StackedInline
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.customer_models import SCXRDSample
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
+
+admin.site.site_header = "MESSLOG Admin"
+admin.site.site_title = "MESSLOG Admin Portal"
+admin.site.index_title = "MESSLOG Administration"
+
+
+class WorkGroupAdmin(admin.ModelAdmin):
+    model = WorkGroup
+    list_display = ('group_head', 'users')
+
+    def users(self, obj: WorkGroup):
+        return len(User.objects.filter(profile__work_group_id=obj.pk))
 
 
 class ExperimentInline(StackedInline):
@@ -60,13 +72,6 @@ class PersonInline(StackedInline):
     can_delete = False
 
 
-class WorkGroupInline(admin.TabularInline):
-    fields = ('group_head',)
-    ordering = ('group_head',)
-    model = WorkGroup
-    extra = 3
-
-
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
     list_display = ['username', 'first_name', 'last_name', 'email', 'work_group', 'is_staff', 'is_operator']
@@ -99,9 +104,18 @@ class GluesAdmin(admin.ModelAdmin):
     used_by.admin_order_field = '_used_by'
 
 
+class CrystalSupportAdmin(admin.ModelAdmin):
+    model = CrystalSupport
+    list_display = ['support', 'used_by']
+
+    def used_by(self, obj):
+        """Returns the number of experiment that use this glue"""
+        return obj.experiments.count()
+
+
 class MachinesAdmin(admin.ModelAdmin):
     model = Machine
-    list_display = ['diffrn_measurement_device_type', 'used_by']
+    list_display = ['diffrn_measurement_device_type', 'measurements', 'measurements_last_year']
 
     '''def get_queryset(self, request):
         """Method to do the sorting for the admin_order_field"""
@@ -109,14 +123,14 @@ class MachinesAdmin(admin.ModelAdmin):
         queryset = queryset.annotate(_used_by=Count('diffrn_measurement_device_type', distinct=False),)
         return queryset'''
 
-    def used_by(self, machine):
-        """Returns the number of experiment that use this glue"""
+    def measurements(self, machine):
+        """Returns the number of experiment that use this machine"""
         return machine.experiments.count()
 
-    # used_by.admin_order_field = '_used_by'
+    def measurements_last_year(self, machine: Machine):
+        return machine.experiments
 
-
-# admin.site.register(MyUser)
+admin.site.unregister(Group)
 admin.site.register(Experiment, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
@@ -124,7 +138,7 @@ admin.site.register(SCXRDSample)
 # admin.site.register(Person)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-admin.site.register(WorkGroup)
+admin.site.register(WorkGroup, WorkGroupAdmin)
 admin.site.register(Machine, MachinesAdmin)
-admin.site.register(CrystalSupport)
+admin.site.register(CrystalSupport, CrystalSupportAdmin)
 admin.site.register(CrystalGlue, GluesAdmin)
