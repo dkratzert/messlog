@@ -1,12 +1,12 @@
 from django.urls import path
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 
 from . import views
 
 app_name = 'scxrd'
 
 urlpatterns = [
-    #path('', views.MySamplesList.as_view(), name=''),
+    # path('', views.MySamplesList.as_view(), name=''),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='index'),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
     path('experiments/', views.ExperimentIndexView.as_view(), name='all_experiments'),
@@ -18,6 +18,7 @@ urlpatterns = [
     path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
     path('experiments/table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
+    path('experiments_list_user/', views.ExperimentsListJsonUser.as_view(), name='experiments_list_from_user'),
     path('experiments/molecule/', views.MoleculeView.as_view(), name='molecule'),
     path('submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
     path('submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),

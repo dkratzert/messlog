@@ -5,6 +5,7 @@ from pprint import pprint
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -85,11 +86,11 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         except AttributeError as e:
             expnum = 1
         initial.update({
-            'experiment_name'      : SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'customer'             : SCXRDSample.objects.get(pk=pk).customer_samp_id,
-            'number'               : expnum,
-            'sum_formula'          : SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date'          : SCXRDSample.objects.get(pk=pk).submit_date_samp,
+            'experiment_name': SCXRDSample.objects.get(pk=pk).sample_name_samp,
+            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'number': expnum,
+            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
+            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
             'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
         })
         return initial
@@ -388,3 +389,14 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
             return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:
             return super(ExperimentListJson, self).render_column(row, column)
+
+
+class ExperimentsListJsonUser(ExperimentListJson):
+
+    def get(self, request, *args, **kwargs):
+        self.user = request.user.username
+        return super().get(request, *args, **kwargs)
+
+    def filter_queryset(self, qs):
+        """Get only experiment from current user"""
+        return qs.filter(Q(operator=User.objects.get(username=self.user)))
