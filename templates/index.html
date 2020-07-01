@@ -5,71 +5,33 @@
 
 {% block content %}
     <div class="row justify-content-center">
-        {% if user.is_authenticated and user|is_operator or user|is_superuser %}
+        {% if user.is_authenticated and user|is_superuser %}
             <!-- Left column -->
             <div class="col-5 mt-4">
-                <a href="{% url 'scxrd:submit_sample' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            Submit Sample
-                        </h1>
-                    </div>
-                </a>
-
-                <a href="{% url 'scxrd:my_samples_page' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            My Samples
-                        </h1>
-                    </div>
-                </a>
-
+                {% include 'scxrd/buttons/submit_sample.html' %}
+                {% include 'scxrd/buttons/my_samples.html' %}
             </div>
-
             <div class="col-5 mt-4">
                 <!-- right column -->
-                <a href="{% url 'scxrd:all_experiments' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            All Experiments
-                        </h1>
-                    </div>
-                </a>
-                <a href="{% url 'scxrd:op_samples_page' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            Measure Samples
-                        </h1>
-                    </div>
-                </a>
+                {% include 'scxrd/buttons/all_experiments.html' %}
+                {% include 'scxrd/buttons/measure_samples.html' %}
+            </div>
+        {% elif user.is_authenticated and user|is_operator %}
+            <div class="col-5 mt-4">
+                {% include 'scxrd/buttons/my_op_experiments.html' %}
+                {% include 'scxrd/buttons/new_experiment.html' %}
+                {% include 'scxrd/buttons/measure_samples.html' %}
             </div>
         {% elif user.is_authenticated %}
             <div class="col-5 mt-4">
-                <a href="{% url 'scxrd:submit_sample' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            Submit Sample
-                        </h1>
-                    </div>
-                </a>
-
-                <a href="{% url 'scxrd:my_samples_page' %}">
-                    <div class="card mb-4 text-center p-4 bg-light h-50">
-                        <h1 class="display-4 font-weight-normal">
-                            My Samples
-                        </h1>
-                    </div>
-                </a>
-
+                {% include 'scxrd/buttons/submit_sample.html' %}
+                {% include 'scxrd/buttons/my_samples.html' %}
             </div>
         {% else %}
             <div class="col-8 justify-content-center mb-5 mt-4">
-                <h2>{% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }} </h2>
-            </div>
-
-            <div class="col-8 justify-content-center">
-                <h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a href="{% url 'signup' %}">new user</a> to begin</h3>
-
+                <h2 class="mb-5">{% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }} </h2>
+                <h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a
+                        href="{% url 'signup' %}">new user</a> to begin</h3>
             </div>
 
         {% endif %}

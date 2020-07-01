@@ -16,6 +16,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 """
 TODO:
 - normalize experiment names to bruker APEX format
+- make a list of experiemtns for each operator like the all experiments page
 - "new experiment" needs the preliminary unit cell
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible

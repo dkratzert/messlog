@@ -6,7 +6,7 @@ from . import views
 app_name = 'scxrd'
 
 urlpatterns = [
-    path('', views.MySamplesList.as_view(), name=''),
+    #path('', views.MySamplesList.as_view(), name=''),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='index'),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
     path('experiments/', views.ExperimentIndexView.as_view(), name='all_experiments'),
