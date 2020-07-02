@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} {{ index }}| {% trans "MESSLOG Admin" %}{% endblock %}
+{% block extrastyle %}
+     <link rel="stylesheet" type="text/css" href="{% static "css/admin_color.css" %}"/>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
