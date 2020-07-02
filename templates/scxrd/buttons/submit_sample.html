@@ -1,8 +1,23 @@
 
 <a href="{% url 'scxrd:submit_sample' %}">
     <div class="card mb-4 text-center p-4 bg-light h-20">
-        <h1 class="display-4 font-weight-normal">
+        <h1 class="display-8 font-weight-normal">
             Submit Sample
         </h1>
     </div>
 </a>
+
+{% comment %}
+{% load static %}
+<div class="card mb-4 p-4 text-center bg-light h-20">
+        <div class="row">
+            <div class="col-1">
+                <img src="{% static "images/molekuel.png" %}" alt="" height="80px" width="80px" class="mr-3">
+            </div>
+            <div class="col-11 pt-3">
+                <h1 class="display-8 font-weight-normal">
+                    Submit Sample
+                </h1>
+            </div>
+        </div>
+    </div>{% endcomment %}

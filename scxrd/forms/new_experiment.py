@@ -9,7 +9,7 @@ from scxrd.models import Experiment
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1)
-    customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
+    #customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')

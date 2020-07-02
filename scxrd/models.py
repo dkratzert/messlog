@@ -15,6 +15,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- Make an external customer field for external measurements
 - normalize experiment names to bruker APEX format
 - make a list of experiemtns for each operator like the all experiments page
 - "new experiment" needs the preliminary unit cell

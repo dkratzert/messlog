@@ -22,10 +22,10 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('measurement_temp'),
             ),
             Row(
-                Column('machine'),
-                # Column('operator'), # done automatically in the view
-                Column('measure_date'),  # TODO: make it invisible?
-                Column('customer'),
+                Column('machine', css_class='col-4'),
+                #Column('operator'),
+                Column('measure_date', css_class='col-4'),
+                #Column('customer'),
             ),
             Row(
                 Column('base', css_class='col-4'),

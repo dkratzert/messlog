@@ -166,6 +166,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
+            exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
             if form.files.get('cif_file_on_disk'):
