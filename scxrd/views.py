@@ -400,4 +400,5 @@ class ExperimentsListJsonUser(ExperimentListJson):
 
     def filter_queryset(self, qs):
         """Get only experiment from current user"""
+        qs = super().filter_queryset(qs)
         return qs.filter(Q(operator=User.objects.get(username=self.user)))

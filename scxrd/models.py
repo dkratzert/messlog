@@ -15,19 +15,18 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- Add a details page behind the click on a sample in the samples list
-- Make an external customer field for external measurements
-- normalize experiment names to bruker APEX format
-- make a list of experiemtns for each operator like the all experiments page
-- "new experiment" needs the preliminary unit cell
+- Add a details page behind the click on a sample in the samples list (from operator and user)
+- normalize experiment names to bruker APEX format [A-Za-z0-9_]+
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
    - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
+     owners can do changes only until the cif file is uploaded 
    - page should have a link to the google calendar (or even embedded into an iframe?)
-- edit experiment: "Solvents used" and "Reaction conditions" must be adapted:
-    - svg of molecule is not displayed
+- samples  can be edited by users until the measurement is done
+- edit experiment: "Solvents used" and "Reaction conditions" should also be displayed if esperiment
+  originates from a sample
 - check checksum for correctness during file upload and download
-- why does ketcher sometimes miss an atom?
+- show wrong cif crc in "Details" of experiments list page
 - make nice looking lists of measurement experiments in the list of samples
 - Check for existing unit cell during cif upload and measure experiment.
 - for charts: https://www.chartjs.org/docs/latest/
