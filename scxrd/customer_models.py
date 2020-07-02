@@ -22,11 +22,11 @@ class Sample(models.Model):
                                       related_name='Sample')
     stable = models.BooleanField(verbose_name=_('sample is sensitive'),
                                  help_text=_("Indicate if the sample requires special care "
-                                                  "to keep it stable until the measurement. "
-                                                  "Tell us more in the 'special remarks' field."))
-    solve_refine_selve = models.BooleanField(verbose_name=_('I want to solve/refine'),
+                                             "to keep it stable until the measurement. "
+                                             "Tell us more in the 'special remarks' field."))
+    solve_refine_selve = models.BooleanField(verbose_name=_('I want to solve/refine by myself'),
                                              help_text=_('Indicate whether you want to solve and '
-                                                             'refine the structure yourselves.'))
+                                                         'refine the structure by yourselves.'))
     sum_formula = models.CharField(max_length=300, verbose_name=_("assumed sum formula"), blank=True)
     reaction_path = models.FileField(
         verbose_name=_('Document with reaction equation and conditions'),
@@ -35,7 +35,8 @@ class Sample(models.Model):
         blank=True,
         null=True
     )
-    crystallization_conditions = models.CharField(verbose_name=_('crystallized from, method and conditions'), blank=True,
+    crystallization_conditions = models.CharField(verbose_name=_('Solvents used for crystallization, method, conditions'),
+                                                  blank=True,
                                                   null=True,
                                                   default='', max_length=500)
     desired_struct_draw = models.TextField(verbose_name=_('desired structure'), blank=True, default='')

@@ -16,7 +16,7 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     submit_date_samp = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                        label=_("Sample submission date"))
     sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
-    crystal_cond_samp = forms.CharField(label=_('Crystallized from, method and conditions'), required=True)
+    crystal_cond_samp = forms.CharField(label=_('Solvents used for crystallization, method, conditions'), required=True)
     reaction_path_samp = forms.FileField(label=_('Document with reaction pathway, desired molecule and conditions'),
                                          required=False,
                                          help_text=_("Please upload a document (.docx, .cdx or .pdf) showing the "
