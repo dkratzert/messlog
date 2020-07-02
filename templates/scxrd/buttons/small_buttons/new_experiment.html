@@ -1,0 +1,10 @@
+{% comment %}
+A small blue outline button to make a new experiemnt 
+{% endcomment %}
+{% load i18n %}
+
+<a role="button"
+   class="btn btn-outline-primary btn-sm float-right p-1 ml-2"
+   href="{% url 'scxrd:new_exp' %}">
+    {% trans "New Experiment" %}
+</a>

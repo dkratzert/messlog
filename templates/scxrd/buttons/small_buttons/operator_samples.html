@@ -1,0 +1,9 @@
+{% comment %}
+A small blue outline button to go back to all samples
+{% endcomment %}
+
+{% load i18n %}
+<a role="button" class="btn btn-outline-primary btn-sm float-right p-1 mr-1"
+   href="{% url 'scxrd:op_samples_page' %}">
+    {% trans "All Samples" %}
+</a>

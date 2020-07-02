@@ -19,7 +19,7 @@
                         <div class="card mb-3">
                             <div class="card-header p-2 badge-dark">
                                 <span class="ml-2">
-                                    {{ sample.sample_name_samp }}
+                                    {{ sample.sample_name }}
                                 </span>
                                 {% comment %} TODO: Put this behind experiment list below:
                                 <span class="ml-4">
@@ -38,33 +38,33 @@
                                     {% endif %}
                                 </span>
                                 <span class="float-right">
-                                    Submitted: {{ sample.submit_date_samp }}
+                                    Submitted: {{ sample.submit_date }}
                                 </span>
                             </div>
                             <div class="card-body p-2">
                                 <div class="form-row mt-2 m-0 p-0 border-dark border-1">
 
                                     <div class="col-6 p-0">
-                                        {{ sample.sum_formula_samp }}
+                                        {{ sample.sum_formula }}
                                     </div>
 
                                     <div class="col-4 p-0">
-                                        {% if sample.solve_refine_selv_samp %}
+                                        {% if sample.solve_refine_selve %}
                                             {% trans "I refine it myself" %}
                                         {% endif %}
                                     </div>
                                 </div>
                                 <div class="form-row mt-2 m-0 p-0">
                                     <div class="col-6 p-0">
-                                        {% if sample.desired_struct_samp %}
+                                        {% if sample.desired_struct_draw %}
                                             {% autoescape off %}
                                                 <div class="svg p-0 m-0" id="id_{{ sample.id }}"
-                                                     style="max-width: 10cm">{{ sample.desired_struct_samp }}
+                                                     style="max-width: 10cm">{{ sample.desired_struct_draw }}
                                                 </div>
                                             {% endautoescape %}
                                         {% else %}
-                                            {% if sample.reaction_path_samp %}
-                                                <a href="{{ sample.reaction_path_samp.url }}">{% trans "Reaction" %}</a>
+                                            {% if sample.reaction_path %}
+                                                <a href="{{ sample.reaction_path.url }}">{% trans "Reaction" %}</a>
                                             {% else %}
                                                 <span class="text-muted">{% trans "File not found" %}</span>
                                             {% endif %}
@@ -109,7 +109,7 @@
                             <div class="card mb-4 text-center p-4 bg-light h-5">
                                 {% trans "No samples found" %}<br>
                                 <h3 class="display-5 font-weight-normal">
-                                    {% trans "Submit a new one" %}
+                                    {% trans "Submit a new Sample" %}
                                 </h3>
                             </div>
                         </a>

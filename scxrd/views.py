@@ -21,9 +21,9 @@ from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
-from scxrd.customer_models import SCXRDSample
+from scxrd.customer_models import Sample
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.forms.new_cust_sample import SubmitNewForm
+from scxrd.forms.new_cust_sample import SubmitNewSampleForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models import Experiment
@@ -68,7 +68,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     Start a new experiment from a prior sample. The experiment gets as much data from the sample submission
     form of the customer as possible.
     """
-    model = SCXRDSample
+    model = Sample
     form_class = ExperimentFromSampleForm
     template_name = 'scxrd/experiment_new.html'
     # Fields are defined in form_class:
@@ -86,12 +86,12 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         except AttributeError as e:
             expnum = 1
         initial.update({
-            'experiment_name': SCXRDSample.objects.get(pk=pk).sample_name_samp,
-            'customer': SCXRDSample.objects.get(pk=pk).customer_samp_id,
+            'experiment_name': Sample.objects.get(pk=pk).sample_name,
+            'customer': Sample.objects.get(pk=pk).customer_samp_id,
             'number': expnum,
-            'sum_formula': SCXRDSample.objects.get(pk=pk).sum_formula_samp,
-            'submit_date': SCXRDSample.objects.get(pk=pk).submit_date_samp,
-            'exptl_special_details': SCXRDSample.objects.get(pk=pk).special_remarks_samp,
+            'sum_formula': Sample.objects.get(pk=pk).sum_formula,
+            'submit_date': Sample.objects.get(pk=pk).submit_date,
+            'exptl_special_details': Sample.objects.get(pk=pk).special_remarks_samp,
         })
         return initial
 
@@ -102,8 +102,8 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         """
         form = self.get_form()
         pprint(request.POST)
-        # self.object is an SCXRDSample because of the views model class:
-        self.object: SCXRDSample = self.get_object()
+        # self.object is an Sample because of the views model class:
+        self.object: Sample = self.get_object()
         if form.is_valid():
             # form.instance is Experiment, because of the form class:
             exp: Experiment = form.instance
@@ -197,10 +197,10 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
 
 class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     """
-    Add a new SCXRDSample in order to submit it to the X-ray facility.
+    Add a new Sample in order to submit it to the X-ray facility.
     """
-    model = SCXRDSample
-    form_class = SubmitNewForm
+    model = Sample
+    form_class = SubmitNewSampleForm
     template_name = 'scxrd/new_sample_by_customer.html'
     success_url = reverse_lazy('scxrd:index')
 
@@ -218,7 +218,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
             # Assigns the currently logged in user to the submetted sample:
             sample.customer_samp = request.user
             # Assigns the current date to the sample submission date field
-            sample.submit_date_samp = timezone.now()
+            sample.submit_date = timezone.now()
             sample.save()
             return self.form_valid(form)
         else:
@@ -234,27 +234,27 @@ class MySamplesList(LoginRequiredMixin, ListView):
     """
     The view for the samples list of a customer submitted for measurement by an operator.
     """
-    model = SCXRDSample
+    model = Sample
     template_name = 'scxrd/submitted_samples_list_by_customer.html'
     ordering = '-submit_date_samp'
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()
-        return SCXRDSample.objects.filter(customer_samp_id=self.request.user)
+        return Sample.objects.filter(customer_samp_id=self.request.user)
 
 
 class OperatorSamplesList(LoginRequiredMixin, ListView):
     """
     The list of all samples submitted by customers.
     """
-    model = SCXRDSample
-    # queryset = SCXRDSample.objects.filter(was_measured=False)
+    model = Sample
+    # queryset = Sample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
 
     '''def get_queryset(self):
         """Returns as default the unmeasured samples context."""
         filter_val = self.request.GET.get('filter', 'False')
-        new_context = SCXRDSample.objects.all()#filter(experiments__was_measured=filter_val)
+        new_context = Sample.objects.all()#filter(experiments__was_measured=filter_val)
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -291,8 +291,8 @@ class MoleculeView(LoginRequiredMixin, View):
     """
 
     def post(self, request: WSGIRequest, *args, **kwargs):
-        print('# Molecule request:')
-        pprint(request.POST)
+        #print('# Molecule request:')
+        #pprint(request.POST)
         # TODO: use cleaned data:
         cif_file = request.POST.get('cif_file')
         exp_id = request.POST.get('experiment_id')
@@ -349,7 +349,7 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     """
     # The model we're going to show
     model = Experiment
-    template_name = 'scxrd/experiment_table.html'
+    template_name = 'scxrd/experiment_all_table.html'
     title = 'Experiments'
 
     # define the columns that will be returned

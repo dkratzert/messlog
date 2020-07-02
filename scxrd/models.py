@@ -144,7 +144,7 @@ class Experiment(models.Model):
     experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                        unique=True)
     # Makes the sample measurement status visible through the experiment status:
-    sample = models.ForeignKey('SCXRDSample', on_delete=models.CASCADE, null=True, blank=True,
+    sample = models.ForeignKey('Sample', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='experiments')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)

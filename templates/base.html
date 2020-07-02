@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 {% load i18n %}
+{% load myfilters %}
 
 <head>
     {% load static %}
@@ -42,54 +43,39 @@
 
     <a class="navbar-brand" href="{% url 'index' %}">MESSLOG</a>
     <ul class="navbar-nav mr-auto">
-        {% comment %}
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="NavbarMethodsDropdown" role="button"
-               data-toggle="dropdown">
-                Methods
-            </a>
-            <div class="dropdown-menu" aria-labelledby="NavbarMethodsDropdown">
-                <a class="dropdown-item" href="{% url 'scxrd:index' %}">SC-XRD</a>
-                <a class="dropdown-item" href="{% url 'scxrd:index' %}">NMR</a>
-                <a class="dropdown-item" href="{% url 'scxrd:index' %}">Foo</a>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'scxrd:customers' %}">Customers</a>
-        </li>
-        {% endcomment %}
         {% if user.is_superuser %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
             </li>
         {% endif %}
         <li class="nav-item">
-            <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">Institut für Anorganische und
-                Analytische Chemie</a>
+            <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">
+                Institut für Anorganische und Analytische Chemie
+            </a>
         </li>
     </ul>
     {% if user.is_authenticated %}
         <div class="nav-item dropdown btn btn-sm btn-outline-secondary p-0 mr-2">
             <a class="nav-link dropdown-toggle p-1" href="#" id="NavbarMethodsDropdown" role="button"
                data-toggle="dropdown">
-
                 {% if user.first_name %}
                     User: {{ user.first_name }} {{ user.last_name }}
                 {% else %}
                     User: {{ user.username }}
                 {% endif %}
-
             </a>
             <div class="dropdown-menu" aria-labelledby="NavbarMethodsDropdown">
-                <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">{% trans "Submit a Sample" %}</a>
+                {% if not user|is_operator and not user|is_superuser %}
+                    <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">{% trans "Submit a Sample" %}</a>
+                {% endif %}
                 <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "My Samples" %}</a>
                 <a class="dropdown-item" href=#>-----</a>
                 <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">{% trans "Edit my Profile" %}</a>
-
                 {% if user.isadmin %}
                     <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "Customer Samples" %}</a>
                     <a class="dropdown-item" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
                 {% endif %}
+                <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Log Off" %}</a>
             </div>
         </div>
     {% endif %}
@@ -102,22 +88,14 @@
 </nav>
 
 
-<div class="container-fluid"> {# px-lg-5 px-md-3 px-sm-0"> #}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+<div class="container-fluid">
+    {% include 'scxrd/alert_messages.html' %}
 
     {% block content %}
 
     {% endblock content %}
 </div>
+
 
 {% block javascript %}
 {% endblock %}

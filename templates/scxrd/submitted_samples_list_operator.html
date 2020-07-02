@@ -29,7 +29,7 @@
                             </thead>
                             {% for sample in object_list %}
                                 <tr>
-                                    <td><b>{{ sample.sample_name_samp }}</b>
+                                    <td><b>{{ sample.sample_name }}</b>
                                         <div class="mt-3">
                                             <a role="button" class="btn btn-sm btn-outline-success my-0 p-1"
                                                href="{% url "scxrd:new_exp_from_sample" pk=sample.id %}">{% trans "Measure Sample" %}</a>
@@ -41,26 +41,26 @@
                                             {% trans "group: " %}{{ sample.customer_samp.profile.work_group }}
                                         </div>
                                         <div class="mt-2">
-                                            {% if sample.solve_refine_selv_samp %}
+                                            {% if sample.solve_refine_selve %}
                                                 <span class="text-danger">
                                                     {% trans "Self refine" %}
                                                 </span>
                                             {% endif %}
                                         </div>
                                     </td>
-                                    <td>{{ sample.submit_date_samp }}</td>
-                                    <td>{{ sample.sum_formula_samp }}</td>
-                                    {% if sample.desired_struct_samp %}
+                                    <td>{{ sample.submit_date }}</td>
+                                    <td>{{ sample.sum_formula }}</td>
+                                    {% if sample.desired_struct_draw %}
                                         {% autoescape off %}
                                             <td>
                                                 <div class="svg card" id="id_{{ sample.id }}"
-                                                     style="max-width: 10cm">{{ sample.desired_struct_samp }} </div>
+                                                     style="max-width: 10cm">{{ sample.desired_struct_draw }} </div>
                                             </td>
                                         {% endautoescape %}
                                     {% else %}
-                                        {% if sample.reaction_path_samp %}
+                                        {% if sample.reaction_path %}
                                             <td>
-                                                <a href="{{ sample.reaction_path_samp.url }}">{% trans "Reaction Conditions" %}</a>
+                                                <a href="{{ sample.reaction_path.url }}">{% trans "Reaction Conditions" %}</a>
                                             </td>
                                         {% else %}
                                             <td> File not found</td>

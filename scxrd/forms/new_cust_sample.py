@@ -5,8 +5,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.customer_models import SCXRDSample
-from scxrd.form_utils import card, save_button2, backbutton
+from scxrd.customer_models import Sample
+from scxrd.form_utils import card, save_button2, backbutton, submit_button
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):
@@ -47,7 +47,7 @@ class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
         self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
 
 
-class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
+class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
     """
     For to submit a new sample to be measured by an expert.
     """
@@ -58,16 +58,16 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             card(self.exp_title, backbutton),
             Row(
-                Column('sample_name_samp', css_class='col-6'),
+                Column('sample_name', css_class='col-6'),
                 Column('sum_formula_samp', css_class='col-6'),
                 # Column('customer_samp'),  # not needed, because inherited by the login
             ),
             Row(
-                Column('stable_samp'),
+                Column('stable'),
                 # Column('solve_refine_selv_samp'),
             ),
             Row(
-                Column('solve_refine_selv_samp'),
+                Column('solve_refine_selve'),
             ),
             Row(
                 Column('crystal_cond_samp')
@@ -97,7 +97,7 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('special_remarks_samp')
             ),
             Row(
-                save_button2,
+                submit_button,
             ),
             HTML('</div>'),  # end of card
         )
@@ -115,5 +115,5 @@ class SubmitNewForm(SubmitNewFormMixin, forms.ModelForm):
                                     'or draw it in the field below.'))
 
     class Meta:
-        model = SCXRDSample
+        model = Sample
         fields = '__all__'
