@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from django.contrib import admin
-from django.contrib.admin import StackedInline
+from django.contrib.admin import StackedInline, TabularInline
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User, Group
 from django.db.models import Count
@@ -17,12 +17,34 @@ admin.site.site_title = "MESSLOG Admin Portal"
 admin.site.index_title = "MESSLOG Administration"
 
 
+class WorkGroupInline(TabularInline):
+    model = Profile
+    list_display = ('members',)
+    #fields = ('user',)
+    extra = 0
+
+    fieldsets = (
+        ('user', {
+            'fields': ('user', )
+        }),
+    )
+
+    def members(self, obj: WorkGroup):
+        WorkGroup.objects.filter(profiles__user=obj)
+
+
 class WorkGroupAdmin(admin.ModelAdmin):
     model = WorkGroup
-    list_display = ('group_head', 'users')
+    list_display = ('group_head', 'members', 'measurements_this_year')
+    inlines = (WorkGroupInline,)
 
-    def users(self, obj: WorkGroup):
+    def members(self, obj: WorkGroup):
         return len(User.objects.filter(profile__work_group_id=obj.pk))
+
+    def measurements_this_year(self, group: WorkGroup):
+        today = datetime.now()
+        return Experiment.objects.filter(measure_date__gt=str(today.year) + '-1-1',
+                                         customer__profile__work_group=group).count()
 
 
 class ExperimentInline(StackedInline):
@@ -31,7 +53,7 @@ class ExperimentInline(StackedInline):
 
 
 class ExperimentAdmin(admin.ModelAdmin):
-    list_display = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula')
+    list_display = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'customer')
     list_filter = ['measure_date']
     search_fields = ['experiment_name', 'number', 'sum_formula']
     ordering = ['-number']
@@ -75,13 +97,17 @@ class PersonInline(StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
-    list_display = ['username', 'first_name', 'last_name', 'email', 'work_group', 'is_staff', 'is_operator']
+    list_display = ['username', 'first_name', 'last_name', 'number_of_experiments', 'work_group', 'is_staff',
+                    'is_operator']
 
     def is_operator(self, obj: User):
         return obj.profile.is_operator
 
     def work_group(self, obj: User):
         return obj.profile.work_group
+
+    def number_of_experiments(self, obj: User):
+        return obj.operator_experiments.count()  # Experiment.objects.filter(operator=obj).count()
 
     is_operator.boolean = True
 
