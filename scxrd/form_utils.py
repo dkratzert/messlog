@@ -15,7 +15,7 @@ save_button = ButtonHolder(
 
 save_button2 = ButtonHolder(
     Submit('Save', 'Save', css_class='btn-primary mr-2'),
-    HTML('''<a href="{% url 'scxrd:my_samples_page' %}" class="btn btn-outline-danger" 
+    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
             formnovalidate="formnovalidate">Cancel</a>
             '''),
     css_class=' ml-3 mb-3'
@@ -35,7 +35,7 @@ def card(header_title, button=''):
 
 jsme_frame = HTML('''<label for="id_sample_name" class="pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-1 requiredField">
                         Desired Compound<span class="asteriskField">*</span></label>
-                        <input type="hidden" id="id_desired_struct_samp" value="" name="desired_struct_samp">
+                        <input type="hidden" id="id_desired_struct_draw" value="" name="desired_struct_draw">
                         <script>
                             //this function will be called after the JSME JavaScriptApplet code has been loaded.
                             function jsmeOnLoad() {

@@ -15,6 +15,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- Add a details page behind the click on a sample in the samples list
 - Make an external customer field for external measurements
 - normalize experiment names to bruker APEX format
 - make a list of experiemtns for each operator like the all experiments page
@@ -50,6 +51,14 @@ def validate_email(value):
         _validate_email(value)
     except ValidationError:
         raise ValidationError(_('Enter a valid email address.'))
+    return value
+
+
+def resolution_validator(value):
+    if not value:
+        return value
+    if value < 0.001 or value > 99:
+        raise ValidationError(_('Enter a valid resolution in angstrom.'))
     return value
 
 
@@ -150,7 +159,7 @@ class Experiment(models.Model):
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
-                                 related_name='customer_experiments')
+                                 verbose_name=_("customer (for service)"), related_name='customer_experiments')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_experiments',
                                  on_delete=models.SET_NULL)
@@ -158,7 +167,8 @@ class Experiment(models.Model):
                                 related_name='experiments', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, verbose_name=_("empirical formula"), blank=True)
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
-    # solvents = models.CharField(verbose_name=_('solvents used'), null=True, blank=True, max_length=256)
+    resolution = models.FloatField(verbose_name=_('Resolution [&#x212b;]'), null=True, blank=True,
+                                   validators=(resolution_validator,))
     conditions = models.TextField(verbose_name=_('reaction conditions'), null=True, blank=True)
     measure_date = models.DateTimeField(verbose_name=_('measurement date'), default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)

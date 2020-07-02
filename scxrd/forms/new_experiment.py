@@ -54,6 +54,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             ),
             Row(
                 Column('prelim_unit_cell', css_class='col-8'),
+                Column('resolution', css_class='col-4'),
             ),
             Row(
                 Column('exptl_special_details'),

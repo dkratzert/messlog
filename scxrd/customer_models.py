@@ -40,8 +40,8 @@ class Sample(models.Model):
                                                   null=True,
                                                   default='', max_length=500)
     desired_struct_draw = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
-    special_remarks_samp = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
-                                            help_text=_('Any additional information we should know.'))
+    special_remarks = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
+                                       help_text=_('Any additional information we should know.'))
 
     class Meta:
         ordering = ["id"]

@@ -13,20 +13,21 @@ class SubmitFormfieldsMixin(forms.ModelForm):
     """
     Definition of the fields for the customer Sample form.
     """
-    submit_date_samp = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
+    submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
                                        label=_("Sample submission date"))
-    sum_formula_samp = forms.CharField(label=_("Presumed sum formula"), required=True)
-    crystal_cond_samp = forms.CharField(label=_('Solvents used for crystallization, method, conditions'), required=True)
-    reaction_path_samp = forms.FileField(label=_('Document with reaction pathway, desired molecule and conditions'),
+    sum_formula = forms.CharField(label=_("Presumed sum formula"), required=True)
+    crystallization_conditions = forms.CharField(label=_('Solvents used for crystallization, method, conditions'), required=True,
+                                        help_text=_("Knowing the solvents used for synthesis and crystallization "
+                                                    "can be crucial for the success of the structure solution and "
+                                                    "refinement"))
+    reaction_path = forms.FileField(label=_('Document with reaction equation, desired molecule and conditions'),
                                          required=False,
-                                         help_text=_("Please upload a document (.docx, .cdx or .pdf) showing the "
-                                                     "reaction path with the "
-                                                     "desired product including all used solvents and other reagents. "
-                                                     "<br>The solvents are important information for us if they crystallize "
-                                                     "along with the main molecule.")
+                                         help_text=_("Please upload a .pdf document showing the "
+                                                     "reaction equation with the desired product including all "
+                                                     "used solvents and other reagents.")
                                          )
-    desired_struct_samp = forms.CharField(label=_('Desired structure'), required=False)
-    special_remarks_samp = forms.TextInput()
+    desired_struct_draw = forms.CharField(label=_('Desired structure'), required=False)
+    special_remarks = forms.TextInput()
 
 
 class SubmitNewFormMixin(SubmitFormfieldsMixin, forms.ModelForm):
@@ -59,21 +60,20 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
             card(self.exp_title, backbutton),
             Row(
                 Column('sample_name', css_class='col-6'),
-                Column('sum_formula_samp', css_class='col-6'),
+                Column('sum_formula', css_class='col-6'),
                 # Column('customer_samp'),  # not needed, because inherited by the login
             ),
             Row(
                 Column('stable'),
-                # Column('solve_refine_selv_samp'),
             ),
             Row(
                 Column('solve_refine_selve'),
             ),
             Row(
-                Column('crystal_cond_samp')
+                Column('crystallization_conditions')
             ),
             Row(
-                Column('reaction_path_samp')
+                Column('reaction_path')
             ),
             Row(
                 Column(
@@ -83,9 +83,9 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                             Draw the desired structure<span class="asteriskField">*</span>\n
                         </label>\n
                         <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                            This field is an alternative to the file upload above:
+                            This field is an alternative to the file upload above
                         </small>\n
-                        <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_samp">\n
+                        <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_draw">\n
                         <div class="p-3">
                             <iframe id="ketcher-frame" src="ketcher.html">\n
                             </iframe>\n
@@ -94,7 +94,7 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                     """)),
             ),
             Row(
-                Column('special_remarks_samp')
+                Column('special_remarks')
             ),
             Row(
                 submit_button,
@@ -104,12 +104,12 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
 
     def clean(self):
         """
-        This runs after submitting the form. It makes sure at least one of the form reaction_path_samp or
-        desired_struct_samp has content.
+        This runs after submitting the form. It makes sure at least one of the form reaction_path or
+        desired_struct_draw has content.
         """
         cleaned_data = super().clean()
-        figure_document = cleaned_data.get('reaction_path_samp')
-        svg_sample = cleaned_data.get('desired_struct_samp')
+        figure_document = cleaned_data.get('reaction_path')
+        svg_sample = cleaned_data.get('desired_struct_draw')
         if not any([figure_document, svg_sample]):
             raise ValidationError(_('You need to either upload a document with the desired structure '
                                     'or draw it in the field below.'))

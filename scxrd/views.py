@@ -91,7 +91,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             'number': expnum,
             'sum_formula': Sample.objects.get(pk=pk).sum_formula,
             'submit_date': Sample.objects.get(pk=pk).submit_date,
-            'exptl_special_details': Sample.objects.get(pk=pk).special_remarks_samp,
+            'exptl_special_details': Sample.objects.get(pk=pk).special_remarks,
         })
         return initial
 
@@ -112,13 +112,13 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.exptl_special_details = form.cleaned_data.get('exptl_special_details')
             # TODO: is form.cleaned_data.get('customer') sufficient?
             exp.customer = User.objects.get(pk=form.cleaned_data.get('customer').pk)
-            exp.submit_date_samp = form.cleaned_data.get('submit_date')
+            exp.submit_date = form.cleaned_data.get('submit_date')
             exp.sum_formula = form.cleaned_data.get('sum_formula')
             exp.crystal_colour = form.cleaned_data.get('crystal_colour')
             exp.measure_date = timezone.now()
             exp.was_measured = not form.cleaned_data.get('was_measured')
             exp.not_measured_cause = form.cleaned_data.get('not_measured_cause')
-            exp.conditions = form.cleaned_data.get('crystal_cond_samp')
+            exp.conditions = form.cleaned_data.get('crystallization_conditions')
             # Assigns the currently logged in user to the submitted sample:
             exp.operator = request.user
             self.object.save()
@@ -214,7 +214,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         pprint(request.POST)
         form = self.get_form()
         if form.is_valid():
-            sample = form.save(commit=False)
+            sample: Sample = form.save(commit=False)
             # Assigns the currently logged in user to the submetted sample:
             sample.customer_samp = request.user
             # Assigns the current date to the sample submission date field

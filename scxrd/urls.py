@@ -1,13 +1,13 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
+from mysite.mysite.views import HomePageView
 from . import views
 
 app_name = 'scxrd'
 
 urlpatterns = [
-    # path('', views.MySamplesList.as_view(), name=''),
-    path('submit/mysamples/', views.MySamplesList.as_view(), name='index'),
+    path('', HomePageView.as_view(), name='index'),
     path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
     path('experiments/', views.ExperimentIndexView.as_view(), name='all_experiments'),
     path('newexp/', views.ExperimentCreateView.as_view(), name='new_exp'),
