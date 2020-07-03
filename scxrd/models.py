@@ -15,6 +15,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- experiment from sample view does not save sample_id relation
 - Add a details page behind the click on a sample in the samples list (from operator and user)
 - normalize experiment names to bruker APEX format [A-Za-z0-9_]+
 - Add a "currently running experiment" page with status for everyone visible
@@ -25,6 +26,7 @@ TODO:
 - samples  can be edited by users until the measurement is done
 - edit experiment: "Solvents used" and "Reaction conditions" should also be displayed if esperiment
   originates from a sample
+- add email notifications
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of experiments list page
 - make nice looking lists of measurement experiments in the list of samples
