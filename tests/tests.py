@@ -8,12 +8,12 @@ from pathlib import Path
 from wsgiref.handlers import SimpleHandler
 
 import gemmi
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse, reverse_lazy
 
+from mysite.settings import MEDIA_ROOT
 from scxrd.cif_model import CifFileModel
 from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
 
@@ -22,8 +22,19 @@ TODO:
  
 """
 
+MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
-class HomeTests(TestCase):
+
+class DeleteFilesMixin():
+    @classmethod
+    def tearDownClass(cls):
+        # print(MEDIA_ROOT)
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class HomeTests(DeleteFilesMixin, TestCase):
     def test_home_view_status_code(self):
         url = reverse('scxrd:index')
         response = self.client.get(url, follow=True)
@@ -71,7 +82,8 @@ def create_experiment():
     return exp
 
 
-class ExperimentIndexViewTests(TestCase):
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class ExperimentIndexViewTests(DeleteFilesMixin, TestCase):
     fixtures = model_fixtures
 
     """def test_no_experiements(self):
@@ -82,17 +94,9 @@ class ExperimentIndexViewTests(TestCase):
 """
 
 
-MEDIA_ROOT = tempfile.mkdtemp(dir=)
-
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateTest(TestCase):
+class ExperimentCreateTest(DeleteFilesMixin, TestCase):
     fixtures = model_fixtures
-
-    @classmethod
-    def tearDownClass(cls):
-        print(MEDIA_ROOT)
-        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
-        super().tearDownClass()
 
     def test_make_exp(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
@@ -109,14 +113,14 @@ class ExperimentCreateTest(TestCase):
         self.assertEqual('APEXII', str(exp.machine))
         self.assertEqual('Hansi', str(exp.customer.first_name))
         self.assertEqual('Hinterseer', str(exp.customer.last_name))
-        #exp.ciffilemodel.delete()
 
     def test_string_representation(self):
-        entry = Experiment(experiment="My entry title")
+        entry = Experiment(experiment_name="My entry title")
         self.assertEqual(str(entry), entry.experiment_name)
 
 
-class ExperimentCreateCif(TestCase):
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class ExperimentCreateCif(DeleteFilesMixin, TestCase):
 
     def test_parsecif(self):
         struct = gemmi.cif.read_file('scxrd/testfiles/p21c.cif')
@@ -126,95 +130,116 @@ class ExperimentCreateCif(TestCase):
         self.assertEqual(b.find_value('_shelx_res_file').replace('\r\n', '')
                          .replace('\n', '')[:20], ';TITL p21c in P2(1)/')
         lo = b.find_loop('_atom_site_label')
-        self.assertEqual(lo[1], 'Al1')
+        self.assertEqual(lo[1], 'C1_6')
 
 
-class UploadTest(TestCase):
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class NewExpTest(DeleteFilesMixin, TestCase):
 
     def setUp(self):
         # setting MEDIA_ROOT to a temporary directory
-        settings.MEDIA_ROOT = tempfile.mkdtemp()
-        self.tmp = settings.MEDIA_ROOT
+        MEDIA_ROOT = tempfile.mkdtemp()
+        self.tmp = MEDIA_ROOT
 
     def tearDown(self):
         # removing temporary directory after tests
         import shutil
-        shutil.rmtree(settings.MEDIA_ROOT)
-        self.assertEqual(settings.MEDIA_ROOT, self.tmp)
+        shutil.rmtree(MEDIA_ROOT)
+        # self.assertEqual(MEDIA_ROOT, self.tmp)
 
     def test_uploadCif(self):
         with open('scxrd/testfiles/p21c.cif') as fp:
-            response = self.client.post('/scxrd/upload/1/', {'name': 'p21c.cif', 'attachment': fp}, follow=True)
+            form = {'Save'                 : 'Save',
+                    'base'                 : '1',
+                    'crystal_colour'       : '6',
+                    'crystal_habit'        : 'needle',
+                    'crystal_size_x'       : '0.13',
+                    'crystal_size_y'       : '0.12',
+                    'crystal_size_z'       : '0.1',
+                    'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
+                    'customer'             : '2',
+                    'experiment_name'      : 'TB_VR40_v1b',
+                    'exptl_special_details': 'blub',
+                    'glue'                 : '1',
+                    'machine'              : '1',
+                    'measure_date'         : '2020-07-03 12:53',
+                    'measurement_temp'     : '102',
+                    'number'               : '8',
+                    'prelim_unit_cell'     : '',
+                    'resolution'           : '0.77',
+                    'sum_formula'          : 'C3H4O2'}
+            response = self.client.post(reverse_lazy('scxrd:new_exp'), data=form, follow=True)
             self.assertEqual(response.status_code, 200)
 
 
-class CifFileTest(TestCase):
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class CifFileTest(DeleteFilesMixin, TestCase):
 
     def test_saveCif(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
         c = CifFileModel(cif_file_on_disk=file)
-        ex = create_experiment(99, cif=c, save_related=True)
+        ex = create_experiment()
         self.assertEqual(ex.customer.first_name, 'Hans')
         self.assertEqual(ex.customer.last_name, 'Meyerhof')
         self.assertEqual(ex.operator.username, 'foouser')
-        self.assertEqual(ex.cif.data, None)
-        ex.cif.save()
-        first_atom = CifFileModel.objects.first().atom_set.first()
-        self.assertEqual(0.63951, first_atom.x)
-        self.assertEqual(str(c.experiments.glue), 'grease')
-        self.assertEqual(str(c.experiments), 'test1')
-        self.assertEqual(str(c.experiments.customer.work_group), 'AK Sorglos')
+        self.assertEqual(ex.ciffilemodel.data, None)
+        ex.save()
+        self.assertEqual(str(c.experiment.glue), 'grease')
+        self.assertEqual(str(c.experiment), 'test1')
         # Cif dictionary is populated during save():
-        self.assertEqual(ex.cif.data, 'p21c')
+        self.assertEqual(ex.ciffilemodel.data, 'p21c')
         # ex.save() would delete the cif handle:
         ex.save_base()
-        self.assertEqual(ex.cif.wr2_in_percent(), 10.1)
-        self.assertEqual(ex.cif.refine_ls_wR_factor_ref, 0.1014)
-        self.assertEqual(ex.cif.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
+        self.assertEqual(ex.ciffilemodel.wr2_in_percent(), 10.1)
+        self.assertEqual(ex.ciffilemodel.refine_ls_wR_factor_ref, 0.1014)
+        self.assertEqual(ex.ciffilemodel.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
                          'TITL p21c in P2(1)/c    p21c.r')
         # self.assertEqual(ex.cif.atoms.x, '')
-        self.assertEqual(ex.cif.space_group_name_H_M_alt, 'P 21/c')
+        self.assertEqual(ex.ciffilemodel.space_group_name_H_M_alt, 'P 21/c')
         response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, 200)
         # delete file afterwards:
-        ex.cif.delete()
-
-    def test_read_cif_content_by_gemmi(self):
-        self.assertEqual(['_diffrn_reflns_number', '42245'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
-                                                                                       '_diffrn_reflns_number'))
-        # check
-        self.assertEqual(['_diffrn_reflns_number', '22246'], CifFileModel.get_cif_item('scxrd/testfiles/p21c.cif',
-                                                                                       '_diffrn_reflns_number'))
+        ex.ciffilemodel.delete()
 
 
-class WorkGroupTest(TestCase):
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class WorkGroupTest(DeleteFilesMixin, TestCase):
 
     def test_group_head(self):
         """
         Create the Person of a group first. Then the group itselv and finally
         define the group as work_group of the heads Person instance.
         """
-        head = Profile(first_name='Susi', last_name='Sorglos', email_adress='foo@bar.de')
-        head.save()  # important
-        group1 = WorkGroup(group_head=head)
-        group1.save()  # important
-        head.work_group = group1
-        head.save()
-        self.assertEqual(str(group1.group_head), 'Susi Sorglos*')
-        dokt1 = Profile(first_name='Sandra', last_name='Superschlau', email_adress='foo@bar.de', work_group=group1)
-        dokt2 = Profile(first_name='Heiner', last_name='Hirni', email_adress='foo@bar.de', work_group=group1)
-        dokt1.save()
-        dokt2.save()
-        group1.save()
-        self.assertEqual([str(x) for x in group1.person.all()], ["Susi Sorglos*", "Sandra Superschlau", "Heiner Hirni"])
+        user = User(first_name='Susie', last_name='Sorglos', email='foo@bar.de', username='susi')
+        user.profile = Profile(company='A Company')
+        user.save()  # important
+        self.assertEqual('Susie Sorglos', str(user.profile))
+        user1 = User(username='sandra', first_name='Sandra', last_name='Superschlau', email='foo@bar.de')
+        user2 = User(username='hein', first_name='Heiner', last_name='Hirni', email='foo@bar.de')
+        group = WorkGroup(group_head='group1')
+        group.save()
+        user1.save_base()
+        user2.save_base()
+        user1.profile.town = 'Freiburg'
+        user1.profile.work_group = group
+        user2.profile.town = 'Freiburg'
+        user2.profile.work_group = group
+        user1.save()
+        user2.save()
+        print(user1.profile.town)
+        print(User.objects.get(username__icontains='san'))
+        print(User.objects.get(username__icontains='san').profile.town)
+        print(User.objects.get(username__icontains='san').profile.work_group)
+        print(User.objects.filter(profile__work_group__group_head__contains='grou'), '###')
 
     def test_validate_email(self):
         # TODO: why is it not evaluating?
-        pers = Profile(first_name='DAniel', last_name='Kratzert', email_adress='-!ß\/()')
+        pers = User(first_name='DAniel', last_name='Kratzert', email='-!ß\/()')
         pers.save()
-        # print(pers.email_adress)
+        print(pers.email)
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class OtherTablesTest(TestCase):
 
     def other_test(self):
@@ -243,6 +268,7 @@ def hello_app(environ, start_response):
     return [b"Hello, world!"]
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestWSGIRef(TestCase):
 
     @unittest.skip
@@ -261,6 +287,7 @@ class TestWSGIRef(TestCase):
             h.run(hello_app)
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestViews(TestCase):
 
     def test_report(self):
