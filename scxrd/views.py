@@ -45,8 +45,6 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     model = Experiment
     form_class = ExperimentNewForm
     template_name = 'scxrd/experiment_new.html'
-    # Fields are defined in form_class:
-    # fields = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
     def form_valid(self, form):
@@ -71,8 +69,6 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
     model = Sample
     form_class = ExperimentFromSampleForm
     template_name = 'scxrd/experiment_new.html'
-    # Fields are defined in form_class:
-    # fields = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'operator')
     success_url = reverse_lazy('scxrd:index')
 
     def get_initial(self) -> dict:
@@ -86,11 +82,11 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         except AttributeError as e:
             expnum = 1
         initial.update({
-            'experiment_name': Sample.objects.get(pk=pk).sample_name,
-            'customer': Sample.objects.get(pk=pk).customer_samp_id,
-            'number': expnum,
-            'sum_formula': Sample.objects.get(pk=pk).sum_formula,
-            'submit_date': Sample.objects.get(pk=pk).submit_date,
+            'experiment_name'      : Sample.objects.get(pk=pk).sample_name,
+            'customer'             : Sample.objects.get(pk=pk).customer_samp_id,
+            'number'               : expnum,
+            'sum_formula'          : Sample.objects.get(pk=pk).sum_formula,
+            'submit_date'          : Sample.objects.get(pk=pk).submit_date,
             'exptl_special_details': Sample.objects.get(pk=pk).special_remarks,
         })
         return initial
@@ -210,7 +206,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         POST variables and then check if it's valid.
         """
         super().post(request, *args, **kwargs)
-        print('request from new sample:')
+        print('Request from new sample:')
         pprint(request.POST)
         form = self.get_form()
         if form.is_valid():
@@ -276,24 +272,12 @@ class ResidualsTable(DetailView):
         return context
 
 
-class FilesUploadedView(ListView):
-    """
-    creates a list of the uploaded files for the respective experiment.
-    # TODO: This is not used at the moment.
-    """
-    model = Experiment
-    template_name = 'scxrd/uploaded_files.html'
-
-
 class MoleculeView(LoginRequiredMixin, View):
     """
     View to get atom data as .mol file.
     """
 
     def post(self, request: WSGIRequest, *args, **kwargs):
-        #print('# Molecule request:')
-        #pprint(request.POST)
-        # TODO: use cleaned data:
         cif_file = request.POST.get('cif_file')
         exp_id = request.POST.get('experiment_id')
         if not cif_file:
