@@ -19,6 +19,8 @@ from model_bakery import baker
 from mysite.settings import MEDIA_ROOT
 from scxrd.cif_model import CifFileModel
 from scxrd.customer_models import Sample
+from scxrd.forms.edit_experiment import ExperimentEditForm
+from scxrd.forms.new_cust_sample import SubmitNewSampleForm
 from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
 
 """
@@ -30,6 +32,8 @@ MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
 
 class DeleteFilesMixin():
+    fixtures = model_fixtures
+
     @classmethod
     def tearDownClass(cls):
         # print(MEDIA_ROOT)
@@ -151,7 +155,7 @@ class CifFileTest(DeleteFilesMixin, TestCase):
         self.assertEqual(ex.operator.username, 'susi')
         ex.save()
         c.experiment = ex
-        #ex.save_base()
+        # ex.save_base()
         self.assertEqual(ex.ciffilemodel.wr2_in_percent(), 10.1)
         self.assertEqual(ex.ciffilemodel.refine_ls_wR_factor_ref, 0.1014)
         self.assertEqual(ex.ciffilemodel.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
@@ -271,31 +275,50 @@ class TestViews(DeleteFilesMixin, TestCase):
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class NewExpTest(DeleteFilesMixin, TestCase):
+    def setUp(self):
+        self.formdata = dict({'Save'                 : 'Save',
+                         'base'                 : '2',
+                         'crystal_colour'       : '6',
+                         'crystal_habit'        : 'needle',
+                         'crystal_size_x'       : '0.13',
+                         'crystal_size_y'       : '0.12',
+                         'crystal_size_z'       : '0.1',
+                         'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
+                         'customer'             : '1',
+                         'experiment_name'      : 'TB_VR40_v1b',
+                         'exptl_special_details': 'blub',
+                         'glue'                 : '2',
+                         'machine'              : '1',
+                         'measure_date'         : '2020-07-03 12:53',
+                         'measurement_temp'     : '102',
+                         'number'               : '88',
+                         'prelim_unit_cell'     : '10 10 10 90 90 90',
+                         'resolution'           : '0.77',
+                         'sum_formula'          : 'C3H4O2',
+                         'cif_file_on_disk'     : '',
+                         })
+        # self.selenium = webdriver.Chrome()
+        super().setUp()
+        user = User.objects.create(username='testuser', email='test@test.com', is_active=True)
+        user.set_password('Test1234!')
+        user.save()
+        self.user = authenticate(username='testuser', password='Test1234!')
 
     def test_post_experiment(self):
-        with open('scxrd/testfiles/p21c.cif') as fp:
-            form = {'Save'                 : 'Save',
-                    'base'                 : '1',
-                    'crystal_colour'       : '6',
-                    'crystal_habit'        : 'needle',
-                    'crystal_size_x'       : '0.13',
-                    'crystal_size_y'       : '0.12',
-                    'crystal_size_z'       : '0.1',
-                    'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
-                    'customer'             : '2',
-                    'experiment_name'      : 'TB_VR40_v1b',
-                    'exptl_special_details': 'blub',
-                    'glue'                 : '1',
-                    'machine'              : '1',
-                    'measure_date'         : '2020-07-03 12:53',
-                    'measurement_temp'     : '102',
-                    'number'               : '8',
-                    'prelim_unit_cell'     : '10 10 10 90 90 90',
-                    'resolution'           : '0.77',
-                    'sum_formula'          : 'C3H4O2'}
-            response = self.client.post(reverse_lazy('scxrd:new_exp'), data=form, follow=True)
-            self.assertEqual(response.status_code, 200)
 
+        response = self.client.post(reverse_lazy('scxrd:new_exp'), data=self.formdata, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_form(self):
+        form = ExperimentEditForm(self.formdata)
+        self.assertEqual({}, form.errors)
+        self.assertEqual(True, form.is_valid())
+
+    def test_invalid_form(self):
+        self.formdata['experiment_name'] = ''
+        form = ExperimentEditForm(self.formdata)
+        self.assertEqual({'experiment_name': ['This field is required.']}, form.errors)
+        self.assertEqual(False, form.is_valid())
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestNewSample(DeleteFilesMixin, TestCase):
@@ -305,8 +328,10 @@ class TestNewSample(DeleteFilesMixin, TestCase):
             "foo"    : " Crain",
             "message": "Would love to talk about Philip K. Dick",
         }
-        response = self.client.post(reverse_lazy("scxrd:submit_sample"), data=data)
+        response = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=data, follow=True)
         pprint(response)
+        form = SubmitNewSampleForm(response)
+        form.save()
         self.assertEqual(Sample.objects.count(), 1)
 
 
@@ -359,7 +384,7 @@ class TestAuthenticated(DeleteFilesMixin, TestCase):
         response = self.client.post(reverse("scxrd:submit_sample"), data=data, user=self.user, follow=True)
         self.assertEqual(response.status_code, 200)
         # TODO: test to full sample creation
-        #self.assertEqual(Sample.objects.count(), 1)
+        # self.assertEqual(Sample.objects.count(), 1)
 
 
 if __name__ == '__main':
