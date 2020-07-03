@@ -60,7 +60,7 @@ def vol_unitcell(a: float, b: float, c: float, al: float, be: float, ga: float):
 
 
 COLOUR_CHOICES = (
-    ('', '----------'),
+    (0, '----------'),
     (1, 'colourless'),
     (2, 'white'),
     (3, 'black'),
