@@ -42,6 +42,10 @@ def get_absolute_url(self):
 
 """
 
+model_fixtures = ['scxrd/fixtures/glue.json', 
+                'scxrd/fixtures/support.json', 
+                'scxrd/fixtures/machines.json',
+                'scxrd/fixtures/work_group.json']
 
 def validate_email(value):
     """
@@ -105,7 +109,7 @@ class WorkGroup(models.Model):
     """
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
-    fixtures = ['work_groups']
+    fixtures = ['scxrd/fixtures/work_group.json']
     group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, null=True, unique=True)
 
     def __str__(self):
@@ -116,7 +120,7 @@ class Machine(models.Model):
     """
     A diffractometer name and type.
     """
-    fixtures = ['machines']
+    fixtures = ['scxrd/fixtures/machines.json']
     # The make, model or name of the measurement device (goniometer) used:
     diffrn_measurement_device_type = models.CharField(verbose_name="machine model name", max_length=200)
     # The general class of goniometer or device used to support and orient the specimen:
@@ -132,6 +136,7 @@ class CrystalSupport(models.Model):
     The support where the crystal was mounted on the diffraktometer.
     _diffrn_measurement_specimen_support e.g. 'glass capillary'
     """
+    fixtures = ['scxrd/fixtures/support.json']
     support = models.CharField(verbose_name='crystal support', max_length=200, unique=True)
 
     def __str__(self):
@@ -142,6 +147,7 @@ class CrystalGlue(models.Model):
     """
     What kind of addhesive was used?
     """
+    fixtures = ['scxrd/fixtures/glue.json']
     glue = models.CharField(verbose_name='crystal glue', max_length=200, unique=True)
 
     def __str__(self):
@@ -149,7 +155,6 @@ class CrystalGlue(models.Model):
 
 
 class Experiment(models.Model):
-    fixtures = ['experiment_name']
     # The name of the current experiment
     experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
                                        unique=True)

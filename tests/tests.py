@@ -1,27 +1,25 @@
 # Create your tests here.
+import shutil
 import sys
 import tempfile
 import unittest
-from datetime import datetime
 from io import BytesIO
 from pathlib import Path
 from wsgiref.handlers import SimpleHandler
 
 import gemmi
-import pytz
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse, reverse_lazy
 
 from scxrd.cif_model import CifFileModel
-from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue
+from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
 
 """
 TODO:      
-
-- Test atoms   
+ 
 """
 
 
@@ -32,67 +30,86 @@ class HomeTests(TestCase):
         self.assertEquals(response.status_code, 200)
 
 
-def create_experiment(number, cif=None, save_related=False):
+def create_experiment():
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
-    head = Profile(first_name='Susi', last_name='Sorglos')
-    head.save()
-    group = WorkGroup(group_head=head)
-    group.save()
-    pers = Profile(first_name='Hans', last_name='Meyerhof', work_group=group)
-    mach = Machine(diffrn_measurement_device_type='FobarMachine')
-    op = User(username='foouser')
-    glue = CrystalGlue(glue='grease')
-    if save_related:
-        group.save()
-        glue.save()
-        pers.save()
-        mach.save()
-        op.save()
-    exp = Experiment(
-        experiment='test1',
-        machine=mach,
-        number=number,
-        customer=pers,
-        glue=glue,
-        sum_formula='C5H10O2',
-        measure_date=datetime(2013, 11, 20, 20, 8, 7, 127325, tzinfo=pytz.UTC),
-        operator=op,
-        cif=cif
-    )
+    user = User(first_name='Susi',
+                last_name='Sorglos',
+                username='susi',
+                email='susi@foo.de',
+                )
+    user.save()
+    user2 = User(first_name='Hansi',
+                 last_name='Hinterseer',
+                 username='hans',
+                 email='hans@foo.de',
+                 )
+    user2.save()
+    pro = Profile(user=user,
+                  phone_number='1234',
+                  street='Foostreet',
+                  work_group=WorkGroup.objects.filter(group_head__contains='Krossing')[0],
+                  )
+    # pro.save()  # not needed?
+    user.profile = pro
+    mach = Machine(diffrn_measurement_device_type='FoobarMachine')
+    mach.save()
+    exp = Experiment(experiment_name='IK_MSJg20_100K',
+                     number='1',
+                     sum_formula='C5H10O2',
+                     machine=Machine.objects.filter(diffrn_measurement_device_type__contains='APEX').first(),
+                     operator=user,
+                     customer=user2,
+                     glue=CrystalGlue.objects.filter(glue__contains='Poly')[0],
+                     crystal_colour='1',
+                     measure_date='2013-11-20 20:08:07.127325+00:00'
+                     )
+    exp.save()
     return exp
 
 
 class ExperimentIndexViewTests(TestCase):
+    fixtures = model_fixtures
 
-    def test_no_experiements(self):
+    """def test_no_experiements(self):
         response = self.client.get(reverse('scxrd:index'), follow=True)
         # print('response:', response)
         self.assertEqual(response.status_code, 200)
         self.assertEqual("<WSGIRequest: GET '/accounts/login/?next=%2Fscxrd%2F'>", str(response.context['request']))
+"""
 
 
+MEDIA_ROOT = tempfile.mkdtemp(dir=)
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class ExperimentCreateTest(TestCase):
+    fixtures = model_fixtures
 
-    def test_makeexp(self):
+    @classmethod
+    def tearDownClass(cls):
+        print(MEDIA_ROOT)
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
+    def test_make_exp(self):
         file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
         c = CifFileModel(cif_file_on_disk=file)
+        exp = create_experiment()
+        c.experiment = exp
         c.save()
-        ex = create_experiment(100, cif=c, save_related=True)
-        ex.save()
-        self.assertEqual(str(ex), 'test1')
-        self.assertEqual(ex.sum_formula, 'C5H10O2')
-        self.assertEqual(ex.pk, 1)
-        self.assertEqual(str(ex.operator), 'foouser')
-        self.assertEqual(str(ex.measure_date), '2013-11-20 20:08:07.127325+00:00')
-        self.assertEqual(str(ex.machine), 'FobarMachine')
-        self.assertEqual(str(ex.operator), 'foouser')
-        self.assertEqual(str(ex.customer.first_name), 'Hans')
-        self.assertEqual(str(ex.customer.last_name), 'Meyerhof')
-        ex.cif.delete()
+        self.cif = c
+        self.assertEqual('IK_MSJg20_100K', str(exp))
+        self.assertEqual('susi', str(exp.operator))
+        self.assertEqual('C5H10O2', exp.sum_formula)
+        self.assertEqual('2013-11-20 20:08:07.127325+00:00', str(exp.measure_date))
+        self.assertEqual(1, exp.pk)
+        self.assertEqual('APEXII', str(exp.machine))
+        self.assertEqual('Hansi', str(exp.customer.first_name))
+        self.assertEqual('Hinterseer', str(exp.customer.last_name))
+        #exp.ciffilemodel.delete()
 
     def test_string_representation(self):
         entry = Experiment(experiment="My entry title")
