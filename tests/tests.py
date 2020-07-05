@@ -309,10 +309,14 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         c.login(username='testuser', password='Test1234!')
         response = c.get(reverse_lazy('scxrd:new_exp'),  follow=True)
         self.assertEqual(200, response.status_code)
-        print(response.context)
+        for c1 in response.context:
+            for c in c1:
+                pprint(c)
         self.assertEqual('testuser', str(response.context.get('user')))
         self.assertEqual(True, response.context.get('render_required_fields'))
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
+        print('######')
+        print(response.context[0]['form'].fields['experiment_name'])
         #response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
         #print(response.redirect_chain)
         #response = self.client.post(reverse_lazy('scxrd:new_exp'), follow=True, data=self.formdata)

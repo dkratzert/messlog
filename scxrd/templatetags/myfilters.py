@@ -27,6 +27,9 @@ def was_refined(experiments) -> bool:
 def was_measured(experiments) -> bool:
     # if experiments.count() == 0:
     #    return False
-    print(experiments.sample)
-    print([x.ciffilemodel.cif_exists for x in experiments.all()])
-    return any([x.ciffilemodel.cif_exists for x in experiments.all()])
+    #print([x.ciffilemodel.cif_exists for x in experiments.all()])
+    # TODO: Is this right? Or is it always true?
+    try:
+        return any([x.ciffilemodel.cif_exists for x in experiments.all()])
+    except Exception:
+        return False
