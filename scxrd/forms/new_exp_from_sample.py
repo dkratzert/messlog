@@ -37,10 +37,10 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('measurement_temp'),
             ),
             Row(
-                Column('machine'),
+                Column('machine', css_class='col-4'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date'),  # TODO: make it invisible?
-                Column('customer'),
+                Column('measure_date', css_class='col-4'),  # TODO: make it invisible?
+                Column('customer', css_class='col-4 invisible'),
             ),
             Row(
                 Column('crystal_colour'),
