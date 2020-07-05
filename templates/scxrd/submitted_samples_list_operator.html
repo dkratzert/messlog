@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% load myfilters %}
 
 {% csrf_token %}
 
@@ -23,8 +24,8 @@
                                 <td><b>{% trans "Submitted at" %}</b></td>
                                 <td><b>{% trans "Sum Formula" %}</b></td>
                                 <td><b>{% trans "Reaction Conditions" %}</b></td>
-                                {# <td><b>{% trans "Measured" %}</b></td>#}
                                 <td><b>{% trans "Special Remarks" %}</b></td>
+                                <td></td>
                             </tr>
                             </thead>
                             {% for sample in object_list %}
@@ -53,25 +54,34 @@
                                     {% if sample.desired_struct_draw %}
                                         {% autoescape off %}
                                             <td>
-                                                <div class="svg card" id="id_{{ sample.id }}"
-                                                     style="max-width: 10cm">{{ sample.desired_struct_draw }} </div>
+                                                <div class="svg card w-100 h-100 border-0" id="id_{{ sample.id }}">
+                                                    {{ sample.desired_struct_draw }}
+                                                </div>
                                             </td>
                                         {% endautoescape %}
                                     {% else %}
                                         {% if sample.reaction_path %}
-                                            <td>
-                                                <a href="{{ sample.reaction_path.url }}">{% trans "Reaction Conditions" %}</a>
+                                            <td style="height: 6rem">
+                                                <div class="card w-100 h-100 border-0 justify-content-center align-items-center">
+                                                    <a href="{{ sample.reaction_path.url }}">{% trans "Reaction Conditions" %}</a>
+                                                </div>
                                             </td>
                                         {% else %}
                                             <td> File not found</td>
                                         {% endif %}
                                     {% endif %}
-                                {{ sample.was_measured }}
-                                    {% if sample.was_measured %}
-                                        <td><span class="badge badge-success m-1 p-1">{% trans "Measured" %}</span></td>
-                                    {% elif not sample.was_measured and sample.not_measured_cause %}
-                                        <td><span
-                                                class="badge badge-danger m-1 p-1">{% trans "Measurement not possible" %}&thinsp;</span>
+                                    {% if sample.experiments|was_measured %}
+                                        <td>
+                                            <span class="badge badge-primary m-1 p-1">{% trans "Measured" %}</span>
+                                        </td>
+                                    {% elif not sample.experiments|was_measured and sample.not_measured_cause %}
+                                        <td>
+                                            <span class="badge badge-danger m-1 p-1">{% trans "Measurement not possible" %}</span>
+                                        </td>
+                                    {% elif sample.experiments|was_measured and sample.experiments|was_deposited %}
+                                        <td>
+{#                                            TODO: make this a link to the CCDC #}
+                                            <span class="badge badge-success m-1 p-1">{% trans "Was deposited" %}</span>
                                         </td>
                                     {% else %}
                                         <td><span
