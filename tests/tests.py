@@ -307,7 +307,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
     def test_post_experiment(self):
         c = Client()
         c.login(username='testuser', password='Test1234!')
-        response = c.get(reverse_lazy('scxrd:new_exp'),  follow=True)
+        response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
         self.assertEqual(200, response.status_code)
         for c1 in response.context:
             for c in c1:
@@ -317,39 +317,77 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
         print('######')
         print(response.context[0]['form'].fields['experiment_name'])
-        #response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        #print(response.redirect_chain)
-        #response = self.client.post(reverse_lazy('scxrd:new_exp'), follow=True, data=self.formdata)
-        #print('#', response.content)
-        #response = self.client.post(reverse_lazy('scxrd:new_exp'), data=self.formdata, follow=True)
-        #self.assertEqual(response.status_code, 200)
+        # response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
+        # print(response.redirect_chain)
+        # response = self.client.post(reverse_lazy('scxrd:new_exp'), follow=True, data=self.formdata)
+        # print('#', response.content)
+        # response = self.client.post(reverse_lazy('scxrd:new_exp'), data=self.formdata, follow=True)
+        # self.assertEqual(response.status_code, 200)
 
     def test_form(self):
         form = ExperimentEditForm(self.formdata)
-        self.assertEqual({}, form.errors)
-        self.assertEqual(True, form.is_valid())
-        print(form.cleaned_data)
+        self.assertDictEqual({'customer': ['Select a valid choice. That choice is not one of the available choices.']},
+                             form.errors)
+        self.assertEqual(False, form.is_valid())
+        # print(form.cleaned_data)
 
     def test_invalid_form(self):
+        self.maxDiff = 999
         self.formdata['experiment_name'] = ''
         form = ExperimentEditForm(self.formdata)
-        self.assertEqual({'experiment_name': ['This field is required.']}, form.errors)
+        self.assertDictEqual({'experiment_name': ['This field is required.'],
+                              'customer'       : [
+                                  'Select a valid choice. That choice is not one of the available choices.']},
+                             form.errors)
         self.assertEqual(False, form.is_valid())
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestNewSample(DeleteFilesMixin, TestCase):
-    def test_can_send_message(self):
-        data = {
-            "name"   : "Juliana",
-            "foo"    : " Crain",
-            "message": "Would love to talk about Philip K. Dick",
+    def setUp(self) -> None:
+        self.data = {
+            "sample_name"               : "Juliana",
+            "sum_formula"               : "C5H5",
+            "crystallization_conditions": "Would love to talk about Philip K. Dick",
+            "desired_struct_draw"       : "Would love to talk about Philip K. Dick",
         }
-        response = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=data, follow=True)
-        pprint(response)
-        form = SubmitNewSampleForm(response)
-        form.save()
+
+    def test_submit_new_sample(self):
+        c = Client()
+        c.login(username='testuser', password='Test1234!')
+        response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
+        self.assertEqual(200, response.status_code)
+        # response = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=data, follow=True)
+        form = SubmitNewSampleForm(self.data)
+        print(form.errors)
+        self.assertEqual(True, form.is_valid())
+        self.assertEqual('Juliana', str(form.save()))
         self.assertEqual(Sample.objects.count(), 1)
+
+    def test_submit_invalid_sample_name(self):
+        self.data["sample_name"] = ''
+        form = SubmitNewSampleForm(self.data)
+        self.assertEqual(False, form.is_valid())
+        self.assertDictEqual({'sample_name': ['This field is required.']}, form.errors)
+
+    def test_submit_invalid_formula(self):
+        self.data["sum_formula"] = ''
+        form = SubmitNewSampleForm(self.data)
+        self.assertEqual(False, form.is_valid())
+        self.assertDictEqual({'sum_formula': ['This field is required.']}, form.errors)
+
+    def test_submit_invalid_crystallizations(self):
+        self.data["crystallization_conditions"] = ''
+        form = SubmitNewSampleForm(self.data)
+        self.assertEqual(False, form.is_valid())
+        self.assertDictEqual({'crystallization_conditions': ['This field is required.']}, form.errors)
+
+    def test_submit_invalid_struct(self):
+        self.data["desired_struct_draw"] = ''
+        form = SubmitNewSampleForm(self.data)
+        self.assertEqual(False, form.is_valid())
+        self.assertDictEqual({'__all__': ['You need to either upload a document with the desired '
+                                          'structure or draw it in the field below.']}, form.errors)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -406,4 +444,3 @@ class TestAuthenticated(DeleteFilesMixin, TestCase):
 
 if __name__ == '__main':
     pass
-    # create_experiment(12)
