@@ -360,9 +360,6 @@ class TestNewSample(DeleteFilesMixin, TestCase):
         self.client.login(username='testuser', password='Test1234!')
 
     def test_submit_new_sample(self):
-        response: HttpResponse = self.client.get(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
-        self.assertEqual(200, response.status_code)
-        self.assertEqual('OK', response.reason_phrase)
         form = SubmitNewSampleForm(self.data)
         self.assertEqual(True, form.is_valid())
         forminst: Sample = form.save()
@@ -402,6 +399,12 @@ class TestNewSample(DeleteFilesMixin, TestCase):
         self.assertEqual(False, form.is_valid())
         self.assertDictEqual({'__all__': ['You need to either upload a document with the desired '
                                           'structure or draw it in the field below.']}, form.errors)
+
+    def getform(self):
+        response: HttpResponse = self.app.get(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('OK', response.reason_phrase)
+        page = response.form.submit()
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
