@@ -349,8 +349,9 @@ class TestNewSample(DeleteFilesMixin, TestCase):
         self.data = {
             "sample_name"               : "Juliana",
             "sum_formula"               : "C5H5",
-            "crystallization_conditions": "Would love to talk about Philip K. Dick",
+            "crystallization_conditions": "Would love to talk about John K. Dick",
             "desired_struct_draw"       : "Would love to talk about Philip K. Dick",
+            "special_remarks"           : 'foobar!',
         }
         user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
         user.set_password('Test1234!')
@@ -359,14 +360,22 @@ class TestNewSample(DeleteFilesMixin, TestCase):
         self.client.login(username='testuser', password='Test1234!')
 
     def test_submit_new_sample(self):
-        #response = self.client.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        #self.assertEqual(200, response.status_code)
         response: HttpResponse = self.client.get(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
+        self.assertEqual(200, response.status_code)
         self.assertEqual('OK', response.reason_phrase)
-        response: HttpResponse = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
-        form = SubmitNewSampleForm(response)
+        form = SubmitNewSampleForm(self.data)
         self.assertEqual(True, form.is_valid())
-        self.assertEqual('Juliana', str(form.save()))
+        forminst: Sample = form.save()
+        self.assertEqual('Juliana', str(forminst))
+        self.assertEqual(1, forminst.pk)
+        self.assertEqual(False, forminst.solve_refine_selve)
+        self.assertEqual(False, forminst.stable)
+        self.assertEqual('Would love to talk about Philip K. Dick', forminst.desired_struct_draw)
+        self.assertEqual('Juliana', forminst.sample_name)
+        self.assertEqual('foobar!', forminst.special_remarks)
+        self.assertEqual('C5H5', forminst.sum_formula)
+        self.assertNotEqual('C5H5', forminst.crystallization_conditions)
+        self.assertEqual('Would love to talk about John K. Dick', forminst.crystallization_conditions)
         self.assertEqual(Sample.objects.count(), 1)
 
     def test_submit_invalid_sample_name(self):
