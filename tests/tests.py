@@ -12,6 +12,7 @@ import gemmi
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import HttpResponse
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse, reverse_lazy
 from model_bakery import baker
@@ -351,15 +352,19 @@ class TestNewSample(DeleteFilesMixin, TestCase):
             "crystallization_conditions": "Would love to talk about Philip K. Dick",
             "desired_struct_draw"       : "Would love to talk about Philip K. Dick",
         }
+        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
+        user.set_password('Test1234!')
+        user.save()
+        self.client = Client()
+        self.client.login(username='testuser', password='Test1234!')
 
     def test_submit_new_sample(self):
-        c = Client()
-        c.login(username='testuser', password='Test1234!')
-        response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        self.assertEqual(200, response.status_code)
-        # response = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=data, follow=True)
-        form = SubmitNewSampleForm(self.data)
-        print(form.errors)
+        #response = self.client.get(reverse_lazy('scxrd:new_exp'), follow=True)
+        #self.assertEqual(200, response.status_code)
+        response: HttpResponse = self.client.get(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
+        self.assertEqual('OK', response.reason_phrase)
+        response: HttpResponse = self.client.post(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
+        form = SubmitNewSampleForm(response)
         self.assertEqual(True, form.is_valid())
         self.assertEqual('Juliana', str(form.save()))
         self.assertEqual(Sample.objects.count(), 1)
