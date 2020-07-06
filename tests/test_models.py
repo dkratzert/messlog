@@ -7,6 +7,7 @@ from django.test import TestCase, override_settings
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
+from scxrd.customer_models import Sample
 from scxrd.models import model_fixtures, Experiment, Machine, CrystalSupport, CrystalGlue, WorkGroup
 from scxrd.utils import generate_sha256
 from tests.tests import MEDIA_ROOT, create_experiment, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \
@@ -129,11 +130,32 @@ class ExperimentCreateTest(DeleteFilesMixin, TestCase):
         self.assertEqual(str(self.cif_model.experiment.customer.profile.work_group), 'AK Hillebrecht')
 
 
-# TODO: class TestSampleModel():
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestSampleCreate(DeleteFilesMixin, TestCase):
+
+    def test_sample(self):
+        user = User.objects.create(username='foo', last_name='Bar', first_name='Foo')
+        user.profile.work_group = WorkGroup.objects.get(group_head__contains='Krossing')
+        user.save()
+        s: Sample = Sample.objects.create(
+            sample_name='DK_123_b',
+            sum_formula='C6H12O6',
+            submit_date='2020-03-02',
+            crystallization_conditions='From methanol at room temperature by evaporation',
+            solve_refine_selve=False,
+            customer_samp=user,
+            stable=True,
+        )
+        s.save()
+        self.assertEqual(str(Sample.objects.first().customer_samp.profile.work_group), 'AK Krossing')
+        self.assertEqual(Sample.objects.first().sum_formula, 'C6H12O6')
+        self.assertEqual(str(Sample.objects.first()), 'DK_123_b')
+        self.assertEqual(str(Sample.objects.last()), 'DK_123_b')
+        self.assertEqual(Sample.objects.last().stable, True)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateCif(DeleteFilesMixin, TestCase):
+class TestExperimentCreateCif(DeleteFilesMixin, TestCase):
 
     def test_parsecif(self):
         struct = gemmi.cif.read_file('scxrd/testfiles/p21c.cif')

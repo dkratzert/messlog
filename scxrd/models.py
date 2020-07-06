@@ -83,14 +83,14 @@ class Profile(models.Model):
     company = models.CharField(max_length=200, verbose_name=_('company'), blank=True)
     work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.SET_NULL,
                                    related_name='profiles')
-    street = models.CharField(max_length=250, blank=True, null=True)
-    house_number = models.CharField(max_length=200, blank=True, null=True)
-    building = models.CharField(max_length=200, blank=True, null=True)
-    town = models.CharField(max_length=200, blank=True, null=True)
-    country = models.CharField(max_length=200, blank=True, null=True)
-    postal_code = models.CharField(max_length=200, blank=True, null=True)
-    phone_number = models.CharField(max_length=17, blank=True, null=True)
-    comment = models.TextField(blank=True, null=True)
+    street = models.CharField(max_length=250, blank=True)
+    house_number = models.CharField(max_length=200, blank=True)
+    building = models.CharField(max_length=200, blank=True)
+    town = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+    postal_code = models.CharField(max_length=200, blank=True)
+    phone_number = models.CharField(max_length=17, blank=True)
+    comment = models.TextField(blank=True)
     is_operator = models.BooleanField(verbose_name=_('The user has operator rights'), default=False)
 
     def __str__(self):
@@ -120,7 +120,7 @@ class WorkGroup(models.Model):
     A work group is a group of Person()s with a leading group_head (which is also a Person).
     """
     fixtures = ['scxrd/fixtures/work_group.json']
-    group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, null=True, unique=True)
+    group_head = models.CharField(verbose_name=_('work group head'), max_length=50, blank=True, unique=True)
 
     def __str__(self):
         return "AK {}".format(self.group_head)
@@ -135,7 +135,7 @@ class Machine(models.Model):
     diffrn_measurement_device_type = models.CharField(verbose_name="machine model name", max_length=200)
     # The general class of goniometer or device used to support and orient the specimen:
     # e.g. 'three-circle diffractometer'
-    diffrn_measurement_device = models.CharField(verbose_name=_("machine type"), max_length=200, null=True, blank=True)
+    diffrn_measurement_device = models.CharField(verbose_name=_("machine type"), max_length=200, blank=True)
 
     def __str__(self):
         return self.diffrn_measurement_device_type
@@ -166,8 +166,7 @@ class CrystalGlue(models.Model):
 
 class Experiment(models.Model):
     # The name of the current experiment
-    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, default='',
-                                       unique=True)
+    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, unique=True)
     # Makes the sample measurement status visible through the experiment status:
     sample = models.ForeignKey('Sample', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='experiments')
@@ -185,7 +184,7 @@ class Experiment(models.Model):
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
     resolution = models.FloatField(verbose_name=_('Resolution [&#x212b;]'), null=True, blank=True,
                                    validators=(resolution_validator,))
-    conditions = models.TextField(verbose_name=_('reaction conditions'), null=True, blank=True)
+    conditions = models.TextField(verbose_name=_('reaction conditions'), blank=True)
     measure_date = models.DateTimeField(verbose_name=_('measurement date'), default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)
     result_date = models.DateField(verbose_name=_('results sent date'), blank=True, null=True)
@@ -210,12 +209,12 @@ class Experiment(models.Model):
     crystal_colour_lustre = models.IntegerField(choices=COLOUR_LUSTRE_COICES,
                                                 default=COLOUR_LUSTRE_COICES[0][0])  # no blank=True here!
     # equivalent to _exptl_crystal_description
-    crystal_habit = models.CharField(max_length=300, blank=True, null=True, verbose_name=_("crystal habit"))
+    crystal_habit = models.CharField(max_length=300, blank=True, verbose_name=_("crystal habit"))
     # _exptl_special_details:
-    exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='')
+    exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, default='')
     was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False, null=True,
                                        blank=True)
-    not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True, default='', null=True,
+    not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True,
                                           help_text=_('The cause why the sample could not be measured'))
 
     class Meta:

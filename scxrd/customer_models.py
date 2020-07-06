@@ -12,8 +12,9 @@ def validate_reaction_file_extension(value):
 
 
 class Sample(models.Model):
-    sample_name = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, null=False, default='',
-                                   unique=True, help_text=_('A unique name of your sample'))
+    # TODO: make sure that no samples can be created in the future and not too far in the past. 
+    sample_name = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, unique=True,
+                                   help_text=_('A unique name of your sample'))
     # The date when the sample is submitted to the facility:
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True,
                                    default=timezone.now)
@@ -35,12 +36,11 @@ class Sample(models.Model):
         blank=True,
         null=True
     )
-    crystallization_conditions = models.CharField(verbose_name=_('Solvents used for crystallization, method, conditions'),
-                                                  blank=True,
-                                                  null=True,
-                                                  default='', max_length=500)
+    crystallization_conditions = models.CharField(blank=True, default='', max_length=500, 
+                                                  verbose_name=_('Solvents used for crystallization, '
+                                                                 'method, conditions'))
     desired_struct_draw = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
-    special_remarks = models.TextField(verbose_name=_('special remarks'), blank=True, null=True, default='',
+    special_remarks = models.TextField(verbose_name=_('special remarks'), blank=True,
                                        help_text=_('Any additional information we should know.'))
 
     class Meta:

@@ -26,12 +26,12 @@ class CifFileModel(models.Model):
     """
     experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='cif file data',
                                       related_name='ciffilemodel')
-    sha256 = models.CharField(max_length=256, blank=True, null=True)
+    sha256 = models.CharField(max_length=256, blank=True)
     date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name=_('change date'), null=True, blank=True)
     filesize = models.PositiveIntegerField(null=True, blank=True)
     #########################################
-    data = models.CharField(null=True, blank=True, max_length=256)
+    data = models.CharField(blank=True, max_length=256)
     cell_length_a = models.FloatField(null=True, blank=True)
     cell_length_b = models.FloatField(null=True, blank=True)
     cell_length_c = models.FloatField(null=True, blank=True)
@@ -40,27 +40,26 @@ class CifFileModel(models.Model):
     cell_angle_gamma = models.FloatField(null=True, blank=True)
     cell_volume = models.FloatField(null=True, blank=True)
     cell_formula_units_Z = models.PositiveIntegerField(null=True, blank=True)
-    space_group_name_H_M_alt = models.CharField(max_length=255, null=True, blank=True)
+    space_group_name_H_M_alt = models.CharField(max_length=255, blank=True)
     space_group_IT_number = models.PositiveIntegerField(null=True, blank=True)
-    space_group_crystal_system = models.CharField(max_length=255, null=True, blank=True)
+    space_group_crystal_system = models.CharField(max_length=255, blank=True)
     space_group_symop_operation_xyz = models.TextField(null=True, blank=True)
     # This is the sum formula directly from the cif key/value:
-    chemical_formula_sum = models.CharField(max_length=2048, null=True, blank=True)
+    chemical_formula_sum = models.CharField(max_length=2048, blank=True)
     diffrn_radiation_wavelength = models.FloatField(null=True, blank=True)
-    diffrn_radiation_type = models.CharField(max_length=255, null=True, blank=True)
+    diffrn_radiation_type = models.CharField(max_length=255, blank=True)
     diffrn_reflns_av_R_equivalents = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_max = models.FloatField(null=True, blank=True)
     diffrn_measured_fraction_theta_max = models.FloatField(null=True, blank=True)
-    refine_ls_abs_structure_Flack = models.CharField(null=True, blank=True, max_length=255)
+    refine_ls_abs_structure_Flack = models.CharField(blank=True, max_length=255)
     refine_ls_R_factor_gt = models.FloatField(null=True, blank=True)
     refine_ls_wR_factor_ref = models.FloatField(null=True, blank=True)
     refine_ls_goodness_of_fit_ref = models.FloatField(null=True, blank=True)
     refine_diff_density_max = models.FloatField(null=True, blank=True)
     refine_diff_density_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
-    database_code_depnum_ccdc_archive = models.CharField(max_length=255, null=True, blank=True,
-                                                         verbose_name=_('CCDC number'))
+    database_code_depnum_ccdc_archive = models.CharField(max_length=255, blank=True, verbose_name=_('CCDC number'))
     cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
                                         validators=[validate_cif_file_extension],
                                         verbose_name='cif file')
