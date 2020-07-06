@@ -2,6 +2,7 @@
 import shutil
 import tempfile
 
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.test import Client
 
@@ -11,11 +12,21 @@ from scxrd.models import Experiment, Machine, WorkGroup, CrystalGlue, model_fixt
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
 
+class SetupUserMixin():
+    def setUp(self):
+        # noinspection PyUnresolvedReferences
+        super().setUp()
+        # You need at least the PlainUserMixin:
+        self.user.set_password('Test1234!')
+        self.user.save()
+        self.user = authenticate(username='testuser', password='Test1234!')
+
+
 class PlainUserMixin():
     def setUp(self) -> None:
         user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
         user.set_password('Test1234!')
-        self.user_instance = user
+        self.user = user
         self.client = Client()
         self.client.login(username='testuser', password='Test1234!')
 
@@ -23,7 +34,7 @@ class PlainUserMixin():
 class OperatorUserMixin():
     def setUp(self) -> None:
         u = make_operator_user()
-        self.user_instance = u
+        self.user = u
         self.client = Client()
         self.client.login(username='testuser', password='Test1234!')
 
@@ -31,7 +42,7 @@ class OperatorUserMixin():
 class SuperUserMixin():
     def setUp(self) -> None:
         u = make_superuser_user()
-        self.user_instance = u
+        self.user = u
         self.client = Client()
         self.client.login(username='elefant', password='Test1234!')
 

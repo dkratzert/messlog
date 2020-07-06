@@ -2,11 +2,12 @@ from pprint import pprint
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.test import TestCase, override_settings, Client
+from django.test import TestCase, override_settings, Client, RequestFactory
 from django.urls import reverse, reverse_lazy
 
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
+from scxrd.views import NewSampleByCustomer
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, SetupUserMixin, PlainUserMixin
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -30,21 +31,26 @@ class TestHostHeader(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, SetupUserMixin, TestCase):
 
-    def test_status_code(self):
-        print('#####foo')
+    def test_authenticated(self):
+        self.assertEqual(self.user.is_authenticated, True)
+
+    def test_request(self):
+        self.maxDiff = None
+        self.longMessage = True
+        request_factory = RequestFactory()
+        request = request_factory.get(reverse('scxrd:submit_sample'))
+        request.user = self.user
+        view = NewSampleByCustomer.as_view(template_name='scxrd/new_sample_by_customer.html',
+                                           extra_context={'sample_name': 'Waldo'})
+        response = view(request, sample_name='laskjdfh')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ['scxrd/new_sample_by_customer.html'])
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestAuthenticated(DeleteFilesMixin, TestCase):
-    def setUp(self):
-        # self.selenium = webdriver.Chrome()
-        super().setUp()
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True)
-        user.set_password('Test1234!')
-        user.save()
-        self.user = authenticate(username='testuser', password='Test1234!')
+class TestAuthenticatedLogin(DeleteFilesMixin, PlainUserMixin, SetupUserMixin, TestCase):
 
     def test_user(self):
         self.assertEqual(str(User.objects.first()), 'testuser')
@@ -64,8 +70,6 @@ class TestAuthenticated(DeleteFilesMixin, TestCase):
         }
         response = self.client.post(reverse("scxrd:submit_sample"), data=data, user=self.user, follow=True)
         self.assertEqual(response.status_code, 200)
-        # TODO: test to full sample creation
-        # self.assertEqual(Sample.objects.count(), 1)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
