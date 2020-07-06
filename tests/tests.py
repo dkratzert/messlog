@@ -1,28 +1,39 @@
 # Create your tests here.
 import shutil
-import sys
 import tempfile
-import unittest
-from io import BytesIO
-from pprint import pprint
-from wsgiref.handlers import SimpleHandler
 
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.test import TestCase, override_settings, Client
-from django.urls import reverse, reverse_lazy
-from model_bakery import baker
+from django.test import Client
 
 from mysite.settings import MEDIA_ROOT
-from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.models import Experiment, Machine, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
-
-"""
-TODO:      
- 
-"""
+from scxrd.models import Experiment, Machine, WorkGroup, CrystalGlue, model_fixtures
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
+
+
+class PlainUserMixin():
+    def setUp(self) -> None:
+        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
+        user.set_password('Test1234!')
+        self.user_instance = user
+        self.client = Client()
+        self.client.login(username='testuser', password='Test1234!')
+
+
+class OperatorUserMixin():
+    def setUp(self) -> None:
+        u = make_operator_user()
+        self.user_instance = u
+        self.client = Client()
+        self.client.login(username='testuser', password='Test1234!')
+
+
+class SuperUserMixin():
+    def setUp(self) -> None:
+        u = make_superuser_user()
+        self.user_instance = u
+        self.client = Client()
+        self.client.login(username='elefant', password='Test1234!')
 
 
 def make_operator_user():
@@ -79,14 +90,6 @@ class DeleteFilesMixin():
         super().tearDownClass()
 
 
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class HomeTests(DeleteFilesMixin, TestCase):
-    def test_home_view_status_code(self):
-        url = reverse('scxrd:index')
-        response = self.client.get(url, follow=True)
-        self.assertEquals(response.status_code, 200)
-
-
 def create_experiment(user: User = None):
     """
     Create a question with the given `question_text` and published the
@@ -129,205 +132,5 @@ def create_experiment(user: User = None):
     return exp
 
 
-
-
-
-
-def hello_app(environ, start_response):
-    start_response("200 OK", [
-        ('Content-Type', 'text/plain'),
-        ('Date', 'Mon, 05 Jun 2006 18:49:54 GMT')
-    ])
-    return [b"Hello, world!"]
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestWSGIRef(DeleteFilesMixin, TestCase):
-
-    @unittest.skip
-    def testConnectionAbortedError(self):
-        class AbortingWriter:
-            def write(self, b):
-                raise ConnectionAbortedError()
-
-            def flush(self):
-                pass
-
-        environ = {"SERVER_PROTOCOL": "HTTP/1.0"}
-        h = SimpleHandler(BytesIO(), AbortingWriter(), sys.stderr, environ)
-        msg = "Client connection aborted"
-        with self.assertWarnsRegex(RuntimeWarning, msg):
-            h.run(hello_app)
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestCustomerModel(DeleteFilesMixin, TestCase):
-
-    def setUp(self):
-        self.sample = baker.prepare('Sample', _quantity=3)
-        self.exp = baker.prepare('Experiment', experiment_name='foo')
-        self.user = baker.prepare('User')
-        self.profile = baker.prepare('Profile')
-
-    def test_foo(self):
-        [pprint(x.__dict__) for x in self.sample]
-        pprint(self.exp.__dict__)
-        pprint(self.user.__dict__)
-        pprint(self.profile.__dict__)
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestViews(DeleteFilesMixin, TestCase):
-
-    def test_report(self):
-        pass
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class NewExpTest(DeleteFilesMixin, TestCase):
-    def setUp(self):
-        self.formdata = dict({'Save'                 : 'Save',
-                              'base'                 : '2',
-                              'crystal_colour'       : '6',
-                              'crystal_habit'        : 'needle',
-                              'crystal_size_x'       : '0.13',
-                              'crystal_size_y'       : '0.12',
-                              'crystal_size_z'       : '0.1',
-                              'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
-                              'customer'             : '1',
-                              'experiment_name'      : 'TB_VR40_v1b',
-                              'exptl_special_details': 'blub',
-                              'glue'                 : '2',
-                              'machine'              : '1',
-                              'measure_date'         : '2020-07-03 12:53',
-                              'measurement_temp'     : '102',
-                              'number'               : '88',
-                              'prelim_unit_cell'     : '10 10 10 90 90 90',
-                              'resolution'           : '0.77',
-                              'sum_formula'          : 'C3H4O2',
-                              'cif_file_on_disk'     : 'scxrd/testfiles/p21c.cif',
-                              })
-        # self.selenium = webdriver.Chrome()
-        super().setUp()
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=True)
-        user.set_password('Test1234!')
-        user.save()
-        self.user = authenticate(username='testuser', password='Test1234!')
-
-    def test_post_experiment(self):
-        c = Client()
-        c.login(username='testuser', password='Test1234!')
-        response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        self.assertEqual(200, response.status_code)
-        for c1 in response.context:
-            for c in c1:
-                pprint(c)
-        self.assertEqual('testuser', str(response.context.get('user')))
-        self.assertEqual(True, response.context.get('render_required_fields'))
-        self.assertEqual(False, response.context.get('render_unmentioned_fields'))
-        print('######')
-        print(response.context[0]['form'].fields['experiment_name'])
-        # response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        # print(response.redirect_chain)
-        # response = self.client.post(reverse_lazy('scxrd:new_exp'), follow=True, data=self.formdata)
-        # print('#', response.content)
-        # response = self.client.post(reverse_lazy('scxrd:new_exp'), data=self.formdata, follow=True)
-        # self.assertEqual(response.status_code, 200)
-
-    def test_form(self):
-        form = ExperimentEditForm(self.formdata)
-        self.assertDictEqual({'customer': ['Select a valid choice. That choice is not one of the available choices.']},
-                             form.errors)
-        self.assertEqual(False, form.is_valid())
-        # print(form.cleaned_data)
-
-    def test_invalid_form(self):
-        self.maxDiff = 999
-        self.formdata['experiment_name'] = ''
-        form = ExperimentEditForm(self.formdata)
-        self.assertDictEqual({'experiment_name': ['This field is required.'],
-                              'customer'       : [
-                                  'Select a valid choice. That choice is not one of the available choices.']},
-                             form.errors)
-        self.assertEqual(False, form.is_valid())
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestHostHeader(DeleteFilesMixin, TestCase):
-    def test_empty_host(self):
-        response = self.client.get(reverse("scxrd:index"))
-        self.assertEqual(response.status_code, 200)
-
-    def test_wrong_host(self):
-        response = self.client.get(reverse("scxrd:index"), HTTP_HOST="128.0.0.2")
-        self.assertEqual(response.status_code, 400)
-
-    def test_wrong_host_construct(self):
-        client = Client(HTTP_HOST="127.0.0.1")
-        response = client.get(reverse("scxrd:index"))
-        self.assertContains(response, "")
-
-    def test_correct_host(self):
-        response = self.client.get(reverse("scxrd:index"), HTTP_HOST="127.0.0.1:8000")
-        self.assertContains(response, "")
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestAuthenticated(DeleteFilesMixin, TestCase):
-    def setUp(self):
-        # self.selenium = webdriver.Chrome()
-        super().setUp()
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True)
-        user.set_password('Test1234!')
-        user.save()
-        self.user = authenticate(username='testuser', password='Test1234!')
-
-    def test_user(self):
-        self.assertEqual(str(User.objects.first()), 'testuser')
-
-    def test_register(self):
-        user = authenticate(username='testuser', password='Test1234!')
-        if user is not None:  # prints Backend login failed
-            print("Backend login successful")
-        else:
-            print("Backend login failed")
-
-    def test_can_send_message(self):
-        data = {
-            "name"   : "Juliana",
-            "foo"    : " Crain",
-            "message": "Would love to talk about Philip K. Dick",
-        }
-        response = self.client.post(reverse("scxrd:submit_sample"), data=data, user=self.user, follow=True)
-        self.assertEqual(response.status_code, 200)
-        # TODO: test to full sample creation
-        # self.assertEqual(Sample.objects.count(), 1)
-
-
 if __name__ == '__main':
     pass
-
-
-class PlainUserMixin():
-    def setUp(self) -> None:
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
-        user.set_password('Test1234!')
-        self.user_instance = user
-        self.client = Client()
-        self.client.login(username='testuser', password='Test1234!')
-
-
-class OperatorUserMixin():
-    def setUp(self) -> None:
-        u = make_operator_user()
-        self.user_instance = u
-        self.client = Client()
-        self.client.login(username='testuser', password='Test1234!')
-
-
-class SuperUserMixin():
-    def setUp(self) -> None:
-        u = make_superuser_user()
-        self.user_instance = u
-        self.client = Client()
-        self.client.login(username='elefant', password='Test1234!')

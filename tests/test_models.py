@@ -88,7 +88,7 @@ class TestSuperuserProfile(SuperUserMixin, DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateTest(DeleteFilesMixin, TestCase):
+class TestExperimentCreateTest(DeleteFilesMixin, TestCase):
     fixtures = model_fixtures
 
     def setUp(self) -> None:
@@ -169,7 +169,7 @@ class TestExperimentCreateCif(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class WorkGroupTest(DeleteFilesMixin, TestCase):
+class TestWorkGroup(DeleteFilesMixin, TestCase):
 
     def test_user_company(self):
         user = User(first_name='Susie', last_name='Sorglos', email='foo@bar.de', username='susi')
@@ -205,7 +205,7 @@ class WorkGroupTest(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class OtherTablesTest(DeleteFilesMixin, TestCase):
+class TestOtherTables(DeleteFilesMixin, TestCase):
 
     def test_machine(self):
         mach = Machine.objects.get(diffrn_measurement_device__contains='APEXII')
