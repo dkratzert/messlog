@@ -42,10 +42,11 @@ def get_absolute_url(self):
 
 """
 
-model_fixtures = ['scxrd/fixtures/glue.json', 
-                'scxrd/fixtures/support.json', 
-                'scxrd/fixtures/machines.json',
-                'scxrd/fixtures/work_group.json']
+model_fixtures = ['scxrd/fixtures/glue.json',
+                  'scxrd/fixtures/support.json',
+                  'scxrd/fixtures/machines.json',
+                  'scxrd/fixtures/work_group.json']
+
 
 def validate_email(value):
     """
@@ -103,6 +104,15 @@ class Profile(models.Model):
                 return name + '*'
             else:
                 return name
+
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    """Creating a Profile model instance while saving a user"""
+    if created:
+        Profile.objects.create(user=instance)
+        print('Created a profile instance!')
+    instance.profile.save()
 
 
 class WorkGroup(models.Model):
@@ -225,10 +235,3 @@ class Experiment(models.Model):
 
     def __str__(self):
         return self.experiment_name
-
-
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    instance.profile.save()

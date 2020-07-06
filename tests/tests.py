@@ -4,22 +4,18 @@ import sys
 import tempfile
 import unittest
 from io import BytesIO
-from pathlib import Path
 from pprint import pprint
 from wsgiref.handlers import SimpleHandler
 
-import gemmi
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse, reverse_lazy
 from model_bakery import baker
 
 from mysite.settings import MEDIA_ROOT
-from scxrd.cif_model import CifFileModel
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.models import Experiment, Machine, Profile, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
+from scxrd.models import Experiment, Machine, WorkGroup, CrystalSupport, CrystalGlue, model_fixtures
 
 """
 TODO:      
@@ -27,6 +23,49 @@ TODO:
 """
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
+
+
+def make_operator_user():
+    group = WorkGroup.objects.create(group_head='Krabäppel')
+    u = User.objects.create(username='testuser', email='test@test.com', is_active=True, first_name='Sandra',
+                            last_name='Sorglos', is_superuser=False)
+    u.set_password('Test1234!')
+    # This works, because of the update_user_profile slot in Profile
+    u.profile.work_group = group
+    u.profile.is_operator = True
+    u.profile.phone_number = '123456'
+    u.profile.street = 'Foostreet'
+    u.profile.house_number = '31'
+    u.profile.town = 'Bartown'
+    u.profile.country = 'Germany'
+    u.profile.postal_code = '3500'
+    u.profile.building = 'AC'
+    u.profile.comment = "A Dog's live in Databases"
+    u.profile.work_group = group
+    u.save()
+    return u
+
+
+def make_superuser_user():
+    group = WorkGroup.objects.create(group_head='Blümchen')
+    u = User.objects.create(username='elefant', email='test@test.com', is_active=True, first_name='Benjamin',
+                            last_name='Blümchen', is_superuser=True)
+    u.set_password('Test1234!')
+    # This works, because of the update_user_profile slot in Profile
+    u.profile.work_group = group
+    # Setting operator to True should be not necessary for a superuser:
+    # u.profile.is_operator = True
+    u.profile.phone_number = '654321'
+    u.profile.street = 'Zoostraße'
+    u.profile.house_number = '3'
+    u.profile.town = 'Freudenstadt'
+    u.profile.country = 'Germany'
+    u.profile.postal_code = '3000'
+    u.profile.building = 'Elefantenhaus'
+    u.profile.comment = "Auf der schönen grünen Wiese"
+    u.profile.work_group = group
+    u.save()
+    return u
 
 
 class DeleteFilesMixin():
@@ -40,36 +79,6 @@ class DeleteFilesMixin():
         super().tearDownClass()
 
 
-class Plain_user_Mixin():
-    def setUp(self) -> None:
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
-        user.set_password('Test1234!')
-        self.client = Client()
-        self.client.login(username='testuser', password='Test1234!')
-
-
-class Operator_user_Mixin():
-    def setUp(self) -> None:
-        group = WorkGroup.objects.create(group_head='AGrouphead')
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, first_name='Sandra',
-                                   last_name='Sorglos', is_superuser = False)
-        Profile(
-            is_operator=True,
-            phone_number='1234',
-            street='Foostreet',
-            house_number='31',
-            work_group=group,
-            user=user
-        )
-        # I do not need to save here!!:
-        # objects.create() already saves the Model!!!
-        # pro.save()
-        user.set_password('Test1234!')
-        self.usermodel = user
-        self.client = Client()
-        self.client.login(username='testuser', password='Test1234!')
-
-
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class HomeTests(DeleteFilesMixin, TestCase):
     def test_home_view_status_code(self):
@@ -78,178 +87,50 @@ class HomeTests(DeleteFilesMixin, TestCase):
         self.assertEquals(response.status_code, 200)
 
 
-def create_experiment():
+def create_experiment(user: User = None):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
     in the past, positive for questions that have yet to be published).
     """
     fixtures = model_fixtures
-    user = User(first_name='Susi',
-                last_name='Sorglos',
-                username='susi',
-                email='susi@foo.de',
-                )
-    user.save()
+    if not user:
+        user = User(first_name='Susi',
+                    last_name='Sorglos',
+                    username='susi',
+                    email='susi@foo.de',
+                    )
+        user.save()
     user2 = User(first_name='Hansi',
                  last_name='Hinterseer',
                  username='hans',
                  email='hans@foo.de',
                  )
     user2.save()
-    pro = Profile(user=user,
-                  phone_number='1234',
-                  street='Foostreet',
-                  work_group=WorkGroup(group_head='Krossing'),
-                  )
-    # pro.save()  # not needed?
-    user.profile = pro
+    user.profile.work_group = WorkGroup.objects.get(group_head__contains='krossing')
+    user2.profile.work_group = WorkGroup.objects.get(group_head__contains='Hillebrecht')
+    # user.save()
+    # user2.save()
     mach = Machine(diffrn_measurement_device_type='FoobarMachine')
     mach.save()
-    exp = Experiment(experiment_name='IK_MSJg20_100K',
-                     number='1',
-                     sum_formula='C5H10O2',
-                     machine=Machine.objects.filter(diffrn_measurement_device_type__contains='APEX').first(),
-                     operator=user,
-                     customer=user2,
-                     glue=CrystalGlue.objects.create(glue='Polyether'),
-                     crystal_colour='1',
-                     measure_date='2013-11-20 20:08:07.127325+00:00'
-                     )
-    exp.save()
+    exp = Experiment.objects.create(experiment_name='IK_MSJg20_100K',
+                                    number='1',
+                                    sum_formula='C5H10O2',
+                                    was_measured=True,
+                                    machine=Machine.objects.filter(
+                                        diffrn_measurement_device_type__contains='APEX').first(),
+                                    operator=user,
+                                    customer=user2,
+                                    glue=CrystalGlue.objects.create(glue='Polyether'),
+                                    crystal_colour='1',
+                                    measure_date='2013-11-20 20:08:07.127325+00:00',
+                                    prelim_unit_cell='10 01 10 90 90 90'
+                                    )
     return exp
 
 
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentIndexViewTests(DeleteFilesMixin, TestCase):
-    fixtures = model_fixtures
-
-    """def test_no_experiements(self):
-        response = self.client.get(reverse('scxrd:index'), follow=True)
-        # print('response:', response)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual("<WSGIRequest: GET '/accounts/login/?next=%2Fscxrd%2F'>", str(response.context['request']))
-"""
 
 
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateTest(DeleteFilesMixin, TestCase):
-    fixtures = model_fixtures
-
-    def test_make_exp(self):
-        file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFileModel(cif_file_on_disk=file)
-        exp = create_experiment()
-        c.experiment = exp
-        c.save()
-        self.cif = c
-        self.assertEqual('IK_MSJg20_100K', str(exp))
-        self.assertEqual('susi', str(exp.operator))
-        self.assertEqual('C5H10O2', exp.sum_formula)
-        self.assertEqual('2013-11-20 20:08:07.127325+00:00', str(exp.measure_date))
-        self.assertEqual(1, exp.pk)
-        self.assertEqual('APEXII', str(exp.machine))
-        self.assertEqual('Hansi', str(exp.customer.first_name))
-        self.assertEqual('Hinterseer', str(exp.customer.last_name))
-
-    def test_string_representation(self):
-        entry = Experiment(experiment_name="My entry title")
-        self.assertEqual(str(entry), entry.experiment_name)
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateCif(DeleteFilesMixin, TestCase):
-
-    def test_parsecif(self):
-        struct = gemmi.cif.read_file('scxrd/testfiles/p21c.cif')
-        struct.sole_block()
-        b = struct.sole_block()
-        self.assertEqual(b.find_value('_diffrn_reflns_number'), '42245')
-        self.assertEqual(b.find_value('_shelx_res_file').replace('\r\n', '')
-                         .replace('\n', '')[:20], ';TITL p21c in P2(1)/')
-        lo = b.find_loop('_atom_site_label')
-        self.assertEqual(lo[1], 'C1_6')
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class CifFileTest(DeleteFilesMixin, TestCase):
-
-    def test_saveCif(self):
-        file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
-        c = CifFileModel(cif_file_on_disk=file, experiment=create_experiment())
-        c.save()
-        ex = c.experiment
-        self.assertEqual(ex.customer.first_name, 'Hansi')
-        self.assertEqual(ex.customer.last_name, 'Hinterseer')
-        self.assertEqual(ex.operator.username, 'susi')
-        ex.save()
-        c.experiment = ex
-        # ex.save_base()
-        self.assertEqual(ex.ciffilemodel.wr2_in_percent(), 10.1)
-        self.assertEqual(ex.ciffilemodel.refine_ls_wR_factor_ref, 0.1014)
-        self.assertEqual(ex.ciffilemodel.shelx_res_file.replace('\r\n', '').replace('\n', '').replace('\r', '')[:30],
-                         'TITL p21c in P2(1)/c    p21c.r')
-        # self.assertEqual(ex.cif.atoms.x, '')
-        self.assertEqual(ex.ciffilemodel.space_group_name_H_M_alt, 'P 21/c')
-        response = self.client.get(reverse('scxrd:details_table', kwargs={'pk': 1}))
-        self.assertEqual(response.status_code, 200)
-        # delete file afterwards:
-        ex.ciffilemodel.delete()
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class WorkGroupTest(DeleteFilesMixin, TestCase):
-
-    def test_group_head(self):
-        """
-        Create the Person of a group first. Then the group itselv and finally
-        define the group as work_group of the heads Person instance.
-        """
-        user = User(first_name='Susie', last_name='Sorglos', email='foo@bar.de', username='susi')
-        user.profile = Profile(company='A Company')
-        user.save()  # important
-        self.assertEqual('Susie Sorglos', str(user.profile))
-        user1 = User(username='sandra', first_name='Sandra', last_name='Superschlau', email='foo@bar.de')
-        user2 = User(username='hein', first_name='Heiner', last_name='Hirni', email='foo@bar.de')
-        group = WorkGroup(group_head='group1')
-        group.save()
-        user1.save_base()
-        user2.save_base()
-        user1.profile.town = 'Freiburg'
-        user1.profile.work_group = group
-        user2.profile.town = 'Freiburg'
-        user2.profile.work_group = group
-        user1.save()
-        user2.save()
-        print(user1.profile.town)
-        print(User.objects.get(username__icontains='san'))
-        print(User.objects.get(username__icontains='san').profile.town)
-        print(User.objects.get(username__icontains='san').profile.work_group)
-        print(User.objects.filter(profile__work_group__group_head__contains='grou'), '###')
-
-    def test_validate_email(self):
-        # TODO: why is it not evaluating?
-        pers = User(first_name='DAniel', last_name='Kratzert', email='-!ß\/()')
-        pers.save()
-
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class OtherTablesTest(DeleteFilesMixin, TestCase):
-
-    def test_other(self):
-        mach = Machine(diffrn_measurement_device_type='APEXII', diffrn_measurement_device='3-circle diffractometer')
-        mach.save()
-        self.assertEqual('APEXII', str(mach))
-        self.assertEqual('3-circle diffractometer', mach.diffrn_measurement_device)
-        self.assertEqual('APEXII', mach.diffrn_measurement_device_type)
-
-        sup = CrystalSupport(support='Glass Fiber')
-        sup.save()
-        self.assertEqual(str(sup), 'Glass Fiber')
-
-        glue = CrystalGlue(glue='perfluor ether oil')
-        glue.save()
-        self.assertEqual(str(glue), 'perfluor ether oil')
 
 
 def hello_app(environ, start_response):
@@ -425,3 +306,28 @@ class TestAuthenticated(DeleteFilesMixin, TestCase):
 
 if __name__ == '__main':
     pass
+
+
+class PlainUserMixin():
+    def setUp(self) -> None:
+        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
+        user.set_password('Test1234!')
+        self.user_instance = user
+        self.client = Client()
+        self.client.login(username='testuser', password='Test1234!')
+
+
+class OperatorUserMixin():
+    def setUp(self) -> None:
+        u = make_operator_user()
+        self.user_instance = u
+        self.client = Client()
+        self.client.login(username='testuser', password='Test1234!')
+
+
+class SuperUserMixin():
+    def setUp(self) -> None:
+        u = make_superuser_user()
+        self.user_instance = u
+        self.client = Client()
+        self.client.login(username='elefant', password='Test1234!')
