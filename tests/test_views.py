@@ -1,13 +1,16 @@
+import datetime
 from pprint import pprint
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings, Client, RequestFactory
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 
 from scxrd.forms.edit_experiment import ExperimentEditForm
+from scxrd.models import Experiment, CrystalSupport, Machine
 from scxrd.views import NewSampleByCustomer
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -47,7 +50,6 @@ class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, TestCase)
         response = view(request, sample_name='laskjdfh')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['scxrd/new_sample_by_customer.html'])
-
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -100,14 +102,6 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         self.assertEqual('testuser', str(response.context.get('user')))
         self.assertEqual(True, response.context.get('render_required_fields'))
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
-        print('######')
-        print(response.context[0]['form'].fields['experiment_name'])
-        # response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
-        # print(response.redirect_chain)
-        # response = self.client.post(reverse_lazy('scxrd:new_exp'), follow=True, data=self.formdata)
-        # print('#', response.content)
-        # response = self.client.post(reverse_lazy('scxrd:new_exp'), data=self.formdata, follow=True)
-        # self.assertEqual(response.status_code, 200)
 
     def test_form(self):
         form = ExperimentEditForm(self.formdata)
@@ -125,3 +119,84 @@ class NewExpTest(DeleteFilesMixin, TestCase):
                                   'Select a valid choice. That choice is not one of the available choices.']},
                              form.errors)
         self.assertEqual(False, form.is_valid())
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+
+    def test_edit_exp(self):
+        response = self.client.get(reverse("scxrd:new_exp"), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'scxrd/experiment_new.html')
+
+    def test_new_exp_create_not_exist(self):
+        self.assertEqual(Experiment.objects.count(), 0)
+        # Do not Follow the post request, because it goes to index page afterwards:
+        response = self.client.post(reverse("scxrd:edit-exp", args=(1,)), follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content,
+                         b'\n<!doctype html>\n<html lang="en">\n<head>\n  <title>Not Found</title>\n</head>\n<body>\n  '
+                         b'<h1>Not Found</h1><p>The requested resource was not found on this server.</p>\n</body>\n</html>\n')
+
+    def test_new_exp_create(self):
+        data = {
+            'conditions'           : '',
+            'crystal_colour'       : 1,
+            'crystal_colour_lustre': 0,
+            'crystal_colour_mod'   : 0,
+            'crystal_habit'        : 'block',
+            'crystal_size_x'       : 0.1,
+            'crystal_size_y'       : 0.1,
+            'crystal_size_z'       : 0.1,
+            'customer_id'          : 1,
+            'experiment_name'      : 'PK-TMP355_b',  # PK-TMP355
+            'exptl_special_details': '',
+            'base'                 : CrystalSupport.objects.get(pk=1),
+            'machine'              : Machine.objects.get(pk=1),
+            'measure_date'         : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
+            'measurement_temp'     : 101.0,  # 123.0
+            'not_measured_cause'   : '',
+            'number'               : 3,
+            'operator_id'          : 1,
+            'prelim_unit_cell'     : '',
+            'publishable'          : True,  # False
+            'resolution'           : None,
+            'result_date'          : None,
+            'submit_date'          : None,
+            'sum_formula'          : '',
+            'was_measured'         : True}
+        data2 = {
+            'conditions'           : 'blubb',
+            'crystal_colour'       : 1,
+            'crystal_colour_lustre': 0,
+            'crystal_colour_mod'   : 0,
+            'crystal_habit'        : 'block',
+            'crystal_size_x'       : 0.12,
+            'crystal_size_y'       : 0.13,
+            'crystal_size_z'       : 0.14,
+            'base'                 : 1,
+            'experiment_name'      : 'PK-TMP355',  # PK-TMP355
+            'exptl_special_details': 'some details',
+            'machine'              : 1,
+            'measurement_temp'     : 124.0,  # 123.0
+            'not_measured_cause'   : '',
+            'number'               : 3,
+            'operator_id'          : 1,
+            'prelim_unit_cell'     : '',
+            'publishable'          : False,  # False
+            'resolution'           : 0.79,
+            'result_date'          : '2020-7-7',
+            'submit_date'          : '',
+            'sum_formula'          : 'C5H5',
+            'was_measured'         : True}
+        self.assertEqual(Experiment.objects.count(), 0)
+        Experiment.objects.create(**data)
+        self.assertEqual(Experiment.objects.count(), 1)
+        # Do not Follow the post request, because it goes to index page afterwards:
+        response = self.client.post(reverse("scxrd:edit-exp", kwargs={'pk': 1}), follow=True, data=data2)
+        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
+        self.assertEqual(Experiment.objects.last().measurement_temp, 124.0)
+        self.assertEqual(Experiment.objects.last().experiment_name, 'PK-TMP355')
+        self.assertEqual(Experiment.objects.last().sum_formula, 'C5H5')

@@ -156,11 +156,12 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
-        print('request from new measurement:')
-        pprint(request.POST)
+        # print('request from new measurement:')
+        # pprint(request.POST)
         self.object = self.get_object()
         form: ExperimentEditForm = self.get_form()
         if form.is_valid():
+            print('Form is valid')
             cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
             exp.operator = request.user
@@ -185,10 +186,13 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
                 cif_model.date_updated = timezone.now()
                 exp.ciffilemodel = cif_model
             exp.save()
+            print('Experiment {} saved.'.format(exp.experiment_name))
             if form.files.get('cif_file_on_disk'):
                 cif_model.save()
             return self.form_valid(form)
         else:
+            print('Form is invalid! Invalid forms:')
+            pprint(form.errors)
             return self.form_invalid(form)
 
 
