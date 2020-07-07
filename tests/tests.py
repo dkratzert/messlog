@@ -13,12 +13,18 @@ MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
 class AnonUserMixin():
     def setUp(self):
-        self.client = Client()
+        # noinspection PyUnresolvedReferences
+        super().setUp()
+        #self.user_anon = User.objects.create_user(username='testuser_anon', email='testa@test.com', is_active=True,
+        #                                     is_superuser=False)
+        self.client_anon = Client()
 
 
 class PlainUserMixin():
 
     def setUp(self) -> None:
+        # noinspection PyUnresolvedReferences
+        super().setUp()
         user = User.objects.create_user(username='testuser', email='test@test.com', is_active=True, is_superuser=False,
                                         password='Test1234!')
         self.user = user
@@ -28,6 +34,8 @@ class PlainUserMixin():
 
 class OperatorUserMixin():
     def setUp(self) -> None:
+        # noinspection PyUnresolvedReferences
+        super().setUp()
         u = make_operator_user()
         self.user = u
         self.client = Client()
@@ -36,6 +44,8 @@ class OperatorUserMixin():
 
 class SuperUserMixin():
     def setUp(self) -> None:
+        # noinspection PyUnresolvedReferences
+        super().setUp()
         u = make_superuser_user()
         self.user = u
         self.client = Client()
