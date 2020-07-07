@@ -2,7 +2,6 @@
 import shutil
 import tempfile
 
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.test import Client
 
@@ -12,20 +11,16 @@ from scxrd.models import Experiment, Machine, WorkGroup, CrystalGlue, model_fixt
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
 
-class SetupUserMixin():
+class AnonUserMixin():
     def setUp(self):
-        # noinspection PyUnresolvedReferences
-        super().setUp()
-        # You need at least the PlainUserMixin:
-        self.user.set_password('Test1234!')
-        self.user.save()
-        self.user = authenticate(username='testuser', password='Test1234!')
+        self.client = Client()
 
 
 class PlainUserMixin():
+
     def setUp(self) -> None:
-        user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
-        user.set_password('Test1234!')
+        user = User.objects.create_user(username='testuser', email='test@test.com', is_active=True, is_superuser=False,
+                                        password='Test1234!')
         self.user = user
         self.client = Client()
         self.client.login(username='testuser', password='Test1234!')
@@ -49,9 +44,8 @@ class SuperUserMixin():
 
 def make_operator_user():
     group = WorkGroup.objects.create(group_head='Krabäppel')
-    u = User.objects.create(username='testuser', email='test@test.com', is_active=True, first_name='Sandra',
-                            last_name='Sorglos', is_superuser=False)
-    u.set_password('Test1234!')
+    u = User.objects.create_user(username='testuser', email='test@test.com', is_active=True, first_name='Sandra',
+                                 last_name='Sorglos', is_superuser=False, password='Test1234!')
     # This works, because of the update_user_profile slot in Profile
     u.profile.work_group = group
     u.profile.is_operator = True
@@ -70,9 +64,8 @@ def make_operator_user():
 
 def make_superuser_user():
     group = WorkGroup.objects.create(group_head='Blümchen')
-    u = User.objects.create(username='elefant', email='test@test.com', is_active=True, first_name='Benjamin',
-                            last_name='Blümchen', is_superuser=True)
-    u.set_password('Test1234!')
+    u = User.objects.create_user(username='elefant', email='test@test.com', is_active=True, first_name='Benjamin',
+                                 last_name='Blümchen', is_superuser=True, password='Test1234!')
     # This works, because of the update_user_profile slot in Profile
     u.profile.work_group = group
     # Setting operator to True should be not necessary for a superuser:

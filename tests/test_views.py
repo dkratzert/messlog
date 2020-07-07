@@ -7,7 +7,7 @@ from django.urls import reverse, reverse_lazy
 
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.views import NewSampleByCustomer
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, SetupUserMixin, PlainUserMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -31,7 +31,7 @@ class TestHostHeader(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, SetupUserMixin, TestCase):
+class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 
     def test_authenticated(self):
         self.assertEqual(self.user.is_authenticated, True)
@@ -48,28 +48,6 @@ class TestNewSampleByCustomerView(DeleteFilesMixin, OperatorUserMixin, SetupUser
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name, ['scxrd/new_sample_by_customer.html'])
 
-
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestAuthenticatedLogin(DeleteFilesMixin, PlainUserMixin, SetupUserMixin, TestCase):
-
-    def test_user(self):
-        self.assertEqual(str(User.objects.first()), 'testuser')
-
-    def test_register(self):
-        user = authenticate(username='testuser', password='Test1234!')
-        if user is not None:  # prints Backend login failed
-            print("Backend login successful")
-        else:
-            print("Backend login failed")
-
-    def test_can_send_message(self):
-        data = {
-            "name"   : "Juliana",
-            "foo"    : " Crain",
-            "message": "Would love to talk about Philip K. Dick",
-        }
-        response = self.client.post(reverse("scxrd:submit_sample"), data=data, user=self.user, follow=True)
-        self.assertEqual(response.status_code, 200)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
