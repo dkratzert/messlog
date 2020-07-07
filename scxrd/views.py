@@ -241,6 +241,7 @@ class MySamplesList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()
+        # Filter by samples owned by the current user:
         return Sample.objects.filter(customer_samp_id=self.request.user)
 
 
@@ -251,18 +252,6 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     model = Sample
     # queryset = Sample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
-
-    '''def get_queryset(self):
-        """Returns as default the unmeasured samples context."""
-        filter_val = self.request.GET.get('filter', 'False')
-        new_context = Sample.objects.all()#filter(experiments__was_measured=filter_val)
-        return new_context
-
-    def get_context_data(self, **kwargs):
-        # TODO: I should use a cookie for the state
-        context = super().get_context_data(**kwargs)
-        context['filterstate'] = False
-        return context'''
 
 
 class ResidualsTable(DetailView):
