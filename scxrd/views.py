@@ -97,6 +97,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         POST variables and then check if it's valid.
         """
         form = self.get_form()
+        print('ExperimentFromSampleCreateView:')
         pprint(request.POST)
         # self.object is an Sample because of the views model class:
         self.object: Sample = self.get_object()
