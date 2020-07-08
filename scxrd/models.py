@@ -16,17 +16,16 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- normalize experiment names to bruker APEX format [A-Za-z0-9_]+
+- make nice looking lists of measurement experiments in the list of samples
+- samples  can be edited by users until the measurement is done. -> Add a SampleEditView
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
    - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
      owners can do changes only until the cif file is uploaded 
    - page should have a link to the google calendar (or even embedded into an iframe?)
-- samples  can be edited by users until the measurement is done
 - add email notifications
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of experiments list page
-- make nice looking lists of measurement experiments in the list of samples
 - Check for existing unit cell during cif upload and measure experiment.
 - for charts:
     https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html 
