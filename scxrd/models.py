@@ -90,7 +90,7 @@ class Profile(models.Model):
     country = models.CharField(max_length=200, blank=True)
     postal_code = models.CharField(max_length=200, blank=True)
     phone_number = models.CharField(max_length=17, blank=True)
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True, default='')
     is_operator = models.BooleanField(verbose_name=_('The user has operator rights'), default=False)
 
     def __str__(self):

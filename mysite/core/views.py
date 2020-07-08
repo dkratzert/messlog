@@ -16,18 +16,10 @@ class SignUp(CreateView):
     success_url = reverse_lazy('index')
     template_name = 'registration/new_user.html'
 
-    def get(self, request, *args, **kwargs):
-        """
-        Initializing empty Forms:
-        """
-        context = {
-            'user_form': SignupForm(),
-        }
-        return render(request, 'registration/new_user.html', context)
-
-    def form_invalid(self, context):
-        """If the form is invalid, render the invalid form."""
-        return self.render_to_response(context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_form'] = SignupForm()
+        return context
 
     def post(self, request, *args, **kwargs):
         user_form = SignupForm(request.POST)
@@ -36,15 +28,15 @@ class SignUp(CreateView):
             user.refresh_from_db()  # load the profile instance created by the signal
             user.profile.phone_number = user_form.cleaned_data.get('phone_number')
             user.profile.work_group = user_form.cleaned_data.get('work_group')
-            user.profile.comment = user_form.cleaned_data.get('comment')
+            # There is no comment in signup view
+            # user.profile.comment = user_form.cleaned_data.get('comment')
             user.save()
             raw_password = user_form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
             return redirect('index')
         else:
-            form = SignupForm()
-        return render(request, 'registration/new_user.html', {'form': form})
+            return render(request, template_name=self.template_name, context={'user_form': user_form})
 
 
 class UserEdit(UpdateView):

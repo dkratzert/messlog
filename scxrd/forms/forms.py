@@ -6,8 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models import Experiment, Machine, CrystalSupport, Profile
-from scxrd.templatetags.myfilters import is_operator
+from scxrd.models import Experiment, Machine, CrystalSupport
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
@@ -31,12 +30,9 @@ class MyDecimalField(forms.DecimalField):
         return attrs
 
 
-class ExperimentFormfieldsMixin(forms.ModelForm):
+class ExperimentFormMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now)
-    # TODO: remove this here:
-    # submit_date = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'), required=False,
-    #                              label=_("Sample submission date (for service)"))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
                                   label=_("Results sent date (for service)"))
     measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=True)
@@ -46,7 +42,7 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
                                                    required=False)
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True)
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
-    customer = forms.ModelChoiceField(queryset=User.objects.filter(profile__is_operator=False, is_superuser=False), 
+    customer = forms.ModelChoiceField(queryset=User.objects.filter(profile__is_operator=False, is_superuser=False),
                                       required=False, label=_('Customer (for service)'))
     # I disabled the requirement on the crystal size, because ther could be also no crystals 
     crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
@@ -55,9 +51,6 @@ class ExperimentFormfieldsMixin(forms.ModelForm):
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
     crystal_habit = forms.CharField(required=True)
-
-
-class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -74,5 +67,3 @@ class ExperimentFormMixin(ExperimentFormfieldsMixin, forms.ModelForm):
         # self.helper.error_text_inline = True  # both can not have the same value
         self.helper.label_class = 'pl-3 pr-3 pt-2 pb-0 mt-1 mb-1 ml-0'  # 'font-weight-bold'
         self.helper.field_class = 'pl-3 pr-3 pb-0 pt-0'
-
-
