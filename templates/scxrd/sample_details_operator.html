@@ -9,52 +9,121 @@
     {% load crispy_forms_tags %}
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-7 col-sm-6">
-            <div class="card">
-                <div>
-                    Sample name: {{ sample.sample_name }}
-                </div>
-                <div>
-                    Submit date: {{ sample.submit_date }}
-                </div>
-                <div>
-                    Sybmitted by: {{ sample.customer_samp }}
-                </div>
-                <div>
-                    {% if sample.stable %}
-                        Sample is sensitive
-                    {% else %}
-                        Sample is not sensitiv
-                    {% endif %}
-                </div>
-
-                <div>
-                    Customer solves by himself: {{ sample.solve_refine_selve }}
-                </div>
-
-                <div>
-                    Sum formula: {{ sample.sum_formula }}
-                </div>
-
-                <div>
-                    Reaction conditions: {{ sample.reaction_path }}
-                </div>
-                <div>
-                    Crstallized from: {{ sample.crystallization_conditions }}
-                </div>
-                {% if sample.desired_struct_draw %}
-                    Sample drawing:
-                    <div class="svg p-0 m-0 h-50 w-50" id="id_{{ sample.id }}">
-                        {% autoescape off %}
-                            {{ sample.desired_struct_draw }}
-                        {% endautoescape %}
-                    </div>
-                {% endif %}
-            
-                <div>
-                    Special remarks:
-                    {{ sample.special_remarks }}
-                </div>
+            <table class="table table-responsive">
+                <tr>
+                    <td class="w-30">
+                        <div>
+                            Sample name
+                        </div>
+                    </td>
+                    <td class="w-70">
+                        <b>{{ sample.sample_name }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Submit date
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.submit_date }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Sybmitted by
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.customer_samp }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Sensitivity
+                        </div>
+                    </td>
+                    <td>
+                        {% if sample.stable %}
+                            Sample is sensitive
+                        {% else %}
+                            Sample is not sensitiv
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Customer solves by himself
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.solve_refine_selve }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Sum formula
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.sum_formula }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Reaction conditions
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.reaction_path }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Crstallized from
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.crystallization_conditions }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if sample.desired_struct_draw %}
+                            Sample drawing
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="svg p-0 m-0 h-100 w-100" id="id_{{ sample.id }}">
+                            {% autoescape off %}
+                                {{ sample.desired_struct_draw }}
+                            {% endautoescape %}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            Special remarks
+                        </div>
+                    </td>
+                    <td>
+                        {{ sample.special_remarks }}
+                    </td>
+                </tr>
+            </table>
+            <div class="">
+                {% include 'scxrd/buttons/back_button.html' %}
             </div>
         </div>
+
     </div>
+
 {% endblock content %}

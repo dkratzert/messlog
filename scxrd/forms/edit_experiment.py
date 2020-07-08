@@ -29,9 +29,9 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                     HTML("""
                     {% if object.sample %}
                     {% load i18n %}
-                        <div class='pt-4 mt-3 ml-0 pl-3'>
-                            <a class='btn btn-outline-success' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
-                                {% trans "SAMPLE" %}
+                        <div class='pt-4 m-3 ml-0'>
+                            <a class='btn btn-outline-success w-100' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
+                                {% trans "Respective Sample" %}
                             </a>
                         </div>
                     {% endif %}
@@ -41,18 +41,6 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 Column('base', css_class='col-4'),
                 Column('glue', css_class='col-4'),
-                Column(
-                    HTML("""
-                                    {% if object.sample %}
-                                    {% load i18n %}
-                                        <div class='pt-4 mt-3 ml-0 pl-3'>
-                                            <a class='btn btn-outline-success' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
-                                                {% trans "SAMPLE" %}
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                    """), css_class='col-4'
-                ),
             ),
             HTML('</div>'),  # end of card
             save_button2,
