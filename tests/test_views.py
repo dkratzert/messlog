@@ -1,16 +1,21 @@
 import datetime
-from pprint import pprint
+from pathlib import Path
 
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings, Client, RequestFactory
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
+from scxrd.cif.cif_file_io import CifContainer
+from scxrd.cif_model import CifFileModel
+from scxrd.customer_models import Sample
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.models import Experiment, CrystalSupport, Machine
+from scxrd.models import Experiment, CrystalSupport, Machine, WorkGroup
+from scxrd.utils import generate_sha256
 from scxrd.views import NewSampleByCustomer
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_experiment
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -96,9 +101,9 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         c.login(username='testuser', password='Test1234!')
         response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
         self.assertEqual(200, response.status_code)
-        for c1 in response.context:
-            for c in c1:
-                pprint(c)
+        # for c1 in response.context:
+        #    for c in c1:
+        #        pprint(c)
         self.assertEqual('testuser', str(response.context.get('user')))
         self.assertEqual(True, response.context.get('render_required_fields'))
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
@@ -140,31 +145,19 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 
     def test_new_exp_create(self):
         data = {
-            'conditions'           : '',
-            'crystal_colour'       : 1,
-            'crystal_colour_lustre': 0,
-            'crystal_colour_mod'   : 0,
-            'crystal_habit'        : 'block',
-            'crystal_size_x'       : 0.1,
-            'crystal_size_y'       : 0.1,
-            'crystal_size_z'       : 0.1,
-            'customer_id'          : 1,
-            'experiment_name'      : 'PK-TMP355_b',  # PK-TMP355
-            'exptl_special_details': '',
-            'base'                 : CrystalSupport.objects.get(pk=1),
-            'machine'              : Machine.objects.get(pk=1),
-            'measure_date'         : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
-            'measurement_temp'     : 101.0,  # 123.0
-            'not_measured_cause'   : '',
-            'number'               : 3,
-            'operator_id'          : 1,
-            'prelim_unit_cell'     : '',
-            'publishable'          : True,  # False
-            'resolution'           : None,
-            'result_date'          : None,
-            'submit_date'          : None,
-            'sum_formula'          : '',
-            'was_measured'         : True}
+            'conditions'      : '',
+            'crystal_habit'   : 'block',
+            'experiment_name' : 'PK-TMP355_b',  # PK-TMP355
+            'base'            : CrystalSupport.objects.get(pk=1),
+            'machine'         : Machine.objects.get(pk=1),
+            'measure_date'    : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
+            'measurement_temp': 101.0,  # 123.0
+            'number'          : 3,
+            'operator_id'     : 1,
+            'prelim_unit_cell': '',
+            'publishable'     : True,  # False
+            'resolution'      : 0.80,
+            'was_measured'    : True}
         data2 = {
             'conditions'           : 'blubb',
             'crystal_colour'       : 1,
@@ -200,3 +193,129 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         self.assertEqual(Experiment.objects.last().measurement_temp, 124.0)
         self.assertEqual(Experiment.objects.last().experiment_name, 'PK-TMP355')
         self.assertEqual(Experiment.objects.last().sum_formula, 'C5H5')
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestExperimentEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
+    data = {
+        'experiment_name': 'PK-TMP355_b',  # PK-TMP355
+        'number'         : 3, }
+
+    def test_exp_edit_by_other_user(self):
+        """TODO: A plain user should not be allowed to edit this experiment"""
+        Experiment.objects.create(**self.data)
+        self.assertEqual(Experiment.objects.count(), 1)
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class MySamplesList(DeleteFilesMixin, TestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.data = {
+            'sample_name'               : 'PK-TMP355_b',  # PK-TMP355
+            'exptl_special_details'     : 'dfg',
+            'crystallization_conditions': 'From hot H2SO4',
+            'sum_formula'               : 'UO2',
+            'desired_struct_draw'       : 'SVG',
+        }
+        user = User.objects.create_user(username='plainuser', email='test@test.com', is_active=True, is_superuser=False,
+                                        password='Test1234!')
+        self.user_plain = user
+        self.client_plain = Client()
+        self.client_plain.login(username='plainuser', password='Test1234!')
+        ##
+        group = WorkGroup.objects.create(group_head='Krabäppel')
+        u = User.objects.create_user(username='opuser', email='test@test.com', is_active=True, first_name='Sandra',
+                                     last_name='Sorglos', is_superuser=False, password='Test1234!')
+        # This works, because of the update_user_profile slot in Profile
+        u.profile.work_group = group
+        u.profile.is_operator = True
+        u.profile.phone_number = '123456'
+        u.profile.street = 'Foostreet'
+        self.user_op = u
+        self.client_op = Client()
+        self.client_op.login(username='opuser', password='Test1234!')
+
+    def test_user_view_op_samples(self):
+        # Operator makes a sample:
+        request = self.client_op.post(reverse('scxrd:submit_sample'), data=self.data, follow=True)
+        self.assertEqual(Sample.objects.count(), 1)
+        self.assertEqual(request.status_code, 200)
+        # The user:
+        request = self.client_plain.get(reverse('scxrd:my_samples_page'))
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.context_data['sample_list']), 0)
+        # The operator
+        request = self.client_op.get(reverse('scxrd:my_samples_page'))
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.context_data['sample_list']), 1)
+
+    def test_op_view_user_samples(self):
+        # Operator makes a sample:
+        request = self.client_plain.post(reverse('scxrd:submit_sample'), data=self.data, follow=True)
+        self.data['sample_name'] = 'sdf'
+        request = self.client_op.post(reverse('scxrd:submit_sample'), data=self.data, follow=True)
+        self.assertEqual(Sample.objects.count(), 2)
+        self.assertEqual(request.status_code, 200)
+        # The user:
+        request = self.client_plain.get(reverse('scxrd:my_samples_page'))
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.context_data['sample_list']), 1)
+        # The operator
+        request = self.client_op.get(reverse('scxrd:my_samples_page'))
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.context_data['sample_list']), 1)
+        # Operator all samples:
+        request = self.client_op.get(reverse('scxrd:op_samples_page'))
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.context_data['sample_list']), 2)
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        cif_model = CifFileModel()
+        cif_file = SimpleUploadedFile('p21c.cif', Path('scxrd/testfiles/p21c.cif').read_bytes())
+        cif = CifContainer(chunks='\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in cif_file.chunks()]))
+        cif_model.fill_residuals_table(cif)
+        cif_model.sha256 = generate_sha256(cif_file)
+        cif_model.filesize = cif_file.size
+        cif_model.cif_file_on_disk = cif_file
+        self.exp = create_experiment()
+        cif_model.experiment = self.exp
+        cif_model.save()
+        self.cif_model = cif_model
+
+    def test_molecule(self):
+        # TODO: experiment_id is useless here: Use id instead of cif file path!
+        request = self.client.post(reverse('scxrd:molecule'), follow=False,
+                                   data={'experiment_id': 2, 'cif_file': self.cif_model.cif_file_path})
+        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(CifFileModel.objects.count(), 1)
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(request.content[:100],
+                         b'\n\n\n  128  126\n    0.2501    4.9458    8.1795 O \n   -0.1835    4.8977'
+                         b'    6.8930 C \n   -1.5751    4.22')
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestExperimentListJsonView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.exp = create_experiment()
+
+    def test_exp_list_json(self):
+        request = self.client.post(reverse('scxrd:experiments_list'), follow=True)
+        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(request.content,
+                         (b'{"draw": 0, "recordsTotal": 1, "recordsFiltered": 1, '
+                          b'"data": [["1", "1", "IK'
+                          b'_MSJg20_100K", "20.11.2013 21:08", "APEXII", "susi", "<span class=\\"badg'
+                          b'e badge-warning ml-1\\">no</span>", '
+                          b'"", '
+                          b'"<a class=\\"btn-outline-danger m-0 p-1\\" href=edit/1>Edit</a>"]], '
+                          b'"result": "ok"}'))

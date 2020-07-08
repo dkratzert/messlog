@@ -211,10 +211,11 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         POST variables and then check if it's valid.
         """
         super().post(request, *args, **kwargs)
-        print('Request from new sample:')
-        pprint(request.POST)
+        #print('Request from new sample:')
+        #pprint(request.POST)
         form = self.get_form()
         if form.is_valid():
+            print('NewSample form is valid')
             sample: Sample = form.save(commit=False)
             # Assigns the currently logged in user to the submetted sample:
             sample.customer_samp = request.user
@@ -223,6 +224,8 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
             sample.save()
             return self.form_valid(form)
         else:
+            print('NewSample form is invalid!')
+            pprint(form.errors)
             return self.form_invalid(form)
 
     def get_context_data(self, **kwargs) -> dict:
@@ -261,10 +264,6 @@ class ResidualsTable(DetailView):
     model = Experiment
     template_name = 'scxrd/residuals_table.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class MoleculeView(LoginRequiredMixin, View):
     """
@@ -272,6 +271,7 @@ class MoleculeView(LoginRequiredMixin, View):
     """
 
     def post(self, request: WSGIRequest, *args, **kwargs):
+        # TODO: get cif file from Experiment:
         cif_file = request.POST.get('cif_file')
         exp_id = request.POST.get('experiment_id')
         if not cif_file:
