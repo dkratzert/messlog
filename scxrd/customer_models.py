@@ -36,7 +36,7 @@ class Sample(models.Model):
         blank=True,
         null=True
     )
-    crystallization_conditions = models.CharField(blank=True, default='', max_length=500, 
+    crystallization_conditions = models.CharField(blank=True, max_length=500, 
                                                   verbose_name=_('Solvents used for crystallization, '
                                                                  'method, conditions'))
     desired_struct_draw = models.TextField(verbose_name=_('desired structure'), blank=True, default='')

@@ -15,7 +15,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- experiment from sample view does not save sample_id relation
+- edit experiment: A link to the sample should also be displayed if experiment originates from a sample
 - Add a details page behind the click on a sample in the samples list (from operator and user)
 - normalize experiment names to bruker APEX format [A-Za-z0-9_]+
 - Add a "currently running experiment" page with status for everyone visible
@@ -24,14 +24,14 @@ TODO:
      owners can do changes only until the cif file is uploaded 
    - page should have a link to the google calendar (or even embedded into an iframe?)
 - samples  can be edited by users until the measurement is done
-- edit experiment: "Solvents used" and "Reaction conditions" should also be displayed if esperiment
-  originates from a sample
 - add email notifications
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of experiments list page
 - make nice looking lists of measurement experiments in the list of samples
 - Check for existing unit cell during cif upload and measure experiment.
-- for charts: https://www.chartjs.org/docs/latest/
+- for charts:
+    https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html 
+    https://www.chartjs.org/docs/latest/
 - http://ccbv.co.uk/projects/Django/3.0/
 
 

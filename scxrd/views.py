@@ -97,9 +97,9 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         POST variables and then check if it's valid.
         """
         form = self.get_form()
-        print('ExperimentFromSampleCreateView:')
-        pprint(request.POST)
-        # self.object is an Sample because of the views model class:
+        # print('ExperimentFromSampleCreateView:')
+        # pprint(request.POST)
+        # self.object is a Sample because of the views model class:
         self.object: Sample = self.get_object()
         if form.is_valid():
             # form.instance is Experiment, because of the form class:
@@ -107,22 +107,25 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             exp.number = form.cleaned_data['number']
             exp.experiment_name = form.cleaned_data.get('experiment_name')
             exp.exptl_special_details = form.cleaned_data.get('exptl_special_details')
-            # TODO: is form.cleaned_data.get('customer') sufficient?
-            exp.customer = User.objects.get(pk=form.cleaned_data.get('customer').pk)
-            exp.submit_date = form.cleaned_data.get('submit_date')
+            exp.customer = self.object.customer_samp
+            exp.submit_date = self.object.submit_date
             exp.sum_formula = form.cleaned_data.get('sum_formula')
             exp.crystal_colour = form.cleaned_data.get('crystal_colour')
             exp.measure_date = timezone.now()
             exp.was_measured = not form.cleaned_data.get('was_measured')
             exp.not_measured_cause = form.cleaned_data.get('not_measured_cause')
-            exp.conditions = form.cleaned_data.get('crystallization_conditions')
+            exp.conditions = self.object.crystallization_conditions
             # Assigns the currently logged in user to the submitted sample:
             exp.operator = request.user
-            self.object.save()
+            # Not needed:
+            # self.object.save()
             exp.sample = self.object
             exp.save()
             return self.form_valid(form)
         else:
+            print('ExperimentFromSampleCreateView is invalid!')
+            pprint(request.POST)
+            pprint(form.errors)
             return self.form_invalid(form)
 
     def get_form_kwargs(self) -> dict:
@@ -211,8 +214,8 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         POST variables and then check if it's valid.
         """
         super().post(request, *args, **kwargs)
-        #print('Request from new sample:')
-        #pprint(request.POST)
+        # print('Request from new sample:')
+        # pprint(request.POST)
         form = self.get_form()
         if form.is_valid():
             print('NewSample form is valid')
