@@ -15,7 +15,6 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- edit experiment: A link to the sample should also be displayed if experiment originates from a sample
 - Add a details page behind the click on a sample in the samples list (from operator and user)
 - normalize experiment names to bruker APEX format [A-Za-z0-9_]+
 - Add a "currently running experiment" page with status for everyone visible

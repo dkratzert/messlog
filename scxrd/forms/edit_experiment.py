@@ -23,14 +23,36 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             ),
             Row(
                 Column('machine', css_class='col-4'),
-                #Column('operator'),
+                # Column('operator'),
                 Column('measure_date', css_class='col-4'),
-                #Column('customer'),
+                Column(
+                    HTML("""
+                    {% if object.sample %}
+                    {% load i18n %}
+                        <div class='pt-4 mt-3 ml-0 pl-3'>
+                            <a class='btn btn-outline-success' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
+                                {% trans "SAMPLE" %}
+                            </a>
+                        </div>
+                    {% endif %}
+                    """), css_class='col-4'
+                ),
             ),
             Row(
                 Column('base', css_class='col-4'),
                 Column('glue', css_class='col-4'),
-                # Column('submit_date'),
+                Column(
+                    HTML("""
+                                    {% if object.sample %}
+                                    {% load i18n %}
+                                        <div class='pt-4 mt-3 ml-0 pl-3'>
+                                            <a class='btn btn-outline-success' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
+                                                {% trans "SAMPLE" %}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    """), css_class='col-4'
+                ),
             ),
             HTML('</div>'),  # end of card
             save_button2,

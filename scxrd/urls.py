@@ -16,6 +16,7 @@ urlpatterns = [
     path('submit/', views.NewSampleByCustomer.as_view(), name='submit_sample'),
     path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
     path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
+    path('operator/sample_detail/<int:pk>/', views.OperatorSampleDetail.as_view(), name='op_samples_detail'),
     path('experiments/table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
     path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
     path('experiments_list_user/', views.ExperimentsListJsonUser.as_view(), name='experiments_list_from_user'),

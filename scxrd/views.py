@@ -260,6 +260,17 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     template_name = 'scxrd/submitted_samples_list_operator.html'
 
 
+class OperatorSampleDetail(LoginRequiredMixin, DetailView):
+    model = Sample
+    template_name = 'scxrd/sample_details_operator.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        context['sample'] = Sample.objects.get(pk=pk)
+        return context
+
+
 class ResidualsTable(DetailView):
     """
     Show residuals of the in-table selected experiment by ajax request.
