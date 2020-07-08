@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
@@ -15,7 +16,6 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- Add a details page behind the click on a sample in the samples list (from operator and user)
 - normalize experiment names to bruker APEX format [A-Za-z0-9_]+
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
@@ -65,6 +65,13 @@ def resolution_validator(value):
     if value < 0.001 or value > 99:
         raise ValidationError(_('Enter a valid resolution in angstrom.'))
     return value
+
+
+def sample_name_validator(value):
+    if re.fullmatch(r'[A-Za-z0-9_]+', value):
+        return value
+    else:
+        raise ValidationError(_('Enter a name with characters A-Z a-z 0-9 or _'))
 
 
 phone_validator = RegexValidator(regex=r'^\+?1?\d{9,15}$',
@@ -165,7 +172,8 @@ class CrystalGlue(models.Model):
 
 class Experiment(models.Model):
     # The name of the current experiment
-    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, unique=True)
+    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, unique=True,
+                                       validators=[sample_name_validator])
     # Makes the sample measurement status visible through the experiment status:
     sample = models.ForeignKey('Sample', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='experiments')

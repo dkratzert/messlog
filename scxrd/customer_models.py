@@ -4,6 +4,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from scxrd.models import sample_name_validator
+
 
 def validate_reaction_file_extension(value):
     ext = value.name.split('.')[-1]
@@ -14,7 +16,7 @@ def validate_reaction_file_extension(value):
 class Sample(models.Model):
     # TODO: make sure that no samples can be created in the future and not too far in the past. 
     sample_name = models.CharField(verbose_name=_('sample name'), max_length=200, blank=False, unique=True,
-                                   help_text=_('A unique name of your sample'))
+                                   help_text=_('A unique name of your sample'), validators=[sample_name_validator])
     # The date when the sample is submitted to the facility:
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True,
                                    default=timezone.now)
