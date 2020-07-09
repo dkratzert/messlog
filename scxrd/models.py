@@ -16,6 +16,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
+- after submit sample -> text what you should do with the sample
 - check if anything gets still lost during experiment edit save
 - samples  can be edited by users until the measurement is done. -> Add a SampleEditView
 - Add a "currently running experiment" page with status for everyone visible

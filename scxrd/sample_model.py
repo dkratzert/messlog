@@ -23,10 +23,9 @@ class Sample(models.Model):
     customer_samp = models.ForeignKey(to=User, verbose_name=_('Submitter'), on_delete=models.SET_NULL, null=True,
                                       blank=True,
                                       related_name='Sample')
-    stable = models.BooleanField(verbose_name=_('sample is sensitive'),
-                                 help_text=_("Indicate if the sample requires special care "
-                                             "to keep it stable until the measurement. "
-                                             "Tell us more in the 'special remarks' field."))
+    stable = models.BooleanField(verbose_name=_('sample is sensitive (temperature, oxygen, moisture)'),
+                                 help_text=_("The sample requires special precautions to remain stable "
+                                             "until measurement."))
     solve_refine_selve = models.BooleanField(verbose_name=_('I want to solve/refine by myself'),
                                              help_text=_('Indicate whether you want to solve and '
                                                          'refine the structure by yourselves.'))
