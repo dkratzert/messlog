@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.customer_models import Sample
+from scxrd.sample_model import Sample
 from scxrd.form_utils import card, save_button2, backbutton, submit_button
 
 

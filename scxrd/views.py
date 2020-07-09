@@ -21,12 +21,12 @@ from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
 from scxrd.cif_model import CifFileModel
-from scxrd.customer_models import Sample
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_cust_sample import SubmitNewSampleForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models import Experiment
+from scxrd.sample_model import Sample
 from scxrd.utils import randstring, generate_sha256
 
 
@@ -233,6 +233,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
+        # This is for robohash:
         context['randstring'] = randstring()
         return context
 

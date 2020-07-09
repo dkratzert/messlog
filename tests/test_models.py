@@ -7,7 +7,7 @@ from django.test import TestCase, override_settings
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
-from scxrd.customer_models import Sample
+from scxrd.sample_model import Sample
 from scxrd.models import model_fixtures, Experiment, Machine, CrystalSupport, CrystalGlue, WorkGroup
 from scxrd.utils import generate_sha256
 from tests.tests import MEDIA_ROOT, create_experiment, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \

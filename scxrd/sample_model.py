@@ -50,3 +50,6 @@ class Sample(models.Model):
 
     def __str__(self):
         return self.sample_name
+
+    def was_measured(self):
+        return any([x.was_measured for x in self.experiments])

@@ -36,6 +36,6 @@ def was_measured(experiments) -> bool:
 def was_deposited(experiments) -> bool:
     try:
         return any([x.ciffilemodel.cif_exists for x in experiments.all()])
-    except Exception as es:
+    except Exception as e:
         print('Error in "was_deposited" filter:', e)
         return False

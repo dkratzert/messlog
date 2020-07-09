@@ -9,7 +9,7 @@ from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.customer_models import Sample
+from scxrd.sample_model import Sample
 from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
 
 admin.site.site_header = "MESSLOG Admin"

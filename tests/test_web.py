@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from scxrd.customer_models import Sample
+from scxrd.sample_model import Sample
 from scxrd.models import Experiment
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin
 

@@ -59,7 +59,7 @@ class CifFileModel(models.Model):
     refine_diff_density_max = models.FloatField(null=True, blank=True)
     refine_diff_density_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
-    database_code_depnum_ccdc_archive = models.CharField(max_length=255, blank=True, verbose_name=_('CCDC number'))
+    ccdc_number = models.CharField(max_length=255, blank=True, verbose_name=_('CCDC number'))
     cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
                                         validators=[validate_cif_file_extension],
                                         verbose_name='cif file')
@@ -103,7 +103,7 @@ class CifFileModel(models.Model):
         self.refine_diff_density_max = get_float(cif["_refine_diff_density_max"])
         self.refine_diff_density_min = get_float(cif["_refine_diff_density_min"])
         self.diffrn_reflns_av_unetI_netI = get_float(cif["_diffrn_reflns_av_unetI/netI"])
-        self.database_code_depnum_ccdc_archive = cif["_database_code_depnum_ccdc_archive"]
+        self.ccdc_number = cif["_database_code_depnum_ccdc_archive"]
 
     def wr2_in_percent(self):
         if self.refine_ls_R_factor_gt:

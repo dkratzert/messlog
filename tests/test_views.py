@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
-from scxrd.customer_models import Sample
+from scxrd.sample_model import Sample
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.models import Experiment, CrystalSupport, Machine, WorkGroup
 from scxrd.utils import generate_sha256
