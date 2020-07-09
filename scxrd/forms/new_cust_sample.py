@@ -79,14 +79,19 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                 Column(
                     HTML("""
                     <div id="div_id_reaction_path" class="form-group">\n
-                        <label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
+                        <button class="btn btn-outline-secondary ml-3 mt-3 mr-1" type="button" data-toggle="collapse" 
+                                data-target="#collapseKetcher" aria-expanded="false" aria-controls="collapseKetcher">
+                            Draw the Molecule
+                        </button><span class="asteriskField">*</span>\n
+                        <!--<label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
                             Draw the desired structure<span class="asteriskField">*</span>\n
-                        </label>\n
+                        </label>\n-->
                         <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                            This field is an alternative to the file upload above
+                            This is an alternative to the file upload above
                         </small>\n
                         <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_draw">\n
-                        <div class="p-3">
+                        
+                        <div class="p-3 collapse" id="collapseKetcher">
                             <iframe id="ketcher-frame" src="ketcher.html">\n
                             </iframe>\n
                         </div>

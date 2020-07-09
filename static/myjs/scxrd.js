@@ -219,5 +219,7 @@ $(document).ready(function () {
     // Go to initial state on page reload or, because otherwise the collapsible state of the not_measured_cause 
     // field is in opposite state what it should be. An alternative would be to set a cookie.
     var box = document.getElementById('measure_check');
-    box.removeAttribute('checked');
+    if (box !== null) {
+        box.removeAttribute('checked');
+    }
 });
