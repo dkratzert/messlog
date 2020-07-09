@@ -79,8 +79,9 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
             Row(
                 Column(
                     HTML("""
+                    <div class='ml-3'>alternatiely</div> 
                     <div id="div_id_reaction_path" class="form-group">\n
-                        <button class="btn btn-outline-secondary ml-3 mt-3 mr-1" type="button" data-toggle="collapse" 
+                        <button class="btn btn-outline-secondary ml-3 mt-2 mr-1" type="button" data-toggle="collapse" 
                                 data-target="#collapseKetcher" aria-expanded="false" aria-controls="collapseKetcher">
                             Draw the Molecule
                         </button>
