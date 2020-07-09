@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{{ form.media }}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+    {% load crispy_forms_tags %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            {% crispy form %}
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var ketcher_svg;
+            var svg_field = document.getElementById('id_svg_struct_samp');
+            var svgval;
+            //var molecule;
+            var k = document.getElementById('ketcher-frame');
+            k.onload = function () {
+                var ketcher = this.contentWindow.ketcher;
+                ketcher.editor.on('click', function () {
+                    //molecule = ketcher.getMolfile();  // to get the mol file
+                    ketcher_svg = ketcher.editor.render.clientArea.getElementsByTagName('svg').item(0).outerHTML;
+                    svgval = ketcher_svg.toString().replace(/<svg\sheight="[0-9]+"\sversion="1.1"\swidth="[0-9]+"/g,
+                        '<svg height="100%" version="1.1" width="100%"');
+                    svg_field.setAttribute('value', svgval);
+                });
+            }
+        });
+    </script>
+{% endblock content %}

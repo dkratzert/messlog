@@ -241,6 +241,12 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         return context
 
 
+class SampleEditView(UpdateView):
+    model = Sample
+    template_name = 'scxrd/edit_sample.html'
+    fields = '__all__'
+
+
 class MySamplesList(LoginRequiredMixin, ListView):
     """
     The view for the samples list of a customer submitted for measurement by an operator.
