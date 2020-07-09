@@ -59,7 +59,7 @@ class CifFileModel(models.Model):
     refine_diff_density_max = models.FloatField(null=True, blank=True)
     refine_diff_density_min = models.FloatField(null=True, blank=True)
     diffrn_reflns_av_unetI_netI = models.FloatField(null=True, blank=True)
-    ccdc_number = models.CharField(max_length=255, blank=True, verbose_name=_('CCDC number'))
+    ccdc_number = models.CharField(max_length=12, blank=True, default='', verbose_name=_('CCDC number'))
     cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
                                         validators=[validate_cif_file_extension],
                                         verbose_name='cif file')

@@ -16,7 +16,7 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- make nice looking lists of measurement experiments in the list of samples
+- check if anything gets still lost during experiment edit save
 - samples  can be edited by users until the measurement is done. -> Add a SampleEditView
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible

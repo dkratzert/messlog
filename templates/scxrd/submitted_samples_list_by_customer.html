@@ -51,7 +51,14 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-2 float-right">
-
+                                        {% for experiment in sample.experiments.all %}
+                                            {% if experiment.ciffilemodel.ccdc_number %}
+                                                CCDC:
+                                                <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ experiment.ciffilemodel.ccdc_number }}">
+                                                    {{ experiment.ciffilemodel.ccdc_number }}
+                                                </a>
+                                            {% endif %}
+                                        {% endfor %}
 
                                     </div>
                                 </div>

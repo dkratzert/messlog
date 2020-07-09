@@ -25,27 +25,29 @@
     <div class="col-5">Measured by</div>
     <div class="col-7" id="t_operator">  {{ experiment.operator.get_username }} </div>
     {% if experiment.customer %}
-    <div class="col-5">Measure Date</div>
-    <div class="col-7" id="t_measure_date">  {{ experiment.measure_date|date|default:"-----"  }} </div>
-    <div class="col-5">Results sent</div>
-    <div class="col-7" id="t_sent">  {{ experiment.result_date|date|default:"-----"  }} </div>
+        <div class="col-5">Measure Date</div>
+        <div class="col-7" id="t_measure_date">  {{ experiment.measure_date|date|default:"-----" }} </div>
+        <div class="col-5">Results sent</div>
+        <div class="col-7" id="t_sent">  {{ experiment.result_date|date|default:"-----" }} </div>
     {% endif %}
     <div class="col-5">CIF File</div>
-    <div class="col-7" id="t_filen">  {{ experiment.ciffilemodel.cif_name_only|default:"-----"  }} </div>
+    <div class="col-7" id="t_filen">  {{ experiment.ciffilemodel.cif_name_only|default:"-----" }} </div>
     {% comment %}
     <div class="col-5">CIF data_</div>
     <div class="col-7" id="t_data_">  {% experiment_name.ciffilemodel.data|default:"-----"  %} </div>
     {% endcomment %}
     <div class="col-5">Space Group</div>
-    <div class="col-7" id="t_spgr">  {{ experiment.ciffilemodel.space_group_name_H_M_alt|default:"-----"  }} </div>
+    <div class="col-7" id="t_spgr">  {{ experiment.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>
     <div class="col-5"><i>R</i><sub>1</sub></div>
-    <div class="col-7" id="t_r1">  {{ experiment.ciffilemodel.r1_in_percent|default:"-----"  }}&nbsp;% </div>
+    <div class="col-7" id="t_r1">  {{ experiment.ciffilemodel.r1_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5"><i>wR</i><sub>2</sub></div>
-    <div class="col-7" id="t_wr2">  {{ experiment.ciffilemodel.wr2_in_percent|default:"-----"  }}&nbsp;% </div>
+    <div class="col-7" id="t_wr2">  {{ experiment.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">Completeness</div>
-    <div class="col-7" id="t_compl">  {{ experiment.ciffilemodel.completeness_in_percent|default:"-----"  }}&nbsp;% </div>
+    <div class="col-7" id="t_compl">  {{ experiment.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">Temperature</div>
-    <div class="col-7" id="t_temp">  {{ experiment.ciffilemodel.temperature|default:"-----" }}&nbsp;K </div>
+    <div class="col-7" id="t_ccdc">  {{ experiment.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
+    <div class="col-5">CCDC Number</div>
+    <div class="col-7" id="t_ccdc">  {{ experiment.ciffilemodel.ccdc_number|default:"-----" }}</div>
 </div>
 
 

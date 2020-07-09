@@ -73,6 +73,15 @@
                                     {% if sample.experiments|was_measured %}
                                         <td>
                                             <span class="badge badge-primary m-1 p-1">{% trans "Measured" %}</span>
+                                            <br>
+                                            {% if sample.experiments.all %}
+                                                <br>
+                                                Experiments:
+                                                <br>
+                                            {% endif %}
+                                            {% for experiment in sample.experiments.all %}
+                                                <a href="{% url 'scxrd:edit-exp' experiment.pk %}">{{ experiment }}</a><br>
+                                            {% endfor %}
                                         </td>
                                     {% elif not sample.experiments|was_measured and sample.not_measured_cause %}
                                         <td>
@@ -80,7 +89,7 @@
                                         </td>
                                     {% elif sample.experiments|was_measured and sample.experiments|was_deposited %}
                                         <td>
-{#                                            TODO: make this a link to the CCDC #}
+                                            {#                                            TODO: make this a link to the CCDC #}
                                             <span class="badge badge-success m-1 p-1">{% trans "Was deposited" %}</span>
                                         </td>
                                     {% else %}

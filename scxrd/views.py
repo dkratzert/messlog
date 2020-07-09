@@ -161,12 +161,15 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         # print('request from new measurement:')
         # pprint(request.POST)
-        self.object = self.get_object()
+        self.object: Experiment = self.get_object()
+        sample = self.object.sample
         form: ExperimentEditForm = self.get_form()
         if form.is_valid():
             print('Form is valid')
             cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
+            # Otherwise sample id gets lost: why?
+            exp.sample = sample
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
