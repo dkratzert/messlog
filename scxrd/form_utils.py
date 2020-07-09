@@ -22,7 +22,7 @@ save_button2 = ButtonHolder(
 )
 
 submit_button = ButtonHolder(
-    Submit('Save', 'Submit', css_class='btn-primary mr-2'),
+    Submit('Save', 'Submit', css_class='btn-primary mr-2 ml-1'),
     HTML('''<a href="{% url 'scxrd:my_samples_page' %}" class="btn btn-outline-danger" 
             formnovalidate="formnovalidate">Cancel</a>
             '''),

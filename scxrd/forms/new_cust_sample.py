@@ -21,10 +21,10 @@ class SubmitFormfieldsMixin(forms.ModelForm):
                                                  help_text=_(
                                                      "Knowing the solvents used for synthesis and crystallization "
                                                      "can be crucial for the success of the structure solution and "
-                                                     "refinement"))
+                                                     "refinement."))
     reaction_path = forms.FileField(label=_('Document with reaction equation'),
                                     required=False,
-                                    help_text=_("Please upload a .pdf document showing the reaction equation "
+                                    help_text=_("Please upload a PDF document showing the reaction equation "
                                                 "with the desired product <br> including all conditions, "
                                                 "solvents and reagents used."))
     desired_struct_draw = forms.CharField(label=_('Desired structure'), required=False)
@@ -79,17 +79,16 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
             Row(
                 Column(
                     HTML("""
-                    <div class='ml-3'>alternatiely</div> 
                     <div id="div_id_reaction_path" class="form-group">\n
                         <button class="btn btn-outline-secondary ml-3 mt-2 mr-1" type="button" data-toggle="collapse" 
                                 data-target="#collapseKetcher" aria-expanded="false" aria-controls="collapseKetcher">
-                            Draw the Molecule
+                                Alternatively, draw the Molecule
                         </button>
                         <!--<label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
                             Draw the desired structure<span class="asteriskField">*</span>\n
                         </label>\n-->
                         <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                            This is an alternative to the file upload above
+                            This is an alternative to the file upload above.
                         </small>\n
                         <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_draw">\n
                         <div class="p-3 collapse" id="collapseKetcher">
