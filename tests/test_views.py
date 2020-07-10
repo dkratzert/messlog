@@ -10,11 +10,11 @@ from django.utils import timezone
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif_model import CifFileModel
-from scxrd.sample_model import Sample
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.models import Experiment, CrystalSupport, Machine, WorkGroup
+from scxrd.sample_model import Sample
 from scxrd.utils import generate_sha256
-from scxrd.views import NewSampleByCustomer
+from scxrd.views.sample_views import NewSampleByCustomer
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_experiment
 
 
@@ -82,6 +82,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
                               'glue'                 : '2',
                               'machine'              : '1',
                               'measure_date'         : '2020-07-03 12:53',
+                              'end_time    '         : '2020-07-03 19:33',
                               'measurement_temp'     : '102',
                               'number'               : '88',
                               'prelim_unit_cell'     : '10 10 10 90 90 90',
@@ -101,16 +102,14 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         c.login(username='testuser', password='Test1234!')
         response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
         self.assertEqual(200, response.status_code)
-        # for c1 in response.context:
-        #    for c in c1:
-        #        pprint(c)
         self.assertEqual('testuser', str(response.context.get('user')))
         self.assertEqual(True, response.context.get('render_required_fields'))
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
 
     def test_form(self):
         form = ExperimentEditForm(self.formdata)
-        self.assertDictEqual({'customer': ['Select a valid choice. That choice is not one of the available choices.']},
+        self.assertDictEqual({'customer': ['Select a valid choice. That choice is not one of the available choices.'],
+                              'end_time': ['This field is required.']},
                              form.errors)
         self.assertEqual(False, form.is_valid())
         # print(form.cleaned_data)
@@ -120,6 +119,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         self.formdata['experiment_name'] = ''
         form = ExperimentEditForm(self.formdata)
         self.assertDictEqual({'experiment_name': ['This field is required.'],
+                              'end_time'       : ['This field is required.'],
                               'customer'       : [
                                   'Select a valid choice. That choice is not one of the available choices.']},
                              form.errors)
@@ -147,10 +147,12 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         data = {
             'conditions'      : '',
             'crystal_habit'   : 'block',
-            'experiment_name' : 'PK-TMP355_b',  # PK-TMP355
+            'experiment_name' : 'PK_TMP355_b',  # PK-TMP355
             'base'            : CrystalSupport.objects.get(pk=1),
             'machine'         : Machine.objects.get(pk=1),
             'measure_date'    : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
+            # 'end_time'        : datetime.datetime(2020, 7, 3, 9, 37, 9, tzinfo=timezone.get_current_timezone()),
+            'end_time'        : '2020-07-03 09:37:19',
             'measurement_temp': 101.0,  # 123.0
             'number'          : 3,
             'operator_id'     : 1,
@@ -168,7 +170,7 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
             'crystal_size_y'       : 0.13,
             'crystal_size_z'       : 0.14,
             'base'                 : 1,
-            'experiment_name'      : 'PK-TMP355',  # PK-TMP355
+            'experiment_name'      : 'PK_TMP355',  # PK-TMP355
             'exptl_special_details': 'some details',
             'machine'              : 1,
             'measurement_temp'     : 124.0,  # 123.0
@@ -179,6 +181,7 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
             'publishable'          : False,  # False
             'resolution'           : 0.79,
             'result_date'          : '2020-7-7',
+            'end_time'             : '2020-07-03 09:37:19',
             'submit_date'          : '',
             'sum_formula'          : 'C5H5',
             'was_measured'         : True}
@@ -191,14 +194,15 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
         self.assertEqual(Experiment.objects.last().measurement_temp, 124.0)
-        self.assertEqual(Experiment.objects.last().experiment_name, 'PK-TMP355')
+        self.assertEqual(Experiment.objects.last().experiment_name, 'PK_TMP355')
         self.assertEqual(Experiment.objects.last().sum_formula, 'C5H5')
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestExperimentEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
     data = {
-        'experiment_name': 'PK-TMP355_b',  # PK-TMP355
+        'experiment_name': 'PK_TMP355_b',  # PK-TMP355
+        'end_time': '2020-07-03 09:37:19',
         'number'         : 3, }
 
     def test_exp_edit_by_other_user(self):
@@ -213,7 +217,7 @@ class MySamplesList(DeleteFilesMixin, TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.data = {
-            'sample_name'               : 'PK-TMP355_b',  # PK-TMP355
+            'sample_name'               : 'PK_TMP355_b',  # PK-TMP355
             'exptl_special_details'     : 'dfg',
             'crystallization_conditions': 'From hot H2SO4',
             'sum_formula'               : 'UO2',

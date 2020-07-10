@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse_lazy
 
-from scxrd.sample_model import Sample
 from scxrd.forms.new_sample import SubmitNewSampleForm
+from scxrd.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin
 
 
@@ -16,7 +16,10 @@ class TestNewSampleForm(DeleteFilesMixin, TestCase):
             "sum_formula"               : "C5H5",
             "crystallization_conditions": "Would love to talk about John K. Dick",
             "desired_struct_draw"       : "Would love to talk about Philip K. Dick",
+            "reaction_path"             : "uploaded file",
             "special_remarks"           : 'foobar!',
+            "stable"                    : 'true',
+            "solve_refine_selve"        : 'false',
         }
         user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=False)
         user.set_password('Test1234!')
@@ -27,17 +30,17 @@ class TestNewSampleForm(DeleteFilesMixin, TestCase):
     def test_submit_new_sample(self):
         form = SubmitNewSampleForm(self.data)
         self.assertEqual(True, form.is_valid())
-        forminst: Sample = form.save()
-        self.assertEqual('Juliana', str(forminst))
-        self.assertEqual(1, forminst.pk)
-        self.assertEqual(False, forminst.solve_refine_selve)
-        self.assertEqual(False, forminst.stable)
-        self.assertEqual('Would love to talk about Philip K. Dick', forminst.desired_struct_draw)
-        self.assertEqual('Juliana', forminst.sample_name)
-        self.assertEqual('foobar!', forminst.special_remarks)
-        self.assertEqual('C5H5', forminst.sum_formula)
-        self.assertNotEqual('C5H5', forminst.crystallization_conditions)
-        self.assertEqual('Would love to talk about John K. Dick', forminst.crystallization_conditions)
+        sample: Sample = form.save()
+        self.assertEqual('Juliana', str(sample))
+        self.assertEqual(1, sample.pk)
+        self.assertEqual(False, sample.solve_refine_selve)
+        self.assertEqual(True, sample.stable)
+        self.assertEqual('Would love to talk about Philip K. Dick', sample.desired_struct_draw)
+        self.assertEqual('Juliana', sample.sample_name)
+        self.assertEqual('foobar!', sample.special_remarks)
+        self.assertEqual('C5H5', sample.sum_formula)
+        self.assertNotEqual('C5H5', sample.crystallization_conditions)
+        self.assertEqual('Would love to talk about John K. Dick', sample.crystallization_conditions)
         self.assertEqual(Sample.objects.count(), 1)
 
     def test_submit_invalid_sample_name(self):

@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from scxrd.sample_model import Sample
 from scxrd.models import Experiment
+from scxrd.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin
 
 
@@ -12,7 +12,7 @@ class TestNotAuthenticated(DeleteFilesMixin, AnonUserMixin, TestCase):
 
     def test_anonymous_cannot_see_page(self):
         response = self.client.get(reverse("scxrd:submit_sample"))
-        self.assertRedirects(response, "/accounts/login/?next=%2Fscxrd%2Fsubmit%2F")
+        self.assertRedirects(response, "/accounts/login/?next=%2Fscxrd%2Fsample%2Fsubmit%2F")
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -113,6 +113,7 @@ class ExperimentCreateView(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, Test
             "sum_formula"               : "C6H12O2",
             "stable"                    : "True",
             "solve_refine_selve"        : "False",
+            'end_time'                  : '2020-07-03 09:37:19',
             "reaction_path"             : "File",
             "desired_struct_draw"       : "SVG",
             "special_remarks"           : "Would love to talk about Philip K. Dick",

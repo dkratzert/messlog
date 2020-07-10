@@ -141,6 +141,7 @@ def create_experiment(user: User = None):
                                     glue=CrystalGlue.objects.create(glue='Polyether'),
                                     crystal_colour='1',
                                     measure_date='2013-11-20 20:08:07.127325+00:00',
+                                    end_time='2013-11-21 00:08:07.127325+00:00',
                                     prelim_unit_cell='10 01 10 90 90 90'
                                     )
     return exp

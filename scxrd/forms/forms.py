@@ -63,7 +63,7 @@ class ExperimentFormMixin(forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
         self.helper.use_custom_control = True
-        self.helper.render_required_fields = False
+        self.helper.render_required_fields = True
         # Turn this off to see only mentioned form fields:
         self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value
