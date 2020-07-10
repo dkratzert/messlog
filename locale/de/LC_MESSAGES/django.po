@@ -3,10 +3,25 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-10 12:37+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: .\mysite\core\forms.py:20 .\mysite\core\forms.py:32
 msgid "email address"
 msgstr "eMail Adresse"
+
 
 #: .\mysite\core\forms.py:21
 msgid "first name"
@@ -73,42 +88,42 @@ msgid "Crystal Color"
 msgstr "Kristallfarbe"
 
 #: .\scxrd\forms\forms.py:41
-msgid "Erscheinung"
+msgid "Colour Modifier"
 msgstr ""
 
 #: .\scxrd\forms\forms.py:42
-msgid "Farbglanz"
+msgid "Colour Lustre"
 msgstr ""
 
 #: .\scxrd\forms\forms.py:47
-msgid "Kunde (für service)"
+msgid "Customer (for service)"
 msgstr ""
 
 #: .\scxrd\forms\forms.py:49
 msgid "Crystal size min"
-msgstr "Kristallgröße Minimum"
+msgstr ""
 
 #: .\scxrd\forms\forms.py:50
 msgid "Crystal size mid"
-msgstr "Kristallgröße Mittel"
+msgstr ""
 
 #: .\scxrd\forms\forms.py:51
 msgid "Crystal size max"
-msgstr "Kristallgröße Maximum"
+msgstr ""
 
 #: .\scxrd\forms\forms.py:53
 msgid "CIF file"
-msgstr "CIF-Datei"
+msgstr ""
 
 #: .\scxrd\forms\new_cust_sample.py:17
 msgid "Sample submission date"
-msgstr "Proben-Abgabedatum"
+msgstr ""
 
 #: .\scxrd\forms\new_cust_sample.py:18
 msgid "Presumed sum formula"
-msgstr "Vermutete Summenformel"
+msgstr ""
 
-#: .\scxrd\forms\new_cust_sample.py:19 .\scxrd\sample_model.py:41
+#: .\scxrd\forms\new_cust_sample.py:19 .\scxrd\sample_model.py:40
 msgid "Solvents used for crystallization, method, conditions"
 msgstr ""
 
@@ -181,43 +196,43 @@ msgstr ""
 
 #: .\scxrd\models.py:144
 msgid "machine type"
-msgstr ""
+msgstr "Maschinentyp"
 
 #: .\scxrd\models.py:175
 msgid "experiment name"
-msgstr ""
+msgstr "Name des Experiments"
 
 #: .\scxrd\models.py:180
 msgid "number"
-msgstr ""
+msgstr "Nummer"
 
 #: .\scxrd\models.py:181
 msgid "structure is publishable"
-msgstr ""
+msgstr "Struktur ist publizierbar"
 
 #: .\scxrd\models.py:184
 msgid "customer (for service)"
-msgstr ""
+msgstr "Kunde (für service)"
 
 #: .\scxrd\models.py:186
 msgid "operator"
-msgstr ""
+msgstr "Operator"
 
 #: .\scxrd\models.py:188
 msgid "diffractometer"
-msgstr ""
+msgstr "Diffraktometer"
 
 #: .\scxrd\models.py:190
 msgid "empirical formula"
-msgstr ""
+msgstr "Summenformel"
 
 #: .\scxrd\models.py:191
 msgid "first unit cell"
-msgstr ""
+msgstr "Vorläufige Einheitszelle"
 
 #: .\scxrd\models.py:192
 msgid "Resolution [&#x212b;]"
-msgstr ""
+msgstr "Auflösung  [&#x212b;]"
 
 #: .\scxrd\models.py:194
 msgid "reaction conditions"
@@ -227,7 +242,7 @@ msgstr ""
 msgid "measurement date"
 msgstr ""
 
-#: .\scxrd\models.py:196 .\scxrd\sample_model.py:21
+#: .\scxrd\models.py:196 .\scxrd\sample_model.py:20
 msgid "sample submission date"
 msgstr ""
 
@@ -267,7 +282,7 @@ msgstr ""
 msgid "crystal habit"
 msgstr ""
 
-#: .\scxrd\models.py:221 .\scxrd\sample_model.py:44
+#: .\scxrd\models.py:221 .\scxrd\sample_model.py:43
 msgid "special remarks"
 msgstr ""
 
@@ -283,53 +298,53 @@ msgstr ""
 msgid "The cause why the sample could not be measured"
 msgstr ""
 
-#: .\scxrd\sample_model.py:13
+#: .\scxrd\sample_model.py:12
 msgid "Files with this extension are not allowed to upload here."
 msgstr ""
 
-#: .\scxrd\sample_model.py:18
+#: .\scxrd\sample_model.py:17
 msgid "sample name"
 msgstr ""
 
-#: .\scxrd\sample_model.py:19
+#: .\scxrd\sample_model.py:18
 msgid "A unique name of your sample"
 msgstr ""
 
-#: .\scxrd\sample_model.py:23
+#: .\scxrd\sample_model.py:22
 msgid "Submitter"
 msgstr ""
 
-#: .\scxrd\sample_model.py:26
+#: .\scxrd\sample_model.py:25
 msgid "sample is sensitive (temperature, oxygen, moisture)"
 msgstr ""
 
-#: .\scxrd\sample_model.py:27
+#: .\scxrd\sample_model.py:26
 msgid ""
 "The sample requires special precautions to remain stable until measurement."
 msgstr ""
 
-#: .\scxrd\sample_model.py:29
+#: .\scxrd\sample_model.py:28
 msgid "I want to solve/refine by myself"
 msgstr ""
 
-#: .\scxrd\sample_model.py:30
+#: .\scxrd\sample_model.py:29
 msgid ""
 "Indicate whether you want to solve and refine the structure by yourselves."
 msgstr ""
 
-#: .\scxrd\sample_model.py:32
+#: .\scxrd\sample_model.py:31
 msgid "assumed sum formula"
 msgstr ""
 
-#: .\scxrd\sample_model.py:34
+#: .\scxrd\sample_model.py:33
 msgid "Document with reaction equation and conditions"
 msgstr ""
 
-#: .\scxrd\sample_model.py:43
+#: .\scxrd\sample_model.py:42
 msgid "desired structure"
 msgstr ""
 
-#: .\scxrd\sample_model.py:45
+#: .\scxrd\sample_model.py:44
 msgid "Any additional information we should know."
 msgstr ""
 
