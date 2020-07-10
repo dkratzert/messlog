@@ -2,29 +2,35 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from mysite.mysite.views import HomePageView
-from . import views
+from scxrd.views.experiment_views import ExperimentIndexView, ExperimentCreateView, ExperimentFromSampleCreateView, \
+    ExperimentEditView, ExperimentListJson, ExperimentsListJsonUser
+from scxrd.views.sample_views import MySamplesList, NewSampleByCustomer, OperatorSamplesList, SampleDeleteView, \
+    OperatorSampleDetail
+from scxrd.views.views import ResidualsTable, MoleculeView
 
 app_name = 'scxrd'
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='index'),
-    path('submit/mysamples/', views.MySamplesList.as_view(), name='my_samples_page'),
-    path('experiments/', views.ExperimentIndexView.as_view(), name='all_experiments'),
-    path('newexp/', views.ExperimentCreateView.as_view(), name='new_exp'),
-    path('newexp/<int:pk>/', views.ExperimentFromSampleCreateView.as_view(), name='new_exp_from_sample'),
-    path('experiments/edit/<int:pk>/', views.ExperimentEditView.as_view(), name='edit-exp'),
-    path('sample/submit/', views.NewSampleByCustomer.as_view(), name='submit_sample'),
-    path('sample/edit/<int:pk>', views.SampleEditView.as_view(), name='edit_sample'),
-    path('submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
-    path('operator/allsamples/', views.OperatorSamplesList.as_view(), name='op_samples_page'),
-    path('operator/sample_detail/<int:pk>/', views.OperatorSampleDetail.as_view(), name='op_samples_detail'),
-    path('experiments/table/<int:pk>/', views.ResidualsTable.as_view(), name='details_table'),
-    path('experiments_list/', views.ExperimentListJson.as_view(), name='experiments_list'),
-    path('experiments_list_user/', views.ExperimentsListJsonUser.as_view(), name='experiments_list_from_user'),
-    path('experiments/molecule/', views.MoleculeView.as_view(), name='molecule'),
-    path('submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
-    path('submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
-    path('submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
+    path('experiments/', ExperimentIndexView.as_view(), name='all_experiments'),
+    path('newexp/', ExperimentCreateView.as_view(), name='new_exp'),
+    path('newexp/<int:pk>/', ExperimentFromSampleCreateView.as_view(), name='new_exp_from_sample'),
+    path('experiments/edit/<int:pk>/', ExperimentEditView.as_view(), name='edit-exp'),
+
+    path('submit/mysamples/', MySamplesList.as_view(), name='my_samples_page'),
+    path('sample/submit/', NewSampleByCustomer.as_view(), name='submit_sample'),
+    path('sample/delete/<int:pk>', SampleDeleteView.as_view(), name='delete_sample'),
+    path('sample/submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
+    path('operator/allsamples/', OperatorSamplesList.as_view(), name='op_samples_page'),
+    path('operator/sample_detail/<int:pk>/', OperatorSampleDetail.as_view(), name='op_samples_detail'),
+
+    path('experiments/table/<int:pk>/', ResidualsTable.as_view(), name='details_table'),
+    path('experiments_list/', ExperimentListJson.as_view(), name='experiments_list'),
+    path('experiments_list_user/', ExperimentsListJsonUser.as_view(), name='experiments_list_from_user'),
+    path('experiments/molecule/', MoleculeView.as_view(), name='molecule'),
+    path('sample/submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
+    path('sample/submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
+    path('sample/submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
     # path('uploadcif/<int:pk>/', views.CifUploadView.as_view(), name='upload_cif_file'),
 
 ]

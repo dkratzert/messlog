@@ -81,7 +81,9 @@
                         </div>
                     </td>
                     <td>
-                        <a href="{{ sample.reaction_path.url}}">{{ sample.reaction_path.name}}</a>
+                        {% if sample.reaction_path %}
+                            <a href="{{ sample.reaction_path.url }}">{{ sample.reaction_path.name }}</a>
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
