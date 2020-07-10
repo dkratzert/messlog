@@ -8,27 +8,22 @@ from scxrd.models import Experiment
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
-    number = forms.IntegerField(min_value=1)
-    #customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
+    number = forms.IntegerField(min_value=1, required=False)
+
+    # customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
         # pop the current user in orde to save him as operator in Experiment model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-        try:
-            self.fields['number'].initial = Experiment.objects.first().number + 1
-        except AttributeError:
-            self.fields['number'].initial = 1
-
 
         self.helper.layout = Layout(
             # Experiment ###
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment_name'),
-                Column('number'),
-                Column('measurement_temp'),
+                Column('experiment_name', css_class='col-4'),
+                Column('measurement_temp', css_class='col-4'),
             ),
             Row(
                 Column('machine'),
@@ -49,8 +44,8 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 Column('sum_formula', css_class='col-8'),
                 Column('crystal_colour'),
-                #Column('crystal_colour_mod'),
-                #Column('crystal_colour_lustre'),
+                # Column('crystal_colour_mod'),
+                # Column('crystal_colour_lustre'),
             ),
             Row(
                 Column('prelim_unit_cell', css_class='col-8'),
@@ -70,5 +65,3 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     class Meta:
         model = Experiment
         fields = '__all__'
-
-

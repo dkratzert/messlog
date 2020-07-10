@@ -11,15 +11,19 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('Experiment')
+        self.number = "<span class='badge badge-secondary'>Nr. {{ object.number }}</span>"
         super().__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
             # Experiment ###
-            card(self.exp_title, backbutton),
+
+            #card(self.exp_title+self.number, backbutton),
+            HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}'
+                 '{}</div>'.format(self.exp_title, self.number, backbutton)),
             Row(
-                Column('experiment_name'),
-                Column('number'),
-                Column('measurement_temp'),
+                Column('experiment_name', css_class='col-4'),
+                #Column('number'),
+                Column('measurement_temp', css_class='col-4'),
             ),
             Row(
                 Column('machine', css_class='col-4'),

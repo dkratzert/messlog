@@ -31,6 +31,7 @@ class MyDecimalField(forms.DecimalField):
 
 
 class ExperimentFormMixin(forms.ModelForm):
+    number = forms.IntegerField(min_value=1, required=False)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now)
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
@@ -60,7 +61,7 @@ class ExperimentFormMixin(forms.ModelForm):
         self.helper.form_method = 'POST'
         self.helper.form_style = 'default'
         self.helper.use_custom_control = True
-        self.helper.render_required_fields = True
+        self.helper.render_required_fields = False
         # Turn this off to see only mentioned form fields:
         self.helper.render_unmentioned_fields = False
         self.helper.help_text_inline = False  # both can not have the same value

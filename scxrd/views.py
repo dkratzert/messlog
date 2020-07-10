@@ -51,6 +51,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
         """Save the current user from the request into the experiment"""
         self.object: Experiment = form.save(commit=False)
         self.object.operator = self.request.user
+        self.object.number = Experiment.objects.first().number + 1
         self.object.save()
         return super().form_valid(form)
 
@@ -156,12 +157,17 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             cif = exp.ciffilemodel.cif_file_on_disk
         return {
             'cif_file_on_disk': cif,
+            'number'          : exp.number,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         # print('request from new measurement:')
         # pprint(request.POST)
         self.object: Experiment = self.get_object()
+        # This is here, because I dont want the number field to be rendered:
+        request.POST._mutable = True
+        request.POST['number'] = self.object.number
+        request.POST._mutable = False
         sample = self.object.sample
         form: ExperimentEditForm = self.get_form()
         if form.is_valid():
