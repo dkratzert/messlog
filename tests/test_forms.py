@@ -4,7 +4,7 @@ from django.test import TestCase, override_settings, Client
 from django.urls import reverse_lazy
 
 from scxrd.sample_model import Sample
-from scxrd.forms.new_cust_sample import SubmitNewSampleForm
+from scxrd.forms.new_sample import SubmitNewSampleForm
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin
 
 

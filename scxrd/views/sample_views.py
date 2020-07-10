@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, ListView, DetailView, DeleteView
 
-from scxrd.forms.new_cust_sample import SubmitNewSampleForm
+from scxrd.forms.new_sample import SubmitNewSampleForm
 from scxrd.sample_model import Sample
 from scxrd.utils import randstring
 
@@ -68,7 +68,7 @@ class MySamplesList(LoginRequiredMixin, ListView):
     """
     model = Sample
     template_name = 'scxrd/submitted_samples_list_customer.html'
-    ordering = '-pk'
+    ordering = '-pk'  # newest should be top
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()
@@ -83,7 +83,7 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     model = Sample
     # queryset = Sample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
-    ordering = '-pk'
+    ordering = 'pk'  # oldest should be top
 
 
 class OperatorSampleDetail(LoginRequiredMixin, DetailView):

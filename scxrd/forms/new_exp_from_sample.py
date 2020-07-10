@@ -1,5 +1,6 @@
 from crispy_forms.layout import Layout, Row, Column, HTML, Submit
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
@@ -18,7 +19,10 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                                       )
 
     def __init__(self, *args, **kwargs):
-        self.exp_title = _('New Experiment')
+        user = User.objects.get(pk=kwargs.get('initial').get('customer'))
+        self.exp_title = _('New Experiment from sample')
+        if user.first_name and user.last_name:
+            self.exp_title = _('New experiment from sample by {} {}'.format(user.first_name, user.last_name))
         # pop the current user in order to save him as operator in Experiment model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
@@ -32,15 +36,15 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
             # Experiment ###
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment_name'),
-                Column('number'),
-                Column('measurement_temp'),
+                Column('experiment_name', css_class='col-4'),
+                Column('measurement_temp', css_class='col-4'),
+                # Column('customer', css_class='col-4 invisible'),  # handled in the view
             ),
             Row(
                 Column('machine', css_class='col-4'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date', css_class='col-4'),  # TODO: make it invisible?
-                Column('customer', css_class='col-4 invisible'),
+                Column('measure_date', css_class='col-4'),
+                Column('end_time', css_class='col-4'),
             ),
             Row(
                 Column('crystal_colour'),

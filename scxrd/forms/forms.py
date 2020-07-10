@@ -52,6 +52,8 @@ class ExperimentFormMixin(forms.ModelForm):
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True)
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
     crystal_habit = forms.CharField(required=True)
+    end_time = forms.DateTimeField(required=True, label=_("Expected end time"), initial=timezone.now,
+                                   widget=DatePickerInput(format='%Y-%m-%d %H:%M'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

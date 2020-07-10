@@ -23,12 +23,13 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name', css_class='col-4'),
-                Column('measurement_temp', css_class='col-4'),
+                Column('measure_date'),
+                Column('end_time', css_class='col-4'),
             ),
             Row(
                 Column('machine'),
                 # Column('operator'), # done automatically in the view
-                Column('measure_date'),
+                Column('measurement_temp', css_class='col-4'),
                 Column('customer'),
             ),
             Row(

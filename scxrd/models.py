@@ -196,6 +196,7 @@ class Experiment(models.Model):
     measure_date = models.DateTimeField(verbose_name=_('measurement date'), default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)
     result_date = models.DateField(verbose_name=_('results sent date'), blank=True, null=True)
+    end_time = models.DateTimeField(verbose_name=_('expected end date and time of the experiment'), blank=False)
     base = models.ForeignKey(CrystalSupport, verbose_name=_('sample base'), blank=True, null=True,
                              on_delete=models.DO_NOTHING, related_name='experiments')
     glue = models.ForeignKey(CrystalGlue, verbose_name=_('sample glue'), related_name='experiments', blank=True,

@@ -11,7 +11,7 @@
         <div class="col-11 align-center">
 
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3">{% trans "Unmeasured Samples from Customers" %}
+                <div class="card-header pb-2 pl-3">{% trans "Samples from Customers" %}
                     <a role="button" class="btn btn-sm btn-outline-secondary float-right my-0 py-0"
                        href="{% url "index" %}">{% trans "Back to start" %}</a>
                 </div>
@@ -36,7 +36,12 @@
                                                href="{% url "scxrd:new_exp_from_sample" pk=sample.id %}">{% trans "Measure Sample" %}</a>
                                         </div>
                                         <div class="mt-2">
-                                            {% trans "Customer: " %}{{ sample.customer_samp }}
+                                            {% if sample.customer_samp.first_name and sample.customer_samp.last_name %}
+                                                {% trans "Customer: " %}{{ sample.customer_samp.first_name }}
+                                                {{ sample.customer_samp.last_name }}
+                                            {% else %}
+                                                {% trans "Customer: " %}{{ sample.customer_samp }}
+                                            {% endif %}
                                         </div>
                                         <div class="mt-2">
                                             {% trans "group: " %}{{ sample.customer_samp.profile.work_group }}
@@ -96,7 +101,7 @@
                                     {% else %}
                                         <td><span
                                                 class="badge badge-warning m-1 p-1">{% trans "Awaiting Measurement" %}</span>
-                                            {% if not sample.experiments|was_measured %}
+                                            {% comment %}{% if not sample.experiments|was_measured %}
                                                 <form class="form-row" method="POST"
                                                       action="{% url "scxrd:delete_sample" sample.pk %}">
                                                     {% csrf_token %}
@@ -105,7 +110,7 @@
                                                     </button>
 
                                                 </form>
-                                            {% endif %}
+                                            {% endif %}{% endcomment %}
                                         </td>
                                     {% endif %}
 

@@ -41,6 +41,7 @@ class Sample(models.Model):
                                                   verbose_name=_('Solvents used for crystallization, '
                                                                  'method, conditions'))
     desired_struct_draw = models.TextField(verbose_name=_('desired structure'), blank=True, default='')
+    mol_file = models.TextField(verbose_name=_('MOL file of the structure'), blank=True, default='')
     special_remarks = models.TextField(verbose_name=_('special remarks'), blank=True,
                                        help_text=_('Any additional information we should know.'))
 
