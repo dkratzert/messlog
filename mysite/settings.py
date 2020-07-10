@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
+# Storage of translations:
+LOCALE_PATHS = [ os.path.join(BASE_DIR, 'locale'), ]
+
 # Application definition
 
 INSTALLED_APPS = [

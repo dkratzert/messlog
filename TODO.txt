@@ -1,37 +1,4 @@
 
-- Add operator to experiment list
-- Fix login form on top bar
-- Make a customer administration page
-- Make experiment administration page
-- Make "new experiment" page
-- Make drag&drop file upload (after new experiment page)
-- decide which properties of a cif should be on index page
-- make a "show all properties of measurement" page
-
-- handle other companys formats
-
-Later:
-- handle .abs, ._ls, etc. files from work dir
-- render reports
-- Send mail with order to person in charge when new experiment starts 
-- Add some explaining text on the main page
-- Add links to pages with help texts about measurements
-- Add machine service logbook
-
-- For accounts:
-  - add matrix with permissions like (new exp, admin page, change exp, service logbook, etc.) for each account
-  
-  Users: List of users, Each user must be in one or more work groups. 
-         Users with no group are in the no_group group. 
-  
-  Workgroups: List of work groups. The groups are an organizational ordering, not for authorization.
-  
-  Do I need permission groups?
-  
-  User_roles: Admin (can do everyhing)
-              Operator (can create measurements)
-              Student (can view measurements)
-  
-  - have selv-signup for users as students. An Admin can higher the level to more acesss.
-  
-  - for group leaders: "[x] I want to get informed about the experiments of my subordinates" option
+* Add some explaining text on the main page
+* Add links to pages with help texts about measurements
+* Add machine service logbook

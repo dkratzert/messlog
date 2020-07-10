@@ -67,8 +67,8 @@ class MySamplesList(LoginRequiredMixin, ListView):
     The view for the samples list of a customer submitted for measurement by an operator.
     """
     model = Sample
-    template_name = 'scxrd/submitted_samples_list_by_customer.html'
-    ordering = '-submit_date_samp'
+    template_name = 'scxrd/submitted_samples_list_customer.html'
+    ordering = '-pk'
 
     def get_queryset(self):
         super(MySamplesList, self).get_queryset()
@@ -83,6 +83,7 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     model = Sample
     # queryset = Sample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
+    ordering = '-pk'
 
 
 class OperatorSampleDetail(LoginRequiredMixin, DetailView):

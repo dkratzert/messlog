@@ -80,7 +80,8 @@
                                                 <br>
                                             {% endif %}
                                             {% for experiment in sample.experiments.all %}
-                                                <a href="{% url 'scxrd:edit-exp' experiment.pk %}">{{ experiment }}</a><br>
+                                                <a href="{% url 'scxrd:edit-exp' experiment.pk %}">{{ experiment }}</a>
+                                                <br>
                                             {% endfor %}
                                         </td>
                                     {% elif not sample.experiments|was_measured and sample.not_measured_cause %}
@@ -95,6 +96,16 @@
                                     {% else %}
                                         <td><span
                                                 class="badge badge-warning m-1 p-1">{% trans "Awaiting Measurement" %}</span>
+                                            {% if not sample.experiments|was_measured %}
+                                                <form class="form-row" method="POST"
+                                                      action="{% url "scxrd:delete_sample" sample.pk %}">
+                                                    {% csrf_token %}
+                                                    <button class="btn btn-outline-danger btn-sm p-0 pl-1 pr-1 ml-2"
+                                                            type="submit" value="DELETE">{% trans "DELETE" %}
+                                                    </button>
+
+                                                </form>
+                                            {% endif %}
                                         </td>
                                     {% endif %}
 

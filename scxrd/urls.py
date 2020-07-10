@@ -18,10 +18,10 @@ urlpatterns = [
     path('experiments/edit/<int:pk>/', ExperimentEditView.as_view(), name='edit-exp'),
 
     path('submit/mysamples/', MySamplesList.as_view(), name='my_samples_page'),
+    path('operator/allsamples/', OperatorSamplesList.as_view(), name='op_samples_page'),
     path('sample/submit/', NewSampleByCustomer.as_view(), name='submit_sample'),
     path('sample/delete/<int:pk>', SampleDeleteView.as_view(), name='delete_sample'),
     path('sample/submit/ketcher.html', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.html")),
-    path('operator/allsamples/', OperatorSamplesList.as_view(), name='op_samples_page'),
     path('operator/sample_detail/<int:pk>/', OperatorSampleDetail.as_view(), name='op_samples_detail'),
 
     path('experiments/table/<int:pk>/', ResidualsTable.as_view(), name='details_table'),

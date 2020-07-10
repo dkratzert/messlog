@@ -35,14 +35,16 @@
                                 <span class="float">
                                     Submitted: {{ sample.submit_date }}
                                 </span>
+                            {% if not sample.experiments|was_measured %}
                                 <form class="form-row float-right" method="POST"
                                       action="{% url "scxrd:delete_sample" sample.pk %}">
                                     {% csrf_token %}
                                     <button class="btn btn-outline-danger btn-sm p-1 ml-2 mr-1 float-right"
-                                            type="submit" value="DELETE">DELETE
+                                            type="submit" value="DELETE">{% trans "DELETE" %}
                                     </button>
 
                                 </form>
+                            {% endif %}
                             </div>
 
                             {# ---------------------------------------------------------------- #}
@@ -82,7 +84,7 @@
                                             {% endautoescape %}
                                         {% else %}
                                             {% if sample.reaction_path %}
-                                                <a href="{{ sample.reaction_path.url }}">
+                                                <a href="{{ sample.reaction_path.url }}" class="btn btn-primary"> 
                                                     {% trans "Reaction equation" %}
                                                 </a>
                                             {% else %}
