@@ -18,7 +18,8 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 TODO:
 - after submit sample -> text what you should do with the sample
 - check if anything gets still lost during experiment edit save
-- samples  can be edited by users until the measurement is done. -> Add a SampleEditView
+- add mol file from ketcher to sample
+- add end time to experiment
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
    - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
