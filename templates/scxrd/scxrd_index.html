@@ -31,7 +31,11 @@
                     {% trans "More Information" %}
                 </div>
                 <div class="card-body">
-                    Here will be status information or statistics.
+                    Currently running experiments:
+                    {% for exp in current_measures %}
+                        <p>{{ exp }} -> end time: {{ exp.end_time }}</p>
+                    {% endfor %}
+
                 </div>
             </div>
         </div>

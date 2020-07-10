@@ -20,15 +20,16 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             #card(self.exp_title+self.number, backbutton),
             HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}'
                  '{}</div>'.format(self.exp_title, self.number, backbutton)),
+
             Row(
                 Column('experiment_name', css_class='col-4'),
-                #Column('number'),
-                Column('measurement_temp', css_class='col-4'),
+                Column('measure_date'),
+                Column('end_time', css_class='col-4'),
             ),
             Row(
-                Column('machine', css_class='col-4'),
-                # Column('operator'),
-                Column('measure_date', css_class='col-4'),
+                Column('machine'),
+                # Column('operator'), # done automatically in the view
+                Column('measurement_temp', css_class='col-4'),
                 Column(
                     HTML("""
                     {% if object.sample %}

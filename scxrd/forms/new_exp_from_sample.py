@@ -9,7 +9,7 @@ from scxrd.models import Experiment
 
 
 class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
-    number = forms.IntegerField(min_value=1)
+    number = forms.IntegerField(min_value=1, required=False)
     not_measured_cause = forms.CharField(widget=forms.Textarea, required=False, label=_('Not measured because'))
     was_measured = forms.BooleanField(label=_('Sample was not measured'),
                                       required=False,

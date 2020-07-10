@@ -1,6 +1,7 @@
 from datetime import datetime
 from pprint import pprint
 
+import pytz
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
@@ -8,7 +9,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.cif_file_io import CifContainer
@@ -21,12 +22,23 @@ from scxrd.sample_model import Sample
 from scxrd.utils import generate_sha256
 
 
-class ExperimentIndexView(LoginRequiredMixin, TemplateView):
+class ExperimentIndexView(LoginRequiredMixin, ListView):
     """
     The view for the main scxrd page.
     """
     model = Experiment
     template_name = 'scxrd/scxrd_index.html'
+
+    def get_context_data(self, **kwargs):
+        """Get a list of currently running experiments to the context"""
+        exp: Experiment
+        utc = pytz.UTC
+        mess = []
+        for exp in self.object_list:
+            if exp.end_time > utc.localize(datetime.now()) > exp.measure_date:
+                mess.append(exp)
+        kwargs.update({'current_measures': mess})
+        return super().get_context_data(**kwargs)
 
 
 class ExperimentCreateView(LoginRequiredMixin, CreateView):
@@ -42,7 +54,10 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
         """Save the current user from the request into the experiment"""
         self.object: Experiment = form.save(commit=False)
         self.object.operator = self.request.user
-        self.object.number = Experiment.objects.first().number + 1
+        if Experiment.objects.first():
+            self.object.number = Experiment.objects.first().number + 1
+        else:
+            self.object.number = 1
         self.object.save()
         return super().form_valid(form)
 
@@ -96,7 +111,11 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             # form.instance is Experiment, because of the form class:
             exp: Experiment = form.instance
-            exp.number = form.cleaned_data['number']
+            # exp.number = form.cleaned_data['number']
+            if Experiment.objects.first():
+                exp.number = Experiment.objects.first().number + 1
+            else:
+                exp.number = 1
             exp.experiment_name = form.cleaned_data.get('experiment_name')
             exp.exptl_special_details = form.cleaned_data.get('exptl_special_details')
             exp.customer = self.object.customer_samp
