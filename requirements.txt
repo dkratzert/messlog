@@ -9,5 +9,5 @@ gemmi
 django-cleanup
 django-crispy-forms
 django-robohash-svg
-model-bakery
+#model-bakery
 django-webtest

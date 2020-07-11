@@ -1122,11 +1122,11 @@ msgstr[1] ""
 #: venv/lib/python3.8/site-packages/django/forms/formsets.py:379
 #: venv/lib/python3.8/site-packages/django/forms/formsets.py:386
 msgid "Order"
-msgstr ""
+msgstr "Ordnen"
 
 #: venv/lib/python3.8/site-packages/django/forms/formsets.py:391
 msgid "Delete"
-msgstr ""
+msgstr "Löschen"
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:754
 #, python-format
@@ -1147,15 +1147,15 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:773
 msgid "Please correct the duplicate values below."
-msgstr ""
+msgstr "Bitte korrigieren Sie die doppelten Werte unten."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1094
 msgid "The inline value did not match the parent instance."
-msgstr ""
+msgstr "Der innere Wert stimmte nicht mit der übergeordneten Instanz überein."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1161
 msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
+msgstr "Wählen Sie eine gültige Auswahl. Diese Wahl gehört nicht zu den verfügbaren Wahlmöglichkeiten."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1277
 #, python-format
@@ -1171,31 +1171,31 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:395
 msgid "Clear"
-msgstr ""
+msgstr "Löschen"
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:396
 msgid "Currently"
-msgstr ""
+msgstr "Derzeit"
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:397
 msgid "Change"
-msgstr ""
+msgstr "Ändern"
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:709
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:710
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: venv/lib/python3.8/site-packages/django/forms/widgets.py:711
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: venv/lib/python3.8/site-packages/django/template/defaultfilters.py:788
 msgid "yes,no,maybe"
-msgstr ""
+msgstr "Ja, Nein, Vielleicht"
 
 #: venv/lib/python3.8/site-packages/django/template/defaultfilters.py:817
 #: venv/lib/python3.8/site-packages/django/template/defaultfilters.py:834
@@ -1248,163 +1248,163 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/utils/dateformat.py:150
 msgid "midnight"
-msgstr ""
+msgstr "Mitternacht"
 
 #: venv/lib/python3.8/site-packages/django/utils/dateformat.py:152
 msgid "noon"
-msgstr ""
+msgstr "mittags"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:6
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:6
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:6
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:6
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:6
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:7
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:7
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:10
 msgid "Mon"
-msgstr ""
+msgstr "Mo"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:10
 msgid "Tue"
-msgstr ""
+msgstr "Di"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:10
 msgid "Wed"
-msgstr ""
+msgstr "Mi"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:10
 msgid "Thu"
-msgstr ""
+msgstr "Do"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:10
 msgid "Fri"
-msgstr ""
+msgstr "Fr"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:11
 msgid "Sat"
-msgstr ""
+msgstr "Sa"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:11
 msgid "Sun"
-msgstr ""
+msgstr "So"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "March"
-msgstr ""
+msgstr "März"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:14
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:15
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:15
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:15
 msgid "September"
-msgstr ""
+msgstr "Sebtember"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:15
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:15
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:16
 msgid "December"
-msgstr ""
+msgstr "Dezember"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "jan"
-msgstr ""
+msgstr "jan"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "feb"
-msgstr ""
+msgstr "feb"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "mar"
-msgstr ""
+msgstr "mär"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "apr"
-msgstr ""
+msgstr "apr"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "may"
-msgstr ""
+msgstr "mai"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:19
 msgid "jun"
-msgstr ""
+msgstr "jun"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "jul"
-msgstr ""
+msgstr "jul"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "aug"
-msgstr ""
+msgstr "aug"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "sep"
-msgstr ""
+msgstr "sept"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "oct"
-msgstr ""
+msgstr "okt"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "nov"
-msgstr ""
+msgstr "nov"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:20
 msgid "dec"
-msgstr ""
+msgstr "dez"
 
 #: venv/lib/python3.8/site-packages/django/utils/dates.py:23
 msgctxt "abbrev. month"
@@ -1740,7 +1740,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:384
 msgid "Django Documentation"
-msgstr ""
+msgstr "Django-Handbuch"
 
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:385
 msgid "Topics, references, &amp; how-to’s"
