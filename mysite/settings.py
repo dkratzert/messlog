@@ -157,6 +157,11 @@ INTERNAL_IPS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
+
+EMAIL_HOST = 'smtp.uni-freiburg.de'
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
