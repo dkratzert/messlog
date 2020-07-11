@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <a href="{% url 'scxrd:op_samples_page' %}">
     <div class="card mb-4 text-center p-4 bg-light h-10">
@@ -8,7 +9,7 @@
             </div>
             <div class="col-10">
                 <h1 class="display-8 font-weight-normal">
-                    View Samples
+                    {% trans "View Samples" %}
                 </h1>
                 {#        Measure samples submitted by others#}
             </div>

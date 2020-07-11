@@ -35,7 +35,7 @@
                                     {% endif %}
                                 </span>
                                 <span class="float">
-                                    Submitted: {{ sample.submit_date }}
+                                    {% trans "Submitted:" %} {{ sample.submit_date }}
                                 </span>
                             {% if not sample.experiments|was_measured %}
                                 <form class="form-row float-right" method="POST"
@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="col-6 p-0">
                                         <div class="card">
-                                            <div class="card-header">Measurements:</div>
+                                            <div class="card-header">{% trans "Measurements:" %}</div>
                                             <div class="card-body">
                                                 {% for experiment in sample.experiments.all %}
                                                     <div>{{ experiment }}
@@ -116,7 +116,7 @@
                                                         {% endif %}
                                                     </div>
                                                 {% empty %}
-                                                    not measured yet
+                                                    {% trans "not measured yet" %}
                                                 {% endfor %}
                                             </div>
                                         </div>
@@ -137,7 +137,7 @@
                                     <div class="col-3 p-0 float-right">
                                         <a href="{% url 'scxrd:op_samples_detail' sample.pk %}"
                                            class="btn btn-outline-primary float-right">
-                                            Sample Details
+                                            {% trans "Sample Details" %}
                                         </a>
                                     </div>
                                 </div>

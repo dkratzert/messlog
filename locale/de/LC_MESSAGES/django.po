@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 21:22+0200\n"
+"POT-Creation-Date: 2020-07-11 21:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,9 @@ msgstr "Neue Probe"
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
-msgstr "Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder es im Feld darunter zeichnen."
+msgstr ""
+"Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder "
+"es im Feld darunter zeichnen."
 
 #: scxrd/models.py:57
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
@@ -399,7 +401,7 @@ msgstr "Administration"
 msgid "Submit a Sample"
 msgstr "Probe abgeben"
 
-#: templates/base.html:71
+#: templates/base.html:71 templates/scxrd/buttons/my_samples.html:7
 #: templates/scxrd/buttons/small_buttons/my_samples.html:9
 msgid "My Samples"
 msgstr "Meine Proben"
@@ -436,28 +438,36 @@ msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 #, fuzzy
 #| msgid "Experiment"
 msgid "All Experiments"
-msgstr "Messung"
+msgstr "Alle Experimente"
 
 #: templates/scxrd/buttons/back_button.html:5
 msgid "Go Back"
 msgstr "Zurück"
 
+#: templates/scxrd/buttons/measure_samples.html:12
+#, fuzzy
+#| msgid "New Sample"
+msgid "View Samples"
+msgstr "Neue Probe"
+
 #: templates/scxrd/buttons/my_op_experiments.html:13
 #, fuzzy
 #| msgid "Experiment"
 msgid "My Experiments"
-msgstr "Messung"
+msgstr "Meine Experimente"
+
+#: templates/scxrd/buttons/my_operator_samples.html:12
+#: templates/scxrd/buttons/small_buttons/operator_samples.html:8
+msgid "All Samples"
+msgstr "Alle Proben"
 
 #: templates/scxrd/buttons/small_buttons/back_to_start.html:9
 #: templates/scxrd/submitted_samples_list_operator.html:16
 msgid "Back to start"
 msgstr "Zurück"
 
-#: templates/scxrd/buttons/small_buttons/operator_samples.html:8
-msgid "All Samples"
-msgstr "Alle Proben"
-
 #: templates/scxrd/buttons/small_buttons/submit_sample.html:9
+#: templates/scxrd/buttons/submit_sample.html:6
 msgid "Submit Sample"
 msgstr "Probe Abgeben"
 
@@ -472,6 +482,138 @@ msgstr "Komplette Struktur"
 #: templates/scxrd/details_struct_table.html:27
 msgid "Details"
 msgstr "Details"
+
+#: templates/scxrd/residuals_table.html:9
+msgid "Exp. Number"
+msgstr "Experimentnummer"
+
+#: templates/scxrd/residuals_table.html:11
+#, fuzzy
+#| msgid "machine type"
+msgid "Machine"
+msgstr "Maschinentyp"
+
+#: templates/scxrd/residuals_table.html:14
+#: templates/scxrd/residuals_table.html:17
+msgid "Solvents"
+msgstr "Lösemittel"
+
+#: templates/scxrd/residuals_table.html:20
+#: templates/scxrd/submitted_samples_list_operator.html:25
+msgid "Sum Formula"
+msgstr "Summenformel"
+
+#: templates/scxrd/residuals_table.html:26
+#, fuzzy
+#| msgid "Measured"
+msgid "Measured by"
+msgstr "Gemessen"
+
+#: templates/scxrd/residuals_table.html:29
+#, fuzzy
+#| msgid "Measure Sample"
+msgid "Measure Date"
+msgstr "Probe messen"
+
+#: templates/scxrd/residuals_table.html:31
+#, fuzzy
+#| msgid "results sent date"
+msgid "Results sent"
+msgstr "Ergebnis gesendet am"
+
+#: templates/scxrd/residuals_table.html:34
+#, fuzzy
+#| msgid "CIF file"
+msgid "CIF File"
+msgstr "CIF-Datei"
+
+#: templates/scxrd/residuals_table.html:41
+msgid "Space Group"
+msgstr "Raumgruppe"
+
+#: templates/scxrd/residuals_table.html:47
+msgid "Completeness"
+msgstr ""
+
+#: templates/scxrd/residuals_table.html:49
+#, fuzzy
+#| msgid "operator"
+msgid "Temperature"
+msgstr "Operator"
+
+#: templates/scxrd/residuals_table.html:51
+#, fuzzy
+#| msgid "CCDC number"
+msgid "CCDC Number"
+msgstr "CCDC-Nummer"
+
+#: templates/scxrd/sample_details_operator.html:17
+#, fuzzy
+#| msgid "sample name"
+msgid "Sample name"
+msgstr "Probenname"
+
+#: templates/scxrd/sample_details_operator.html:27
+#, fuzzy
+#| msgid "Submitter"
+msgid "Submit date"
+msgstr "Probenbesitzer/in"
+
+#: templates/scxrd/sample_details_operator.html:37
+#, fuzzy
+#| msgid "Submitted at"
+msgid "Sybmitted by"
+msgstr "Abgegeben am"
+
+#: templates/scxrd/sample_details_operator.html:47
+msgid "Sensitivity"
+msgstr "Empfindlichkeit"
+
+#: templates/scxrd/sample_details_operator.html:52
+#, fuzzy
+#| msgid "Sample submission date"
+msgid "Sample is sensitive"
+msgstr "Probenabgabedatum"
+
+#: templates/scxrd/sample_details_operator.html:54
+#, fuzzy
+#| msgid "My Samples List"
+msgid "Sample is stable"
+msgstr "Meine Probenlist"
+
+#: templates/scxrd/sample_details_operator.html:61
+msgid "Customer solves by himself"
+msgstr "Kunde verfeinert selbst"
+
+#: templates/scxrd/sample_details_operator.html:71
+#, fuzzy
+#| msgid "Sum Formula"
+msgid "Sum formula"
+msgstr "Summenformel"
+
+#: templates/scxrd/sample_details_operator.html:81
+#, fuzzy
+#| msgid "reaction conditions"
+msgid "Reaction conditions"
+msgstr "Reaktionsbedingungen"
+
+#: templates/scxrd/sample_details_operator.html:93
+#, fuzzy
+#| msgid "Crystal size min"
+msgid "Crstallized from"
+msgstr "Max. Kristallkante"
+
+#: templates/scxrd/sample_details_operator.html:103
+#, fuzzy
+#| msgid "Sample"
+msgid "Sample drawing"
+msgstr "Probe"
+
+#: templates/scxrd/sample_details_operator.html:117
+#, fuzzy
+#| msgid "Special remarks:"
+msgid "Special remarks"
+msgstr "Weitere Anmerkungen:"
 
 #: templates/scxrd/scxrd_index.html:14
 msgid "Experiments List"
@@ -507,6 +649,12 @@ msgstr "Gemessen"
 msgid "Structure Finished!"
 msgstr "Struktur fertig!"
 
+#: templates/scxrd/submitted_samples_list_customer.html:39
+#, fuzzy
+#| msgid "Submitter"
+msgid "Submitted:"
+msgstr "Probenbesitzer/in"
+
 #: templates/scxrd/submitted_samples_list_customer.html:46
 msgid "DELETE"
 msgstr "LÖSCHEN"
@@ -524,6 +672,12 @@ msgstr "Reaktionsgleichung"
 msgid "File not found"
 msgstr "Datei nicht gefunden"
 
+#: templates/scxrd/submitted_samples_list_customer.html:100
+#, fuzzy
+#| msgid "measurement date"
+msgid "Measurements:"
+msgstr "Datum der Messung"
+
 #: templates/scxrd/submitted_samples_list_customer.html:105
 msgid "was measured"
 msgstr "gemessen"
@@ -536,9 +690,21 @@ msgstr "Nicht gemessen, weil:"
 msgid "could not be measured"
 msgstr "Nicht messbar"
 
+#: templates/scxrd/submitted_samples_list_customer.html:120
+#, fuzzy
+#| msgid "Not measured because"
+msgid "not measured yet"
+msgstr "Nicht gemessen, weil"
+
 #: templates/scxrd/submitted_samples_list_customer.html:134
 msgid "Special remarks:"
 msgstr "Weitere Anmerkungen:"
+
+#: templates/scxrd/submitted_samples_list_customer.html:141
+#, fuzzy
+#| msgid "Details"
+msgid "Sample Details"
+msgstr "Details"
 
 #: templates/scxrd/submitted_samples_list_customer.html:152
 msgid "No samples found"
@@ -559,10 +725,6 @@ msgstr "Probe"
 #: templates/scxrd/submitted_samples_list_operator.html:24
 msgid "Submitted at"
 msgstr "Abgegeben am"
-
-#: templates/scxrd/submitted_samples_list_operator.html:25
-msgid "Sum Formula"
-msgstr "Summenformel"
 
 #: templates/scxrd/submitted_samples_list_operator.html:26
 #: templates/scxrd/submitted_samples_list_operator.html:71
@@ -628,7 +790,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/alabaster/navigation.html:1
 msgid "Navigation"
-msgstr ""
+msgstr "Navigation"
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:129
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:139
@@ -657,11 +819,11 @@ msgstr "Mitteilungen"
 
 #: venv/lib/python3.8/site-packages/django/contrib/sitemaps/apps.py:7
 msgid "Site Maps"
-msgstr ""
+msgstr "Seitenindex"
 
 #: venv/lib/python3.8/site-packages/django/contrib/staticfiles/apps.py:9
 msgid "Static Files"
-msgstr ""
+msgstr "Statische Dateien"
 
 #: venv/lib/python3.8/site-packages/django/contrib/syndication/apps.py:7
 msgid "Syndication"
@@ -673,11 +835,11 @@ msgstr "Diese Seitenzahl ist keine ganze Zahl"
 
 #: venv/lib/python3.8/site-packages/django/core/paginator.py:47
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "Diese Seitennummer ist kleiner als eins"
 
 #: venv/lib/python3.8/site-packages/django/core/paginator.py:52
 msgid "That page contains no results"
-msgstr ""
+msgstr "Diese Seite ist leer"
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:103
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:659
@@ -1608,7 +1770,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/utils/text.py:235
 msgid "or"
-msgstr ""
+msgstr "oder"
 
 #. Translators: This string is used as a separator between list elements
 #: venv/lib/python3.8/site-packages/django/utils/text.py:254

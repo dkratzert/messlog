@@ -1,8 +1,10 @@
+{% load static %}
+{% load i18n %}
 
 <a href="{% url 'scxrd:my_samples_page' %}">
     <div class="card mb-4 text-center p-4 bg-light h-20">
         <h1 class="display-8 font-weight-normal">
-            My Samples
+            {% trans "My Samples" %}
         </h1>
     </div>
 </a>
