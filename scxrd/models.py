@@ -16,20 +16,28 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
 TODO:
-- after submit sample -> text what you should do with the sample
-- check if anything gets still lost during experiment edit save
+- after submit sample -> text what you should do with the sample, who will measre it and what we will do with 
+   the results
+- add email notifications and password reset etc...
+- make experiments write protected after CIF upload
+
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
    - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
      owners can do changes only until the cif file is uploaded 
    - page should have a link to the google calendar (or even embedded into an iframe?)
-- add email notifications
+
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of experiments list page
 - Check for existing unit cell during cif upload and measure experiment.
+- reminder message to take back vials?
 - for charts:
     https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html 
     https://www.chartjs.org/docs/latest/
+    - chart with measurements per time
+    - chart with R-value per time
+    - chart with  
+- show success rate per person
 - http://ccbv.co.uk/projects/Django/3.0/
 
 
