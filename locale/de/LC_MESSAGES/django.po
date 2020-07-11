@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 11:22+0200\n"
+"POT-Creation-Date: 2020-07-11 21:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,7 +157,9 @@ msgstr "Verwendete Lösemittel zur Kristallisation, Methode, Bedingungen"
 msgid ""
 "Knowing the solvents used for synthesis and crystallization can be crucial "
 "for the success of the structure solution and refinement."
-msgstr "Für den Erfolg der Strukturlösung und -Verfeinerung kann es essentiell sein diese Informationen zu haben."
+msgstr ""
+"Für den Erfolg der Strukturlösung und -Verfeinerung kann es essentiell sein "
+"diese Informationen zu haben."
 
 #: scxrd/forms/new_sample.py:25
 msgid "Document with reaction equation"
@@ -167,7 +169,9 @@ msgstr "Dokument mit Reaktionsgleichung"
 msgid ""
 "Please upload a PDF document showing the reaction equation with the desired "
 "product <br> including all conditions, solvents and reagents used."
-msgstr "Lade ein PDF-Dokument mit der Reaktionsgleichung des gewünschten Produkts und aller Reaktionsbedingungen, Lösemittel und Reagenzien hoch."
+msgstr ""
+"Lade ein PDF-Dokument mit der Reaktionsgleichung des gewünschten Produkts "
+"und aller Reaktionsbedingungen, Lösemittel und Reagenzien hoch."
 
 #: scxrd/forms/new_sample.py:30
 msgid "Desired structure"
@@ -339,7 +343,9 @@ msgstr "Probe ist empfindlich (Temperatur, Sauerstoff, Feuchtigkeit)"
 #: scxrd/sample_model.py:27
 msgid ""
 "The sample requires special precautions to remain stable until measurement."
-msgstr "Die Probe erfordert besondere Vorkehrungen, um bis zur Messung stabil zu bleiben."
+msgstr ""
+"Die Probe erfordert besondere Vorkehrungen, um bis zur Messung stabil zu "
+"bleiben."
 
 #: scxrd/sample_model.py:29
 msgid "I want to solve/refine by myself"
@@ -585,8 +591,10 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:129
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:139
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:53
-msgid "Dieses Feld ist erforderlich."
-msgstr "Dieses Feld ist "
+#, fuzzy
+#| msgid "This field cannot be null."
+msgid "This field is required."
+msgstr "Dieses Feld ist erforderlich sein."
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_layout.py:361
 msgid "i18n text"
@@ -672,17 +680,20 @@ msgstr "Geben Sie nur durch Kommas getrennte Ziffern ein."
 #: venv/lib/python3.8/site-packages/django/core/validators.py:311
 #, python-format
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr "Stellen Sie sicher, dass dieser Wert %(limit_value) (er ist %(show_value))."
+msgstr ""
+"Stellen Sie sicher, dass dieser Wert %(limit_value) (er ist %(show_value))."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:343
 #, python-format
 msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr "Stellen Sie sicher, dass dieser Wert kleiner oder gleich %(limit_value) ist."
+msgstr ""
+"Stellen Sie sicher, dass dieser Wert kleiner oder gleich %(limit_value) ist."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:352
 #, python-format
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr "Stellen Sie sicher, dass dieser Wert größer oder gleich %(limit_value) ist."
+msgstr ""
+"Stellen Sie sicher, dass dieser Wert größer oder gleich %(limit_value) ist."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:362
 #, python-format
@@ -716,15 +727,23 @@ msgstr "Geben sie eine Nummer ein."
 #, python-format
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] "Stellen Sie sicher, dass insgesamt nicht mehr als %(max)s Stelle vorhanden ist."
-msgstr[1] "Stellen Sie sicher, dass insgesamt nicht mehr als %(max)s Stellen vorhanden sind."
+msgstr[0] ""
+"Stellen Sie sicher, dass insgesamt nicht mehr als %(max)s Stelle vorhanden "
+"ist."
+msgstr[1] ""
+"Stellen Sie sicher, dass insgesamt nicht mehr als %(max)s Stellen vorhanden "
+"sind."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:403
 #, python-format
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] "Stellen Sie sicher, dass nicht mehr als %(max)s Nachkommastelle vorhanden ist."
-msgstr[1] "Stellen Sie sicher, dass nicht mehr als %(max)s Nachkommastellen vorhanden sind."
+msgstr[0] ""
+"Stellen Sie sicher, dass nicht mehr als %(max)s Nachkommastelle vorhanden "
+"ist."
+msgstr[1] ""
+"Stellen Sie sicher, dass nicht mehr als %(max)s Nachkommastellen vorhanden "
+"sind."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:408
 #, python-format
@@ -732,15 +751,20 @@ msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
 msgid_plural ""
 "Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] "Stellen Sie sicher, dass nicht mehr als %(max)s Stelle vor dem Dezimalpunkt vorhanden ist."
-msgstr[1] "Stellen Sie sicher, dass nicht mehr als %(max)s-Stellen vor dem Dezimalpunkt vorhanden sind."
+msgstr[0] ""
+"Stellen Sie sicher, dass nicht mehr als %(max)s Stelle vor dem Dezimalpunkt "
+"vorhanden ist."
+msgstr[1] ""
+"Stellen Sie sicher, dass nicht mehr als %(max)s-Stellen vor dem Dezimalpunkt "
+"vorhanden sind."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:470
 #, python-format
 msgid ""
 "File extension “%(extension)s” is not allowed. Allowed extensions are: "
 "%(allowed_extensions)s."
-msgstr "Dateiendung “%(extension)s” ist nich erlaubt. Erlaubte Dateiendungen sind: "
+msgstr ""
+"Dateiendung “%(extension)s” ist nich erlaubt. Erlaubte Dateiendungen sind: "
 "%(allowed_extensions)s."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:522
@@ -1075,7 +1099,9 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1275
 #, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr "Wählen Sie eine gültige Auswahl. %(value)s gehört nicht zu den verfügbaren Auswahlmöglichkeiten."
+msgstr ""
+"Wählen Sie eine gültige Auswahl. %(value)s gehört nicht zu den verfügbaren "
+"Auswahlmöglichkeiten."
 
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:854
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:969
@@ -1155,7 +1181,9 @@ msgstr "Der innere Wert stimmte nicht mit der übergeordneten Instanz überein."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1161
 msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr "Wählen Sie eine gültige Auswahl. Diese Wahl gehört nicht zu den verfügbaren Wahlmöglichkeiten."
+msgstr ""
+"Wählen Sie eine gültige Auswahl. Diese Wahl gehört nicht zu den verfügbaren "
+"Wahlmöglichkeiten."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1277
 #, python-format
