@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 21:46+0200\n"
+"POT-Creation-Date: 2020-07-11 21:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,10 +127,8 @@ msgid "Sample was not measured"
 msgstr "Probe wurde nicht gemessen"
 
 #: scxrd/forms/new_exp_from_sample.py:23
-#, fuzzy
-#| msgid "experiment name"
 msgid "New Experiment from sample"
-msgstr "Name des Experiments"
+msgstr "Neues Experiment von Probe"
 
 #: scxrd/forms/new_exp_from_sample.py:25
 msgid "New experiment from sample by {} {}"
@@ -380,10 +378,8 @@ msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
 #: scxrd/views/experiment_views.py:234
-#, fuzzy
-#| msgid "Experiment"
 msgid "Experiments"
-msgstr "Messung"
+msgstr "Messungen"
 
 #: templates/admin/base_site.html:4
 msgid "MESSLOG Admin"
@@ -435,26 +431,20 @@ msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
 #: templates/scxrd/buttons/all_experiments.html:13
-#, fuzzy
-#| msgid "Experiment"
 msgid "All Experiments"
-msgstr "Alle Experimente"
+msgstr "Alle Messungen"
 
 #: templates/scxrd/buttons/back_button.html:5
 msgid "Go Back"
 msgstr "Zurück"
 
 #: templates/scxrd/buttons/measure_samples.html:12
-#, fuzzy
-#| msgid "New Sample"
 msgid "View Samples"
-msgstr "Neue Probe"
+msgstr "Abgegebene Proben"
 
 #: templates/scxrd/buttons/my_op_experiments.html:13
-#, fuzzy
-#| msgid "Experiment"
 msgid "My Experiments"
-msgstr "Meine Experimente"
+msgstr "Meine Messungen"
 
 #: templates/scxrd/buttons/my_operator_samples.html:12
 #: templates/scxrd/buttons/small_buttons/operator_samples.html:8
@@ -504,16 +494,12 @@ msgid "Sum Formula"
 msgstr "Summenformel"
 
 #: templates/scxrd/residuals_table.html:26
-#, fuzzy
-#| msgid "Measured"
 msgid "Measured by"
-msgstr "Gemessen"
+msgstr "Gemessen von"
 
 #: templates/scxrd/residuals_table.html:29
-#, fuzzy
-#| msgid "Measure Sample"
 msgid "Measure Date"
-msgstr "Probe messen"
+msgstr "Messdatum"
 
 #: templates/scxrd/residuals_table.html:31
 #, fuzzy
@@ -536,10 +522,8 @@ msgid "Completeness"
 msgstr ""
 
 #: templates/scxrd/residuals_table.html:49
-#, fuzzy
-#| msgid "operator"
 msgid "Temperature"
-msgstr "Operator"
+msgstr "Temperatur"
 
 #: templates/scxrd/residuals_table.html:51
 #, fuzzy
@@ -554,32 +538,24 @@ msgid "Sample name"
 msgstr "Probenname"
 
 #: templates/scxrd/sample_details_operator.html:27
-#, fuzzy
-#| msgid "Submitter"
 msgid "Submit date"
-msgstr "Probenbesitzer/in"
+msgstr "Abgabedatum"
 
 #: templates/scxrd/sample_details_operator.html:37
-#, fuzzy
-#| msgid "Submitted at"
 msgid "Sybmitted by"
-msgstr "Abgegeben am"
+msgstr "Abgegeben von"
 
 #: templates/scxrd/sample_details_operator.html:47
 msgid "Sensitivity"
 msgstr "Empfindlichkeit"
 
 #: templates/scxrd/sample_details_operator.html:52
-#, fuzzy
-#| msgid "Sample submission date"
 msgid "Sample is sensitive"
-msgstr "Probenabgabedatum"
+msgstr "Probe ist nicht stabil"
 
 #: templates/scxrd/sample_details_operator.html:54
-#, fuzzy
-#| msgid "My Samples List"
 msgid "Sample is stable"
-msgstr "Meine Probenlist"
+msgstr "Probe ist stabil"
 
 #: templates/scxrd/sample_details_operator.html:61
 msgid "Customer solves by himself"
@@ -604,10 +580,8 @@ msgid "Crstallized from"
 msgstr "Max. Kristallkante"
 
 #: templates/scxrd/sample_details_operator.html:103
-#, fuzzy
-#| msgid "Sample"
 msgid "Sample drawing"
-msgstr "Probe"
+msgstr "Strukturformel"
 
 #: templates/scxrd/sample_details_operator.html:117
 #, fuzzy
@@ -628,10 +602,8 @@ msgid "Currently running experiments:"
 msgstr "Gerade laufende Experimente"
 
 #: templates/scxrd/scxrd_index.html:36
-#, fuzzy
-#| msgid "Expected end time"
 msgid "end time:"
-msgstr "Erwartetes Ende"
+msgstr "Erwartetes Ende:"
 
 #: templates/scxrd/submitted_samples_list_customer.html:13
 msgid "My Samples List"
@@ -650,10 +622,8 @@ msgid "Structure Finished!"
 msgstr "Struktur fertig!"
 
 #: templates/scxrd/submitted_samples_list_customer.html:39
-#, fuzzy
-#| msgid "Submitter"
 msgid "Submitted:"
-msgstr "Probenbesitzer/in"
+msgstr "Abgegeben:"
 
 #: templates/scxrd/submitted_samples_list_customer.html:46
 msgid "DELETE"
@@ -673,10 +643,8 @@ msgid "File not found"
 msgstr "Datei nicht gefunden"
 
 #: templates/scxrd/submitted_samples_list_customer.html:100
-#, fuzzy
-#| msgid "measurement date"
 msgid "Measurements:"
-msgstr "Datum der Messung"
+msgstr "Messungen:"
 
 #: templates/scxrd/submitted_samples_list_customer.html:105
 msgid "was measured"
@@ -691,8 +659,6 @@ msgid "could not be measured"
 msgstr "Nicht messbar"
 
 #: templates/scxrd/submitted_samples_list_customer.html:120
-#, fuzzy
-#| msgid "Not measured because"
 msgid "not measured yet"
 msgstr "Nicht gemessen, weil"
 
@@ -757,10 +723,8 @@ msgid "Measured"
 msgstr "Gemessen"
 
 #: templates/scxrd/submitted_samples_list_operator.html:84
-#, fuzzy
-#| msgid "Experiment"
 msgid "Experiments:"
-msgstr "Messung"
+msgstr "Messungen:"
 
 #: templates/scxrd/submitted_samples_list_operator.html:94
 msgid "Measurement not possible"
