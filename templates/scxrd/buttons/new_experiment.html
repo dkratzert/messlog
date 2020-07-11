@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <a href="{% url 'scxrd:new_exp' %}">
     <div class="card mb-4 text-center p-4 bg-light h-20">
@@ -8,7 +9,7 @@
             </div>
             <div class="col-10">
                 <h1 class="display-8 font-weight-normal">
-                    New Experiment
+                    {% trans "New Experiment" %}
                 </h1>
             </div>
         </div>

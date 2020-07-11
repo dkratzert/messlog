@@ -20,6 +20,7 @@ from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.sample_model import Sample
 from scxrd.utils import generate_sha256
+from django.utils.translation import gettext_lazy as _
 
 
 class ExperimentIndexView(LoginRequiredMixin, ListView):
@@ -230,7 +231,7 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     # The model we're going to show
     model = Experiment
     template_name = 'scxrd/experiment_all_table.html'
-    title = 'Experiments'
+    title = _('Experiments')
 
     # define the columns that will be returned
     columns = ['id', 'number', 'experiment_name', 'measure_date', 'machine', 'operator', 'publishable', 'ciffilemodel',

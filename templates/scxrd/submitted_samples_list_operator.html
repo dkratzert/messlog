@@ -72,7 +72,7 @@
                                                 </div>
                                             </td>
                                         {% else %}
-                                            <td> File not found</td>
+                                            <td> {% trans "File not found" %}</td>
                                         {% endif %}
                                     {% endif %}
                                     {% if sample.experiments|was_measured %}
@@ -81,7 +81,7 @@
                                             <br>
                                             {% if sample.experiments.all %}
                                                 <br>
-                                                Experiments:
+                                                {% trans "Experiments:" %}
                                                 <br>
                                             {% endif %}
                                             {% for experiment in sample.experiments.all %}
@@ -136,7 +136,7 @@
                                     {% empty %}
                                     <td colspan="6">
                                         <div class="card align-items-center m-4 p-4 badge-light font-weight-bold">
-                                            No Samples found
+                                            {% trans "No Samples found" %}
                                         </div>
                                     </td>
 

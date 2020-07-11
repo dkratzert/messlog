@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 21:03+0200\n"
+"POT-Creation-Date: 2020-07-11 21:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,6 +137,7 @@ msgid "New experiment from sample by {} {}"
 msgstr "Neues Experiment aus Probe von {} {}"
 
 #: scxrd/forms/new_experiment.py:16
+#: templates/scxrd/buttons/new_experiment.html:12
 #: templates/scxrd/buttons/small_buttons/new_experiment.html:9
 msgid "New Experiment"
 msgstr "Neues Experiment"
@@ -185,7 +186,7 @@ msgstr "Neue Probe"
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
-msgstr ""
+msgstr "Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder es im Feld darunter zeichnen."
 
 #: scxrd/models.py:57
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
@@ -376,6 +377,12 @@ msgstr "MOL-Datei der Struktur"
 msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
+#: scxrd/views/experiment_views.py:234
+#, fuzzy
+#| msgid "Experiment"
+msgid "Experiments"
+msgstr "Messung"
+
 #: templates/admin/base_site.html:4
 msgid "MESSLOG Admin"
 msgstr "MESSLOG Administratorseite"
@@ -425,9 +432,21 @@ msgstr "Einkristall-Strukturanalyse"
 msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
+#: templates/scxrd/buttons/all_experiments.html:13
+#, fuzzy
+#| msgid "Experiment"
+msgid "All Experiments"
+msgstr "Messung"
+
 #: templates/scxrd/buttons/back_button.html:5
 msgid "Go Back"
 msgstr "Zurück"
+
+#: templates/scxrd/buttons/my_op_experiments.html:13
+#, fuzzy
+#| msgid "Experiment"
+msgid "My Experiments"
+msgstr "Messung"
 
 #: templates/scxrd/buttons/small_buttons/back_to_start.html:9
 #: templates/scxrd/submitted_samples_list_operator.html:16
@@ -462,6 +481,16 @@ msgstr "Experimentliste"
 msgid "More Information"
 msgstr "Mehr Infos"
 
+#: templates/scxrd/scxrd_index.html:34
+msgid "Currently running experiments:"
+msgstr "Gerade laufende Experimente"
+
+#: templates/scxrd/scxrd_index.html:36
+#, fuzzy
+#| msgid "Expected end time"
+msgid "end time:"
+msgstr "Erwartetes Ende"
+
 #: templates/scxrd/submitted_samples_list_customer.html:13
 msgid "My Samples List"
 msgstr "Meine Probenlist"
@@ -491,6 +520,7 @@ msgid "Reaction equation"
 msgstr "Reaktionsgleichung"
 
 #: templates/scxrd/submitted_samples_list_customer.html:94
+#: templates/scxrd/submitted_samples_list_operator.html:75
 msgid "File not found"
 msgstr "Datei nicht gefunden"
 
@@ -564,6 +594,12 @@ msgstr "Selbst verfeinern"
 msgid "Measured"
 msgstr "Gemessen"
 
+#: templates/scxrd/submitted_samples_list_operator.html:84
+#, fuzzy
+#| msgid "Experiment"
+msgid "Experiments:"
+msgstr "Messung"
+
 #: templates/scxrd/submitted_samples_list_operator.html:94
 msgid "Measurement not possible"
 msgstr "Messung nicht möglich"
@@ -579,6 +615,12 @@ msgstr "Erwarte Messung"
 #: templates/scxrd/submitted_samples_list_operator.html:131
 msgid "Not measured because:"
 msgstr "Nicht gemessen, weil:"
+
+#: templates/scxrd/submitted_samples_list_operator.html:141
+#, fuzzy
+#| msgid "No samples found"
+msgid "No Samples found"
+msgstr "Keine Proben gefunden"
 
 #: venv/lib/python3.8/site-packages/alabaster/layout.html:98
 msgid "Page source"
@@ -852,7 +894,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1099
 msgid "Date (without time)"
-msgstr ""
+msgstr "Datum (ohne Zeit)"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1237
 #, python-format
@@ -870,7 +912,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1245
 msgid "Date (with time)"
-msgstr ""
+msgstr "Datum (mit Zeit)"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1393
 #, python-format
@@ -879,7 +921,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1395
 msgid "Decimal number"
-msgstr ""
+msgstr "Dezimalzahl"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1534
 #, python-format
@@ -890,7 +932,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1537
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1587
 msgid "Email address"
@@ -898,7 +940,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1610
 msgid "File path"
-msgstr ""
+msgstr "Dateipfad"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1676
 #, python-format
@@ -907,7 +949,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1678
 msgid "Floating point number"
-msgstr ""
+msgstr "Fließkommazahl"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1716
 #, python-format
@@ -916,7 +958,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1718
 msgid "Integer"
-msgstr ""
+msgstr "Ganze Zahl"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1801
 msgid "Big (8 byte) integer"
@@ -928,7 +970,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1848
 msgid "IP address"
-msgstr ""
+msgstr "IP-Adresse"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1928
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1929
@@ -959,7 +1001,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2032
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2060
 #, python-format
@@ -977,7 +1019,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2065
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:2191
 msgid "URL"
