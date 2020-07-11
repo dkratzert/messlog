@@ -14,6 +14,9 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Experiment')
+        # This is essential:
+        # pop the current user in orde to save him as operator in Experiment model:
+        self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
