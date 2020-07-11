@@ -52,6 +52,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         """Save the current user from the request into the experiment"""
+        pprint(form.errors) if form.errors else None
         self.object: Experiment = form.save(commit=False)
         self.object.operator = self.request.user
         if Experiment.objects.first():

@@ -3,9 +3,10 @@ from django.http import HttpResponse
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse_lazy
 
+from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.forms.new_sample import SubmitNewSampleForm
 from scxrd.sample_model import Sample
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -72,3 +73,29 @@ class TestNewSampleForm(DeleteFilesMixin, TestCase):
         response: HttpResponse = self.app.get(path=reverse_lazy("scxrd:submit_sample"), data=self.data, follow=True)
         self.assertEqual(200, response.status_code)
         self.assertEqual('OK', response.reason_phrase)
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestNewExperimentForm(DeleteFilesMixin, OperatorUserMixin, TestCase):
+    def setUp(self) -> None:
+        self.data = {
+            # The minimum requirements:
+            "experiment_name" : "A_test_123",
+            "number"          : 100,
+            "machine"         : 1,
+            "measurement_temp": 100.15,
+            'end_time'        : '2020-07-03 09:37:19',
+            "base"            : '1',
+            "crystal_colour"  : 3,
+            "crystal_habit"   : 2,
+            "crystal_size_x"  : '0.12',
+            "crystal_size_y"  : '0.132',
+            "crystal_size_z"  : '0.21',
+        }
+
+    def test_create_new_experiment(self):
+        form = ExperimentNewForm(self.data)
+        self.assertEqual(True, form.is_valid())
+        sample: Sample = form.save()
+        self.assertNotEqual('Juliana', str(sample))
+        self.assertEqual('A_test_123', str(sample))
