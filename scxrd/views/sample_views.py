@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.views.generic import CreateView, ListView, DetailView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView, TemplateView
 
 from scxrd.forms.new_sample import SubmitNewSampleForm
 from scxrd.sample_model import Sample
@@ -19,7 +19,7 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
     model = Sample
     form_class = SubmitNewSampleForm
     template_name = 'scxrd/new_sample_by_customer.html'
-    success_url = reverse_lazy('scxrd:index')
+    success_url = reverse_lazy('scxrd:submit_sample_ok')
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         """
@@ -49,6 +49,10 @@ class NewSampleByCustomer(LoginRequiredMixin, CreateView):
         # This is for robohash:
         context['randstring'] = randstring()
         return context
+
+
+class NewSampleOKView(TemplateView):
+    template_name = 'scxrd/sample_submitted_page.html'
 
 
 class SampleDeleteView(SuccessMessageMixin, DeleteView):

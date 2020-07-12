@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-11 21:52+0200\n"
+"POT-Creation-Date: 2020-07-12 20:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,136 +188,136 @@ msgstr ""
 "Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder "
 "es im Feld darunter zeichnen."
 
-#: scxrd/models.py:57
+#: scxrd/models.py:64
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: scxrd/models.py:65
+#: scxrd/models.py:72
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: scxrd/models.py:73
+#: scxrd/models.py:80
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: scxrd/models.py:88
+#: scxrd/models.py:95
 msgid "company"
 msgstr "Firma"
 
-#: scxrd/models.py:99
+#: scxrd/models.py:106
 msgid "The user has operator rights"
 msgstr "Der Benutzer ist Operator"
 
-#: scxrd/models.py:128
+#: scxrd/models.py:135
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models.py:143
+#: scxrd/models.py:150
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models.py:174
+#: scxrd/models.py:181
 msgid "experiment name"
 msgstr "Name des Experiments"
 
-#: scxrd/models.py:179
+#: scxrd/models.py:186
 msgid "number"
 msgstr "Nummer"
 
-#: scxrd/models.py:180
+#: scxrd/models.py:187
 msgid "structure is publishable"
 msgstr "Struktur ist publizierbar"
 
-#: scxrd/models.py:183
+#: scxrd/models.py:190
 msgid "customer (for service)"
 msgstr "Kunde (für service)"
 
-#: scxrd/models.py:185
+#: scxrd/models.py:192
 msgid "operator"
 msgstr "Operator"
 
-#: scxrd/models.py:187
+#: scxrd/models.py:194
 msgid "diffractometer"
 msgstr "Diffraktometer"
 
-#: scxrd/models.py:189
+#: scxrd/models.py:196
 msgid "empirical formula"
 msgstr "Summenformel"
 
-#: scxrd/models.py:190
+#: scxrd/models.py:197
 msgid "first unit cell"
 msgstr "Vorläufige Einheitszelle"
 
-#: scxrd/models.py:191
+#: scxrd/models.py:198
 msgid "Resolution [&#x212b;]"
 msgstr "Auflösung  [&#x212b;]"
 
-#: scxrd/models.py:193
+#: scxrd/models.py:200
 msgid "reaction conditions"
 msgstr "Reaktionsbedingungen"
 
-#: scxrd/models.py:194
+#: scxrd/models.py:201
 msgid "measurement date"
 msgstr "Datum der Messung"
 
-#: scxrd/models.py:195 scxrd/sample_model.py:21
+#: scxrd/models.py:202 scxrd/sample_model.py:21
 msgid "sample submission date"
 msgstr "Proben-Abgabedatum"
 
-#: scxrd/models.py:196
+#: scxrd/models.py:203
 msgid "results sent date"
 msgstr "Ergebnis gesendet am"
 
-#: scxrd/models.py:197
+#: scxrd/models.py:204
 msgid "expected end date and time of the experiment"
 msgstr "Erwartetes Ende der Messung"
 
-#: scxrd/models.py:198
+#: scxrd/models.py:205
 msgid "sample base"
 msgstr "Probenhalter"
 
-#: scxrd/models.py:200
+#: scxrd/models.py:207
 msgid "sample glue"
 msgstr "Kleber"
 
-#: scxrd/models.py:204
+#: scxrd/models.py:211
 msgid "crystal size max"
 msgstr "Max. Kristallgröße"
 
-#: scxrd/models.py:206
+#: scxrd/models.py:213
 msgid "crystal size mid"
 msgstr "Mittl. Kristallgröße"
 
-#: scxrd/models.py:208
+#: scxrd/models.py:215
 msgid "crystal size min"
 msgstr "Min. Kristallgröße"
 
-#: scxrd/models.py:209
+#: scxrd/models.py:216
 msgid "measurement temperature [K]"
 msgstr "Messtemperatur [K]"
 
-#: scxrd/models.py:213
+#: scxrd/models.py:220
 msgid "crystal colour modifier"
 msgstr "Farbeigenschaften"
 
-#: scxrd/models.py:219
+#: scxrd/models.py:226
 msgid "crystal habit"
 msgstr "Habitus"
 
-#: scxrd/models.py:221 scxrd/sample_model.py:45
+#: scxrd/models.py:228 scxrd/sample_model.py:45
 msgid "special remarks"
 msgstr "Weitere Anmerkungen"
 
-#: scxrd/models.py:222
+#: scxrd/models.py:229
 msgid "The sample was measured successfully"
 msgstr "Die Probe wurde erfolgreich gemessen"
 
-#: scxrd/models.py:224
+#: scxrd/models.py:231
 msgid "Not measured, because:"
 msgstr "Nicht gemessen, weil:"
 
-#: scxrd/models.py:225
+#: scxrd/models.py:232
 msgid "The cause why the sample could not be measured"
 msgstr "Grund, warum die Probe nicht gemessen wurde"
 
@@ -418,7 +418,7 @@ msgstr "Abmelden"
 msgid "Login"
 msgstr "Anmelden"
 
-#: templates/base.html:87
+#: templates/base.html:87 templates/registration/new_user.html:10
 msgid "New User"
 msgstr "Neuer Benutzer"
 
@@ -429,6 +429,18 @@ msgstr "Einkristall-Strukturanalyse"
 #: templates/registration/edit_user.html:14
 msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
+
+#: templates/registration/options.html:9
+msgid "Options"
+msgstr ""
+
+#: templates/registration/options.html:16
+msgid "Change Password"
+msgstr ""
+
+#: templates/registration/options.html:21
+msgid "You must login to change options"
+msgstr ""
 
 #: templates/scxrd/buttons/all_experiments.html:13
 msgid "All Experiments"
@@ -450,6 +462,10 @@ msgstr "Meine Messungen"
 #: templates/scxrd/buttons/small_buttons/operator_samples.html:8
 msgid "All Samples"
 msgstr "Alle Proben"
+
+#: templates/scxrd/buttons/ok_button.html:3
+msgid "OK"
+msgstr ""
 
 #: templates/scxrd/buttons/small_buttons/back_to_start.html:9
 #: templates/scxrd/submitted_samples_list_operator.html:16
@@ -519,7 +535,7 @@ msgstr "Raumgruppe"
 
 #: templates/scxrd/residuals_table.html:47
 msgid "Completeness"
-msgstr ""
+msgstr "Vollständigkeit"
 
 #: templates/scxrd/residuals_table.html:49
 msgid "Temperature"
@@ -588,6 +604,48 @@ msgstr "Strukturformel"
 #| msgid "Special remarks:"
 msgid "Special remarks"
 msgstr "Weitere Anmerkungen:"
+
+#: templates/scxrd/sample_submitted_page.html:10
+#, fuzzy
+#| msgid "Submit Sample"
+msgid "Successfully Submitted Sample"
+msgstr "Probe Abgeben"
+
+#: templates/scxrd/sample_submitted_page.html:12
+msgid "What should I do next?"
+msgstr "Was nun?"
+
+#: templates/scxrd/sample_submitted_page.html:14
+msgid ""
+"Bring the sample to room No. -173 in the basement of the Inorganic Chemistry "
+"Institute."
+msgstr "Bringe die Probe in Raum Nr. -173 im Untergeschoss des Instituts für Anorganische Chemie."
+
+#: templates/scxrd/sample_submitted_page.html:15
+msgid "If in doubt about the sample quality, ask"
+msgstr "Bei Zweifeln an der Qualität der Probe, frage"
+
+#: templates/scxrd/sample_submitted_page.html:16
+#: venv/lib/python3.8/site-packages/django/utils/text.py:235
+msgid "or"
+msgstr "oder"
+
+#: templates/scxrd/sample_submitted_page.html:19
+msgid ""
+"Do not dry Crystals. They like to stay in the conditions where they "
+"crystallized."
+msgstr "Kristalle nicht trocknen. Sie bleiben gerne in den Bedingungen, in denen sie kristallisiert sind."
+
+#: templates/scxrd/sample_submitted_page.html:20
+msgid ""
+"You will get notice weather we could measure the sample and if the structure "
+"is publishable"
+msgstr "Du wirst benachrichtigt, ob wir die Probe messen konnten und ob die Struktur veröffentlichbar ist."
+
+#: templates/scxrd/sample_submitted_page.html:21
+msgid ""
+"Finally, you will be able to download the results from your samples list."
+msgstr "Schließlich kannst du die Ergebnisse aus Ihrer Probenliste herunterladen."
 
 #: templates/scxrd/scxrd_index.html:14
 msgid "Experiments List"
@@ -750,7 +808,7 @@ msgstr "Keine Proben gefunden"
 
 #: venv/lib/python3.8/site-packages/alabaster/layout.html:98
 msgid "Page source"
-msgstr ""
+msgstr "Quellseite"
 
 #: venv/lib/python3.8/site-packages/alabaster/navigation.html:1
 msgid "Navigation"
@@ -791,7 +849,7 @@ msgstr "Statische Dateien"
 
 #: venv/lib/python3.8/site-packages/django/contrib/syndication/apps.py:7
 msgid "Syndication"
-msgstr ""
+msgstr "Syndikation"
 
 #: venv/lib/python3.8/site-packages/django/core/paginator.py:45
 msgid "That page number is not an integer"
@@ -829,17 +887,17 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/core/validators.py:256
 #: venv/lib/python3.8/site-packages/django/core/validators.py:276
 msgid "Enter a valid IPv4 address."
-msgstr ""
+msgstr "Geben Sie eine gültige IPv4-Adresse ein."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:261
 #: venv/lib/python3.8/site-packages/django/core/validators.py:277
 msgid "Enter a valid IPv6 address."
-msgstr ""
+msgstr "Geben Sie eine gültige IPv6-Adresse ein."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:271
 #: venv/lib/python3.8/site-packages/django/core/validators.py:275
 msgid "Enter a valid IPv4 or IPv6 address."
-msgstr ""
+msgstr "Geben Sie eine gültige IPv4 oder IPv6-Adresse ein"
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:305
 msgid "Enter only digits separated by commas."
@@ -1731,10 +1789,6 @@ msgstr ""
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
 msgstr ""
-
-#: venv/lib/python3.8/site-packages/django/utils/text.py:235
-msgid "or"
-msgstr "oder"
 
 #. Translators: This string is used as a separator between list elements
 #: venv/lib/python3.8/site-packages/django/utils/text.py:254

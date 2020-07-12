@@ -1,23 +1,24 @@
 {% extends 'registration/registration_base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block inner_content %}
 
     <div class="card-header">
-        <h3>Options</h3>
+        <h3>{% trans "Options" %}</h3>
     </div>
 
     <div class="card-body">
         {% if user.is_authenticated %}
             <ul>
                 <li>
-                    <a href="{% url 'password_change' %}">Change Password</a>
+                    <a href="{% url 'password_change' %}">{% trans "Change Password" %}</a>
                 </li>
             </ul>
         {% else %}
 
-            <h3>You must login to change options</h3>
+            <h3>{% trans "You must login to change options" %}</h3>
 
         {% endif %}
     </div>

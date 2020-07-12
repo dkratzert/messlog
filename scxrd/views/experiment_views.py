@@ -2,10 +2,11 @@ from datetime import datetime
 from pprint import pprint
 
 import pytz
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
-from django.db.models import Q
+from django.db.models import Q, ProtectedError
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
@@ -209,11 +210,19 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
                     cif_model.date_created = timezone.now()
                 cif_model.date_updated = timezone.now()
                 exp.ciffilemodel = cif_model
-            exp.save()
+            try:
+                exp.save()
+            except ProtectedError:
+                messages.warning(request, 'This Experiment can not be changed anymore.')
+                return self.form_invalid(form)
             print('Experiment {} saved.'.format(exp.experiment_name))
-            if form.files.get('cif_file_on_disk'):
-                cif_model.save()
-            return self.form_valid(form)
+            try:
+                if form.files.get('cif_file_on_disk'):
+                    cif_model.save()
+                return self.form_valid(form)
+            except ProtectedError:
+                messages.warning(request, 'This Experiment can not be changed anymore.')
+                return self.form_invalid(form)
         else:
             print('Form is invalid! Invalid forms:')
             pprint(form.errors)
