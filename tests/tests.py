@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.test import Client
 
 from mysite.settings import MEDIA_ROOT
-from scxrd.models import Experiment, Machine, WorkGroup, CrystalGlue, model_fixtures
+from scxrd.models.models import Machine, WorkGroup, CrystalGlue, model_fixtures
+from scxrd.models.experiment_model import Experiment
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 

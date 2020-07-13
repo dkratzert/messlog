@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton, submit_button
-from scxrd.sample_model import Sample
+from scxrd.models.sample_model import Sample
 
 
 class SubmitFormfieldsMixin(forms.ModelForm):

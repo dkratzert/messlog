@@ -9,10 +9,11 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.cif_model import CifFileModel
+from scxrd.models.cif_model import CifFileModel
 from scxrd.forms.edit_experiment import ExperimentEditForm
-from scxrd.models import Experiment, CrystalSupport, Machine, WorkGroup
-from scxrd.sample_model import Sample
+from scxrd.models.models import CrystalSupport, Machine, WorkGroup
+from scxrd.models.experiment_model import Experiment
+from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 from scxrd.views.sample_views import NewSampleByCustomer
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_experiment

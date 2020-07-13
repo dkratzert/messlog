@@ -12,7 +12,7 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.models import Experiment
+from scxrd.models.experiment_model import Experiment
 from scxrd.utils import randstring
 
 

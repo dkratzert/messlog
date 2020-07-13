@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, TemplateView
 
 from scxrd.forms.new_sample import SubmitNewSampleForm
-from scxrd.sample_model import Sample
+from scxrd.models.sample_model import Sample
 from scxrd.utils import randstring
 
 

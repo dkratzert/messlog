@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.forms.new_sample import SubmitNewSampleForm
-from scxrd.sample_model import Sample
+from scxrd.models.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
 
 

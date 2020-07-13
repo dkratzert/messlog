@@ -15,12 +15,12 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.cif_model import CifFileModel
+from scxrd.models.cif_model import CifFileModel
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
-from scxrd.models import Experiment
-from scxrd.sample_model import Sample
+from scxrd.models.experiment_model import Experiment
+from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 
 

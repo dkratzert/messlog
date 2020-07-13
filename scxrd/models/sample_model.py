@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models import sample_name_validator
+from scxrd.models.models import sample_name_validator
 
 
 def validate_reaction_file_extension(value):

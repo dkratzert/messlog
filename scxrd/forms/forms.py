@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models import Experiment, Machine, CrystalSupport
+from scxrd.models.models import Machine, CrystalSupport
+from scxrd.models.experiment_model import Experiment
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 

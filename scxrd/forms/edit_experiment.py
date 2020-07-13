@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton, save_button2
 from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models import Experiment
+from scxrd.models.experiment_model import Experiment
 
 
 class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models import Profile, WorkGroup
+from scxrd.models.models import Profile, WorkGroup
 
 
 class ProfileEditForm(forms.ModelForm):

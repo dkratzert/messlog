@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from scxrd.models import Experiment
-from scxrd.sample_model import Sample
+from scxrd.models.experiment_model import Experiment
+from scxrd.models.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin
 
 
@@ -50,7 +50,7 @@ class TestNewSampleSubmit(DeleteFilesMixin, PlainUserMixin, TestCase):
     def test_post_request_folow(self):
         response = self.client.post(reverse("scxrd:submit_sample"), follow=True, data=self.data)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'scxrd/sample_submitted_page.html')
         self.assertEqual(Sample.objects.count(), 1)
         self.assertEqual(Sample.objects.first().sample_name, 'DK_ml_766')
 

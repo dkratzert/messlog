@@ -9,8 +9,10 @@ from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.sample_model import Sample
-from scxrd.models import CifFileModel, Machine, Experiment, WorkGroup, CrystalSupport, CrystalGlue, Profile
+from scxrd.models.cif_model import CifFileModel
+from scxrd.models.sample_model import Sample
+from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile
+from scxrd.models.experiment_model import Experiment
 
 admin.site.site_header = "MESSLOG Admin"
 admin.site.site_title = "MESSLOG Admin Portal"
