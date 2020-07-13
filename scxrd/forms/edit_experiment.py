@@ -36,7 +36,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                     {% load i18n %}
                         <div class='pt-4 m-3 ml-0'>
                             <a class='btn btn-outline-success w-100' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
-                                {% trans "Respective Sample" %}
+                                """ + "{}".format(_("Respective Sample")) + """
                             </a>
                         </div>
                     {% endif %}

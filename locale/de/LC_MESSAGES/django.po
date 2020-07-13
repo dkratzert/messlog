@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 09:01+0200\n"
+"POT-Creation-Date: 2020-07-13 09:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: mysite/core/forms.py:20 mysite/core/forms.py:32
+#: mysite/core/forms.py:10 mysite/core/forms.py:30
+msgid "phone number"
+msgstr "Telefonnummer"
+
+#: mysite/core/forms.py:11
+msgid "street"
+msgstr "Straße"
+
+#: mysite/core/forms.py:12
+msgid "house number"
+msgstr "Hausnummer"
+
+#: mysite/core/forms.py:13
+msgid "building"
+msgstr "Gebäude"
+
+#: mysite/core/forms.py:14
+msgid "town"
+msgstr "Stadt"
+
+#: mysite/core/forms.py:15
+msgid "country"
+msgstr "Land"
+
+#: mysite/core/forms.py:16
+msgid "postal code"
+msgstr "Postleitzahl"
+
+#: mysite/core/forms.py:17 mysite/core/forms.py:31
+msgid "Member of Group"
+msgstr "Arbeitsgruppe"
+
+#: mysite/core/forms.py:27 mysite/core/forms.py:39
 msgid "email address"
 msgstr "E-Mail-Adresse"
 
-#: mysite/core/forms.py:21
+#: mysite/core/forms.py:28
 msgid "first name"
 msgstr "Vorname"
 
-#: mysite/core/forms.py:22
+#: mysite/core/forms.py:29
 msgid "last name"
 msgstr "Nachnahme"
 
@@ -58,9 +90,31 @@ msgstr "Datum ändern"
 msgid "CCDC number"
 msgstr "CCDC-Nummer"
 
+#: scxrd/form_utils.py:7
+#: templates/scxrd/buttons/small_buttons/back_to_start.html:9
+#: templates/scxrd/submitted_samples_list_operator.html:16
+msgid "Back to start"
+msgstr "Zurück"
+
+#: scxrd/form_utils.py:10 scxrd/form_utils.py:18
+msgid "Save"
+msgstr "Speichern"
+
+#: scxrd/form_utils.py:13 scxrd/form_utils.py:21 scxrd/form_utils.py:29
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: scxrd/form_utils.py:26
+msgid "Submit"
+msgstr "Abgeben"
+
 #: scxrd/forms/edit_experiment.py:13
 msgid "Experiment"
 msgstr "Messung"
+
+#: scxrd/forms/edit_experiment.py:39
+msgid "Respective Sample"
+msgstr "Zugehörige Probe"
 
 #: scxrd/forms/edit_experiment.py:53
 msgid "Crystal and Conditions"
@@ -99,10 +153,8 @@ msgid "Colour Lustre"
 msgstr "Glanz"
 
 #: scxrd/forms/forms.py:44 templates/scxrd/residuals_table.html:11
-#, fuzzy
-#| msgid "machine type"
 msgid "Machine"
-msgstr "Maschinentyp"
+msgstr "Maschine"
 
 #: scxrd/forms/forms.py:47
 msgid "Customer (for service)"
@@ -121,10 +173,8 @@ msgid "Crystal size max"
 msgstr "Max. Kristallkante"
 
 #: scxrd/forms/forms.py:52
-#, fuzzy
-#| msgid "sample name"
 msgid "Sample Base"
-msgstr "Probenname"
+msgstr "Probenhalter"
 
 #: scxrd/forms/forms.py:53
 msgid "CIF file"
@@ -499,11 +549,6 @@ msgstr "Alle Proben"
 msgid "OK"
 msgstr "OK"
 
-#: templates/scxrd/buttons/small_buttons/back_to_start.html:9
-#: templates/scxrd/submitted_samples_list_operator.html:16
-msgid "Back to start"
-msgstr "Zurück"
-
 #: templates/scxrd/buttons/small_buttons/submit_sample.html:9
 #: templates/scxrd/buttons/submit_sample.html:6
 msgid "Submit Sample"
@@ -544,14 +589,10 @@ msgid "Measure Date"
 msgstr "Messdatum"
 
 #: templates/scxrd/residuals_table.html:31
-#, fuzzy
-#| msgid "results sent date"
 msgid "Results sent"
-msgstr "Ergebnis gesendet am"
+msgstr "Ergebnisse gesendet"
 
 #: templates/scxrd/residuals_table.html:34
-#, fuzzy
-#| msgid "CIF file"
 msgid "CIF File"
 msgstr "CIF-Datei"
 
@@ -568,14 +609,10 @@ msgid "Temperature"
 msgstr "Temperatur"
 
 #: templates/scxrd/residuals_table.html:51
-#, fuzzy
-#| msgid "CCDC number"
 msgid "CCDC Number"
 msgstr "CCDC-Nummer"
 
 #: templates/scxrd/sample_details_operator.html:17
-#, fuzzy
-#| msgid "sample name"
 msgid "Sample name"
 msgstr "Probenname"
 
@@ -601,11 +638,9 @@ msgstr "Probe ist stabil"
 
 #: templates/scxrd/sample_details_operator.html:61
 msgid "Customer solves by himself"
-msgstr "Kunde verfeinert selbst"
+msgstr "Ich löse und verfeinere selbst"
 
 #: templates/scxrd/sample_details_operator.html:71
-#, fuzzy
-#| msgid "Sum Formula"
 msgid "Sum formula"
 msgstr "Summenformel"
 
@@ -759,7 +794,7 @@ msgstr "Keine Proben gefunden"
 
 #: templates/scxrd/submitted_samples_list_customer.html:154
 msgid "Submit a new Sample"
-msgstr "Probe abgeben"
+msgstr "Neue Probe abgeben"
 
 #: templates/scxrd/submitted_samples_list_operator.html:14
 msgid "Samples from Customers"
@@ -2030,3 +2065,6 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:409
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "comment"
+#~ msgstr "Kommentar"

@@ -7,7 +7,14 @@ from scxrd.models import Profile, WorkGroup
 
 
 class ProfileEditForm(forms.ModelForm):
-    phone_number = forms.CharField(required=True)
+    phone_number = forms.CharField(required=True, label=_('phone number'))
+    street = forms.CharField(required=False, label=_('street'))
+    house_number = forms.CharField(required=False, label=_('house number'))
+    building = forms.CharField(required=False, label=_('building'))
+    town = forms.CharField(required=False, label=_('town'))
+    country = forms.CharField(required=False, label=_('country'))
+    postal_code = forms.CharField(required=False, label=_('postal code'))
+    work_group = forms.ModelChoiceField(required=True, queryset=WorkGroup.objects.all(), label=_('Member of Group'))
 
     class Meta:
         model = Profile
@@ -18,10 +25,10 @@ class ProfileEditForm(forms.ModelForm):
 class SignupForm(UserCreationForm):
     """The form to create a new user (attached to a profile)"""
     email = forms.EmailField(label=_('email address'), required=True)
-    first_name = forms.CharField(label=_('first name'), max_length=30, required=True)
-    last_name = forms.CharField(label=_('last name'), max_length=150, required=True)
-    phone_number = forms.CharField(required=True)
-    work_group = forms.ModelChoiceField(required=True, queryset=WorkGroup.objects.all(), label='Member of Group')
+    first_name = forms.CharField(label=_('first name'), required=True)
+    last_name = forms.CharField(label=_('last name'), required=True)
+    phone_number = forms.CharField(required=True, label=_('phone number'))
+    work_group = forms.ModelChoiceField(required=True, queryset=WorkGroup.objects.all(), label=_('Member of Group'))
 
     class Meta:
         model = User
