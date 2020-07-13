@@ -270,7 +270,7 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
             else:
                 return '<span class="badge badge-warning ml-1">no</span>'
         if column == 'edit':
-            return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>Edit</a>'.format(row.id)
+            return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>{}</a>'.format(row.id, _('Edit'))
         # I need the id in the table! Therefore I add the check in javascript later.
         # if column == 'cif.id' and row.cif_id:
         #    return """<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

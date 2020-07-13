@@ -82,14 +82,13 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                     <div id="div_id_reaction_path" class="form-group">\n
                         <button class="btn btn-outline-secondary ml-3 mt-2 mr-1" type="button" data-toggle="collapse" 
                                 data-target="#collapseKetcher" aria-expanded="false" aria-controls="collapseKetcher">
-                                Alternatively, draw the Molecule
+                                {}
                         </button>
-                        <!--<label for="id_svg_struct_samp" class="pr-3 pt-2 pb-0 mt-3 mb-0 ml-3">\n
-                            Draw the desired structure<span class="asteriskField">*</span>\n
-                        </label>\n-->
+
                         <small id="hint_id_reaction_path" class="form-text text-muted ml-3">
-                            This is an alternative to the file upload above.
+                            {}
                         </small>\n
+                        
                         <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_draw">\n
                         <input type="hidden" id="id_molfile_sample" value="" name="mol_file">\n
                         <div class="p-3 collapse" id="collapseKetcher">
@@ -97,7 +96,11 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                             </iframe>\n
                         </div>
                     </div>\n
-                    """)),
+                    """.format(
+                        _('Alternatively, draw the Molecule'),
+                        _('This is an alternative to the file upload above.'),
+
+                    ))),
             ),
             Row(
                 Column('special_remarks')

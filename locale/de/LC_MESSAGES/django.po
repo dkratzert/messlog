@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-12 20:49+0200\n"
+"POT-Creation-Date: 2020-07-13 09:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: mysite/core/forms.py:20 mysite/core/forms.py:32
 msgid "email address"
-msgstr "eMail Adresse"
+msgstr "E-Mail-Adresse"
 
 #: mysite/core/forms.py:21
 msgid "first name"
@@ -74,6 +74,10 @@ msgstr "Datei-Upload"
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
+#: scxrd/forms/forms.py:36 scxrd/forms/new_exp_from_sample.py:16
+msgid "measure date"
+msgstr "Datum der Messung"
+
 #: scxrd/forms/forms.py:38
 msgid "Results sent date (for service)"
 msgstr "Ergebnis gesendet am (für Service)"
@@ -94,13 +98,19 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
+#: scxrd/forms/forms.py:44 templates/scxrd/residuals_table.html:11
+#, fuzzy
+#| msgid "machine type"
+msgid "Machine"
+msgstr "Maschinentyp"
+
 #: scxrd/forms/forms.py:47
 msgid "Customer (for service)"
 msgstr "Kunde (für Servicemessung)"
 
 #: scxrd/forms/forms.py:49
 msgid "Crystal size min"
-msgstr "Max. Kristallkante"
+msgstr "Min. Kristallkante"
 
 #: scxrd/forms/forms.py:50
 msgid "Crystal size mid"
@@ -108,29 +118,39 @@ msgstr "Mittl. Kristallkante"
 
 #: scxrd/forms/forms.py:51
 msgid "Crystal size max"
-msgstr "Min. Kristallkante"
+msgstr "Max. Kristallkante"
+
+#: scxrd/forms/forms.py:52
+#, fuzzy
+#| msgid "sample name"
+msgid "Sample Base"
+msgstr "Probenname"
 
 #: scxrd/forms/forms.py:53
 msgid "CIF file"
 msgstr "CIF-Datei"
 
+#: scxrd/forms/forms.py:54
+msgid "habit"
+msgstr "Habitus"
+
 #: scxrd/forms/forms.py:55
 msgid "Expected end time"
 msgstr "Erwartetes Ende"
 
-#: scxrd/forms/new_exp_from_sample.py:13
+#: scxrd/forms/new_exp_from_sample.py:17
 msgid "Not measured because"
 msgstr "Nicht gemessen, weil"
 
-#: scxrd/forms/new_exp_from_sample.py:14
+#: scxrd/forms/new_exp_from_sample.py:18
 msgid "Sample was not measured"
 msgstr "Probe wurde nicht gemessen"
 
-#: scxrd/forms/new_exp_from_sample.py:23
+#: scxrd/forms/new_exp_from_sample.py:27
 msgid "New Experiment from sample"
 msgstr "Neues Experiment von Probe"
 
-#: scxrd/forms/new_exp_from_sample.py:25
+#: scxrd/forms/new_exp_from_sample.py:29
 msgid "New experiment from sample by {} {}"
 msgstr "Neues Experiment aus Probe von {} {}"
 
@@ -180,7 +200,15 @@ msgstr "Gewünschte Struktur"
 msgid "New Sample"
 msgstr "Neue Probe"
 
-#: scxrd/forms/new_sample.py:120
+#: scxrd/forms/new_sample.py:100
+msgid "Alternatively, draw the Molecule"
+msgstr "Alternativ, Molekül zeichnen"
+
+#: scxrd/forms/new_sample.py:101
+msgid "This is an alternative to the file upload above."
+msgstr "Dies ist eine Alternative Möglichkeit zum obigen Datei-Upload"
+
+#: scxrd/forms/new_sample.py:123
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
@@ -188,136 +216,136 @@ msgstr ""
 "Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder "
 "es im Feld darunter zeichnen."
 
-#: scxrd/models.py:64
+#: scxrd/models.py:65
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: scxrd/models.py:72
+#: scxrd/models.py:73
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: scxrd/models.py:80
+#: scxrd/models.py:81
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: scxrd/models.py:95
+#: scxrd/models.py:96
 msgid "company"
 msgstr "Firma"
 
-#: scxrd/models.py:106
+#: scxrd/models.py:107
 msgid "The user has operator rights"
 msgstr "Der Benutzer ist Operator"
 
-#: scxrd/models.py:135
+#: scxrd/models.py:136
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models.py:150
+#: scxrd/models.py:151
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models.py:181
+#: scxrd/models.py:182
 msgid "experiment name"
 msgstr "Name des Experiments"
 
-#: scxrd/models.py:186
+#: scxrd/models.py:187
 msgid "number"
 msgstr "Nummer"
 
-#: scxrd/models.py:187
+#: scxrd/models.py:188
 msgid "structure is publishable"
 msgstr "Struktur ist publizierbar"
 
-#: scxrd/models.py:190
+#: scxrd/models.py:191
 msgid "customer (for service)"
 msgstr "Kunde (für service)"
 
-#: scxrd/models.py:192
+#: scxrd/models.py:193
 msgid "operator"
 msgstr "Operator"
 
-#: scxrd/models.py:194
+#: scxrd/models.py:195
 msgid "diffractometer"
 msgstr "Diffraktometer"
 
-#: scxrd/models.py:196
+#: scxrd/models.py:197
 msgid "empirical formula"
 msgstr "Summenformel"
 
-#: scxrd/models.py:197
-msgid "first unit cell"
-msgstr "Vorläufige Einheitszelle"
-
 #: scxrd/models.py:198
+msgid "first unit cell"
+msgstr "Vorläufige Elementarzelle"
+
+#: scxrd/models.py:199
 msgid "Resolution [&#x212b;]"
 msgstr "Auflösung  [&#x212b;]"
 
-#: scxrd/models.py:200
+#: scxrd/models.py:201
 msgid "reaction conditions"
 msgstr "Reaktionsbedingungen"
 
-#: scxrd/models.py:201
+#: scxrd/models.py:202
 msgid "measurement date"
 msgstr "Datum der Messung"
 
-#: scxrd/models.py:202 scxrd/sample_model.py:21
+#: scxrd/models.py:203 scxrd/sample_model.py:21
 msgid "sample submission date"
 msgstr "Proben-Abgabedatum"
 
-#: scxrd/models.py:203
+#: scxrd/models.py:204
 msgid "results sent date"
 msgstr "Ergebnis gesendet am"
 
-#: scxrd/models.py:204
+#: scxrd/models.py:205
 msgid "expected end date and time of the experiment"
 msgstr "Erwartetes Ende der Messung"
 
-#: scxrd/models.py:205
+#: scxrd/models.py:206
 msgid "sample base"
 msgstr "Probenhalter"
 
-#: scxrd/models.py:207
+#: scxrd/models.py:208
 msgid "sample glue"
 msgstr "Kleber"
 
-#: scxrd/models.py:211
+#: scxrd/models.py:212
 msgid "crystal size max"
 msgstr "Max. Kristallgröße"
 
-#: scxrd/models.py:213
+#: scxrd/models.py:214
 msgid "crystal size mid"
 msgstr "Mittl. Kristallgröße"
 
-#: scxrd/models.py:215
+#: scxrd/models.py:216
 msgid "crystal size min"
 msgstr "Min. Kristallgröße"
 
-#: scxrd/models.py:216
+#: scxrd/models.py:217
 msgid "measurement temperature [K]"
 msgstr "Messtemperatur [K]"
 
-#: scxrd/models.py:220
+#: scxrd/models.py:221
 msgid "crystal colour modifier"
 msgstr "Farbeigenschaften"
 
-#: scxrd/models.py:226
+#: scxrd/models.py:227
 msgid "crystal habit"
 msgstr "Habitus"
 
-#: scxrd/models.py:228 scxrd/sample_model.py:45
+#: scxrd/models.py:229 scxrd/sample_model.py:45
 msgid "special remarks"
 msgstr "Weitere Anmerkungen"
 
-#: scxrd/models.py:229
+#: scxrd/models.py:230
 msgid "The sample was measured successfully"
 msgstr "Die Probe wurde erfolgreich gemessen"
 
-#: scxrd/models.py:231
+#: scxrd/models.py:232
 msgid "Not measured, because:"
 msgstr "Nicht gemessen, weil:"
 
-#: scxrd/models.py:232
+#: scxrd/models.py:233
 msgid "The cause why the sample could not be measured"
 msgstr "Grund, warum die Probe nicht gemessen wurde"
 
@@ -377,48 +405,52 @@ msgstr "MOL-Datei der Struktur"
 msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
-#: scxrd/views/experiment_views.py:234
+#: scxrd/views/experiment_views.py:243
 msgid "Experiments"
 msgstr "Messungen"
+
+#: scxrd/views/experiment_views.py:273
+msgid "Edit"
+msgstr "Edit."
 
 #: templates/admin/base_site.html:4
 msgid "MESSLOG Admin"
 msgstr "MESSLOG Administratorseite"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "Main Page"
 msgstr "Hauptseite"
 
-#: templates/base.html:48 templates/base.html:76
+#: templates/base.html:49 templates/base.html:77
 msgid "Administration"
 msgstr "Administration"
 
-#: templates/base.html:69
+#: templates/base.html:70
 msgid "Submit a Sample"
 msgstr "Probe abgeben"
 
-#: templates/base.html:71 templates/scxrd/buttons/my_samples.html:7
+#: templates/base.html:72 templates/scxrd/buttons/my_samples.html:7
 #: templates/scxrd/buttons/small_buttons/my_samples.html:9
 msgid "My Samples"
 msgstr "Meine Proben"
 
-#: templates/base.html:73
+#: templates/base.html:74
 msgid "Edit my Profile"
 msgstr "Benutzerprofil"
 
-#: templates/base.html:75
+#: templates/base.html:76
 msgid "Customer Samples"
 msgstr "Proben von Kunden"
 
-#: templates/base.html:78 templates/base.html:85
+#: templates/base.html:79 templates/base.html:86
 msgid "Log Off"
 msgstr "Abmelden"
 
-#: templates/base.html:83
+#: templates/base.html:84
 msgid "Login"
 msgstr "Anmelden"
 
-#: templates/base.html:87 templates/registration/new_user.html:10
+#: templates/base.html:88 templates/registration/new_user.html:10
 msgid "New User"
 msgstr "Neuer Benutzer"
 
@@ -432,15 +464,15 @@ msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
 #: templates/registration/options.html:9
 msgid "Options"
-msgstr ""
+msgstr "Optionen"
 
 #: templates/registration/options.html:16
 msgid "Change Password"
-msgstr ""
+msgstr "Passwort Ändern"
 
 #: templates/registration/options.html:21
 msgid "You must login to change options"
-msgstr ""
+msgstr "Du musst eingeloggt sein um Optionen zu ändern"
 
 #: templates/scxrd/buttons/all_experiments.html:13
 msgid "All Experiments"
@@ -465,7 +497,7 @@ msgstr "Alle Proben"
 
 #: templates/scxrd/buttons/ok_button.html:3
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: templates/scxrd/buttons/small_buttons/back_to_start.html:9
 #: templates/scxrd/submitted_samples_list_operator.html:16
@@ -492,12 +524,6 @@ msgstr "Details"
 #: templates/scxrd/residuals_table.html:9
 msgid "Exp. Number"
 msgstr "Experimentnummer"
-
-#: templates/scxrd/residuals_table.html:11
-#, fuzzy
-#| msgid "machine type"
-msgid "Machine"
-msgstr "Maschinentyp"
 
 #: templates/scxrd/residuals_table.html:14
 #: templates/scxrd/residuals_table.html:17
@@ -584,32 +610,24 @@ msgid "Sum formula"
 msgstr "Summenformel"
 
 #: templates/scxrd/sample_details_operator.html:81
-#, fuzzy
-#| msgid "reaction conditions"
 msgid "Reaction conditions"
 msgstr "Reaktionsbedingungen"
 
 #: templates/scxrd/sample_details_operator.html:93
-#, fuzzy
-#| msgid "Crystal size min"
 msgid "Crstallized from"
-msgstr "Max. Kristallkante"
+msgstr "Kristallisiert aus"
 
 #: templates/scxrd/sample_details_operator.html:103
 msgid "Sample drawing"
 msgstr "Strukturformel"
 
 #: templates/scxrd/sample_details_operator.html:117
-#, fuzzy
-#| msgid "Special remarks:"
 msgid "Special remarks"
-msgstr "Weitere Anmerkungen:"
+msgstr "Weitere Anmerkungen"
 
 #: templates/scxrd/sample_submitted_page.html:10
-#, fuzzy
-#| msgid "Submit Sample"
 msgid "Successfully Submitted Sample"
-msgstr "Probe Abgeben"
+msgstr "Probe erfolgreich Abgeben"
 
 #: templates/scxrd/sample_submitted_page.html:12
 msgid "What should I do next?"
@@ -619,7 +637,9 @@ msgstr "Was nun?"
 msgid ""
 "Bring the sample to room No. -173 in the basement of the Inorganic Chemistry "
 "Institute."
-msgstr "Bringe die Probe in Raum Nr. -173 im Untergeschoss des Instituts für Anorganische Chemie."
+msgstr ""
+"Bringe die Probe in Raum Nr. -173 im Untergeschoss des Instituts für "
+"Anorganische Chemie."
 
 #: templates/scxrd/sample_submitted_page.html:15
 msgid "If in doubt about the sample quality, ask"
@@ -634,18 +654,23 @@ msgstr "oder"
 msgid ""
 "Do not dry Crystals. They like to stay in the conditions where they "
 "crystallized."
-msgstr "Kristalle nicht trocknen. Sie bleiben gerne in den Bedingungen, in denen sie kristallisiert sind."
+msgstr ""
+"Kristalle nicht trocknen. Sie bleiben gerne in den Bedingungen, in denen sie "
+"kristallisiert sind."
 
 #: templates/scxrd/sample_submitted_page.html:20
 msgid ""
 "You will get notice weather we could measure the sample and if the structure "
 "is publishable"
-msgstr "Du wirst benachrichtigt, ob wir die Probe messen konnten und ob die Struktur veröffentlichbar ist."
+msgstr ""
+"Du wirst benachrichtigt, ob wir die Probe messen konnten und ob die Struktur "
+"veröffentlichbar ist."
 
 #: templates/scxrd/sample_submitted_page.html:21
 msgid ""
 "Finally, you will be able to download the results from your samples list."
-msgstr "Schließlich kannst du die Ergebnisse aus Ihrer Probenliste herunterladen."
+msgstr ""
+"Schließlich kannst du die Ergebnisse aus Ihrer Probenliste herunterladen."
 
 #: templates/scxrd/scxrd_index.html:14
 msgid "Experiments List"
@@ -725,8 +750,6 @@ msgid "Special remarks:"
 msgstr "Weitere Anmerkungen:"
 
 #: templates/scxrd/submitted_samples_list_customer.html:141
-#, fuzzy
-#| msgid "Details"
 msgid "Sample Details"
 msgstr "Details"
 
@@ -801,8 +824,6 @@ msgid "Not measured because:"
 msgstr "Nicht gemessen, weil:"
 
 #: templates/scxrd/submitted_samples_list_operator.html:141
-#, fuzzy
-#| msgid "No samples found"
 msgid "No Samples found"
 msgstr "Keine Proben gefunden"
 
@@ -817,10 +838,8 @@ msgstr "Navigation"
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:129
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_form_helper.py:139
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:53
-#, fuzzy
-#| msgid "This field cannot be null."
 msgid "This field is required."
-msgstr "Dieses Feld ist erforderlich sein."
+msgstr "Dieses Feld ist erforderlich."
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_layout.py:361
 msgid "i18n text"
@@ -1059,7 +1078,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1045
 msgid "Comma-separated integers"
-msgstr ""
+msgstr "Mit Komma getrennte Ganzzahlen"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1094
 #, python-format
@@ -1120,7 +1139,7 @@ msgstr "Dauer"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1587
 msgid "Email address"
-msgstr ""
+msgstr "E-Mail-Adresse"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1610
 msgid "File path"
@@ -1150,7 +1169,7 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1817
 msgid "IPv4 address"
-msgstr ""
+msgstr "IPv4-Adresse"
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1848
 msgid "IP address"
@@ -1333,11 +1352,11 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:969
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1274
 msgid "Enter a list of values."
-msgstr ""
+msgstr "Gib eine Liste von Werten ein."
 
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:970
 msgid "Enter a complete value."
-msgstr ""
+msgstr "Gib einen kompletten Wert ein."
 
 #: venv/lib/python3.8/site-packages/django/forms/fields.py:1186
 msgid "Enter a valid UUID."
@@ -1840,11 +1859,11 @@ msgstr[1] ""
 
 #: venv/lib/python3.8/site-packages/django/utils/timesince.py:72
 msgid "0 minutes"
-msgstr ""
+msgstr "0 Minuten"
 
 #: venv/lib/python3.8/site-packages/django/views/csrf.py:110
 msgid "Forbidden"
-msgstr ""
+msgstr "Verboten"
 
 #: venv/lib/python3.8/site-packages/django/views/csrf.py:111
 msgid "CSRF verification failed. Request aborted."
@@ -1893,25 +1912,25 @@ msgstr ""
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:41
 msgid "No year specified"
-msgstr ""
+msgstr "Kein Jahr angegeben"
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:61
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:111
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:208
 msgid "Date out of range"
-msgstr ""
+msgstr "Datum außerhalb des erlaubten Bereichs"
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:90
 msgid "No month specified"
-msgstr ""
+msgstr "Kein Monat anegegeben"
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:142
 msgid "No day specified"
-msgstr ""
+msgstr "Kein Tag angegeben"
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:188
 msgid "No week specified"
-msgstr ""
+msgstr "Keine Woche angegeben"
 
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:338
 #: venv/lib/python3.8/site-packages/django/views/generic/dates.py:367
