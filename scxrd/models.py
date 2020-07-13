@@ -18,8 +18,6 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 """
 TODO: 
 - add email notifications and password reset etc...
-- make experiments write protected after CIF upload. Improve current implementation. 
-  Maybe with checks: https://docs.djangoproject.com/en/3.0/topics/checks/
 
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
