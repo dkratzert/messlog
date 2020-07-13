@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
-from django.db.models.signals import post_save, pre_save, pre_delete
+from django.db.models import ProtectedError
+from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -15,7 +16,7 @@ from scxrd.cif_model import CifFileModel
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 """
-TODO:
+TODO: 
 - add email notifications and password reset etc...
 - make experiments write protected after CIF upload. Improve current implementation. 
   Maybe with checks: https://docs.djangoproject.com/en/3.0/topics/checks/
@@ -116,15 +117,6 @@ class Profile(models.Model):
                 return name + '*'
             else:
                 return name
-
-
-@receiver(post_save, sender=User)
-def update_user_profile(sender, instance, created, **kwargs):
-    """Creating a Profile model instance while saving a user"""
-    if created:
-        Profile.objects.create(user=instance)
-        # print('Created a profile instance!')
-    instance.profile.save()
 
 
 class WorkGroup(models.Model):
@@ -230,6 +222,8 @@ class Experiment(models.Model):
                                        blank=True)
     not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True,
                                           help_text=_('The cause why the sample could not be measured'))
+    # After setting final to True, the experiment is write protected:
+    final = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-number"]
@@ -250,17 +244,19 @@ class Experiment(models.Model):
         return self.experiment_name
 
 
-@receiver(pre_save, sender=Experiment)
-def write_protect_handler(sender, instance: Experiment, **kwargs):
-    """
-    TODO: make this a database switch in a column
-    """
-    pass
-
-
 @receiver(pre_delete, sender=Experiment)
 def delete_protect_handler(sender, instance: Experiment, **kwargs):
     """
-    TODO: make this a database switch in a column
+    Delete protection for finished projects.
     """
-    pass
+    if hasattr(instance, 'final') and instance.final:
+        raise ProtectedError('This Experiment can not be changed anymore.', instance)
+
+
+@receiver(post_save, sender=User)
+def update_user_profile(sender, instance, created, **kwargs):
+    """Creating a Profile model instance while saving a user"""
+    if created:
+        Profile.objects.create(user=instance)
+        # print('Created a profile instance!')
+    instance.profile.save()

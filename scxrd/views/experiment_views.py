@@ -6,10 +6,11 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.handlers.wsgi import WSGIRequest
-from django.db.models import Q, ProtectedError
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.timezone import make_naive
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
@@ -21,7 +22,6 @@ from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models import Experiment
 from scxrd.sample_model import Sample
 from scxrd.utils import generate_sha256
-from django.utils.translation import gettext_lazy as _
 
 
 class ExperimentIndexView(LoginRequiredMixin, ListView):
@@ -111,6 +111,9 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         # pprint(request.POST)
         # self.object is a Sample because of the views model class:
         self.object: Sample = self.get_object()
+        if form.instance.final:
+            messages.warning(request, 'This Experiment can not be changed anymore!')
+            return self.form_invalid(form)
         if form.is_valid():
             # form.instance is Experiment, because of the form class:
             exp: Experiment = form.instance
@@ -182,51 +185,51 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         request.POST['number'] = self.object.number
         request.POST._mutable = False
         sample = self.object.sample
+        final = self.object.final
         form: ExperimentEditForm = self.get_form()
+        if final:
+            messages.warning(request, 'This Experiment can not be changed anymore!')
+            return self.form_invalid(form)
         if form.is_valid():
             print('Form is valid')
             cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
             # Otherwise sample id gets lost: why?
             exp.sample = sample
+            exp.final = final
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
             if form.files.get('cif_file_on_disk'):
-                if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists():
-                    exp.ciffilemodel.delete()
-                cif_file = form.files['cif_file_on_disk']
-                try:
-                    cif = CifContainer(
-                        chunks='\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in cif_file.chunks()]))
-                    cif_model.fill_residuals_table(cif)
-                except Exception as e:
-                    print('Error during CIF parsing:', e)
-                    # TODO: handle bad cif parsing
-                cif_model.cif_file_on_disk = cif_file
-                cif_model.sha256 = generate_sha256(cif_file)
-                cif_model.filesize = cif_file.size
-                if not cif_model.date_created:
-                    cif_model.date_created = timezone.now()
-                cif_model.date_updated = timezone.now()
-                exp.ciffilemodel = cif_model
-            try:
-                exp.save()
-            except ProtectedError:
-                messages.warning(request, 'This Experiment can not be changed anymore.')
-                return self.form_invalid(form)
+                self.prepare_cif_file_model(cif_model, exp, form)
+            exp.save()
             print('Experiment {} saved.'.format(exp.experiment_name))
-            try:
-                if form.files.get('cif_file_on_disk'):
-                    cif_model.save()
-                return self.form_valid(form)
-            except ProtectedError:
-                messages.warning(request, 'This Experiment can not be changed anymore.')
-                return self.form_invalid(form)
+            if form.files.get('cif_file_on_disk'):
+                cif_model.save()
+            return self.form_valid(form)
         else:
             print('Form is invalid! Invalid forms:')
             pprint(form.errors)
             return self.form_invalid(form)
+
+    def prepare_cif_file_model(self, cif_model, exp, form):
+        if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists():
+            exp.ciffilemodel.delete()
+        cif_file = form.files['cif_file_on_disk']
+        try:
+            cif = CifContainer(
+                chunks='\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in cif_file.chunks()]))
+            cif_model.fill_residuals_table(cif)
+        except Exception as e:
+            print('Error during CIF parsing:', e)
+            # TODO: handle bad cif parsing
+        cif_model.cif_file_on_disk = cif_file
+        cif_model.sha256 = generate_sha256(cif_file)
+        cif_model.filesize = cif_file.size
+        if not cif_model.date_created:
+            cif_model.date_created = timezone.now()
+        cif_model.date_updated = timezone.now()
+        exp.ciffilemodel = cif_model
 
 
 class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
