@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, EmailValidator, RegexValidator
 from django.db import models
 # Create your models here.
-from django.db.models import ProtectedError
 from django.db.models.signals import post_save, pre_save, pre_delete
 from django.dispatch import receiver
 from django.utils import timezone
@@ -253,13 +252,15 @@ class Experiment(models.Model):
 
 @receiver(pre_save, sender=Experiment)
 def write_protect_handler(sender, instance: Experiment, **kwargs):
-    print('foo')
-    if instance.ciffilemodel.cif_exists():
-        raise ProtectedError('This Experiment can not be changed anymore.', instance)
+    """
+    TODO: make this a database switch in a column
+    """
+    pass
 
 
 @receiver(pre_delete, sender=Experiment)
 def delete_protect_handler(sender, instance: Experiment, **kwargs):
-    print('foobar')
-    if instance.ciffilemodel.cif_exists():
-        raise ProtectedError('This Experiment can not be deleted anymore.', instance)
+    """
+    TODO: make this a database switch in a column
+    """
+    pass
