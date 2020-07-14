@@ -20,6 +20,7 @@ from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models.experiment_model import Experiment
+from scxrd.models.models import CheckCifModel
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 
@@ -203,6 +204,14 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
                 exp.ciffilemodel.delete()
             if form.files.get('cif_file_on_disk'):
                 self.prepare_cif_file_model(cif_model, exp, form)
+            if request.POST.get('checkcif_on_disk-clear'):
+                exp.checkcifmodel.delete()
+            if form.files.get('checkcif_on_disk'):
+                chk = CheckCifModel()
+                chk.experiment = exp
+                chk.checkcif_on_disk = form.files.get('checkcif_on_disk')
+                chk.save()
+                exp.checkcifmodel = chk 
             exp.save()
             print('Experiment {} saved.'.format(exp.experiment_name))
             if form.files.get('cif_file_on_disk'):
