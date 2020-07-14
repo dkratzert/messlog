@@ -162,9 +162,8 @@ LOGOUT_REDIRECT_URL = 'index'
 EMAIL_HOST = 'mail.uni-freiburg.de'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'daniel.kratzert@ac.uni-freiburg.de'
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 25
+EMAIL_USE_SSL = False
+
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
