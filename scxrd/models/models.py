@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 """
 TODO: 
+- check file uploads in edit experiment
 - add email notifications and password reset etc...
 - report and checkcif file model
 
@@ -183,7 +184,7 @@ class CheckCifModel(models.Model):
     """
     experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='checkCIF report',
                                       related_name='checkcifmodel')
-    checkcif_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, max_length=255,
+    checkcif_on_disk = models.FileField(upload_to='checkcif_reports', null=True, blank=True, max_length=255,
                                         validators=[validate_checkcif_file_extension],
                                         verbose_name='cif file')
 
@@ -195,7 +196,7 @@ class ReportModel(models.Model):
     experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, max_length=255,
                                       verbose_name='structure report document',
                                       related_name='reportmodel')
-    reportdoc_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
+    reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,
                                          validators=[validate_reportdoc_file_extension],
                                          verbose_name='cif file')
 

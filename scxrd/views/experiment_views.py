@@ -189,6 +189,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         form: ExperimentEditForm = self.get_form()
         if final:
             messages.warning(request, 'This Experiment can not be changed anymore!')
+            print('This Experiment can not be changed anymore!')
             return self.form_invalid(form)
         if form.is_valid():
             print('Form is valid')
