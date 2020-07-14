@@ -7,13 +7,15 @@ from django.test import TestCase, override_settings
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.sample_model import Sample
-from scxrd.models.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
 from scxrd.models.experiment_model import Experiment
+from scxrd.models.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
+from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 from tests.tests import MEDIA_ROOT, create_experiment, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \
     SuperUserMixin
 
+
+# TODO: tests for write protection of experiment, file uploads
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestUser(PlainUserMixin, DeleteFilesMixin, TestCase):
@@ -217,13 +219,13 @@ class TestOtherTables(DeleteFilesMixin, TestCase):
     def test_supports(self):
         sup = CrystalSupport.objects.get(support__contains='fiber')
         self.assertEqual(str(sup), 'glass fiber')
-        sup = CrystalSupport(support='Gass Fiber')
+        sup = CrystalSupport(support='glass rod')
         sup.save()
-        self.assertEqual(str(sup), 'Gass Fiber')
+        self.assertEqual(str(sup), 'glass rod')
 
     def test_glues(self):
-        g = CrystalGlue.objects.get(glue__contains='Polyether')
-        self.assertEqual(str(g), 'Polyether Oil')
-        glue = CrystalGlue(glue='perfluor ether oil')
+        g = CrystalGlue.objects.get(glue__contains='polyether')
+        self.assertEqual(str(g), 'polyether oil')
+        glue = CrystalGlue(glue='other ether oil')
         glue.save()
-        self.assertEqual(str(glue), 'perfluor ether oil')
+        self.assertEqual(str(glue), 'other ether oil')

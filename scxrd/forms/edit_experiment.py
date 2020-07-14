@@ -17,7 +17,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         self.helper.layout = Layout(
             # Experiment ###
 
-            #card(self.exp_title+self.number, backbutton),
+            # card(self.exp_title+self.number, backbutton),
             HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}'
                  '{}</div>'.format(self.exp_title, self.number, backbutton)),
 
@@ -77,20 +77,30 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             card(_('File upload')),
             Row(
                 Column(
-                    # Field('cif'), css_class='col-12'
                     Field('cif_file_on_disk'), css_class='col-8'
+                ),
+            ),
+            Row(
+                Column(
+                    Field('checkcif_on_disk'), css_class='col-8'
+                ),
+            ),
+            Row(
+                Column(
+                    Field('reportdoc_on_disk'), css_class='col-8'
                 ),
             ),
             HTML('</div>'),  # end of card
             # HTML('</div>'),  # end of card
-            save_button2,
+            # save_button2,
             # HTML('</div>'),  # end of card
             card(_('Miscellaneous'), backbutton),
             Row(
-                Column('exptl_special_details'),
+                Column('publishable', css_class='col-6 mt-3'),
+                Column('final', css_class='col-6 mt-3'),
             ),
             Row(
-                Column('publishable'),
+                Column('exptl_special_details'),
             ),
             HTML('</div>'),  # end of card
             save_button2,

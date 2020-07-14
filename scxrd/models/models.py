@@ -161,6 +161,45 @@ class CrystalGlue(models.Model):
         return self.glue
 
 
+def validate_checkcif_file_extension(value):
+    error = ValidationError(_('Only .html or .pdf files are allowed to upload here.'))
+    if not isinstance(value.name, str):
+        raise error
+    if not value.name.lower().endswith(('.pdf', '.htm', '.html')):
+        raise error
+
+
+def validate_reportdoc_file_extension(value):
+    error = ValidationError(_('Only .docx, .doc or .pdf files are allowed to upload here.'))
+    if not isinstance(value.name, str):
+        raise error
+    if not value.name.lower().endswith(('.docx', '.doc', '.pdf')):
+        raise error
+
+
+class CheckCifModel(models.Model):
+    """
+    A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
+    """
+    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='checkCIF report',
+                                      related_name='checkcifmodel')
+    checkcif_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, max_length=255,
+                                        validators=[validate_checkcif_file_extension],
+                                        verbose_name='cif file')
+
+
+class ReportModel(models.Model):
+    """
+    A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
+    """
+    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, max_length=255,
+                                      verbose_name='structure report document',
+                                      related_name='reportmodel')
+    reportdoc_on_disk = models.FileField(upload_to='cifs', null=True, blank=True,
+                                         validators=[validate_reportdoc_file_extension],
+                                         verbose_name='cif file')
+
+
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     """Creating a Profile model instance while saving a user"""

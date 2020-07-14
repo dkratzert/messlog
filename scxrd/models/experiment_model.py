@@ -21,7 +21,8 @@ class Experiment(models.Model):
     sample = models.ForeignKey('Sample', on_delete=models.CASCADE, null=True, blank=True,
                                related_name='experiments')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
-    publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
+    publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False,
+                                      help_text=_('The structure is of sufficient quality to publish it.'))
     # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
                                  verbose_name=_("customer (for service)"), related_name='customer_experiments')
@@ -68,7 +69,7 @@ class Experiment(models.Model):
     not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True,
                                           help_text=_('The cause why the sample could not be measured'))
     # After setting final to True, the experiment is write protected:
-    final = models.BooleanField(default=False)
+    final = models.BooleanField(default=False, help_text=_('Structure is finished and can not be changed afterwards.'))
 
     class Meta:
         ordering = ["-number"]

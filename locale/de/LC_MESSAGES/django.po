@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 09:53+0200\n"
+"POT-Creation-Date: 2020-07-14 08:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,25 +69,9 @@ msgstr "Das Profil wurde erfolgreich gespeichert!"
 msgid "Please correct the error below."
 msgstr "Bitte korrigiere den Fehler unten."
 
-#: scxrd/admin.py:87
+#: scxrd/admin.py:89
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
-
-#: scxrd/cif_model.py:15
-msgid "Only .cif files are allowed to upload here."
-msgstr "Hier sind nur .cif-Dateien erlaubt."
-
-#: scxrd/cif_model.py:30
-msgid "upload date"
-msgstr "Upload-Datum"
-
-#: scxrd/cif_model.py:31
-msgid "change date"
-msgstr "Datum ändern"
-
-#: scxrd/cif_model.py:62
-msgid "CCDC number"
-msgstr "CCDC-Nummer"
 
 #: scxrd/form_utils.py:7
 #: templates/scxrd/buttons/small_buttons/back_to_start.html:9
@@ -96,17 +79,9 @@ msgstr "CCDC-Nummer"
 msgid "Back to start"
 msgstr "Zurück"
 
-#: scxrd/form_utils.py:10 scxrd/form_utils.py:18
-msgid "Save"
-msgstr "Speichern"
-
-#: scxrd/form_utils.py:13 scxrd/form_utils.py:21 scxrd/form_utils.py:29
+#: scxrd/form_utils.py:21 scxrd/form_utils.py:29
 msgid "Cancel"
 msgstr "Abbrechen"
-
-#: scxrd/form_utils.py:26
-msgid "Submit"
-msgstr "Abgeben"
 
 #: scxrd/forms/edit_experiment.py:13
 msgid "Experiment"
@@ -124,67 +99,75 @@ msgstr "Kristall und Bedingungen"
 msgid "File upload"
 msgstr "Datei-Upload"
 
-#: scxrd/forms/edit_experiment.py:88
+#: scxrd/forms/edit_experiment.py:97
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: scxrd/forms/forms.py:36 scxrd/forms/new_exp_from_sample.py:16
+#: scxrd/forms/forms.py:37 scxrd/forms/new_exp_from_sample.py:16
 msgid "measure date"
 msgstr "Datum der Messung"
 
-#: scxrd/forms/forms.py:38
+#: scxrd/forms/forms.py:39
 msgid "Results sent date (for service)"
 msgstr "Ergebnis gesendet am (für Service)"
 
-#: scxrd/forms/forms.py:39
+#: scxrd/forms/forms.py:40
 msgid "Measurement temp. [K]"
 msgstr "Messtemperatur [K]"
 
-#: scxrd/forms/forms.py:40
+#: scxrd/forms/forms.py:41
 msgid "Crystal Color"
 msgstr "Kristallfarbe"
 
-#: scxrd/forms/forms.py:41
+#: scxrd/forms/forms.py:42
 msgid "Colour Modifier"
 msgstr "Farbeigenschaften"
 
-#: scxrd/forms/forms.py:42
+#: scxrd/forms/forms.py:43
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: scxrd/forms/forms.py:44 templates/scxrd/residuals_table.html:11
+#: scxrd/forms/forms.py:45 templates/scxrd/residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
 
-#: scxrd/forms/forms.py:47
+#: scxrd/forms/forms.py:48
 msgid "Customer (for service)"
 msgstr "Kunde (für Servicemessung)"
 
-#: scxrd/forms/forms.py:49
+#: scxrd/forms/forms.py:50
 msgid "Crystal size min"
 msgstr "Min. Kristallkante"
 
-#: scxrd/forms/forms.py:50
+#: scxrd/forms/forms.py:51
 msgid "Crystal size mid"
 msgstr "Mittl. Kristallkante"
 
-#: scxrd/forms/forms.py:51
+#: scxrd/forms/forms.py:52
 msgid "Crystal size max"
 msgstr "Max. Kristallkante"
 
-#: scxrd/forms/forms.py:52
+#: scxrd/forms/forms.py:53
 msgid "Sample Base"
 msgstr "Probenhalter"
 
-#: scxrd/forms/forms.py:53
+#: scxrd/forms/forms.py:54
 msgid "CIF file"
 msgstr "CIF-Datei"
 
-#: scxrd/forms/forms.py:54
+#: scxrd/forms/forms.py:55
+msgid "checkCIF report"
+msgstr "checkCIF-Report"
+
+#: scxrd/forms/forms.py:56
+msgid "Structure report"
+msgstr "Struktur-Report"
+
+#: scxrd/forms/forms.py:57
 msgid "habit"
 msgstr "Habitus"
 
-#: scxrd/forms/forms.py:55
+#: scxrd/forms/forms.py:58
 msgid "Expected end time"
 msgstr "Erwartetes Ende"
 
@@ -218,7 +201,7 @@ msgstr "Probenabgabedatum"
 msgid "Presumed sum formula"
 msgstr "Vermutete Summenformel"
 
-#: scxrd/forms/new_sample.py:19 scxrd/sample_model.py:41
+#: scxrd/forms/new_sample.py:19 scxrd/models/sample_model.py:41
 msgid "Solvents used for crystallization, method, conditions"
 msgstr "Verwendete Lösemittel zur Kristallisation, Methode, Bedingungen"
 
@@ -266,200 +249,234 @@ msgstr ""
 "Sie müssen entweder ein Dokument mit der gewünschten Struktur hochladen oder "
 "es im Feld darunter zeichnen."
 
-#: scxrd/models.py:65
+#: scxrd/models/cif_model.py:15
+msgid "Only .cif files are allowed to upload here."
+msgstr "Hier sind nur .cif-Dateien erlaubt."
+
+#: scxrd/models/cif_model.py:30
+msgid "upload date"
+msgstr "Upload-Datum"
+
+#: scxrd/models/cif_model.py:31
+msgid "change date"
+msgstr "Datum ändern"
+
+#: scxrd/models/cif_model.py:62
+msgid "CCDC number"
+msgstr "CCDC-Nummer"
+
+#: scxrd/models/experiment_model.py:18
+msgid "experiment name"
+msgstr "Name des Experiments"
+
+#: scxrd/models/experiment_model.py:23
+msgid "number"
+msgstr "Nummer"
+
+#: scxrd/models/experiment_model.py:24
+msgid "structure is publishable"
+msgstr "Struktur ist publizierbar"
+
+#: scxrd/models/experiment_model.py:25
+msgid "The structure is of sufficient quality to publish it."
+msgstr ""
+"Die Struktur ist von ausreichender Qualität, um sie zu veröffentlichen."
+
+#: scxrd/models/experiment_model.py:28
+msgid "customer (for service)"
+msgstr "Kunde (für service)"
+
+#: scxrd/models/experiment_model.py:30
+msgid "operator"
+msgstr "Operator"
+
+#: scxrd/models/experiment_model.py:32
+msgid "diffractometer"
+msgstr "Diffraktometer"
+
+#: scxrd/models/experiment_model.py:34
+msgid "empirical formula"
+msgstr "Summenformel"
+
+#: scxrd/models/experiment_model.py:35
+msgid "first unit cell"
+msgstr "Vorläufige Elementarzelle"
+
+#: scxrd/models/experiment_model.py:36
+msgid "Resolution [&#x212b;]"
+msgstr "Auflösung  [&#x212b;]"
+
+#: scxrd/models/experiment_model.py:38
+msgid "reaction conditions"
+msgstr "Reaktionsbedingungen"
+
+#: scxrd/models/experiment_model.py:39
+msgid "measurement date"
+msgstr "Datum der Messung"
+
+#: scxrd/models/experiment_model.py:40 scxrd/models/sample_model.py:21
+msgid "sample submission date"
+msgstr "Proben-Abgabedatum"
+
+#: scxrd/models/experiment_model.py:41
+msgid "results sent date"
+msgstr "Ergebnis gesendet am"
+
+#: scxrd/models/experiment_model.py:42
+msgid "expected end date and time of the experiment"
+msgstr "Erwartetes Ende der Messung"
+
+#: scxrd/models/experiment_model.py:43
+msgid "sample base"
+msgstr "Probenhalter"
+
+#: scxrd/models/experiment_model.py:45
+msgid "sample glue"
+msgstr "Kleber"
+
+#: scxrd/models/experiment_model.py:49
+msgid "crystal size max"
+msgstr "Max. Kristallgröße"
+
+#: scxrd/models/experiment_model.py:51
+msgid "crystal size mid"
+msgstr "Mittl. Kristallgröße"
+
+#: scxrd/models/experiment_model.py:53
+msgid "crystal size min"
+msgstr "Min. Kristallgröße"
+
+#: scxrd/models/experiment_model.py:54
+msgid "measurement temperature [K]"
+msgstr "Messtemperatur [K]"
+
+#: scxrd/models/experiment_model.py:58
+msgid "crystal colour modifier"
+msgstr "Farbeigenschaften"
+
+#: scxrd/models/experiment_model.py:64
+msgid "crystal habit"
+msgstr "Habitus"
+
+#: scxrd/models/experiment_model.py:66 scxrd/models/sample_model.py:45
+msgid "special remarks"
+msgstr "Weitere Anmerkungen"
+
+#: scxrd/models/experiment_model.py:67
+msgid "The sample was measured successfully"
+msgstr "Die Probe wurde erfolgreich gemessen"
+
+#: scxrd/models/experiment_model.py:69
+msgid "Not measured, because:"
+msgstr "Nicht gemessen, weil:"
+
+#: scxrd/models/experiment_model.py:70
+msgid "The cause why the sample could not be measured"
+msgstr "Grund, warum die Probe nicht gemessen wurde"
+
+#: scxrd/models/experiment_model.py:72
+msgid "Structure is finished and can not be changed afterwards."
+msgstr ""
+"Die Struktur ist fertig gestellt und kann danach nicht mehr geändert werden."
+
+#: scxrd/models/models.py:58
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: scxrd/models.py:73
+#: scxrd/models/models.py:66
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: scxrd/models.py:81
+#: scxrd/models/models.py:74
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: scxrd/models.py:96
+#: scxrd/models/models.py:89
 msgid "company"
 msgstr "Firma"
 
-#: scxrd/models.py:107
+#: scxrd/models/models.py:100
 msgid "The user has operator rights"
 msgstr "Der Benutzer ist Operator"
 
-#: scxrd/models.py:136
+#: scxrd/models/models.py:120
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models.py:151
+#: scxrd/models/models.py:135
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models.py:182
-msgid "experiment name"
-msgstr "Name des Experiments"
+#: scxrd/models/models.py:165
+msgid "Only .html or .pdf files are allowed to upload here."
+msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models.py:187
-msgid "number"
-msgstr "Nummer"
+#: scxrd/models/models.py:173
+msgid "Only .docx, .doc or .pdf files are allowed to upload here."
+msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
-#: scxrd/models.py:188
-msgid "structure is publishable"
-msgstr "Struktur ist publizierbar"
-
-#: scxrd/models.py:191
-msgid "customer (for service)"
-msgstr "Kunde (für service)"
-
-#: scxrd/models.py:193
-msgid "operator"
-msgstr "Operator"
-
-#: scxrd/models.py:195
-msgid "diffractometer"
-msgstr "Diffraktometer"
-
-#: scxrd/models.py:197
-msgid "empirical formula"
-msgstr "Summenformel"
-
-#: scxrd/models.py:198
-msgid "first unit cell"
-msgstr "Vorläufige Elementarzelle"
-
-#: scxrd/models.py:199
-msgid "Resolution [&#x212b;]"
-msgstr "Auflösung  [&#x212b;]"
-
-#: scxrd/models.py:201
-msgid "reaction conditions"
-msgstr "Reaktionsbedingungen"
-
-#: scxrd/models.py:202
-msgid "measurement date"
-msgstr "Datum der Messung"
-
-#: scxrd/models.py:203 scxrd/sample_model.py:21
-msgid "sample submission date"
-msgstr "Proben-Abgabedatum"
-
-#: scxrd/models.py:204
-msgid "results sent date"
-msgstr "Ergebnis gesendet am"
-
-#: scxrd/models.py:205
-msgid "expected end date and time of the experiment"
-msgstr "Erwartetes Ende der Messung"
-
-#: scxrd/models.py:206
-msgid "sample base"
-msgstr "Probenhalter"
-
-#: scxrd/models.py:208
-msgid "sample glue"
-msgstr "Kleber"
-
-#: scxrd/models.py:212
-msgid "crystal size max"
-msgstr "Max. Kristallgröße"
-
-#: scxrd/models.py:214
-msgid "crystal size mid"
-msgstr "Mittl. Kristallgröße"
-
-#: scxrd/models.py:216
-msgid "crystal size min"
-msgstr "Min. Kristallgröße"
-
-#: scxrd/models.py:217
-msgid "measurement temperature [K]"
-msgstr "Messtemperatur [K]"
-
-#: scxrd/models.py:221
-msgid "crystal colour modifier"
-msgstr "Farbeigenschaften"
-
-#: scxrd/models.py:227
-msgid "crystal habit"
-msgstr "Habitus"
-
-#: scxrd/models.py:229 scxrd/sample_model.py:45
-msgid "special remarks"
-msgstr "Weitere Anmerkungen"
-
-#: scxrd/models.py:230
-msgid "The sample was measured successfully"
-msgstr "Die Probe wurde erfolgreich gemessen"
-
-#: scxrd/models.py:232
-msgid "Not measured, because:"
-msgstr "Nicht gemessen, weil:"
-
-#: scxrd/models.py:233
-msgid "The cause why the sample could not be measured"
-msgstr "Grund, warum die Probe nicht gemessen wurde"
-
-#: scxrd/sample_model.py:13
+#: scxrd/models/sample_model.py:13
 msgid "Files with this extension are not allowed to upload here."
 msgstr "Dateien mit dieser Endung können nicht hochgeladen werden."
 
-#: scxrd/sample_model.py:18
+#: scxrd/models/sample_model.py:18
 msgid "sample name"
 msgstr "Probenname"
 
-#: scxrd/sample_model.py:19
+#: scxrd/models/sample_model.py:19
 msgid "A unique name of your sample"
 msgstr "Eineindeutiger Probenname"
 
-#: scxrd/sample_model.py:23
+#: scxrd/models/sample_model.py:23
 msgid "Submitter"
 msgstr "Probenbesitzer/in"
 
-#: scxrd/sample_model.py:26
+#: scxrd/models/sample_model.py:26
 msgid "sample is sensitive (temperature, oxygen, moisture)"
 msgstr "Probe ist empfindlich (Temperatur, Sauerstoff, Feuchtigkeit)"
 
-#: scxrd/sample_model.py:27
+#: scxrd/models/sample_model.py:27
 msgid ""
 "The sample requires special precautions to remain stable until measurement."
 msgstr ""
 "Die Probe erfordert besondere Vorkehrungen, um bis zur Messung stabil zu "
 "bleiben."
 
-#: scxrd/sample_model.py:29
+#: scxrd/models/sample_model.py:29
 msgid "I want to solve/refine by myself"
 msgstr "Ich möchte selbst lösen und verfeinern"
 
-#: scxrd/sample_model.py:30
+#: scxrd/models/sample_model.py:30
 msgid ""
 "Indicate whether you want to solve and refine the structure by yourselves."
 msgstr "Geben Sie an, ob Sie die Struktur selbst lösen und verfeinern wollen."
 
-#: scxrd/sample_model.py:32
+#: scxrd/models/sample_model.py:32
 msgid "assumed sum formula"
 msgstr "Angenommene Summenformel"
 
-#: scxrd/sample_model.py:34
+#: scxrd/models/sample_model.py:34
 msgid "Document with reaction equation and conditions"
 msgstr "Dokument mit Reaktionsgleichung und -Bedingungen"
 
-#: scxrd/sample_model.py:43
+#: scxrd/models/sample_model.py:43
 msgid "desired structure"
 msgstr "Gewünschte Struktur"
 
-#: scxrd/sample_model.py:44
+#: scxrd/models/sample_model.py:44
 msgid "MOL file of the structure"
 msgstr "MOL-Datei der Struktur"
 
-#: scxrd/sample_model.py:46
+#: scxrd/models/sample_model.py:46
 msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
-#: scxrd/views/experiment_views.py:243
+#: scxrd/views/experiment_views.py:246
 msgid "Experiments"
 msgstr "Messungen"
 
-#: scxrd/views/experiment_views.py:273
+#: scxrd/views/experiment_views.py:276
 msgid "Edit"
 msgstr "Edit."
 
@@ -878,11 +895,11 @@ msgstr "Dieses Feld ist erforderlich."
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_layout.py:361
 msgid "i18n text"
-msgstr ""
+msgstr "i18n-Text"
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_layout.py:361
 msgid "i18n legend"
-msgstr ""
+msgstr "i18n-Legende"
 
 #: venv/lib/python3.8/site-packages/crispy_forms/tests/test_layout_objects.py:129
 #: venv/lib/python3.8/site-packages/django/core/validators.py:32
@@ -2065,6 +2082,12 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/views/templates/default_urlconf.html:409
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "Save"
+#~ msgstr "Speichern"
+
+#~ msgid "Submit"
+#~ msgstr "Abgeben"
 
 #~ msgid "comment"
 #~ msgstr "Kommentar"

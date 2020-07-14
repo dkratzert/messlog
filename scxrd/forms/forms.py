@@ -52,6 +52,8 @@ class ExperimentFormMixin(forms.ModelForm):
     crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True, label=_('Sample Base'))
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
+    checkcif_on_disk = forms.FileField(required=False, label=_("checkCIF report"))
+    reportdoc_on_disk = forms.FileField(required=False, label=_("Structure report"))
     crystal_habit = forms.CharField(required=True, label=_('habit'))
     end_time = forms.DateTimeField(required=True, label=_("Expected end time"), initial=timezone.now,
                                    widget=DatePickerInput(format='%Y-%m-%d %H:%M'))
