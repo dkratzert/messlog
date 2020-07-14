@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 08:58+0200\n"
+"POT-Creation-Date: 2020-07-14 10:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,15 +73,19 @@ msgstr "Bitte korrigiere den Fehler unten."
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
-#: scxrd/form_utils.py:7
-#: templates/scxrd/buttons/small_buttons/back_to_start.html:9
-#: templates/scxrd/submitted_samples_list_operator.html:16
-msgid "Back to start"
-msgstr "Zurück"
+#: scxrd/form_utils.py:7 scxrd/form_utils.py:15
+#: scxrd/forms/new_experiment.py:61
+msgid "Save"
+msgstr "Speichern"
 
-#: scxrd/form_utils.py:21 scxrd/form_utils.py:29
+#: scxrd/form_utils.py:10 scxrd/form_utils.py:17 scxrd/form_utils.py:25
+#: scxrd/forms/new_experiment.py:63
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: scxrd/form_utils.py:22
+msgid "Submit"
+msgstr "Abgeben"
 
 #: scxrd/forms/edit_experiment.py:13
 msgid "Experiment"
@@ -137,15 +141,15 @@ msgstr "Kunde (für Servicemessung)"
 
 #: scxrd/forms/forms.py:50
 msgid "Crystal size min"
-msgstr "Min. Kristallkante"
+msgstr "Min. Kristallgröße"
 
 #: scxrd/forms/forms.py:51
 msgid "Crystal size mid"
-msgstr "Mittl. Kristallkante"
+msgstr "Mittl. Kristallgröße"
 
 #: scxrd/forms/forms.py:52
 msgid "Crystal size max"
-msgstr "Max. Kristallkante"
+msgstr "Max. Kristallgröße"
 
 #: scxrd/forms/forms.py:53
 msgid "Sample Base"
@@ -565,6 +569,11 @@ msgstr "Alle Proben"
 #: templates/scxrd/buttons/ok_button.html:3
 msgid "OK"
 msgstr "OK"
+
+#: templates/scxrd/buttons/small_buttons/back_to_start.html:9
+#: templates/scxrd/submitted_samples_list_operator.html:16
+msgid "Back to start"
+msgstr "Zurück"
 
 #: templates/scxrd/buttons/small_buttons/submit_sample.html:9
 #: templates/scxrd/buttons/submit_sample.html:6
@@ -2083,11 +2092,8 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#~ msgid "Save"
-#~ msgstr "Speichern"
-
-#~ msgid "Submit"
-#~ msgstr "Abgeben"
+#~ msgid "Back to Start"
+#~ msgstr "Zurück"
 
 #~ msgid "comment"
 #~ msgstr "Kommentar"

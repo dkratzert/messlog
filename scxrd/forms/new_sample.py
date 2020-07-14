@@ -1,11 +1,11 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, HTML
+from crispy_forms.layout import Layout, Row, Column, HTML, ButtonHolder, Submit
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import card, backbutton, submit_button
+from scxrd.form_utils import card, backbutton
 from scxrd.models.sample_model import Sample
 
 
@@ -106,7 +106,13 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                 Column('special_remarks')
             ),
             Row(
-                submit_button,
+                ButtonHolder(
+                    Submit('Save', _('Submit'), css_class='btn-primary mr-2 ml-1'),
+                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                            formnovalidate="formnovalidate">''' + '''{}</a>
+                            '''.format(_('Cancel'))),
+                    css_class=' ml-3 mb-3'
+                ),
             ),
             HTML('</div>'),  # end of card
         )

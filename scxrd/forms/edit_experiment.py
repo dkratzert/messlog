@@ -1,8 +1,8 @@
-from crispy_forms.layout import Layout, Row, Column, HTML, Field
+from crispy_forms.layout import Layout, Row, Column, HTML, Field, Submit, ButtonHolder
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.form_utils import card, backbutton, save_button2
+from scxrd.form_utils import card, backbutton
 from scxrd.forms.forms import ExperimentFormMixin
 from scxrd.models.experiment_model import Experiment
 
@@ -27,28 +27,40 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('end_time', css_class='col-4'),
             ),
             Row(
-                Column('machine'),
+                Column('machine', css_class='col-4'),
                 # Column('operator'), # done automatically in the view
                 Column('measurement_temp', css_class='col-4'),
-                Column(
-                    HTML("""
-                    {% if object.sample %}
-                    {% load i18n %}
-                        <div class='pt-4 m-3 ml-0'>
-                            <a class='btn btn-outline-success w-100' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
-                                """ + "{}".format(_("Respective Sample")) + """
-                            </a>
-                        </div>
-                    {% endif %}
-                    """), css_class='col-4'
-                ),
+                Column('customer', css_class='col-4')
             ),
             Row(
                 Column('base', css_class='col-4'),
                 Column('glue', css_class='col-4'),
+                Column(
+                    HTML("""
+                            {% if object.sample %}
+                            {% load i18n %}
+                                <div class='pt-3 mt-3 ml-3 mr-3 ml-0 mb-3'>
+                                    <a class='btn btn-outline-success w-100 mt-1 p-2' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
+                                        """ + "{}".format(_("Respective Sample")) + """
+                                    </a>
+                                </div>
+                            {% endif %}
+                        """), css_class='col-4'
+                ),
             ),
             HTML('</div>'),  # end of card
-            save_button2,
+
+            Row(
+                ButtonHolder(
+                    Submit('Save', _('Save'), css_class='btn-primary mr-2'),
+                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                                                    formnovalidate="formnovalidate">''' + '''{}</a> '''.format(
+                        _('Cancel')),
+                         ),
+                    css_class='ml-2 mb-3'
+                ),
+            ),
+
             # Crystal ######
             card(_('Crystal and Conditions'), backbutton),
             # AppendedText('prelim_unit_cell', 'presumed empirical formula', active=True),
@@ -103,7 +115,16 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('exptl_special_details'),
             ),
             HTML('</div>'),  # end of card
-            save_button2,
+            Row(
+                ButtonHolder(
+                    Submit('Save', _('Save'), css_class='btn-primary mr-2'),
+                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                                        formnovalidate="formnovalidate">''' + '''{}</a> '''.format(_('Cancel')),
+                         ),
+                    css_class='ml-2 mb-5'
+                ),
+            ),
+
         )
 
     class Meta:

@@ -76,10 +76,9 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('not_measured_cause', css_id='measure_box', css_class="collapse col-12", ),
             ),
             HTML('</div>'),  # end of card
-            Submit('Save', 'Save', css_class='btn-primary mr-2'),
+            Submit('Save', _('Save'), css_class='btn-primary mr-2'),
             HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
-                        formnovalidate="formnovalidate">Cancel</a>
-                        '''),
+                        formnovalidate="formnovalidate">''' + '''{}</a>'''.format(_('Cancel'))),
             HTML("<div class='mb-5'></div>"),
 
         )

@@ -33,14 +33,14 @@
             </div>
         {% else %}
             <div class="row justify-content-center">
-                <h2 class="mb-5">
+                <h2 class="mb-4 mt-4">
                     {% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }}
                 </h2>
             </div>
             <div class="row justify-content-center">
                 {% comment %}<h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a
                         href="{% url 'signup' %}">new user</a> to begin</h3>{% endcomment %}
-                <img src="{% static 'icons/diffraktometer.png' %}" alt="" class="rounded">
+                <img src="{% static 'icons/diffraktometer.png' %}" alt="" class="rounded-lg">
             </div>
 
         {% endif %}
