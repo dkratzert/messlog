@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -11,9 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 """
 TODO: 
-- check file uploads in edit experiment
 - add email notifications and password reset etc...
-- report and checkcif file model
 
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
@@ -188,6 +187,22 @@ class CheckCifModel(models.Model):
                                         validators=[validate_checkcif_file_extension],
                                         verbose_name='cif file')
 
+    @property
+    def chkcif_file_path(self) -> Path:
+        """The complete absolute path of the CIF file with file name and ending"""
+        return Path(str(self.checkcif_on_disk.file))
+
+    @property
+    def chkcif_name_only(self) -> str:
+        """The CIF file name without path"""
+        return self.chkcif_file_path.name
+
+    def chkcif_exists(self):
+        """Check if the CIF exists"""
+        if self.chkcif_file_path.exists():
+            return True
+        return False
+
 
 class ReportModel(models.Model):
     """
@@ -199,6 +214,22 @@ class ReportModel(models.Model):
     reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,
                                          validators=[validate_reportdoc_file_extension],
                                          verbose_name='cif file')
+
+    @property
+    def report_file_path(self) -> Path:
+        """The complete absolute path of the report file with file name and ending"""
+        return Path(str(self.reportdoc_on_disk.file))
+
+    @property
+    def report_name_only(self) -> str:
+        """The CIF file name without path"""
+        return self.report_file_path.name
+
+    def report_exists(self):
+        """Check if the report document exists"""
+        if self.report_file_path.exists():
+            return True
+        return False
 
 
 @receiver(post_save, sender=User)

@@ -15,12 +15,12 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.models.cif_model import CifFileModel
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
+from scxrd.models.cif_model import CifFileModel
 from scxrd.models.experiment_model import Experiment
-from scxrd.models.models import CheckCifModel
+from scxrd.models.models import CheckCifModel, ReportModel
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 
@@ -169,12 +169,22 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         pk = self.kwargs.get('pk')
         exp = Experiment.objects.get(pk=pk)
         cif = None
+        chk = None
+        report = None
         if hasattr(exp, 'ciffilemodel'):
             # noinspection PyUnresolvedReferences
             cif = exp.ciffilemodel.cif_file_on_disk
+        if hasattr(exp, 'checkcifmodel'):
+            # noinspection PyUnresolvedReferences
+            chk = exp.checkcifmodel.checkcif_on_disk
+        if hasattr(exp, 'reportmodel'):
+            # noinspection PyUnresolvedReferences
+            report = exp.reportmodel.reportdoc_on_disk
         return {
-            'cif_file_on_disk': cif,
-            'number'          : exp.number,
+            'cif_file_on_disk' : cif,
+            'checkcif_on_disk' : chk,
+            'reportdoc_on_disk': report,
+            'number'           : exp.number,
         }
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
@@ -194,7 +204,6 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             return self.form_invalid(form)
         if form.is_valid():
             print('Form is valid')
-            cif_model = CifFileModel()
             exp: Experiment = form.save(commit=False)
             # Otherwise sample id gets lost: why?
             exp.sample = sample
@@ -202,30 +211,45 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
-            if form.files.get('cif_file_on_disk'):
-                self.prepare_cif_file_model(cif_model, exp, form)
             if request.POST.get('checkcif_on_disk-clear'):
                 exp.checkcifmodel.delete()
+            if request.POST.get('reportdoc_on_disk-clear'):
+                exp.reportmodel.delete()
+            if form.files.get('cif_file_on_disk'):
+                self.prepare_cif_file_model(exp, form)
             if form.files.get('checkcif_on_disk'):
-                chk = CheckCifModel()
-                chk.experiment = exp
-                chk.checkcif_on_disk = form.files.get('checkcif_on_disk')
-                chk.save()
-                exp.checkcifmodel = chk 
+                self.handle_checkcif_file(exp, form)
+            if form.files.get('reportdoc_on_disk'):
+                self.handle_report_file(exp, form)
             exp.save()
             print('Experiment {} saved.'.format(exp.experiment_name))
-            if form.files.get('cif_file_on_disk'):
-                cif_model.save()
             return self.form_valid(form)
         else:
             print('Form is invalid! Invalid forms:')
             pprint(form.errors)
             return self.form_invalid(form)
 
-    def prepare_cif_file_model(self, cif_model, exp, form):
+    def handle_checkcif_file(self, exp, form):
+        if hasattr(exp, 'checkcifmodel') and exp.checkcifmodel.chkcif_exists():
+            exp.checkcifmodel.delete()
+        chk = CheckCifModel()
+        chk.checkcif_on_disk = form.files.get('checkcif_on_disk')
+        exp.checkcifmodel = chk
+        chk.save()
+
+    def handle_report_file(self, exp, form):
+        if hasattr(exp, 'reportmodel') and exp.reportmodel.report_exists():
+            exp.reportmodel.delete()
+        rep = ReportModel()
+        rep.reportdoc_on_disk = form.files.get('reportdoc_on_disk')
+        exp.reportmodel = rep
+        rep.save()
+
+    def prepare_cif_file_model(self, exp, form):
         if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists():
             exp.ciffilemodel.delete()
         cif_file = form.files['cif_file_on_disk']
+        cif_model = CifFileModel()
         try:
             cif = CifContainer(
                 chunks='\n'.join([x.decode(encoding='cp1250', errors='ignore') for x in cif_file.chunks()]))
@@ -240,6 +264,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             cif_model.date_created = timezone.now()
         cif_model.date_updated = timezone.now()
         exp.ciffilemodel = cif_model
+        cif_model.save()
 
 
 class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
