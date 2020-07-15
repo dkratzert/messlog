@@ -139,11 +139,13 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
             # self.object.save()
             exp.sample = self.object
             exp.save()
+            messages.success(request, _('Saved successfully.'))
             return self.form_valid(form)
         else:
             print('ExperimentFromSampleCreateView is invalid!')
             pprint(request.POST)
             pprint(form.errors)
+            messages.warning(request, _('Please correct the errors below.'))
             return self.form_invalid(form)
 
     def get_form_kwargs(self) -> dict:
@@ -199,7 +201,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         final = self.object.final
         form: ExperimentEditForm = self.get_form()
         if final:
-            messages.warning(request, 'This Experiment can not be changed anymore!')
+            messages.warning(request, _('This Experiment can not be changed anymore!'))
             print('This Experiment can not be changed anymore!')
             return self.form_invalid(form)
         if form.is_valid():
@@ -222,11 +224,13 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             if form.files.get('reportdoc_on_disk'):
                 self.handle_report_file(exp, form)
             exp.save()
+            messages.success(request, _('Saved successfully.'))
             print('Experiment {} saved.'.format(exp.experiment_name))
             return self.form_valid(form)
         else:
             print('Form is invalid! Invalid forms:')
             pprint(form.errors)
+            messages.warning(request, _('Please correct the errors below.'))
             return self.form_invalid(form)
 
     def handle_checkcif_file(self, exp, form):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 10:12+0200\n"
+"POT-Creation-Date: 2020-07-15 21:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,105 +73,102 @@ msgstr "Bitte korrigiere den Fehler unten."
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
-#: scxrd/form_utils.py:7 scxrd/form_utils.py:15
-#: scxrd/forms/new_experiment.py:61
-msgid "Save"
-msgstr "Speichern"
-
-#: scxrd/form_utils.py:10 scxrd/form_utils.py:17 scxrd/form_utils.py:25
-#: scxrd/forms/new_experiment.py:63
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: scxrd/form_utils.py:22
-msgid "Submit"
-msgstr "Abgeben"
-
 #: scxrd/forms/edit_experiment.py:13
 msgid "Experiment"
 msgstr "Messung"
 
-#: scxrd/forms/edit_experiment.py:39
+#: scxrd/forms/edit_experiment.py:44
 msgid "Respective Sample"
 msgstr "Zugehörige Probe"
 
-#: scxrd/forms/edit_experiment.py:53
+#: scxrd/forms/edit_experiment.py:55 scxrd/forms/edit_experiment.py:120
+#: scxrd/forms/new_exp_from_sample.py:79 scxrd/forms/new_experiment.py:61
+msgid "Save"
+msgstr "Speichern"
+
+#: scxrd/forms/edit_experiment.py:58 scxrd/forms/edit_experiment.py:122
+#: scxrd/forms/new_exp_from_sample.py:81 scxrd/forms/new_experiment.py:63
+#: scxrd/forms/new_sample.py:113
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: scxrd/forms/edit_experiment.py:65
 msgid "Crystal and Conditions"
 msgstr "Kristall und Bedingungen"
 
-#: scxrd/forms/edit_experiment.py:77
+#: scxrd/forms/edit_experiment.py:89
 msgid "File upload"
 msgstr "Datei-Upload"
 
-#: scxrd/forms/edit_experiment.py:97
+#: scxrd/forms/edit_experiment.py:109
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: scxrd/forms/forms.py:37 scxrd/forms/new_exp_from_sample.py:16
+#: scxrd/forms/forms.py:39 scxrd/forms/new_exp_from_sample.py:16
 msgid "measure date"
 msgstr "Datum der Messung"
 
-#: scxrd/forms/forms.py:39
+#: scxrd/forms/forms.py:41
 msgid "Results sent date (for service)"
 msgstr "Ergebnis gesendet am (für Service)"
 
-#: scxrd/forms/forms.py:40
+#: scxrd/forms/forms.py:42
 msgid "Measurement temp. [K]"
 msgstr "Messtemperatur [K]"
 
-#: scxrd/forms/forms.py:41
+#: scxrd/forms/forms.py:43
 msgid "Crystal Color"
 msgstr "Kristallfarbe"
 
-#: scxrd/forms/forms.py:42
+#: scxrd/forms/forms.py:44
 msgid "Colour Modifier"
 msgstr "Farbeigenschaften"
 
-#: scxrd/forms/forms.py:43
+#: scxrd/forms/forms.py:45
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: scxrd/forms/forms.py:45 templates/scxrd/residuals_table.html:11
+#: scxrd/forms/forms.py:47 templates/scxrd/residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
 
-#: scxrd/forms/forms.py:48
+#: scxrd/forms/forms.py:50
 msgid "Customer (for service)"
 msgstr "Kunde (für Servicemessung)"
 
-#: scxrd/forms/forms.py:50
+#: scxrd/forms/forms.py:52
 msgid "Crystal size min"
 msgstr "Min. Kristallgröße"
 
-#: scxrd/forms/forms.py:51
+#: scxrd/forms/forms.py:53
 msgid "Crystal size mid"
 msgstr "Mittl. Kristallgröße"
 
-#: scxrd/forms/forms.py:52
+#: scxrd/forms/forms.py:54
 msgid "Crystal size max"
 msgstr "Max. Kristallgröße"
 
-#: scxrd/forms/forms.py:53
+#: scxrd/forms/forms.py:55
 msgid "Sample Base"
 msgstr "Probenhalter"
 
-#: scxrd/forms/forms.py:54
+#: scxrd/forms/forms.py:56
 msgid "CIF file"
 msgstr "CIF-Datei"
 
-#: scxrd/forms/forms.py:55
+#: scxrd/forms/forms.py:57
 msgid "checkCIF report"
 msgstr "checkCIF-Report"
 
-#: scxrd/forms/forms.py:56
+#: scxrd/forms/forms.py:58
 msgid "Structure report"
 msgstr "Struktur-Report"
 
-#: scxrd/forms/forms.py:57
+#: scxrd/forms/forms.py:59
 msgid "habit"
 msgstr "Habitus"
 
-#: scxrd/forms/forms.py:58
+#: scxrd/forms/forms.py:60
 msgid "Expected end time"
 msgstr "Erwartetes Ende"
 
@@ -245,7 +242,11 @@ msgstr "Alternativ, Molekül zeichnen"
 msgid "This is an alternative to the file upload above."
 msgstr "Dies ist eine Alternative Möglichkeit zum obigen Datei-Upload"
 
-#: scxrd/forms/new_sample.py:123
+#: scxrd/forms/new_sample.py:110
+msgid "Submit"
+msgstr "Abgeben"
+
+#: scxrd/forms/new_sample.py:129
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
@@ -476,11 +477,25 @@ msgstr "MOL-Datei der Struktur"
 msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
-#: scxrd/views/experiment_views.py:246
+#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:227
+msgid "Saved successfully."
+msgstr "Erfolgreich gespeichert."
+
+#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:233
+#, fuzzy
+#| msgid "Please correct the error below."
+msgid "Please correct the errors below."
+msgstr "Bitte korrigiere den Fehler unten."
+
+#: scxrd/views/experiment_views.py:204
+msgid "This Experiment can not be changed anymore!"
+msgstr ""
+
+#: scxrd/views/experiment_views.py:285
 msgid "Experiments"
 msgstr "Messungen"
 
-#: scxrd/views/experiment_views.py:276
+#: scxrd/views/experiment_views.py:315
 msgid "Edit"
 msgstr "Edit."
 
@@ -957,12 +972,16 @@ msgstr "Geben Sie eine ganze Zahl ein."
 msgid ""
 "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
 msgstr ""
+"Geben Sie eine gültige 'Bezeichnung' ein, die aus Buchstaben, Zahlen, "
+"Unterstrichen oder Bindestrichen besteht."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:247
 msgid ""
 "Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
 "hyphens."
 msgstr ""
+"Geben Sie eine gültige 'Bezeichnung' ein, die aus Buchstaben, Zahlen, "
+"Unterstrichen oder Bindestrichen besteht."
 
 #: venv/lib/python3.8/site-packages/django/core/validators.py:256
 #: venv/lib/python3.8/site-packages/django/core/validators.py:276
@@ -1463,12 +1482,14 @@ msgstr "Löschen"
 #: venv/lib/python3.8/site-packages/django/forms/models.py:754
 #, python-format
 msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
+msgstr "Bitte korrigieren Sie die doppelten Daten für %(field)s."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:758
 #, python-format
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
 msgstr ""
+"Bitte korrigieren Sie die doppelten Daten für %(field)s, die eindeutig sein "
+"müssen."
 
 #: venv/lib/python3.8/site-packages/django/forms/models.py:764
 #, python-format
@@ -1494,7 +1515,7 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/django/forms/models.py:1277
 #, python-format
 msgid "“%(pk)s” is not a valid value."
-msgstr ""
+msgstr "'%(pk)s' ist kein gültiger Wert."
 
 #: venv/lib/python3.8/site-packages/django/forms/utils.py:162
 #, python-format

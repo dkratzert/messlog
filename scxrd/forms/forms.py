@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from scxrd.models.models import Machine, CrystalSupport
+from scxrd.models.cif_model import validate_cif_file_extension
+from scxrd.models.models import Machine, CrystalSupport, validate_checkcif_file_extension, \
+    validate_reportdoc_file_extension
 from scxrd.models.experiment_model import Experiment
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
@@ -51,9 +53,9 @@ class ExperimentFormMixin(forms.ModelForm):
     crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
     crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True, label=_('Sample Base'))
-    cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"))
-    checkcif_on_disk = forms.FileField(required=False, label=_("checkCIF report"))
-    reportdoc_on_disk = forms.FileField(required=False, label=_("Structure report"))
+    cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"), validators=[validate_cif_file_extension])
+    checkcif_on_disk = forms.FileField(required=False, label=_("checkCIF report"), validators=[validate_checkcif_file_extension])
+    reportdoc_on_disk = forms.FileField(required=False, label=_("Structure report"), validators=[validate_reportdoc_file_extension])
     crystal_habit = forms.CharField(required=True, label=_('habit'))
     end_time = forms.DateTimeField(required=True, label=_("Expected end time"), initial=timezone.now,
                                    widget=DatePickerInput(format='%Y-%m-%d %H:%M'))
