@@ -3,12 +3,15 @@ A django project for data management and planing of Single-Crystal X-ray measure
 
 try it with 
 
-```python
+```
 git clone https://github.com/dkratzert/messlog.git
 cd messlog
 python3 -m venv venv
 pip3 install -r requirements.txt
 ```
+\+ You have to know how [django](https://www.djangoproject.com/) works.
+More detailed documentation will follow...
+
 
 *This project is still in strong flux. Do not expect anything to stay as it is. Even the name might change.*
 
