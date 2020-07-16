@@ -10,7 +10,7 @@ from scxrd.models.experiment_model import Measurement
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1, required=False)
 
-    # customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
+    # customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service only)'))
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('New Measurement')

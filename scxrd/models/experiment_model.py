@@ -25,7 +25,7 @@ class Measurement(models.Model):
                                       help_text=_('The structure is of sufficient quality to publish it.'))
     # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
-                                 verbose_name=_("customer (for service)"), related_name='customer_experiments')
+                                 verbose_name=_("customer (for service only)"), related_name='customer_experiments')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_experiments',
                                  on_delete=models.SET_NULL)
@@ -46,11 +46,11 @@ class Measurement(models.Model):
                              null=True,
                              on_delete=models.DO_NOTHING)
     # equivalent to _exptl_crystal_size_max
-    crystal_size_x = models.FloatField(verbose_name=_('crystal size max'), null=True, blank=True)
+    crystal_size_x = models.FloatField(verbose_name=_('crystal size max [mm]'), null=True, blank=True)
     # equivalent to _exptl_crystal_size_mid
-    crystal_size_y = models.FloatField(verbose_name=_('crystal size mid'), null=True, blank=True)
+    crystal_size_y = models.FloatField(verbose_name=_('crystal size mid [mm]'), null=True, blank=True)
     # equivalent to _exptl_crystal_size_min
-    crystal_size_z = models.FloatField(verbose_name=_('crystal size min'), null=True, blank=True)
+    crystal_size_z = models.FloatField(verbose_name=_('crystal size min [mm]'), null=True, blank=True)
     measurement_temp = models.FloatField(verbose_name=_('measurement temperature [K]'), null=True, blank=True)
     # equivalent to _exptl_crystal_colour
     crystal_colour = models.IntegerField(choices=COLOUR_CHOICES, default=COLOUR_CHOICES[0][0])

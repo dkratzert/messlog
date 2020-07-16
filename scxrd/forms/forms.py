@@ -38,7 +38,7 @@ class ExperimentFormMixin(forms.ModelForm):
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now, label=_('measure date'))
     result_date = forms.DateField(widget=DatePickerInput(format="%Y-%m-%d"), required=False,
-                                  label=_("Results sent date (for service)"))
+                                  label=_("Results sent date (for service only)"))
     measurement_temp = forms.FloatField(label=_('Measurement temp. [K]'), required=True)
     crystal_colour = forms.TypedChoiceField(choices=COLOUR_CHOICES, label=_('Crystal Color'), required=True)
     crystal_colour_mod = forms.TypedChoiceField(choices=COLOUR_MOD_CHOICES, label=_('Colour Modifier'), required=False)
@@ -47,11 +47,11 @@ class ExperimentFormMixin(forms.ModelForm):
     machine = forms.ModelChoiceField(queryset=Machine.objects.all(), required=True, label=_('Machine'))
     operator = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
     customer = forms.ModelChoiceField(queryset=User.objects.filter(profile__is_operator=False, is_superuser=False),
-                                      required=False, label=_('Customer (for service)'))
+                                      required=False, label=_('Customer (for service only)'))
     # I disabled the requirement on the crystal size, because ther could be also no crystals 
-    crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min"))
-    crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid"))
-    crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max"))
+    crystal_size_z = MyDecimalField(required=True, min_value=0, label=_("Crystal size min [mm]"))
+    crystal_size_y = MyDecimalField(required=True, min_value=0, label=_("Crystal size mid [mm]"))
+    crystal_size_x = MyDecimalField(required=True, min_value=0, label=_("Crystal size max [mm]"))
     base = forms.ModelChoiceField(queryset=CrystalSupport.objects.all(), required=True, label=_('Sample Base'))
     cif_file_on_disk = forms.FileField(required=False, label=_("CIF file"), validators=[validate_cif_file_extension])
     checkcif_on_disk = forms.FileField(required=False, label=_("checkCIF report"), validators=[validate_checkcif_file_extension])

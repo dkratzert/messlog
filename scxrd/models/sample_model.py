@@ -24,11 +24,8 @@ class Sample(models.Model):
                                       blank=True,
                                       related_name='Sample')
     stable = models.BooleanField(verbose_name=_('sample is sensitive (temperature, oxygen, moisture)'),
-                                 help_text=_("The sample requires special precautions to remain stable "
-                                             "until measurement."))
-    solve_refine_selve = models.BooleanField(verbose_name=_('I want to solve/refine by myself'),
-                                             help_text=_('Indicate whether you want to solve and '
-                                                         'refine the structure by yourselves.'))
+                                 help_text=_("Please indicate in the notes which conditions are necessary to keep the sample stable."))
+    solve_refine_selve = models.BooleanField(verbose_name=_('I want to solve/refine by myself'))
     sum_formula = models.CharField(max_length=300, verbose_name=_("assumed sum formula"), blank=True)
     reaction_path = models.FileField(
         verbose_name=_('Document with reaction equation and conditions'),

@@ -8,9 +8,9 @@ $(document).ready(function () {
             "Date Measured": "Messdatum",
             "Machine": "Maschine",
             "Operator": "Operator",
-            "Publ.": "Publ.",
+            "Publ.": "publiz.",
             "CIF": "CIF",
-            "Edit": "Edit.",
+            "Edit": "ändern",
         }
     });
 
