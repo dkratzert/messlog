@@ -39,15 +39,15 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
                 Column('crystal_habit'),
             ),
             Row(
-                Column('crystal_size_z'),
-                Column('crystal_size_y'),
-                Column('crystal_size_x'),
-            ),
-            Row(
                 Column('sum_formula', css_class='col-8'),
                 Column('crystal_colour'),
                 # Column('crystal_colour_mod'),
                 # Column('crystal_colour_lustre'),
+            ),
+            Row(
+                Column('crystal_size_z'),
+                Column('crystal_size_y'),
+                Column('crystal_size_x'),
             ),
             Row(
                 Column('prelim_unit_cell', css_class='col-8'),

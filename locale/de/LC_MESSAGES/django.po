@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-16 16:23+0200\n"
+"POT-Creation-Date: 2020-07-16 16:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,12 +184,12 @@ msgid "Sample was not measured"
 msgstr "Probe wurde nicht gemessen"
 
 #: .\scxrd\forms\new_exp_from_sample.py:27
-msgid "New measurement of sample"
-msgstr "neue Probenmessung"
+msgid "New measurement of a sample"
+msgstr "Neue Messung einer Probe"
 
 #: .\scxrd\forms\new_exp_from_sample.py:29
-msgid "New measurement of sample by {} {}"
-msgstr "neue Probenmessung von {} {}"
+msgid "New measurement of a sample by"
+msgstr "Neue Messung einer Probe von"
 
 #: .\scxrd\forms\new_experiment.py:16
 #: .\templates\scxrd\buttons\new_experiment.html:12
@@ -502,7 +502,7 @@ msgstr "Messungen"
 
 #: .\scxrd\views\experiment_views.py:330
 msgid "Edit"
-msgstr "Edit."
+msgstr "ändern"
 
 #: .\templates\admin\base_site.html:4
 msgid "MESSLOG Admin"
@@ -2153,6 +2153,9 @@ msgstr ""
 #: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:409
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "New measurement of sample by {} {}"
+#~ msgstr "neue Probenmessung von {} {}"
 
 #~ msgid "Customer (for service)"
 #~ msgstr "Kunde (für service)"

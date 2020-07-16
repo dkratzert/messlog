@@ -24,9 +24,9 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = User.objects.get(pk=kwargs.get('initial').get('customer'))
-        self.exp_title = _('New measurement of sample')
+        self.exp_title = _('New measurement of a sample')
         if user.first_name and user.last_name:
-            self.exp_title = _('New measurement of sample by {} {}'.format(user.first_name, user.last_name))
+            self.exp_title = _('New measurement of a sample by') + ' {} {}'.format(user.first_name, user.last_name)
         # pop the current user in order to save him as operator in Measurement model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
@@ -51,19 +51,19 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
                 Column('end_time', css_class='col-4'),
             ),
             Row(
-                Column('crystal_colour'),
                 Column('base'),
                 Column('glue'),
+                Column('crystal_colour'),
                 # Column('submit_date'),
+            ),
+            Row(
+                Column('sum_formula', css_class='col-8'),
+                Column('crystal_habit'),
             ),
             Row(
                 Column('crystal_size_z'),
                 Column('crystal_size_y'),
                 Column('crystal_size_x'),
-            ),
-            Row(
-                Column('sum_formula', css_class='col-8'),
-                Column('crystal_habit'),
             ),
             Row(
                 Column('exptl_special_details'),
