@@ -18,8 +18,8 @@
             {% csrf_token %}
             {{ user_form |crispy }}
             {{ profile_form |crispy }}
-            <button class="btn btn-primary mr-2" type="submit"> Save </button>
-            <a href="{% url 'index' %}" class="btn btn-outline-danger">Cancel</a>
+            <button class="btn btn-primary mr-2" type="submit">{% trans "Save" %}</button>
+            <a href="{% url 'index' %}" class="btn btn-outline-danger">{% trans "Cancel" %}</a>
         </form>
     </div>
 

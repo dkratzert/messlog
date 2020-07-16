@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-16 14:05+0200\n"
+"POT-Creation-Date: 2020-07-16 14:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,12 +83,15 @@ msgstr "Zugehörige Probe"
 
 #: .\scxrd\forms\edit_experiment.py:55 .\scxrd\forms\edit_experiment.py:120
 #: .\scxrd\forms\new_exp_from_sample.py:79 .\scxrd\forms\new_experiment.py:61
+#: .\templates\registration\edit_user.html:21
+#: .\templates\registration\password_reset_confirm.html:16
 msgid "Save"
 msgstr "Speichern"
 
 #: .\scxrd\forms\edit_experiment.py:58 .\scxrd\forms\edit_experiment.py:122
 #: .\scxrd\forms\new_exp_from_sample.py:81 .\scxrd\forms\new_experiment.py:63
-#: .\scxrd\forms\new_sample.py:113
+#: .\scxrd\forms\new_sample.py:113 .\templates\registration\edit_user.html:22
+#: .\templates\registration\new_user.html:17
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -538,7 +541,7 @@ msgstr "Proben von Kunden"
 msgid "Log Off"
 msgstr "Abmelden"
 
-#: .\templates\base.html:84
+#: .\templates\base.html:84 .\templates\registration\login.html:15
 msgid "Login"
 msgstr "Anmelden"
 
@@ -554,6 +557,10 @@ msgstr "Einkristall-Strukturanalyse"
 msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
+#: .\templates\registration\login.html:16
+msgid "Forgot your password?"
+msgstr ""
+
 #: .\templates\registration\new_user.html:16
 msgid "Sign Up"
 msgstr "Speichern"
@@ -563,12 +570,68 @@ msgid "Options"
 msgstr "Optionen"
 
 #: .\templates\registration\options.html:16
+#: .\templates\registration\password_change_done.html:9
+#: .\templates\registration\password_change_form.html:9
 msgid "Change Password"
 msgstr "Passwort Ändern"
 
 #: .\templates\registration\options.html:21
 msgid "You must login to change options"
 msgstr "Du musst eingeloggt sein um Optionen zu ändern"
+
+#: .\templates\registration\password_change_done.html:12
+msgid "Password sucessfully changed"
+msgstr "Passwort erfolgreich geändert"
+
+#: .\templates\registration\password_change_form.html:16
+#: .\venv\Lib\site-packages\django\forms\widgets.py:397
+msgid "Change"
+msgstr "Ändern"
+
+#: .\templates\registration\password_change_form.html:19
+msgid "You must login to change Passwords"
+msgstr "Du musst eingeloggt sein um das Passwort zu ändern"
+
+#: .\templates\registration\password_reset_complete.html:9
+msgid "Password changed sucessfully!"
+msgstr "Passwort erfolgreich geändert."
+
+#: .\templates\registration\password_reset_complete.html:12
+msgid "You may now "
+msgstr "Du kannst nun erneut"
+
+#: .\templates\registration\password_reset_complete.html:12
+msgid "log in"
+msgstr "anmelden"
+
+#: .\templates\registration\password_reset_complete.html:12
+msgid "again."
+msgstr "."
+
+#: .\templates\registration\password_reset_confirm.html:9
+msgid "Set new Password"
+msgstr "Neues Passwort bestätigen"
+
+#: .\templates\registration\password_reset_confirm.html:19
+msgid "Invalid token!"
+msgstr "Ungültiges Kürzel!"
+
+#: .\templates\registration\password_reset_confirm.html:21
+msgid "Request a new password reset token."
+msgstr "Passwort erneut zurücksetzen."
+
+#: .\templates\registration\password_reset_done.html:9
+#: .\templates\registration\password_reset_form.html:9
+msgid "Reset your Password"
+msgstr "Passwort zurücksetzen"
+
+#: .\templates\registration\password_reset_done.html:12
+msgid "Password reset email was sent."
+msgstr "Eine E-Mail zum Zurücksetzen des Passworts wurde gesendet."
+
+#: .\templates\registration\password_reset_form.html:15
+msgid "Send Confirmation Link"
+msgstr "Bestätigungslink senden"
 
 #: .\templates\scxrd\buttons\all_experiments.html:13
 msgid "All measurements"
@@ -1536,10 +1599,6 @@ msgstr "Löschen"
 #: .\venv\Lib\site-packages\django\forms\widgets.py:396
 msgid "Currently"
 msgstr "Derzeit"
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:397
-msgid "Change"
-msgstr "Ändern"
 
 #: .\venv\Lib\site-packages\django\forms\widgets.py:709
 msgid "Unknown"
