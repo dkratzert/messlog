@@ -5,44 +5,44 @@
 
 {% block content %}
 
-        {% if user.is_authenticated and user|is_superuser %}
-            <div class="row justify-content-center">
-                <!-- Left column -->
-                <div class="col-5 col-sm-8 mt-4">
-                    {% include 'scxrd/buttons/new_experiment.html' %}
-                    {% include 'scxrd/buttons/all_experiments.html' %}
-                    {% include 'scxrd/buttons/measure_samples.html' %}
+    {% if user.is_authenticated and user|is_superuser %}
+        <div class="row justify-content-center">
+            <!-- Left column -->
+            <div class="col-5 col-sm-8 mt-4">
+                {% include 'scxrd/buttons/new_experiment.html' %}
+                {% include 'scxrd/buttons/all_experiments.html' %}
+                {% include 'scxrd/buttons/measure_samples.html' %}
 
-                </div>
             </div>
-        {% elif user.is_authenticated and user|is_operator %}
-            <div class="row justify-content-center">
-                <div class="col-5 mt-4">
-{#                    {% include 'scxrd/buttons/my_operator_samples.html' %}#}
-                    {% include 'scxrd/buttons/my_op_experiments.html' %}
-                    {% include 'scxrd/buttons/new_experiment.html' %}
-                    {% include 'scxrd/buttons/measure_samples.html' %}
-                </div>
+        </div>
+    {% elif user.is_authenticated and user|is_operator %}
+        <div class="row justify-content-center">
+            <div class="col-5 mt-4">
+                {#                    {% include 'scxrd/buttons/my_operator_samples.html' %}#}
+                {% include 'scxrd/buttons/new_experiment.html' %}
+                {% include 'scxrd/buttons/my_op_experiments.html' %}
+                {% include 'scxrd/buttons/measure_samples.html' %}
             </div>
-        {% elif user.is_authenticated %}
-            <div class="row justify-content-center">
-                <div class="col-5 col-sm-8 mt-4">
-                    {% include 'scxrd/buttons/submit_sample.html' %}
-                    {% include 'scxrd/buttons/my_samples.html' %}
-                </div>
+        </div>
+    {% elif user.is_authenticated %}
+        <div class="row justify-content-center">
+            <div class="col-5 col-sm-8 mt-4">
+                {% include 'scxrd/buttons/submit_sample.html' %}
+                {% include 'scxrd/buttons/my_samples.html' %}
             </div>
-        {% else %}
-            <div class="row justify-content-center">
-                <h2 class="mb-4 mt-4">
-                    {% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }}
-                </h2>
-            </div>
-            <div class="row justify-content-center">
-                {% comment %}<h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <h2 class="mb-4 mt-4">
+                {% trans "Single-Crystal X-ray diffraction Analysis" as tit %}{{ tit | title }}
+            </h2>
+        </div>
+        <div class="row justify-content-center">
+            {% comment %}<h3 class="text-primary"><a href="{% url 'login' %}"> Login </a> or create a <a
                         href="{% url 'signup' %}">new user</a> to begin</h3>{% endcomment %}
-                <img src="{% static 'icons/diffraktometer.png' %}" alt="" class="rounded-lg">
-            </div>
+            <img src="{% static 'icons/diffraktometer.png' %}" alt="" class="rounded-lg">
+        </div>
 
-        {% endif %}
-    
+    {% endif %}
+
 {% endblock content %}
