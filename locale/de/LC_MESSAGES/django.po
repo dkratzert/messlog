@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-16 10:34+0200\n"
+"POT-Creation-Date: 2020-07-16 14:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -554,6 +554,10 @@ msgstr "Einkristall-Strukturanalyse"
 msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
+#: .\templates\registration\new_user.html:16
+msgid "Sign Up"
+msgstr "Speichern"
+
 #: .\templates\registration\options.html:9
 msgid "Options"
 msgstr "Optionen"
@@ -803,12 +807,12 @@ msgid "Reaction equation"
 msgstr "Reaktionsgleichung"
 
 #: .\templates\scxrd\submitted_samples_list_customer.html:94
-#: .\templates\scxrd\submitted_samples_list_operator.html:75
+#: .\templates\scxrd\submitted_samples_list_operator.html:80
 msgid "File not found"
 msgstr "Datei nicht gefunden"
 
 #: .\templates\scxrd\submitted_samples_list_customer.html:100
-#: .\templates\scxrd\submitted_samples_list_operator.html:84
+#: .\templates\scxrd\submitted_samples_list_operator.html:89
 msgid "Measurements:"
 msgstr "Messungen:"
 
@@ -857,7 +861,7 @@ msgid "Submitted at"
 msgstr "Abgegeben am"
 
 #: .\templates\scxrd\submitted_samples_list_operator.html:26
-#: .\templates\scxrd\submitted_samples_list_operator.html:71
+#: .\templates\scxrd\submitted_samples_list_operator.html:76
 msgid "Reaction Conditions"
 msgstr "Reaktionsbedingungen"
 
@@ -865,44 +869,45 @@ msgstr "Reaktionsbedingungen"
 msgid "Special Remarks"
 msgstr "Weitere Anmerkungen"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:36
+#: .\templates\scxrd\submitted_samples_list_operator.html:37
+#: .\templates\scxrd\submitted_samples_list_operator.html:40
 msgid "Measure Sample"
 msgstr "Probe messen"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:40
-#: .\templates\scxrd\submitted_samples_list_operator.html:43
+#: .\templates\scxrd\submitted_samples_list_operator.html:45
+#: .\templates\scxrd\submitted_samples_list_operator.html:48
 msgid "Customer: "
 msgstr "Kunde: "
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:47
+#: .\templates\scxrd\submitted_samples_list_operator.html:52
 msgid "group: "
 msgstr "Arbeitskreis: "
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:52
+#: .\templates\scxrd\submitted_samples_list_operator.html:57
 msgid "Self refine"
 msgstr "Selbst verfeinern"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:80
+#: .\templates\scxrd\submitted_samples_list_operator.html:85
 msgid "Measured"
 msgstr "Gemessen"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:94
+#: .\templates\scxrd\submitted_samples_list_operator.html:99
 msgid "Measurement not possible"
 msgstr "Messung nicht möglich"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:99
+#: .\templates\scxrd\submitted_samples_list_operator.html:104
 msgid "Was deposited"
 msgstr "Wurde deponiert"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:103
+#: .\templates\scxrd\submitted_samples_list_operator.html:108
 msgid "Awaiting Measurement"
 msgstr "Erwarte Messung"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:131
+#: .\templates\scxrd\submitted_samples_list_operator.html:136
 msgid "Not measured because:"
 msgstr "Nicht gemessen, weil:"
 
-#: .\templates\scxrd\submitted_samples_list_operator.html:141
+#: .\templates\scxrd\submitted_samples_list_operator.html:146
 msgid "No Samples found"
 msgstr "Keine Proben gefunden"
 

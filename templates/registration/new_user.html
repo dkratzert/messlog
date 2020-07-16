@@ -13,7 +13,7 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ user_form |crispy }}
-
+            <button class="btn btn-primary mr-2" type="submit">{% trans "Sign Up" %}</button>
             <a href="{% url 'index' %}" class="btn btn-outline-danger">Cancel</a>
         </form>
     </div>
