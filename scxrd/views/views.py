@@ -32,14 +32,15 @@ class MoleculeView(LoginRequiredMixin, View):
     def post(self, request: WSGIRequest, *args, **kwargs):
         # TODO: get cif file from Experiment:
         cif_file = request.POST.get('cif_file')
+        cifpath = Path(MEDIA_ROOT).joinpath(Path(cif_file))
         exp_id = request.POST.get('experiment_id')
-        if not cif_file:
+        if not cif_file or not cifpath.is_file():
             print('Experiment with id {} has no cif file.'.format(exp_id))
             # Show a robot where no cif is found:
             robot = make_robot_svg(randstring(), width=300, height=300)
             return HttpResponse(robot[1:])
         grow = request.POST.get('grow')
-        cif = CifContainer(Path(MEDIA_ROOT).joinpath(Path(cif_file)))
+        cif = CifContainer(cifpath)
         if cif.atoms_fract:
             return HttpResponse(self.make_molfile(cif, grow))
         print('Cif file with id {} of experiment_name {} has no atoms!'.format(cif_file, exp_id))

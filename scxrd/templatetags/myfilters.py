@@ -19,8 +19,8 @@ def was_refined(experiments) -> bool:
     print(experiments.count(), '1')
     if experiments.count() == 0:
         return False
-    print([x.ciffilemodel.cif_exists() for x in experiments])
-    return any([x.ciffilemodel.cif_exists() for x in experiments])
+    print([x.ciffilemodel.cif_exists for x in experiments])
+    return any([x.ciffilemodel.cif_exists for x in experiments])
 
 
 @register.filter

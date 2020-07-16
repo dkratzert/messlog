@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-15 21:43+0200\n"
+"POT-Creation-Date: 2020-07-16 08:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -384,40 +384,40 @@ msgid "Structure is finished and can not be changed afterwards."
 msgstr ""
 "Die Struktur ist fertig gestellt und kann danach nicht mehr geändert werden."
 
-#: scxrd/models/models.py:58
+#: scxrd/models/models.py:60
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: scxrd/models/models.py:66
+#: scxrd/models/models.py:68
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: scxrd/models/models.py:74
+#: scxrd/models/models.py:76
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: scxrd/models/models.py:89
+#: scxrd/models/models.py:91
 msgid "company"
 msgstr "Firma"
 
-#: scxrd/models/models.py:100
+#: scxrd/models/models.py:102
 msgid "The user has operator rights"
 msgstr "Der Benutzer ist Operator"
 
-#: scxrd/models/models.py:120
+#: scxrd/models/models.py:122
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models/models.py:135
+#: scxrd/models/models.py:137
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models/models.py:165
+#: scxrd/models/models.py:167
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models/models.py:173
+#: scxrd/models/models.py:175
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
@@ -477,11 +477,11 @@ msgstr "MOL-Datei der Struktur"
 msgid "Any additional information we should know."
 msgstr "Beliebeige weitere Information die wir wissen sollten"
 
-#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:227
+#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:230
 msgid "Saved successfully."
 msgstr "Erfolgreich gespeichert."
 
-#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:233
+#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:236
 #, fuzzy
 #| msgid "Please correct the error below."
 msgid "Please correct the errors below."
@@ -489,13 +489,18 @@ msgstr "Bitte korrigiere den Fehler unten."
 
 #: scxrd/views/experiment_views.py:204
 msgid "This Experiment can not be changed anymore!"
-msgstr ""
+msgstr "Dieses Experiment kann nicht mehr verändert werden!"
 
-#: scxrd/views/experiment_views.py:285
+#: scxrd/views/experiment_views.py:215
+msgid ""
+"You can only finalize an experiment with a CIF, report and checkcif file!"
+msgstr "Das Experiment kann nur mit einer CIF-, Report- und checkCIF-Datei abgeschlossen werden!"
+
+#: scxrd/views/experiment_views.py:297
 msgid "Experiments"
 msgstr "Messungen"
 
-#: scxrd/views/experiment_views.py:315
+#: scxrd/views/experiment_views.py:327
 msgid "Edit"
 msgstr "Edit."
 

@@ -128,23 +128,30 @@ class CifFileModel(models.Model):
             return round(self.diffrn_measured_fraction_theta_max * 100, 1)
 
     def temperature(self):
-        if not self.cif_file_on_disk:
+        if not self.cif_exists:
             return ''
         return CifContainer(self.cif_file_path)['_diffrn_ambient_temperature']
 
     @property
     def cif_file_path(self) -> Path:
         """The complete absolute path of the CIF file with file name and ending"""
-        return Path(str(self.cif_file_on_disk.file))
+        try:
+            return Path(str(self.cif_file_on_disk.file))
+        except FileNotFoundError:
+            return Path()
 
     @property
     def cif_name_only(self) -> str:
         """The CIF file name without path"""
-        return self.cif_file_path.name
+        if self.cif_exists:
+            return self.cif_file_path.name
+        else:
+            return ''
 
+    @property
     def cif_exists(self):
-        """Check if the CIF exists"""
-        if self.cif_file_path.exists():
+        """Check if the CIF exists and is a file"""
+        if self.cif_file_path.exists() and self.cif_file_path.is_file():
             return True
         return False
 

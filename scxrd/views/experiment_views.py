@@ -209,7 +209,13 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             exp: Experiment = form.save(commit=False)
             # Otherwise sample id gets lost: why?
             exp.sample = sample
-            exp.final = final
+            if form.cleaned_data.get('final'):
+                if self.all_files_there(form):
+                    exp.final = form.cleaned_data.get('final')
+                else:
+                    messages.warning(request,
+                                     _('You can only finalize an experiment with a CIF, report and checkcif file!'))
+                    return self.form_invalid(form)
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
                 exp.ciffilemodel.delete()
@@ -234,7 +240,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             return self.form_invalid(form)
 
     def handle_checkcif_file(self, exp, form):
-        if hasattr(exp, 'checkcifmodel') and exp.checkcifmodel.chkcif_exists():
+        if hasattr(exp, 'checkcifmodel') and exp.checkcifmodel.chkcif_exists:
             exp.checkcifmodel.delete()
         chk = CheckCifModel()
         chk.checkcif_on_disk = form.files.get('checkcif_on_disk')
@@ -242,7 +248,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         chk.save()
 
     def handle_report_file(self, exp, form):
-        if hasattr(exp, 'reportmodel') and exp.reportmodel.report_exists():
+        if hasattr(exp, 'reportmodel') and exp.reportmodel.report_exists:
             exp.reportmodel.delete()
         rep = ReportModel()
         rep.reportdoc_on_disk = form.files.get('reportdoc_on_disk')
@@ -250,7 +256,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         rep.save()
 
     def prepare_cif_file_model(self, exp, form):
-        if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists():
+        if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists:
             exp.ciffilemodel.delete()
         cif_file = form.files['cif_file_on_disk']
         cif_model = CifFileModel()
@@ -269,6 +275,15 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         cif_model.date_updated = timezone.now()
         exp.ciffilemodel = cif_model
         cif_model.save()
+
+    def all_files_there(self, form: ExperimentEditForm) -> bool:
+        if form.cleaned_data.get('cif_file_on_disk') \
+                and form.cleaned_data.get('checkcif_on_disk') \
+                and form.cleaned_data.get('reportdoc_on_disk'):
+            return True
+        else:
+            return False
+
 
 
 class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):

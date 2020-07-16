@@ -13,6 +13,8 @@ from django.utils.translation import gettext_lazy as _
 """
 TODO: 
 - add email notifications and password reset etc...
+- mail request of operator status: page for operators where they can send a mail and set status
+- improve admin page for user profiles
 
 - Add a "currently running experiment" page with status for everyone visible
    - there should be also the end time visible and who is responsible
@@ -190,16 +192,20 @@ class CheckCifModel(models.Model):
     @property
     def chkcif_file_path(self) -> Path:
         """The complete absolute path of the CIF file with file name and ending"""
-        return Path(str(self.checkcif_on_disk.file))
+        try:
+            return Path(str(self.checkcif_on_disk.file))
+        except FileNotFoundError:
+            return Path()
 
     @property
     def chkcif_name_only(self) -> str:
         """The CIF file name without path"""
         return self.chkcif_file_path.name
 
+    @property
     def chkcif_exists(self):
         """Check if the CIF exists"""
-        if self.chkcif_file_path.exists():
+        if self.chkcif_file_path.exists() and self.chkcif_file_path.is_file():
             return True
         return False
 
@@ -218,16 +224,20 @@ class ReportModel(models.Model):
     @property
     def report_file_path(self) -> Path:
         """The complete absolute path of the report file with file name and ending"""
-        return Path(str(self.reportdoc_on_disk.file))
+        try:
+            return Path(str(self.reportdoc_on_disk.file))
+        except FileNotFoundError:
+            return Path()
 
     @property
     def report_name_only(self) -> str:
         """The CIF file name without path"""
         return self.report_file_path.name
 
+    @property
     def report_exists(self):
         """Check if the report document exists"""
-        if self.report_file_path.exists():
+        if self.report_file_path.exists() and self.report_file_path.is_file():
             return True
         return False
 
