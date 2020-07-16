@@ -13,6 +13,18 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 from django.contrib.messages import constants as messages
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+    ('de', _('German')),
+    ('en', _('English')),
+]
+
+# Internationalization
+# https://docs.djangoproject.com/en/2.1/topics/i18n/
+
+LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'de'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,6 +57,7 @@ INSTALLED_APPS = [
     # 'django_extensions',  # extensions for manage console
     'bootstrap_datepicker_plus',
     'crispy_forms',
+    'django_translation_flags',
     'django_robohash',
     # 'debug_toolbar',
     'django_cleanup.apps.CleanupConfig',  # should be last
@@ -122,11 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-# LANGUAGE_CODE = 'de'
 
 TIME_ZONE = 'Europe/Berlin'
 
@@ -158,15 +167,13 @@ INTERNAL_IPS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
-
 EMAIL_HOST = 'mail.uni-freiburg.de'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

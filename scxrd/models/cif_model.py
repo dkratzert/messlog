@@ -24,7 +24,7 @@ class CifFileModel(models.Model):
     The database model for a single cif file. The following table rows are filled during file upload
     wR2, R1, Space group, symmcards, atoms, cell, sumformula, completeness, Goof, temperature, Z, Rint, Peak/hole
     """
-    experiment = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='cif file data',
+    measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='cif file data',
                                       related_name='ciffilemodel')
     sha256 = models.CharField(max_length=256, blank=True)
     date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)

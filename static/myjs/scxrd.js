@@ -151,7 +151,7 @@ $(document).ready(function () {
         // console.log(tdata);
         var tab_url = 'table/' + tdata[0];
         cif_file = tdata[7];
-        experiment_id = tdata[0];
+        measurement_id = tdata[0];
         // Load the details table for the respective measurements:
         $.get(url = tab_url, function (result) {
             //console.log(result);
@@ -184,7 +184,7 @@ $(document).ready(function () {
             url = 'molecule/',
             data = {
                 cif_file: cif_file,
-                experiment_id: experiment_id,
+                measurement_id: measurement_id,
                 grow: grow_struct,
                 'csrfmiddlewaretoken': csrftoken
             },

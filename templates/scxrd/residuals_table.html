@@ -7,9 +7,9 @@
 {% endcomment %}
 <div class="form-row">
     <div class="col-5">{% trans "Meas. Number" %}</div>
-    <div class="col-7" id="t_exp">  {{ experiment.number }} </div>
+    <div class="col-7" id="t_exp">  {{ measurement.number }} </div>
     <div class="col-5">{% trans "Machine" %}</div>
-    <div class="col-7" id="t_machine">  {{ experiment.machine }} </div>
+    <div class="col-7" id="t_machine">  {{ measurement.machine }} </div>
     {% if experiment.solvents %}
         <div class="col-5">{% trans "Solvents" %}</div>
         <div class="col-7 " id="t_solvents">  {{ experiment.solvents|safe }} </div>

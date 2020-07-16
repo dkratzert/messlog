@@ -2,6 +2,8 @@
 <html lang="en">
 {% load i18n %}
 {% load myfilters %}
+{% load flags %}
+
 
 <head>
     {% load static %}
@@ -28,7 +30,7 @@
         var table_url;
         var csrftoken;
         var cif_file;  // The id of the current CIF
-        var experiment_id;
+        var measurement_id;
         var grow_struct;
     </script>
     <title>
@@ -53,6 +55,7 @@
             <a class="nav-link text-muted" href="http://www.ac.uni-freiburg.de">
                 Institut für Anorganische und Analytische Chemie
             </a>
+
         </li>
     </ul>
     {% if user.is_authenticated %}
@@ -66,14 +69,12 @@
                 {% endif %}
             </a>
             <div class="dropdown-menu" aria-labelledby="NavbarMethodsDropdown">
-                {% if not user|is_operator and not user|is_superuser %}
-                    <a class="dropdown-item" href="{% url 'scxrd:submit_sample' %}">{% trans "Submit a Sample" %}</a>
-                {% endif %}
-                <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "My Samples" %}</a>
+
+                {% languages  li_class='dropdown-item' a_class='float-left' %}
+
                 <a class="dropdown-item" href=#>-----</a>
                 <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">{% trans "Edit my Profile" %}</a>
                 {% if user.isadmin %}
-                    <a class="dropdown-item" href="{% url 'scxrd:index' %}">{% trans "Customer Samples" %}</a>
                     <a class="dropdown-item" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
                 {% endif %}
                 <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Log Off" %}</a>

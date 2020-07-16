@@ -28,6 +28,7 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='index'),
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
+    path('i18n/', include('django_translation_flags.urls')),
     path('favicon.ico', favicon_view),
     path('signup/', views.SignUp.as_view(), name='signup'),
     path('options/', views.OptionsView.as_view(), name='options'),

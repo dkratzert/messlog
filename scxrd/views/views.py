@@ -33,7 +33,7 @@ class MoleculeView(LoginRequiredMixin, View):
         # TODO: get cif file from Measurement:
         cif_file = request.POST.get('cif_file')
         cifpath = Path(MEDIA_ROOT).joinpath(Path(cif_file))
-        exp_id = request.POST.get('experiment_id')
+        exp_id = request.POST.get('measurement_id')
         if not cif_file or not cifpath.is_file():
             print('Measurement with id {} has no cif file.'.format(exp_id))
             # Show a robot where no cif is found:

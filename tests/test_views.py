@@ -295,9 +295,9 @@ class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         self.cif_model = cif_model
 
     def test_molecule(self):
-        # TODO: experiment_id is useless here: Use id instead of cif file path!
+        # TODO: measurement_id is useless here: Use id instead of cif file path!
         request = self.client.post(reverse('scxrd:molecule'), follow=False,
-                                   data={'experiment_id': 2, 'cif_file': self.cif_model.cif_file_path})
+                                   data={'measurement_id': 2, 'cif_file': self.cif_model.cif_file_path})
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(CifFileModel.objects.count(), 1)
         self.assertEqual(request.status_code, 200)

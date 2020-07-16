@@ -37,6 +37,12 @@ TODO:
 - show success rate per person
 - http://ccbv.co.uk/projects/Django/3.0/
 
+from django.utils.text import format_lazy
+from django.utils.translation import gettext_lazy
+...
+name = gettext_lazy('John Lennon')
+instrument = gettext_lazy('guitar')
+result = format_lazy('{name}: {instrument}', name=name, instrument=instrument)
 
 <a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
 
@@ -185,7 +191,7 @@ class CheckCifModel(models.Model):
     """
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
-    experiment = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='checkCIF report',
+    measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='checkCIF report',
                                       related_name='checkcifmodel')
     checkcif_on_disk = models.FileField(upload_to='checkcif_reports', null=True, blank=True, max_length=255,
                                         validators=[validate_checkcif_file_extension],
@@ -216,7 +222,7 @@ class ReportModel(models.Model):
     """
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
-    experiment = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, max_length=255,
+    measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, max_length=255,
                                       verbose_name='structure report document',
                                       related_name='reportmodel')
     reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,
