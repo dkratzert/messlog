@@ -214,7 +214,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
                     exp.final = form.cleaned_data.get('final')
                 else:
                     messages.warning(request,
-                                     _('You can only finalize an experiment with a CIF, report and checkcif file!'))
+                                     _('You can only finalize a measurement after uploading a CIF, report and checkcif file!'))
                     return self.form_invalid(form)
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):

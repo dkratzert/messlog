@@ -11,7 +11,7 @@
         <!-- Left column with experiment table --------- -->
         <div class="col-8">
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3 pr-2">{% trans "Experiments List" %}
+                <div class="card-header pb-2 pl-3 pr-2">{% trans "Measurements List" %}
                     {% include 'scxrd/buttons/small_buttons/new_experiment.html' %}
                     {% include 'scxrd/buttons/small_buttons/back_to_start.html' %}
                 </div>
@@ -31,7 +31,7 @@
                     {% trans "More Information" %}
                 </div>
                 <div class="card-body">
-                    {% trans "Currently running experiments:" %}
+                    {% trans "Currently running measurements:" %}
                     {% for exp in current_measures %}
                         <p>{{ exp }} -> {% trans "end time:" %} {{ exp.end_time }}</p>
                     {% endfor %}

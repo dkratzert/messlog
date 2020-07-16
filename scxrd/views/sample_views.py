@@ -87,7 +87,7 @@ class OperatorSamplesList(LoginRequiredMixin, ListView):
     model = Sample
     # queryset = Sample.objects.filter(was_measured=False)
     template_name = 'scxrd/submitted_samples_list_operator.html'
-    ordering = 'pk'  # oldest should be top
+    ordering = '-pk'  # oldest should be top
 
 
 class OperatorSampleDetail(LoginRequiredMixin, DetailView):

@@ -24,9 +24,9 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = User.objects.get(pk=kwargs.get('initial').get('customer'))
-        self.exp_title = _('New measurement from sample')
+        self.exp_title = _('New measurement of sample')
         if user.first_name and user.last_name:
-            self.exp_title = _('New measurement from sample by {} {}'.format(user.first_name, user.last_name))
+            self.exp_title = _('New measurement of sample by {} {}'.format(user.first_name, user.last_name))
         # pop the current user in order to save him as operator in Measurement model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)

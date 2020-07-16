@@ -59,7 +59,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             HTML('</div>'),  # end of card
 
             Submit('Save', _('Save'), css_class='btn-primary mr-2'),
-            HTML('''<a href="{% url 'scxrd:all_experiments' %}" class="btn btn-outline-danger" 
+            HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
                     formnovalidate="formnovalidate">''' + '''{}</a> '''.format(_('Cancel'))),
             HTML("<div class='mb-5'></div>"),
         )
