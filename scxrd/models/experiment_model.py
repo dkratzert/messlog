@@ -13,7 +13,7 @@ from scxrd.models.models import sample_name_validator, Machine, resolution_valid
 from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
-class Experiment(models.Model):
+class Measurement(models.Model):
     # The name of the current experiment
     experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, unique=True,
                                        validators=[sample_name_validator])
@@ -90,10 +90,10 @@ class Experiment(models.Model):
         return self.experiment_name
 
 
-@receiver(pre_delete, sender=Experiment)
-def delete_protect_handler(sender, instance: Experiment, **kwargs):
+@receiver(pre_delete, sender=Measurement)
+def delete_protect_handler(sender, instance: Measurement, **kwargs):
     """
     Delete protection for finished projects.
     """
     if hasattr(instance, 'final') and instance.final:
-        raise ProtectedError('This Experiment can not be changed anymore.', instance)
+        raise ProtectedError('This Measurement can not be changed anymore.', instance)

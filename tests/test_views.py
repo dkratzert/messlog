@@ -12,7 +12,7 @@ from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
 from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.models.models import CrystalSupport, Machine, WorkGroup
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 from scxrd.views.sample_views import NewSampleByCustomer
@@ -136,7 +136,7 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         self.assertTemplateUsed(response, 'scxrd/experiment_new.html')
 
     def test_new_exp_create_not_exist(self):
-        self.assertEqual(Experiment.objects.count(), 0)
+        self.assertEqual(Measurement.objects.count(), 0)
         # Do not Follow the post request, because it goes to index page afterwards:
         response = self.client.post(reverse("scxrd:edit-exp", args=(1,)), follow=True)
         self.assertEqual(response.status_code, 404)
@@ -186,17 +186,17 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
             'submit_date'          : '',
             'sum_formula'          : 'C5H5',
             'was_measured'         : True}
-        self.assertEqual(Experiment.objects.count(), 0)
-        Experiment.objects.create(**data)
-        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(Measurement.objects.count(), 0)
+        Measurement.objects.create(**data)
+        self.assertEqual(Measurement.objects.count(), 1)
         # Do not Follow the post request, because it goes to index page afterwards:
         response = self.client.post(reverse("scxrd:edit-exp", kwargs={'pk': 1}), follow=True, data=data2)
-        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
-        self.assertEqual(Experiment.objects.last().measurement_temp, 124.0)
-        self.assertEqual(Experiment.objects.last().experiment_name, 'PK_TMP355')
-        self.assertEqual(Experiment.objects.last().sum_formula, 'C5H5')
+        self.assertEqual(Measurement.objects.last().measurement_temp, 124.0)
+        self.assertEqual(Measurement.objects.last().experiment_name, 'PK_TMP355')
+        self.assertEqual(Measurement.objects.last().sum_formula, 'C5H5')
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -208,8 +208,8 @@ class TestExperimentEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
 
     def test_exp_edit_by_other_user(self):
         """TODO: A plain user should not be allowed to edit this experiment"""
-        Experiment.objects.create(**self.data)
-        self.assertEqual(Experiment.objects.count(), 1)
+        Measurement.objects.create(**self.data)
+        self.assertEqual(Measurement.objects.count(), 1)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -298,7 +298,7 @@ class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         # TODO: experiment_id is useless here: Use id instead of cif file path!
         request = self.client.post(reverse('scxrd:molecule'), follow=False,
                                    data={'experiment_id': 2, 'cif_file': self.cif_model.cif_file_path})
-        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(CifFileModel.objects.count(), 1)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.content[:100],
@@ -314,7 +314,7 @@ class TestExperimentListJsonView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 
     def test_exp_list_json(self):
         request = self.client.post(reverse('scxrd:experiments_list'), follow=True)
-        self.assertEqual(Experiment.objects.count(), 1)
+        self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.content,
                          (b'{"draw": 0, "recordsTotal": 1, "recordsFiltered": 1, '

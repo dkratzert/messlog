@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
 from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 
 
 class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
@@ -24,20 +24,20 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = User.objects.get(pk=kwargs.get('initial').get('customer'))
-        self.exp_title = _('New Experiment from sample')
+        self.exp_title = _('New measurement from sample')
         if user.first_name and user.last_name:
-            self.exp_title = _('New experiment from sample by {} {}'.format(user.first_name, user.last_name))
-        # pop the current user in order to save him as operator in Experiment model:
+            self.exp_title = _('New measurement from sample by {} {}'.format(user.first_name, user.last_name))
+        # pop the current user in order to save him as operator in Measurement model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.helper.render_unmentioned_fields = False
         try:
-            self.fields['number'].initial = Experiment.objects.first().number + 1
+            self.fields['number'].initial = Measurement.objects.first().number + 1
         except AttributeError:
             self.fields['number'].initial = 1
 
         self.helper.layout = Layout(
-            # Experiment ###
+            # Measurement ###
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name', css_class='col-4'),
@@ -84,5 +84,5 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
         )
 
     class Meta:
-        model = Experiment
+        model = Measurement
         fields = '__all__'

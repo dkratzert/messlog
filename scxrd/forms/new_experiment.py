@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
 from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 
 
 class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
@@ -13,14 +13,14 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
     # customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service)'))
 
     def __init__(self, *args, **kwargs):
-        self.exp_title = _('New Experiment')
+        self.exp_title = _('New Measurement')
         # This is essential:
-        # pop the current user in orde to save him as operator in Experiment model:
+        # pop the current user in orde to save him as operator in Measurement model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
-            # Experiment ###
+            # Measurement ###
             card(self.exp_title, backbutton),
             Row(
                 Column('experiment_name', css_class='col-4'),
@@ -65,5 +65,5 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
         )
 
     class Meta:
-        model = Experiment
+        model = Measurement
         fields = '__all__'

@@ -7,7 +7,7 @@ from django.test import TestCase, override_settings
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 from scxrd.models.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
@@ -118,7 +118,7 @@ class TestExperimentCreateTest(DeleteFilesMixin, TestCase):
         self.assertEqual('Hinterseer', str(self.exp.customer.last_name))
 
     def test_string_representation(self):
-        entry = Experiment(experiment_name="My entry title")
+        entry = Measurement(experiment_name="My entry title")
         self.assertEqual(str(entry), entry.experiment_name)
 
     def test_cif_model(self):

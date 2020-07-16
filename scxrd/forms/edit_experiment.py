@@ -4,18 +4,18 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
 from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 
 
 class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.exp_title = _('Experiment')
+        self.exp_title = _('Measurement')
         self.number = "<span class='badge badge-secondary'>Nr. {{ object.number }}</span>"
         super().__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
-            # Experiment ###
+            # Measurement ###
 
             # card(self.exp_title+self.number, backbutton),
             HTML('<div class="card w-100 mb-3">  <div class="card-header">{} {}'
@@ -128,5 +128,5 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
         )
 
     class Meta:
-        model = Experiment
+        model = Measurement
         fields = '__all__'

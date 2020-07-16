@@ -12,7 +12,7 @@ from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
 from scxrd.models.sample_model import Sample
 from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 
 admin.site.site_header = "MESSLOG Admin"
 admin.site.site_title = "MESSLOG Admin Portal"
@@ -45,8 +45,8 @@ class WorkGroupAdmin(admin.ModelAdmin):
 
     def measurements_this_year(self, group: WorkGroup):
         today = datetime.now()
-        return Experiment.objects.filter(measure_date__gt=str(today.year) + '-1-1',
-                                         customer__profile__work_group=group).count()
+        return Measurement.objects.filter(measure_date__gt=str(today.year) + '-1-1',
+                                          customer__profile__work_group=group).count()
 
 
 class ExperimentInline(StackedInline):
@@ -64,7 +64,7 @@ class ExperimentAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)
         try:
-            form.base_fields['number'].initial = Experiment.objects.first().number + 1
+            form.base_fields['number'].initial = Measurement.objects.first().number + 1
         except AttributeError:
             form.base_fields['number'].initial = 1
         return form
@@ -79,7 +79,7 @@ class CifAdmin(admin.ModelAdmin):
 
     @staticmethod
     def related_experiment(obj):
-        return Experiment.objects.get(ciffilemodel=obj.pk)
+        return Measurement.objects.get(ciffilemodel=obj.pk)
 
     def number_of_atoms(self, obj):
         try:
@@ -109,7 +109,7 @@ class UserAdmin(BaseUserAdmin):
         return obj.profile.work_group
 
     def number_of_experiments(self, obj: User):
-        return obj.operator_experiments.count()  # Experiment.objects.filter(operator=obj).count()
+        return obj.operator_experiments.count()  # Measurement.objects.filter(operator=obj).count()
 
     is_operator.boolean = True
 
@@ -162,7 +162,7 @@ class MachinesAdmin(admin.ModelAdmin):
 
 
 admin.site.unregister(Group)
-admin.site.register(Experiment, ExperimentAdmin)
+admin.site.register(Measurement, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
 admin.site.register(Sample)

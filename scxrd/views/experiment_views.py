@@ -19,7 +19,7 @@ from scxrd.forms.edit_experiment import ExperimentEditForm
 from scxrd.forms.new_exp_from_sample import ExperimentFromSampleForm
 from scxrd.forms.new_experiment import ExperimentNewForm
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 from scxrd.models.models import CheckCifModel, ReportModel
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
@@ -29,12 +29,12 @@ class ExperimentIndexView(LoginRequiredMixin, ListView):
     """
     The view for the main scxrd page.
     """
-    model = Experiment
+    model = Measurement
     template_name = 'scxrd/scxrd_index.html'
 
     def get_context_data(self, **kwargs):
         """Get a list of currently running experiments to the context"""
-        exp: Experiment
+        exp: Measurement
         utc = pytz.UTC
         mess = []
         for exp in self.object_list:
@@ -48,7 +48,7 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new experiment
     """
-    model = Experiment
+    model = Measurement
     form_class = ExperimentNewForm
     template_name = 'scxrd/experiment_new.html'
     success_url = reverse_lazy('scxrd:index')
@@ -56,10 +56,10 @@ class ExperimentCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """Save the current user from the request into the experiment"""
         pprint(form.errors) if form.errors else None
-        self.object: Experiment = form.save(commit=False)
+        self.object: Measurement = form.save(commit=False)
         self.object.operator = self.request.user
-        if Experiment.objects.first():
-            self.object.number = Experiment.objects.first().number + 1
+        if Measurement.objects.first():
+            self.object.number = Measurement.objects.first().number + 1
         else:
             self.object.number = 1
         self.object.save()
@@ -89,7 +89,7 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         initial = super().get_initial()
         pk = self.kwargs.get('pk')
         try:
-            expnum = Experiment.objects.first().number + 1
+            expnum = Measurement.objects.first().number + 1
         except AttributeError as e:
             expnum = 1
         initial.update({
@@ -113,14 +113,14 @@ class ExperimentFromSampleCreateView(LoginRequiredMixin, UpdateView):
         # self.object is a Sample because of the views model class:
         self.object: Sample = self.get_object()
         if form.instance.final:
-            messages.warning(request, 'This Experiment can not be changed anymore!')
+            messages.warning(request, 'This Measurement can not be changed anymore!')
             return self.form_invalid(form)
         if form.is_valid():
-            # form.instance is Experiment, because of the form class:
-            exp: Experiment = form.instance
+            # form.instance is Measurement, because of the form class:
+            exp: Measurement = form.instance
             # exp.number = form.cleaned_data['number']
-            if Experiment.objects.first():
-                exp.number = Experiment.objects.first().number + 1
+            if Measurement.objects.first():
+                exp.number = Measurement.objects.first().number + 1
             else:
                 exp.number = 1
             exp.experiment_name = form.cleaned_data.get('experiment_name')
@@ -159,7 +159,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     """
     Edit an experiment as Operator.
     """
-    model = Experiment
+    model = Measurement
     form_class = ExperimentEditForm
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:all_experiments')
@@ -169,7 +169,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         Initial data for the form.
         """
         pk = self.kwargs.get('pk')
-        exp = Experiment.objects.get(pk=pk)
+        exp = Measurement.objects.get(pk=pk)
         cif = None
         chk = None
         report = None
@@ -192,7 +192,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     def post(self, request: WSGIRequest, *args, **kwargs) -> WSGIRequest:
         # print('request from new measurement:')
         # pprint(request.POST)
-        self.object: Experiment = self.get_object()
+        self.object: Measurement = self.get_object()
         # This is here, because I dont want the number field to be rendered:
         request.POST._mutable = True
         request.POST['number'] = self.object.number
@@ -201,12 +201,12 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         final = self.object.final
         form: ExperimentEditForm = self.get_form()
         if final:
-            messages.warning(request, _('This Experiment can not be changed anymore!'))
-            print('This Experiment can not be changed anymore!')
+            messages.warning(request, _('This Measurement can not be changed anymore!'))
+            print('This Measurement can not be changed anymore!')
             return self.form_invalid(form)
         if form.is_valid():
             print('Form is valid')
-            exp: Experiment = form.save(commit=False)
+            exp: Measurement = form.save(commit=False)
             # Otherwise sample id gets lost: why?
             exp.sample = sample
             if form.cleaned_data.get('final'):
@@ -231,7 +231,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
                 self.handle_report_file(exp, form)
             exp.save()
             messages.success(request, _('Saved successfully.'))
-            print('Experiment {} saved.'.format(exp.experiment_name))
+            print('Measurement {} saved.'.format(exp.experiment_name))
             return self.form_valid(form)
         else:
             print('Form is invalid! Invalid forms:')
@@ -295,7 +295,7 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
     This implementation is also promising: https://github.com/pivotal-energy-solutions/django-datatable-view
     """
     # The model we're going to show
-    model = Experiment
+    model = Measurement
     template_name = 'scxrd/experiment_all_table.html'
     title = _('Experiments')
 

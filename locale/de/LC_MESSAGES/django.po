@@ -74,7 +74,7 @@ msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
 #: scxrd/forms/edit_experiment.py:13
-msgid "Experiment"
+msgid "Measurement"
 msgstr "Messung"
 
 #: scxrd/forms/edit_experiment.py:44
@@ -181,18 +181,18 @@ msgid "Sample was not measured"
 msgstr "Probe wurde nicht gemessen"
 
 #: scxrd/forms/new_exp_from_sample.py:27
-msgid "New Experiment from sample"
-msgstr "Neues Experiment von Probe"
+msgid "New Measurement from sample"
+msgstr "Neues Measurement von Probe"
 
 #: scxrd/forms/new_exp_from_sample.py:29
-msgid "New experiment from sample by {} {}"
-msgstr "Neues Experiment aus Probe von {} {}"
+msgid "New measurement from sample by {} {}"
+msgstr "Neues Measurement aus Probe von {} {}"
 
 #: scxrd/forms/new_experiment.py:16
 #: templates/scxrd/buttons/new_experiment.html:12
 #: templates/scxrd/buttons/small_buttons/new_experiment.html:9
-msgid "New Experiment"
-msgstr "Neues Experiment"
+msgid "New Measurement"
+msgstr "Neues Measurement"
 
 #: scxrd/forms/new_sample.py:17
 msgid "Sample submission date"
@@ -271,8 +271,8 @@ msgid "CCDC number"
 msgstr "CCDC-Nummer"
 
 #: scxrd/models/experiment_model.py:18
-msgid "experiment name"
-msgstr "Name des Experiments"
+msgid "measurement name"
+msgstr "Name der Messung"
 
 #: scxrd/models/experiment_model.py:23
 msgid "number"
@@ -328,7 +328,7 @@ msgid "results sent date"
 msgstr "Ergebnis gesendet am"
 
 #: scxrd/models/experiment_model.py:42
-msgid "expected end date and time of the experiment"
+msgid "expected end date and time of the measurement"
 msgstr "Erwartetes Ende der Messung"
 
 #: scxrd/models/experiment_model.py:43
@@ -482,22 +482,20 @@ msgid "Saved successfully."
 msgstr "Erfolgreich gespeichert."
 
 #: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:236
-#, fuzzy
-#| msgid "Please correct the error below."
 msgid "Please correct the errors below."
 msgstr "Bitte korrigiere den Fehler unten."
 
 #: scxrd/views/experiment_views.py:204
-msgid "This Experiment can not be changed anymore!"
-msgstr "Dieses Experiment kann nicht mehr verändert werden!"
+msgid "This Measurement can not be changed anymore!"
+msgstr "Dieses Measurement kann nicht mehr verändert werden!"
 
 #: scxrd/views/experiment_views.py:215
 msgid ""
-"You can only finalize an experiment with a CIF, report and checkcif file!"
-msgstr "Das Experiment kann nur mit einer CIF-, Report- und checkCIF-Datei abgeschlossen werden!"
+"You can only finalize a measurement with a CIF, report and checkcif file!"
+msgstr "Die Messung kann nur mit einer CIF-, Report- und checkCIF-Datei abgeschlossen werden!"
 
 #: scxrd/views/experiment_views.py:297
-msgid "Experiments"
+msgid "Measurements"
 msgstr "Messungen"
 
 #: scxrd/views/experiment_views.py:327
@@ -566,7 +564,7 @@ msgid "You must login to change options"
 msgstr "Du musst eingeloggt sein um Optionen zu ändern"
 
 #: templates/scxrd/buttons/all_experiments.html:13
-msgid "All Experiments"
+msgid "All Measurements"
 msgstr "Alle Messungen"
 
 #: templates/scxrd/buttons/back_button.html:5
@@ -578,7 +576,7 @@ msgid "View Samples"
 msgstr "Abgegebene Proben"
 
 #: templates/scxrd/buttons/my_op_experiments.html:13
-msgid "My Experiments"
+msgid "My Measurements"
 msgstr "Meine Messungen"
 
 #: templates/scxrd/buttons/my_operator_samples.html:12
@@ -613,7 +611,7 @@ msgid "Details"
 msgstr "Details"
 
 #: templates/scxrd/residuals_table.html:9
-msgid "Exp. Number"
+msgid "Meas. Number"
 msgstr "Experimentnummer"
 
 #: templates/scxrd/residuals_table.html:14
@@ -754,16 +752,16 @@ msgstr ""
 "Schließlich kannst du die Ergebnisse aus Ihrer Probenliste herunterladen."
 
 #: templates/scxrd/scxrd_index.html:14
-msgid "Experiments List"
-msgstr "Experimentliste"
+msgid "Measurements List"
+msgstr "Liste der Messungen"
 
 #: templates/scxrd/scxrd_index.html:31
 msgid "More Information"
 msgstr "Mehr Infos"
 
 #: templates/scxrd/scxrd_index.html:34
-msgid "Currently running experiments:"
-msgstr "Gerade laufende Experimente"
+msgid "Currently running measurements:"
+msgstr "Gerade laufende Messungen"
 
 #: templates/scxrd/scxrd_index.html:36
 msgid "end time:"
@@ -885,7 +883,7 @@ msgid "Measured"
 msgstr "Gemessen"
 
 #: templates/scxrd/submitted_samples_list_operator.html:84
-msgid "Experiments:"
+msgid "Measurements:"
 msgstr "Messungen:"
 
 #: templates/scxrd/submitted_samples_list_operator.html:94

@@ -184,7 +184,7 @@ class CheckCifModel(models.Model):
     """
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
-    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, verbose_name='checkCIF report',
+    experiment = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='checkCIF report',
                                       related_name='checkcifmodel')
     checkcif_on_disk = models.FileField(upload_to='checkcif_reports', null=True, blank=True, max_length=255,
                                         validators=[validate_checkcif_file_extension],
@@ -215,7 +215,7 @@ class ReportModel(models.Model):
     """
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
-    experiment = models.OneToOneField(to='Experiment', on_delete=models.CASCADE, max_length=255,
+    experiment = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, max_length=255,
                                       verbose_name='structure report document',
                                       related_name='reportmodel')
     reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,

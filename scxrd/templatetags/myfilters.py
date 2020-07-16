@@ -15,27 +15,26 @@ def is_superuser(user: User):
 
 
 @register.filter
-def was_refined(experiments) -> bool:
-    print(experiments.count(), '1')
-    if experiments.count() == 0:
+def was_refined(measurements) -> bool:
+    if measurements.count() == 0:
         return False
-    print([x.ciffilemodel.cif_exists for x in experiments])
-    return any([x.ciffilemodel.cif_exists for x in experiments])
+    print([x.ciffilemodel.cif_exists for x in measurements])
+    return any([x.ciffilemodel.cif_exists for x in measurements])
 
 
 @register.filter
-def was_measured(experiments) -> bool:
+def was_measured(measurements) -> bool:
     try:
-        return any([x.was_measured for x in experiments.all()])
+        return any([x.was_measured for x in measurements.all()])
     except Exception as e:
         print('Error in "was_measured" filter:', e)
         return False
 
 
 @register.filter
-def was_deposited(experiments) -> bool:
+def was_deposited(measurements) -> bool:
     try:
-        return any([x.ciffilemodel.cif_exists for x in experiments.all()])
+        return any([x.ciffilemodel.cif_exists for x in measurements.all()])
     except Exception as e:
         print('Error in "was_deposited" filter:', e)
         return False

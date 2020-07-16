@@ -152,7 +152,7 @@ $(document).ready(function () {
         var tab_url = 'table/' + tdata[0];
         cif_file = tdata[7];
         experiment_id = tdata[0];
-        // Load the details table for the respective experiment:
+        // Load the details table for the respective measurements:
         $.get(url = tab_url, function (result) {
             //console.log(result);
             document.getElementById("ttable").innerHTML = result;

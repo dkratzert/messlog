@@ -9,13 +9,13 @@ from django.utils.translation import gettext_lazy as _
 from scxrd.models.cif_model import validate_cif_file_extension
 from scxrd.models.models import Machine, CrystalSupport, validate_checkcif_file_extension, \
     validate_reportdoc_file_extension
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
 class ExperimentTableForm(forms.ModelForm):
     class Meta:
-        model = Experiment
+        model = Measurement
         fields = ('experiment_name', 'number', 'measure_date')
 
 

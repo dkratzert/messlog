@@ -7,7 +7,7 @@ from django.test import Client
 
 from mysite.settings import MEDIA_ROOT
 from scxrd.models.models import Machine, WorkGroup, CrystalGlue, model_fixtures
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
@@ -131,20 +131,20 @@ def create_experiment(user: User = None):
     # user2.save()
     mach = Machine(diffrn_measurement_device_type='FoobarMachine')
     mach.save()
-    exp = Experiment.objects.create(experiment_name='IK_MSJg20_100K',
-                                    number='1',
-                                    sum_formula='C5H10O2',
-                                    was_measured=True,
-                                    machine=Machine.objects.filter(
+    exp = Measurement.objects.create(experiment_name='IK_MSJg20_100K',
+                                     number='1',
+                                     sum_formula='C5H10O2',
+                                     was_measured=True,
+                                     machine=Machine.objects.filter(
                                         diffrn_measurement_device_type__contains='APEX').first(),
-                                    operator=user,
-                                    customer=user2,
-                                    glue=CrystalGlue.objects.create(glue='Polyether'),
-                                    crystal_colour='1',
-                                    measure_date='2013-11-20 20:08:07.127325+00:00',
-                                    end_time='2013-11-21 00:08:07.127325+00:00',
-                                    prelim_unit_cell='10 01 10 90 90 90'
-                                    )
+                                     operator=user,
+                                     customer=user2,
+                                     glue=CrystalGlue.objects.create(glue='Polyether'),
+                                     crystal_colour='1',
+                                     measure_date='2013-11-20 20:08:07.127325+00:00',
+                                     end_time='2013-11-21 00:08:07.127325+00:00',
+                                     prelim_unit_cell='10 01 10 90 90 90'
+                                     )
     return exp
 
 

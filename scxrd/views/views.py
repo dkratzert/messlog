@@ -12,7 +12,7 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.models.experiment_model import Experiment
+from scxrd.models.experiment_model import Measurement
 from scxrd.utils import randstring
 
 
@@ -20,7 +20,7 @@ class ResidualsTable(DetailView):
     """
     Show residuals of the in-table selected experiment by ajax request.
     """
-    model = Experiment
+    model = Measurement
     template_name = 'scxrd/residuals_table.html'
 
 
@@ -30,12 +30,12 @@ class MoleculeView(LoginRequiredMixin, View):
     """
 
     def post(self, request: WSGIRequest, *args, **kwargs):
-        # TODO: get cif file from Experiment:
+        # TODO: get cif file from Measurement:
         cif_file = request.POST.get('cif_file')
         cifpath = Path(MEDIA_ROOT).joinpath(Path(cif_file))
         exp_id = request.POST.get('experiment_id')
         if not cif_file or not cifpath.is_file():
-            print('Experiment with id {} has no cif file.'.format(exp_id))
+            print('Measurement with id {} has no cif file.'.format(exp_id))
             # Show a robot where no cif is found:
             robot = make_robot_svg(randstring(), width=300, height=300)
             return HttpResponse(robot[1:])
