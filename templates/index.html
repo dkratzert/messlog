@@ -8,7 +8,7 @@
         {% if user.is_authenticated and user|is_superuser %}
             <div class="row justify-content-center">
                 <!-- Left column -->
-                <div class="col-5 mt-4">
+                <div class="col-5 col-sm-8 mt-4">
                     {% include 'scxrd/buttons/new_experiment.html' %}
                     {% include 'scxrd/buttons/all_experiments.html' %}
                     {% include 'scxrd/buttons/measure_samples.html' %}
