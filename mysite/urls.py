@@ -17,6 +17,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import RedirectView
+from django.views.i18n import JavaScriptCatalog
 
 from mysite.core import views
 
@@ -24,10 +25,12 @@ favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 from mysite import settings
 from mysite.mysite.views import HomePageView
 
+
 urlpatterns = [
     path('', HomePageView.as_view(), name='index'),
     path('scxrd/', include('scxrd.urls')),
     path('admin/', admin.site.urls),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     path('i18n/', include('django_translation_flags.urls')),
     path('favicon.ico', favicon_view),
     path('signup/', views.SignUp.as_view(), name='signup'),

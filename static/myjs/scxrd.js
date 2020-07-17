@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     var polyglot = new Polyglot({
-        locale: 'en',
+        locale: 'de',
         phrases: {
             "Number": "Nummer",
             "Project Name": "Projektname",

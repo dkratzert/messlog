@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-17 08:10+0200\n"
+"POT-Creation-Date: 2020-07-17 09:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -672,48 +672,43 @@ msgid "Details"
 msgstr "Details"
 
 #: templates/scxrd/residuals_table.html:9
-msgid "Meas. Number"
+msgid "Measurement Nr."
 msgstr "Experimentnummer"
 
-#: templates/scxrd/residuals_table.html:14
-#: templates/scxrd/residuals_table.html:17
-msgid "Solvents"
-msgstr "Lösemittel"
-
-#: templates/scxrd/residuals_table.html:20
+#: templates/scxrd/residuals_table.html:13
 #: templates/scxrd/submitted_samples_list_operator.html:25
 msgid "Sum Formula"
 msgstr "Summenformel"
 
-#: templates/scxrd/residuals_table.html:26
+#: templates/scxrd/residuals_table.html:19
 msgid "Measured by"
 msgstr "Gemessen von"
 
-#: templates/scxrd/residuals_table.html:29
+#: templates/scxrd/residuals_table.html:22
 msgid "Measure Date"
 msgstr "Messdatum"
 
-#: templates/scxrd/residuals_table.html:31
+#: templates/scxrd/residuals_table.html:24
 msgid "Results sent"
 msgstr "Ergebnisse gesendet"
 
-#: templates/scxrd/residuals_table.html:34
+#: templates/scxrd/residuals_table.html:27
 msgid "CIF File"
 msgstr "CIF-Datei"
 
-#: templates/scxrd/residuals_table.html:41
+#: templates/scxrd/residuals_table.html:34
 msgid "Space Group"
 msgstr "Raumgruppe"
 
-#: templates/scxrd/residuals_table.html:47
+#: templates/scxrd/residuals_table.html:40
 msgid "Completeness"
 msgstr "Completeness"
 
-#: templates/scxrd/residuals_table.html:49
+#: templates/scxrd/residuals_table.html:42
 msgid "Temperature"
 msgstr "Temperatur"
 
-#: templates/scxrd/residuals_table.html:51
+#: templates/scxrd/residuals_table.html:50
 msgid "CCDC Number"
 msgstr "CCDC-Nummer"
 
@@ -2144,6 +2139,9 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/tests/settings.py:45
 msgid "Brazilian Portuguese"
 msgstr ""
+
+#~ msgid "Solvents"
+#~ msgstr "Lösemittel"
 
 #~ msgid "Respective Sample"
 #~ msgstr "zugehörige Probe"
