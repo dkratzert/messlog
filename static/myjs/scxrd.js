@@ -34,7 +34,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,  // without serverside=true, the list is only 10 items long!
         select: true,
-        //keys: true,
+        keys: true,
         renderer: 'bootstrap4',
         full_row_select: true,
         ajax: {
@@ -130,38 +130,42 @@ $(document).ready(function () {
     });
 
 
+    function refresh_residuals_table(tab_url) {
+        $.get(url = tab_url, function (result) {
+            //console.log(result);
+            document.getElementById("ttable").innerHTML = result;
+        });
+    }
+
     dtable.on('click', 'tr', function () {
         var row = dtable.row(this);
         //var row0 = $('#exptable tbody tr:eq(0)');
         var tdata = row.data();
         // console.log(tdata);
-        var tab_url = 'table/' + tdata[0];
-        cif_file = tdata[7];
         measurement_id = tdata[0];
+        var tab_url = 'table/' + measurement_id;
+        cif_file = tdata[7];
         // Load the details table for the respective measurements:
-        $.get(url = tab_url, function (result) {
-            //console.log(result);
-            document.getElementById("ttable").innerHTML = result;
-        });
+        refresh_residuals_table(tab_url);
         get_mol_and_display();
         //row0.removeClass('selected');
     });
 
-    /* //Trying keyboard navigation:
-    dtable.on('key-focus', function() {
-      $('#exptable').DataTable().row(getRowIdx()).select();
-      console.log('selected', getRowIdx())
+    dtable.on('key-focus', function (e, datatable, cell) {
+        var rowData = datatable.row(cell.index().row).data();
+        var row = cell.index().row;
+        // deselect previous rows, otherwise it adds up to the cuurent selection:
+        datatable.rows([row - 1, row + 1]).deselect();
+        datatable.row(row).select();
+        measurement_id = rowData[0];
+        var tab_url = 'table/' + measurement_id;
+        cif_file = rowData[7];
+        refresh_residuals_table(tab_url);
+        get_mol_and_display();
     })
-
-    function getRowIdx() {
-        return $('#exptable').DataTable().cell({
-            focused: true
-        }).index().row;
-    }*/
 
     dtable.ajax.reload(function (json) {
         var row = $('#exptable tbody tr:eq(0)');
-        //row.addClass("selected");
         row.click();
     });
 
@@ -175,11 +179,11 @@ $(document).ready(function () {
                 'csrfmiddlewaretoken': csrftoken
             },
             function (result) {
+                // this is a robot:
                 if (result.toString().startsWith('<svg', 0)) {
-                    console.log('replacing');
                     document.getElementById("molcard").innerHTML = result.toString();
                 } else {
-                    console.log('jmol');
+                    // this is a molecule:
                     display_molecule(result);
                 }
             });
