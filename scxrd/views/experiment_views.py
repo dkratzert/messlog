@@ -240,7 +240,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
             return self.form_invalid(form)
 
     def handle_checkcif_file(self, exp, form):
-        if hasattr(exp, 'checkcifmodel') and exp.checkcifmodel.chkcif_exists:
+        if hasattr(exp, 'checkcifmodel'):
             exp.checkcifmodel.delete()
         chk = CheckCifModel()
         chk.checkcif_on_disk = form.files.get('checkcif_on_disk')
@@ -248,7 +248,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         chk.save()
 
     def handle_report_file(self, exp, form):
-        if hasattr(exp, 'reportmodel') and exp.reportmodel.report_exists:
+        if hasattr(exp, 'reportmodel'):
             exp.reportmodel.delete()
         rep = ReportModel()
         rep.reportdoc_on_disk = form.files.get('reportdoc_on_disk')
@@ -256,7 +256,7 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
         rep.save()
 
     def prepare_cif_file_model(self, exp, form):
-        if hasattr(exp, 'ciffilemodel') and exp.ciffilemodel.cif_exists:
+        if hasattr(exp, 'ciffilemodel'):
             exp.ciffilemodel.delete()
         cif_file = form.files['cif_file_on_disk']
         cif_model = CifFileModel()

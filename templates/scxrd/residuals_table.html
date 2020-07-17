@@ -12,9 +12,11 @@
     <div class="col-7" id="t_machine">  {{ measurement.machine }} </div>
     <div class="col-5">{% trans "Sum Formula" %}</div>
     {% if measurement.cif %}
-        <div class="col-7" id="t_sumform">  {{ measurement.ciffilemodel.chemical_formula_sum|safe|default:"-----" }} </div>
+        <div class="col-7" id="t_sumform">  {{ measurement.ciffilemodel.chemical_formula_sum|safe }} </div>
+    {% elif measurement.sum_formula %}
+        <div class="col-7" id="t_sumform">  {{ measurement.sum_formula|safe }} </div>
     {% else %}
-        <div class="col-7" id="t_sumform">  {{ measurement.sum_formula|safe|default:"-----" }} </div>
+        <div class="col-7" id="t_sumform"> ----- </div>
     {% endif %}
     <div class="col-5">{% trans "Measured by" %}</div>
     <div class="col-7" id="t_operator">  {{ measurement.operator.get_username }} </div>
@@ -37,7 +39,8 @@
     <div class="col-5"><i>wR</i><sub>2</sub></div>
     <div class="col-7" id="t_wr2">  {{ measurement.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">{% trans "Completeness" %}</div>
-    <div class="col-7" id="t_compl">  {{ measurement.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-7"
+         id="t_compl">  {{ measurement.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">{% trans "Temperature" %}</div>
     {% if measurement.ciffilemodel.temperature %}
         <div class="col-7" id="t_ccdc">  {{ measurement.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
@@ -49,7 +52,8 @@
     <div class="col-5">{% trans "CCDC Number" %}</div>
     <div class="col-7" id="t_ccdc">
         {% if measurement.ciffilemodel.ccdc_number %}
-            <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ measurement.ciffilemodel.ccdc_number }}" target="_blank">
+            <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ measurement.ciffilemodel.ccdc_number }}"
+               target="_blank">
                 {{ measurement.ciffilemodel.ccdc_number }}
             </a>
         {% else %}
