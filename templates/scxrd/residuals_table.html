@@ -10,45 +10,52 @@
     <div class="col-7" id="t_exp">  {{ measurement.number }} </div>
     <div class="col-5">{% trans "Machine" %}</div>
     <div class="col-7" id="t_machine">  {{ measurement.machine }} </div>
-    {% if experiment.solvents %}
-        <div class="col-5">{% trans "Solvents" %}</div>
-        <div class="col-7 " id="t_solvents">  {{ experiment.solvents|safe }} </div>
-    {% else %}
-        <div class="col-5">{% trans "Solvents" %}</div>
-        <div class="col-7 " id="t_solvents"> -----</div>
-    {% endif %}
     <div class="col-5">{% trans "Sum Formula" %}</div>
-    {% if experiment.cif %}
-        <div class="col-7" id="t_sumform">  {{ experiment.ciffilemodel.chemical_formula_sum|safe|default:"-----" }} </div>
+    {% if measurement.cif %}
+        <div class="col-7" id="t_sumform">  {{ measurement.ciffilemodel.chemical_formula_sum|safe|default:"-----" }} </div>
     {% else %}
-        <div class="col-7" id="t_sumform">  {{ experiment.sum_formula|safe|default:"-----" }} </div>
+        <div class="col-7" id="t_sumform">  {{ measurement.sum_formula|safe|default:"-----" }} </div>
     {% endif %}
     <div class="col-5">{% trans "Measured by" %}</div>
-    <div class="col-7" id="t_operator">  {{ experiment.operator.get_username }} </div>
-    {% if experiment.customer %}
+    <div class="col-7" id="t_operator">  {{ measurement.operator.get_username }} </div>
+    {% if measurement.customer %}
         <div class="col-5">{% trans "Measure Date" %}</div>
-        <div class="col-7" id="t_measure_date">  {{ experiment.measure_date|date|default:"-----" }} </div>
+        <div class="col-7" id="t_measure_date">  {{ measurement.measure_date|date|default:"-----" }} </div>
         <div class="col-5">{% trans "Results sent" %}</div>
-        <div class="col-7" id="t_sent">  {{ experiment.result_date|date|default:"-----" }} </div>
+        <div class="col-7" id="t_sent">  {{ measurement.result_date|date|default:"-----" }} </div>
     {% endif %}
     <div class="col-5">{% trans "CIF File" %}</div>
-    <div class="col-7" id="t_filen">  {{ experiment.ciffilemodel.cif_name_only|default:"-----" }} </div>
+    <div class="col-7" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
     {% comment %}
     <div class="col-5">CIF data_</div>
     <div class="col-7" id="t_data_">  {% experiment_name.ciffilemodel.data|default:"-----"  %} </div>
     {% endcomment %}
     <div class="col-5">{% trans "Space Group" %}</div>
-    <div class="col-7" id="t_spgr">  {{ experiment.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>
+    <div class="col-7" id="t_spgr">  {{ measurement.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>
     <div class="col-5"><i>R</i><sub>1</sub></div>
-    <div class="col-7" id="t_r1">  {{ experiment.ciffilemodel.r1_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-7" id="t_r1">  {{ measurement.ciffilemodel.r1_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5"><i>wR</i><sub>2</sub></div>
-    <div class="col-7" id="t_wr2">  {{ experiment.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-7" id="t_wr2">  {{ measurement.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">{% trans "Completeness" %}</div>
-    <div class="col-7" id="t_compl">  {{ experiment.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-7" id="t_compl">  {{ measurement.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
     <div class="col-5">{% trans "Temperature" %}</div>
-    <div class="col-7" id="t_ccdc">  {{ experiment.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
+    {% if measurement.ciffilemodel.temperature %}
+        <div class="col-7" id="t_ccdc">  {{ measurement.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
+    {% elif measurement.measurement_temp %}
+        <div class="col-7" id="t_ccdc">  {{ measurement.measurement_temp|default:"-----" }}&nbsp;K</div>
+    {% else %}
+        <div class="col-7" id="t_ccdc"> -----</div>
+    {% endif %}
     <div class="col-5">{% trans "CCDC Number" %}</div>
-    <div class="col-7" id="t_ccdc">  {{ experiment.ciffilemodel.ccdc_number|default:"-----" }}</div>
+    <div class="col-7" id="t_ccdc">
+        {% if measurement.ciffilemodel.ccdc_number %}
+            <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ measurement.ciffilemodel.ccdc_number }}" target="_blank">
+                {{ measurement.ciffilemodel.ccdc_number }}
+            </a>
+        {% else %}
+            -----
+        {% endif %}
+    </div>
 </div>
 
 
