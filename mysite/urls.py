@@ -19,12 +19,11 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 from django.views.i18n import JavaScriptCatalog
 
-from mysite.core import views
-
-favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 from mysite import settings
+from mysite.core import views
 from mysite.mysite.views import HomePageView
 
+favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='index'),

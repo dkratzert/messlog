@@ -33,6 +33,5 @@ urlpatterns = [
     path('sample/submit/library.sdf', TemplateView.as_view(template_name="scxrd/ketcher/library.sdf")),
     path('sample/submit/library.svg', TemplateView.as_view(template_name="scxrd/ketcher/library.svg")),
     path('sample/submit/ketcher.svg', TemplateView.as_view(template_name="scxrd/ketcher/ketcher.svg")),
-    # path('uploadcif/<int:pk>/', views.CifUploadView.as_view(), name='upload_cif_file'),
 
 ]
