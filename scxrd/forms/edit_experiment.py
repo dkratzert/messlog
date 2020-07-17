@@ -11,7 +11,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('Measurement')
-        self.number = "<span class='badge badge-secondary'>Nr. {{ object.number }}</span>"
+        self.number = "<span class='btn btn-secondary ml-3 pt-0 pb-0 pl-1 pr-1'>Nr. {{ object.number }}</span>"
         super().__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
