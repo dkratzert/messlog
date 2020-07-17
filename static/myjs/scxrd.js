@@ -1,19 +1,5 @@
 $(document).ready(function () {
 
-    var polyglot = new Polyglot({
-        locale: 'de',
-        phrases: {
-            "Number": "Nummer",
-            "Project Name": "Projektname",
-            "Date Measured": "Messdatum",
-            "Machine": "Maschine",
-            "Operator": "Operator",
-            "Publ.": "publiz.",
-            "CIF": "CIF",
-            "Edit": "ändern",
-        }
-    });
-
     // some options for JSmol_lite:
     var bgcolor = $(this.body).css("background-color");
     var jsmol_options;
@@ -72,43 +58,43 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
-                title: polyglot.t("Number"),
+                title: gettext("Number"),
                 name: 'number',
                 searchable: false,
                 orderable: true,
             },
             {
-                title: polyglot.t("Project Name"),
+                title: gettext("Project Name"),
                 name: 'experiment_name',
                 searchable: true,
                 orderable: true,
             },
             {
-                title: polyglot.t("Date Measured"),
+                title: gettext("Date Measured"),
                 name: 'measure_date',
                 searchable: false,
                 orderable: true,
             },
             {
-                title: polyglot.t("Machine"),
+                title: gettext("Machine"),
                 name: 'machine',
                 searchable: false,
                 orderable: true,
             },
             {
-                title: polyglot.t("Operator"),
+                title: gettext("Operator"),
                 name: 'operator',
                 searchable: false,
                 orderable: true,
             },
             {
-                title: polyglot.t("Publ."),
+                title: gettext("Publ."),
                 name: 'publishable',
                 searchable: false,
                 orderable: true,
             },
             {
-                title: polyglot.t('CIF'),
+                title: gettext('CIF'),
                 name: 'cif_file_on_disk',
                 visible: true,
                 searchable: false,
@@ -125,7 +111,7 @@ $(document).ready(function () {
                 },
             },
             {
-                title: polyglot.t('Edit'),
+                title: gettext('Edit'),
                 name: 'edit_button',
                 searchable: false,
                 orderable: false,
