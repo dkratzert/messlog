@@ -36,12 +36,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                 Column('base', css_class='col-4'),
                 Column('glue', css_class='col-4'),
                 Column(
-                    HTML("""
+                    HTML(""" 
                             {% if object.sample %}
                             {% load i18n %}
+                            {% trans "Respective Sample" as myvar %}
                                 <div class='pt-3 mt-3 ml-3 mr-3 ml-0 mb-3'>
                                     <a class='btn btn-outline-success w-100 mt-1 p-2' href="{% url "scxrd:op_samples_detail" object.sample.pk %}">
-                                        """ + "{}".format(_("Respective Sample")) + """
+                                        {{ myvar }}           
                                     </a>
                                 </div>
                             {% endif %}
@@ -53,11 +54,12 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 ButtonHolder(
                     Submit('Save', _('Save'), css_class='btn-primary mr-2'),
-                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
-                                                    formnovalidate="formnovalidate">''' + '''{}</a> '''.format(
-                        _('Cancel')),
-                         ),
-                    css_class='ml-2 mb-3'
+                    HTML('''
+                        {% load i18n %}
+                        {% trans "Cancel" as myvar %}
+                        <a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                                                    formnovalidate="formnovalidate">
+                                                    {{ myvar }}</a>'''), css_class='ml-2 mb-3'
                 ),
             ),
 
@@ -118,11 +120,13 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
             Row(
                 ButtonHolder(
                     Submit('Save', _('Save'), css_class='btn-primary mr-2'),
-                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
-                                        formnovalidate="formnovalidate">''' + '''{}</a> '''.format(_('Cancel')),
-                         ),
-                    css_class='ml-2 mb-5'
-                ),
+                    HTML('''
+                        {% load i18n %}
+                        {% trans "Cancel" as myvar %}
+                        <a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                                                    formnovalidate="formnovalidate">
+                                                    {{ myvar }}</a>'''), css_class='ml-2'
+                ), css_class='mb-5'
             ),
 
         )

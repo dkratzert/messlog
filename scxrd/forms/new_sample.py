@@ -108,9 +108,11 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
             Row(
                 ButtonHolder(
                     Submit('Save', _('Submit'), css_class='btn-primary mr-2 ml-1'),
-                    HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
-                            formnovalidate="formnovalidate">''' + '''{}</a>
-                            '''.format(_('Cancel'))),
+                    HTML('''
+                    {% load i18n %}
+                    {% trans "Cancel" as myvar %}
+                    <a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                            formnovalidate="formnovalidate">{{ myvar }}</a>'''),
                     css_class=' ml-3 mb-3'
                 ),
             ),

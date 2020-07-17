@@ -26,7 +26,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
         user = User.objects.get(pk=kwargs.get('initial').get('customer'))
         self.exp_title = _('New measurement of a sample')
         if user.first_name and user.last_name:
-            self.exp_title = _('New measurement of a sample by') + ' {} {}'.format(user.first_name, user.last_name)
+            self.exp_title = _('New measurement of a sample by %(first)s %(last)s') % {'first': user.first_name, 'last': user.last_name}
         # pop the current user in order to save him as operator in Measurement model:
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
@@ -77,8 +77,11 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
             ),
             HTML('</div>'),  # end of card
             Submit('Save', _('Save'), css_class='btn-primary mr-2'),
-            HTML('''<a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
-                        formnovalidate="formnovalidate">''' + '''{}</a>'''.format(_('Cancel'))),
+            HTML('''
+            {% load i18n %}
+            {% trans "Cancel" as myvar %}
+            <a href="{% url 'scxrd:index' %}" class="btn btn-outline-danger" 
+                        formnovalidate="formnovalidate">{{ myvar }}</a>'''),
             HTML("<div class='mb-5'></div>"),
 
         )
