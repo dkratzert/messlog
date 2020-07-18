@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 """
 TODO: 
+- make sure that operators without superuser rights can only edit their own experiments
 - Not measured because: hide if no cause or sho only "not measurable"
 - on details page for sample: list files of every measurement.
 - add email notifications and password reset etc...
