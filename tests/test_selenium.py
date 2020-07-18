@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 import chromedriver_binary
 from selenium.webdriver.support.select import Select
 
+from scxrd.models.experiment_model import Measurement
 from scxrd.models.models import WorkGroup
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin
 
@@ -150,14 +151,26 @@ class ExperimentFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stati
         user.save()
         login_user(selenium, username='testuser_operator', password='Test1234!')
         selenium.get('http://127.0.0.1:8001/scxrd/newexp/1/')
-        time.sleep(100)
         #TODO: test what happens if I change the sample name
-        selenium.find_element_by_id('id_measurement_temp').send_keys('')
-        mach = selenium.find_element_by_id('id_machine')
-        select = Select(mach).select_by_visible_text('VENTURE')
-        mach.send_keys(Keys.RETURN)
-        #random_option.click()
-        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
-        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
-        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
-        time.sleep(4)
+        selenium.find_element_by_id('id_measurement_temp').send_keys('101.5')
+        self.select_choicefield(selenium, field_id='id_machine', choice='VENTURE')
+        selenium.find_element_by_id('id_end_time').send_keys('2020-07-19 09:01')
+        self.select_choicefield(selenium, field_id='id_base', choice='glass fiber')
+        self.select_choicefield(selenium, field_id='id_glue', choice='grease')
+        self.assertEqual(selenium.find_element_by_id('id_sum_formula').get_attribute('value'), 'C2H5OH')
+        self.assertEqual(selenium.find_element_by_id('id_experiment_name').get_attribute('value'), 'testsample_123')
+        selenium.find_element_by_id('id_crystal_habit').send_keys('block')
+        selenium.find_element_by_id('id_crystal_size_z').send_keys('0.067')
+        selenium.find_element_by_id('id_crystal_size_y').send_keys('0.079')
+        selenium.find_element_by_id('id_crystal_size_x').send_keys('0.099')
+        self.assertEqual(selenium.find_element_by_id('id_exptl_special_details').get_attribute('value'), 'this is a comment')
+        selenium.find_element_by_id('id_exptl_special_details').send_keys('\nsome more comments')
+        selenium.find_element_by_id('id_prelim_unit_cell').send_keys('12.12 13.654 29.374 90 108.5 90')
+        # send
+        selenium.find_element_by_id('submit-id-save').send_keys(Keys.RETURN)
+        assert 'Erfolgreich gespeichert' in selenium.page_source
+        self.assertEqual(str(Measurement.objects.last()), 'testsample_123')
+
+    def select_choicefield(self, selenium, field_id, choice):
+        mach = selenium.find_element_by_id(field_id)
+        Select(mach).select_by_visible_text(choice)
