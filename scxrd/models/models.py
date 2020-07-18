@@ -108,7 +108,7 @@ class Profile(models.Model):
     postal_code = models.CharField(max_length=200, blank=True)
     phone_number = models.CharField(max_length=17, blank=True)
     comment = models.TextField(blank=True, default='')
-    is_operator = models.BooleanField(verbose_name=_('The user has operator rights'), default=False)
+    is_operator = models.BooleanField(verbose_name=_('Operator status'), default=False)
 
     def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
@@ -193,7 +193,7 @@ class CheckCifModel(models.Model):
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
     measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='checkCIF report',
-                                      related_name='checkcifmodel')
+                                       related_name='checkcifmodel')
     checkcif_on_disk = models.FileField(upload_to='checkcif_reports', null=True, blank=True, max_length=255,
                                         validators=[validate_checkcif_file_extension],
                                         verbose_name='cif file')
@@ -224,8 +224,8 @@ class ReportModel(models.Model):
     A pdf or html file with the IUCr checkcif result: https://checkcif.iucr.org/
     """
     measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, max_length=255,
-                                      verbose_name='structure report document',
-                                      related_name='reportmodel')
+                                       verbose_name='structure report document',
+                                       related_name='reportmodel')
     reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,
                                          validators=[validate_reportdoc_file_extension],
                                          verbose_name='cif file')

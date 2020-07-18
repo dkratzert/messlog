@@ -26,7 +26,7 @@ LANGUAGES = [
 LANGUAGE_CODE = 'en-us'
 
 ABSOLUTE_URL_OVERRIDES = {
-    'auth.user': lambda u: "/{:s}/".format(u.username),
+    'auth.user': lambda u: "/useredit/{:s}/".format(u.username),
 }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

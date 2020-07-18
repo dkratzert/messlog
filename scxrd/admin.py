@@ -101,6 +101,15 @@ class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
     list_display = ['username', 'first_name', 'last_name', 'number_of_experiments', 'work_group', 'is_staff',
                     'is_operator']
+    list_filter = ('is_superuser', 'profile__work_group')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser'),
+        }),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
 
     def is_operator(self, obj: User):
         return obj.profile.is_operator
