@@ -6,6 +6,7 @@ from django.test import override_settings, LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import chromedriver_binary
+from selenium.webdriver.support.select import Select
 
 from scxrd.models.models import WorkGroup
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin
@@ -13,7 +14,7 @@ from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class AccountChromeTestCase(DeleteFilesMixin, StaticLiveServerTestCase):
-    port = 8000
+    port = 8001
 
     @classmethod
     def tearDownClass(cls):
@@ -32,7 +33,7 @@ class AccountChromeTestCase(DeleteFilesMixin, StaticLiveServerTestCase):
     def test_register(self):
         selenium = self.selenium
         # Opening the link we want to test
-        selenium.get('http://127.0.0.1:8000/signup/')
+        selenium.get('http://127.0.0.1:8001/signup/')
         # find the form element
         first_name = selenium.find_element_by_id('id_first_name')
         last_name = selenium.find_element_by_id('id_last_name')
@@ -65,7 +66,7 @@ class AccountChromeTestCase(DeleteFilesMixin, StaticLiveServerTestCase):
 def submit_sample(selenium):
     # Opening the link we want to test
     login_user(selenium, username='testuser', password='Test1234!')
-    selenium.get('http://127.0.0.1:8000/scxrd/sample/submit/')
+    selenium.get('http://127.0.0.1:8001/scxrd/sample/submit/')
     # time.sleep(0.5)
     sample_name = selenium.find_element_by_id('id_sample_name')
     formula = selenium.find_element_by_id('id_sum_formula')
@@ -92,7 +93,7 @@ def submit_sample(selenium):
 
 
 def login_user(selenium, username='', password=''):
-    selenium.get('http://127.0.0.1:8000/scxrd/sample/submit/')
+    selenium.get('http://127.0.0.1:8001/scxrd/sample/submit/')
     # time.sleep(0.5)
     userfield = selenium.find_element_by_id('id_username')
     passwordfield = selenium.find_element_by_id('id_password')
@@ -104,7 +105,7 @@ def login_user(selenium, username='', password=''):
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class NewSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServerTestCase):
-    port = 8000
+    port = 8001
 
     def setUp(self):
         self.selenium = webdriver.Chrome()
@@ -124,7 +125,7 @@ class NewSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServer
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class ExperimentFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServerTestCase):
-    port = 8000
+    port = 8001
 
     def setUp(self):
         self.selenium = webdriver.Chrome()
@@ -148,4 +149,15 @@ class ExperimentFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stati
         user.profile.work_group = group
         user.save()
         login_user(selenium, username='testuser_operator', password='Test1234!')
-        time.sleep(14)
+        selenium.get('http://127.0.0.1:8001/scxrd/newexp/1/')
+        time.sleep(100)
+        #TODO: test what happens if I change the sample name
+        selenium.find_element_by_id('id_measurement_temp').send_keys('')
+        mach = selenium.find_element_by_id('id_machine')
+        select = Select(mach).select_by_visible_text('VENTURE')
+        mach.send_keys(Keys.RETURN)
+        #random_option.click()
+        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
+        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
+        #selenium.find_element_by_id('id_sample_name').send_keys('Keys.RETURN')
+        time.sleep(4)
