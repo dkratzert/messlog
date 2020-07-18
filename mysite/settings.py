@@ -25,6 +25,10 @@ LANGUAGES = [
 
 LANGUAGE_CODE = 'en-us'
 
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: "/{:s}/".format(u.username),
+}
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -133,8 +137,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
 TIME_ZONE = 'Europe/Berlin'
 
