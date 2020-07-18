@@ -76,9 +76,9 @@
         </div>
     {% endif %}
     {% if not user.is_authenticated %}
-        <a class="btn btn-success btn-sm" role="button" href="{% url 'login' %}">{% trans "Login" %}</a>
+        <a class="btn btn-success btn-sm" id="login_button" role="button" href="{% url 'login' %}">{% trans "Login" %}</a>
     {% else %}
-        <a class="btn btn-danger btn-sm" role="button" href="{% url 'logout' %}">{% trans "Log Off" %}</a>
+        <a class="btn btn-danger btn-sm" id="logout_button" role="button" href="{% url 'logout' %}">{% trans "Log Off" %}</a>
     {% endif %}
     <a class="btn btn-outline-primary btn-sm ml-2" role="button" href="{% url 'signup' %}">{% trans "New User" %}</a>
 </nav>

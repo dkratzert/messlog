@@ -14,6 +14,7 @@ import os
 
 from django.contrib.messages import constants as messages
 from django.utils.translation import gettext_lazy as _
+from selenium import webdriver
 
 LANGUAGES = [
     ('de', _('German')),
@@ -27,6 +28,14 @@ LANGUAGE_CODE = 'en-us'
 
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: "/useredit/{:s}/".format(u.username),
+}
+
+SELENIUM_WEBDRIVERS = {
+    'default': {
+        'callable': webdriver.Chrome,
+        'args': (),
+        'kwargs': {},
+    }
 }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

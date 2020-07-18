@@ -68,7 +68,6 @@ def make_operator_user():
     u.profile.postal_code = '3500'
     u.profile.building = 'AC'
     u.profile.comment = "A Dog's live in Databases"
-    u.profile.work_group = group
     u.save()
     return u
 
