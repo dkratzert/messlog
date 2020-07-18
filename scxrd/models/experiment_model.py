@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import ProtectedError
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -88,6 +89,9 @@ class Measurement(models.Model):
 
     def __str__(self):
         return self.experiment_name
+
+    def get_absolute_url(self):
+        return reverse_lazy('scxrd:edit-exp', args=(self.pk,))
 
 
 @receiver(pre_delete, sender=Measurement)

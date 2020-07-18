@@ -327,16 +327,13 @@ class ExperimentListJson(LoginRequiredMixin, BaseDatatableView):
             else:
                 return '<span class="badge badge-warning ml-1">no</span>'
         if column == 'edit':
-            return '<a class="btn-outline-danger m-0 p-1" href=edit/{}>{}</a>'.format(row.id, _('Edit'))
-        # I need the id in the table! Therefore I add the check in javascript later.
-        # if column == 'cif.id' and row.cif_id:
-        #    return """<svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        #            <path fill-rule="evenodd" d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
-        #            </svg>"""
+            return '<a class="btn-outline-danger m-0 p-1" href="{}">{}</a>'.format(row.get_absolute_url(), _('Edit'))
         if column == 'measure_date':
             return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:
-            return super(ExperimentListJson, self).render_column(row, column)
+            # no super() of parent method or every value in each row turns into a link:
+            #return super(ExperimentListJson, self).render_column(row, column)
+            return super()._render_column(row, column)
 
 
 class ExperimentsListJsonUser(ExperimentListJson):
