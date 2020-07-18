@@ -72,7 +72,7 @@
                 {% languages  li_class='dropdown-item' a_class='float-left' %}
 
                 <a class="dropdown-item" href=#>-----</a>
-                <a class="dropdown-item" href="{% url 'useredit' pk=user.id %}">{% trans "Edit my Profile" %}</a>
+                <a class="dropdown-item" href="{{ user.get_absolute_url }}">{% trans "Edit my Profile" %}</a>
                 {% if user.isadmin %}
                     <a class="dropdown-item" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
                 {% endif %}

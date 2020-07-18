@@ -90,7 +90,7 @@
                                                 <br>
                                             {% endif %}
                                             {% for experiment in sample.experiments.all %}
-                                                <a href="{% url 'scxrd:edit-exp' experiment.pk %}">{{ experiment }}</a>
+                                                <a href="{{ experiment.get_absolute_url }}">{{ experiment }}</a>
                                                 <br>
                                             {% endfor %}
                                         </td>
