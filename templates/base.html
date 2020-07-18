@@ -68,7 +68,7 @@
 
                 <a class="dropdown-item" href=#>-----</a>
                 <a class="dropdown-item" href="{{ user.get_absolute_url }}">{% trans "Edit my Profile" %}</a>
-                {% if user.profile.is_superuser %}
+                {% if user.is_superuser %}
                     <a class="dropdown-item" href="{% url 'admin:index' %}">{% trans "Administration" %}</a>
                 {% endif %}
                 <a class="dropdown-item" href="{% url 'logout' %}">{% trans "Log Off" %}</a>

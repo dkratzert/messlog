@@ -165,6 +165,8 @@ MEDIA_URL = '/media/'
 
 INTERNAL_IPS = ['127.0.0.1']
 
+FIXTURE_DIRS = [os.path.join(BASE_DIR, "scxrd/fixtures/")]
+
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
