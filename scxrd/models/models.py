@@ -135,6 +135,10 @@ class WorkGroup(models.Model):
     def __str__(self):
         return "AK {}".format(self.group_head)
 
+    class Meta:
+        verbose_name = _('Work group')
+        verbose_name_plural = _('Work group')
+
 
 class Machine(models.Model):
     """
@@ -150,6 +154,9 @@ class Machine(models.Model):
     def __str__(self):
         return self.diffrn_measurement_device_type
 
+    class Meta:
+        verbose_name = _('Machine')
+
 
 class CrystalSupport(models.Model):
     """
@@ -162,6 +169,9 @@ class CrystalSupport(models.Model):
     def __str__(self):
         return self.support
 
+    class Meta:
+        verbose_name = _('Crystal support')
+
 
 class CrystalGlue(models.Model):
     """
@@ -172,6 +182,10 @@ class CrystalGlue(models.Model):
 
     def __str__(self):
         return self.glue
+
+    class Meta:
+        verbose_name = _('Crystal Glue')
+        verbose_name_plural = _('Crystal Glues')
 
 
 def validate_checkcif_file_extension(value):

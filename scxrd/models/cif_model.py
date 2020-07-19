@@ -66,6 +66,11 @@ class CifFileModel(models.Model):
                                         verbose_name='cif file')
     history = HistoricalRecords()
 
+    class Meta:
+        verbose_name = _('CIF file')
+        verbose_name_plural = _('CIF files')
+
+
     def __str__(self):
         try:
             return self.cif_file_on_disk.name

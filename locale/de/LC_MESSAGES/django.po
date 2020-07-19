@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 22:33+0200\n"
+"POT-Creation-Date: 2020-07-19 22:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,7 +140,8 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: scxrd/forms/forms.py:47 templates/scxrd/residuals_table.html:11
+#: scxrd/forms/forms.py:47 scxrd/models/models.py:158
+#: templates/scxrd/residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
 
@@ -164,7 +165,7 @@ msgstr "maximale Kristallgröße"
 msgid "Sample Base"
 msgstr "Probenhalter"
 
-#: scxrd/forms/forms.py:56
+#: scxrd/forms/forms.py:56 scxrd/models/cif_model.py:70
 msgid "CIF file"
 msgstr "CIF-Datei"
 
@@ -282,6 +283,10 @@ msgstr "Datum ändern"
 #: scxrd/models/cif_model.py:63
 msgid "CCDC number"
 msgstr "CCDC-Nummer"
+
+#: scxrd/models/cif_model.py:71
+msgid "CIF files"
+msgstr "CIF-Dateien"
 
 #: scxrd/models/measurement_model.py:20
 msgid "measurement name"
@@ -425,15 +430,31 @@ msgstr "Operator-Status"
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models/models.py:148
+#: scxrd/models/models.py:139 scxrd/models/models.py:140
+msgid "Work group"
+msgstr "Arbeitsgruppe"
+
+#: scxrd/models/models.py:152
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models/models.py:178
+#: scxrd/models/models.py:173
+msgid "Crystal support"
+msgstr "Probenhalter"
+
+#: scxrd/models/models.py:187
+msgid "Crystal Glue"
+msgstr "Kristallkleber"
+
+#: scxrd/models/models.py:188
+msgid "Crystal Glues"
+msgstr "Kristallkleber"
+
+#: scxrd/models/models.py:192
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models/models.py:186
+#: scxrd/models/models.py:200
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
