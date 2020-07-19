@@ -10,9 +10,9 @@ from django.utils.translation import gettext_lazy as _
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.sample_model import Sample
-from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile
 from scxrd.models.experiment_model import Measurement
+from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile, CheckCifModel, ReportModel
+from scxrd.models.sample_model import Sample
 
 admin.site.site_header = "MESSLOG Admin"
 admin.site.site_title = "MESSLOG Admin Portal"
@@ -22,12 +22,12 @@ admin.site.index_title = "MESSLOG Administration"
 class WorkGroupInline(TabularInline):
     model = Profile
     list_display = ('members',)
-    #fields = ('user',)
+    # fields = ('user',)
     extra = 0
 
     fieldsets = (
         ('user', {
-            'fields': ('user', )
+            'fields': ('user',)
         }),
     )
 
@@ -49,8 +49,18 @@ class WorkGroupAdmin(admin.ModelAdmin):
                                           customer__profile__work_group=group).count()
 
 
-class ExperimentInline(StackedInline):
+class ExperimentCIFInline(StackedInline):
     model = CifFileModel
+    can_delete = True
+
+
+class ExperimentCheckCifInline(StackedInline):
+    model = CheckCifModel
+    can_delete = True
+
+
+class ExperimentReportInline(StackedInline):
+    model = ReportModel
     can_delete = True
 
 
@@ -59,7 +69,7 @@ class ExperimentAdmin(admin.ModelAdmin):
     list_filter = ['measure_date']
     search_fields = ['experiment_name', 'number', 'sum_formula']
     ordering = ['-number']
-    inlines = (ExperimentInline,)
+    inlines = (ExperimentCIFInline, ExperimentCheckCifInline, ExperimentReportInline)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)
