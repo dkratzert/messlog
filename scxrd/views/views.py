@@ -12,13 +12,13 @@ from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.utils import randstring
 
 
 class ResidualsTable(DetailView):
     """
-    Show residuals of the in-table selected experiment by ajax request.
+    Show residuals of the in-table selected measurement by ajax request.
     """
     model = Measurement
     template_name = 'scxrd/residuals_table.html'
@@ -43,7 +43,7 @@ class MoleculeView(LoginRequiredMixin, View):
         cif = CifContainer(cifpath)
         if cif.atoms_fract:
             return HttpResponse(self.make_molfile(cif, grow))
-        print('Cif file with id {} of experiment_name {} has no atoms!'.format(cif_file, exp_id))
+        print('Cif file with id {} of measurement_name {} has no atoms!'.format(cif_file, exp_id))
         return HttpResponse('')
 
     def make_molfile(self, cif: CifContainer, grow: str) -> str:

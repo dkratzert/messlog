@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 10:30+0200\n"
+"POT-Creation-Date: 2020-07-19 17:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,30 +93,30 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Letzte Änderungen"
 
-#: scxrd/forms/edit_experiment.py:13
+#: scxrd/forms/edit_measurement.py:13
 msgid "Measurement"
 msgstr "Messung"
 
-#: scxrd/forms/edit_experiment.py:56 scxrd/forms/edit_experiment.py:122
-#: scxrd/forms/new_exp_from_sample.py:79 scxrd/forms/new_experiment.py:61
+#: scxrd/forms/edit_measurement.py:56 scxrd/forms/edit_measurement.py:122
+#: scxrd/forms/new_measure_from_sample.py:79 scxrd/forms/new_measurement.py:61
 #: templates/registration/edit_user.html:21
 #: templates/registration/password_reset_confirm.html:16
 msgid "Save"
 msgstr "Speichern"
 
-#: scxrd/forms/edit_experiment.py:67
+#: scxrd/forms/edit_measurement.py:67
 msgid "Crystal and Conditions"
 msgstr "Kristall und Bedingungen"
 
-#: scxrd/forms/edit_experiment.py:91
+#: scxrd/forms/edit_measurement.py:91
 msgid "File upload"
 msgstr "Datei-Upload"
 
-#: scxrd/forms/edit_experiment.py:111
+#: scxrd/forms/edit_measurement.py:111
 msgid "Miscellaneous"
 msgstr "verschiedenes"
 
-#: scxrd/forms/forms.py:39 scxrd/forms/new_exp_from_sample.py:16
+#: scxrd/forms/forms.py:39 scxrd/forms/new_measure_from_sample.py:16
 msgid "measure date"
 msgstr "Datum der Messung"
 
@@ -184,26 +184,26 @@ msgstr "Habitus"
 msgid "Expected end time"
 msgstr "erwartetes Ende"
 
-#: scxrd/forms/new_exp_from_sample.py:17
+#: scxrd/forms/new_measure_from_sample.py:17
 msgid "Not measured because"
 msgstr "Nicht gemessen, weil"
 
-#: scxrd/forms/new_exp_from_sample.py:18
+#: scxrd/forms/new_measure_from_sample.py:18
 msgid "Sample was not measured"
 msgstr "Probe wurde nicht gemessen"
 
-#: scxrd/forms/new_exp_from_sample.py:27
+#: scxrd/forms/new_measure_from_sample.py:27
 msgid "New measurement of a sample"
 msgstr "Neue Messung einer Probe"
 
-#: scxrd/forms/new_exp_from_sample.py:29
+#: scxrd/forms/new_measure_from_sample.py:29
 #, python-format
 msgid "New measurement of a sample by %(first)s %(last)s"
 msgstr "Neue Messung einer Probe von %(first)s %(last)s"
 
-#: scxrd/forms/new_experiment.py:16
-#: templates/scxrd/buttons/new_experiment.html:12
-#: templates/scxrd/buttons/small_buttons/new_experiment.html:9
+#: scxrd/forms/new_measurement.py:16
+#: templates/scxrd/buttons/new_measurement.html:12
+#: templates/scxrd/buttons/small_buttons/new_measurement.html:9
 msgid "New Measurement"
 msgstr "neue Messung"
 
@@ -283,111 +283,111 @@ msgstr "Datum ändern"
 msgid "CCDC number"
 msgstr "CCDC-Nummer"
 
-#: scxrd/models/experiment_model.py:20
-msgid "experiment name"
+#: scxrd/models/measurement_model.py:20
+msgid "measurement name"
 msgstr "Name der Messung"
 
-#: scxrd/models/experiment_model.py:25
+#: scxrd/models/measurement_model.py:25
 msgid "number"
 msgstr "Nummer"
 
-#: scxrd/models/experiment_model.py:26
+#: scxrd/models/measurement_model.py:26
 msgid "structure is publishable"
 msgstr "Struktur ist publizierbar"
 
-#: scxrd/models/experiment_model.py:29
+#: scxrd/models/measurement_model.py:29
 msgid "customer (for service only)"
 msgstr "Kunde (nur für Servicemessung)"
 
-#: scxrd/models/experiment_model.py:31
+#: scxrd/models/measurement_model.py:31
 msgid "operator"
 msgstr "Operator"
 
-#: scxrd/models/experiment_model.py:33
+#: scxrd/models/measurement_model.py:33
 msgid "diffractometer"
 msgstr "Diffraktometer"
 
-#: scxrd/models/experiment_model.py:35
+#: scxrd/models/measurement_model.py:35
 msgid "empirical formula"
 msgstr "Summenformel"
 
-#: scxrd/models/experiment_model.py:36
+#: scxrd/models/measurement_model.py:36
 msgid "first unit cell"
 msgstr "Vorläufige Elementarzelle"
 
-#: scxrd/models/experiment_model.py:37
+#: scxrd/models/measurement_model.py:37
 msgid "Resolution [&#x212b;]"
 msgstr "Auflösung  [&#x212b;]"
 
-#: scxrd/models/experiment_model.py:39
+#: scxrd/models/measurement_model.py:39
 msgid "reaction conditions"
 msgstr "Reaktionsbedingungen"
 
-#: scxrd/models/experiment_model.py:40
+#: scxrd/models/measurement_model.py:40
 msgid "measurement date"
 msgstr "Datum der Messung"
 
-#: scxrd/models/experiment_model.py:41 scxrd/models/sample_model.py:22
+#: scxrd/models/measurement_model.py:41 scxrd/models/sample_model.py:22
 msgid "sample submission date"
 msgstr "Proben-Abgabedatum"
 
-#: scxrd/models/experiment_model.py:42
+#: scxrd/models/measurement_model.py:42
 msgid "results sent date"
 msgstr "Ergebnis gesendet am"
 
-#: scxrd/models/experiment_model.py:43
+#: scxrd/models/measurement_model.py:43
 msgid "expected end date and time of the measurement"
 msgstr "Erwartetes Ende der Messung"
 
-#: scxrd/models/experiment_model.py:44
+#: scxrd/models/measurement_model.py:44
 msgid "sample base"
 msgstr "Probenhalter"
 
-#: scxrd/models/experiment_model.py:46
+#: scxrd/models/measurement_model.py:46
 msgid "sample glue"
 msgstr "Kleber"
 
-#: scxrd/models/experiment_model.py:50
+#: scxrd/models/measurement_model.py:50
 msgid "crystal size max [mm]"
 msgstr "Max. Kristallgröße"
 
-#: scxrd/models/experiment_model.py:52
+#: scxrd/models/measurement_model.py:52
 msgid "crystal size mid [mm]"
 msgstr "Mittl. Kristallgröße"
 
-#: scxrd/models/experiment_model.py:54
+#: scxrd/models/measurement_model.py:54
 msgid "crystal size min [mm]"
 msgstr "Min. Kristallgröße"
 
-#: scxrd/models/experiment_model.py:55
+#: scxrd/models/measurement_model.py:55
 msgid "measurement temperature [K]"
 msgstr "Messtemperatur [K]"
 
-#: scxrd/models/experiment_model.py:59
+#: scxrd/models/measurement_model.py:59
 msgid "crystal colour modifier"
 msgstr "Farbeigenschaften"
 
-#: scxrd/models/experiment_model.py:65
+#: scxrd/models/measurement_model.py:65
 msgid "crystal habit"
 msgstr "Habitus"
 
-#: scxrd/models/experiment_model.py:67 scxrd/models/sample_model.py:43
+#: scxrd/models/measurement_model.py:67 scxrd/models/sample_model.py:43
 msgid "special remarks"
 msgstr "Weitere Anmerkungen"
 
-#: scxrd/models/experiment_model.py:68
+#: scxrd/models/measurement_model.py:68
 msgid "The sample was measured successfully"
 msgstr "Die Probe wurde erfolgreich gemessen"
 
-#: scxrd/models/experiment_model.py:70
+#: scxrd/models/measurement_model.py:70
 msgid "Not measured, because:"
 msgstr "Nicht gemessen, weil:"
 
-#: scxrd/models/experiment_model.py:71
+#: scxrd/models/measurement_model.py:71
 msgid "The cause why the sample could not be measured"
 msgstr "Grund, warum die Probe nicht gemessen wurde"
 
-#: scxrd/models/experiment_model.py:73
+#: scxrd/models/measurement_model.py:73
 msgid "Structure is finished and can not be changed afterwards."
 msgstr ""
 "Die Struktur ist fertig gestellt und kann danach nicht mehr geändert werden."
@@ -481,19 +481,19 @@ msgstr "MOL-Datei der Struktur"
 msgid "Any additional information we should know."
 msgstr "Beliebige weitere Information die wir wissen sollten."
 
-#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:236
+#: scxrd/views/measurement_views.py:142 scxrd/views/measurement_views.py:236
 msgid "Saved successfully."
 msgstr "Erfolgreich gespeichert."
 
-#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:242
+#: scxrd/views/measurement_views.py:148 scxrd/views/measurement_views.py:242
 msgid "Please correct the errors below."
 msgstr "Bitte korrigiere den Fehler unten."
 
-#: scxrd/views/experiment_views.py:207
+#: scxrd/views/measurement_views.py:207
 msgid "This Measurement can not be changed anymore!"
 msgstr "Dieses Measurement kann nicht mehr verändert werden!"
 
-#: scxrd/views/experiment_views.py:220
+#: scxrd/views/measurement_views.py:220
 msgid ""
 "You can only finalize a measurement after uploading a CIF, report and "
 "checkcif file!"
@@ -501,11 +501,11 @@ msgstr ""
 "Die Messung kann nur abgeschlossen werden wenn CIF-, Report- und checkCIF-"
 "Datei vorhanden sind!"
 
-#: scxrd/views/experiment_views.py:303
-msgid "Experiments"
+#: scxrd/views/measurement_views.py:303
+msgid "Measurements"
 msgstr "Messungen"
 
-#: scxrd/views/experiment_views.py:333
+#: scxrd/views/measurement_views.py:333
 msgid "Edit"
 msgstr "ändern"
 
@@ -626,7 +626,7 @@ msgstr "Eine E-Mail zum Zurücksetzen des Passworts wurde gesendet."
 msgid "Send Confirmation Link"
 msgstr "Bestätigungslink senden"
 
-#: templates/scxrd/buttons/all_experiments.html:13
+#: templates/scxrd/buttons/all_measurements.html:13
 msgid "All measurements"
 msgstr "Alle Messungen"
 
@@ -638,7 +638,7 @@ msgstr "Zurück"
 msgid "View Samples"
 msgstr "Abgegebene Proben"
 
-#: templates/scxrd/buttons/my_op_experiments.html:13
+#: templates/scxrd/buttons/my_op_measurement.html:13
 msgid "My Measurements"
 msgstr "Meine Messungen"
 
@@ -680,7 +680,7 @@ msgstr "Details"
 
 #: templates/scxrd/residuals_table.html:9
 msgid "Measurement Nr."
-msgstr "Experimentnummer"
+msgstr "Measurementnummer"
 
 #: templates/scxrd/residuals_table.html:13
 #: templates/scxrd/submitted_samples_list_operator.html:25
@@ -2211,12 +2211,6 @@ msgstr ""
 
 #~ msgid "What should I do next?"
 #~ msgstr "Was nun?"
-
-#~ msgid "My Experiments"
-#~ msgstr "Meine Messungen"
-
-#~ msgid "Experiments:"
-#~ msgstr "Messungen:"
 
 #~ msgid "Back to Start"
 #~ msgstr "Zurück"

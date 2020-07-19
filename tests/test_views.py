@@ -10,13 +10,13 @@ from django.utils import timezone
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.forms.edit_experiment import ExperimentEditForm
+from scxrd.forms.edit_measurement import MeasurementEditForm
 from scxrd.models.models import CrystalSupport, Machine, WorkGroup
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 from scxrd.views.sample_views import NewSampleByCustomer
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_experiment
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_measurement
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -78,7 +78,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
                               'crystal_size_z'       : '0.1',
                               'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
                               'customer'             : '1',
-                              'experiment_name'      : 'TB_VR40_v1b',
+                              'measurement_name'      : 'TB_VR40_v1b',
                               'exptl_special_details': 'blub',
                               'glue'                 : '2',
                               'machine'              : '1',
@@ -98,7 +98,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         user.save()
         self.user = authenticate(username='testuser', password='Test1234!')
 
-    def test_post_experiment(self):
+    def test_post_measurement(self):
         c = Client()
         c.login(username='testuser', password='Test1234!')
         response = c.get(reverse_lazy('scxrd:new_exp'), follow=True)
@@ -108,7 +108,7 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         self.assertEqual(False, response.context.get('render_unmentioned_fields'))
 
     def test_form(self):
-        form = ExperimentEditForm(self.formdata)
+        form = MeasurementEditForm(self.formdata)
         self.assertDictEqual({'customer': ['Select a valid choice. That choice is not one of the available choices.'],
                               'end_time': ['This field is required.']},
                              form.errors)
@@ -117,9 +117,9 @@ class NewExpTest(DeleteFilesMixin, TestCase):
 
     def test_invalid_form(self):
         self.maxDiff = 999
-        self.formdata['experiment_name'] = ''
-        form = ExperimentEditForm(self.formdata)
-        self.assertDictEqual({'experiment_name': ['This field is required.'],
+        self.formdata['measurement_name'] = ''
+        form = MeasurementEditForm(self.formdata)
+        self.assertDictEqual({'measurement_name': ['This field is required.'],
                               'end_time'       : ['This field is required.'],
                               'customer'       : [
                                   'Select a valid choice. That choice is not one of the available choices.']},
@@ -128,12 +128,12 @@ class NewExpTest(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 
     def test_edit_exp(self):
         response = self.client.get(reverse("scxrd:new_exp"), follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'scxrd/experiment_new.html')
+        self.assertTemplateUsed(response, 'scxrd/measurement_new.html')
 
     def test_new_exp_create_not_exist(self):
         self.assertEqual(Measurement.objects.count(), 0)
@@ -148,7 +148,7 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         data = {
             'conditions'      : '',
             'crystal_habit'   : 'block',
-            'experiment_name' : 'PK_TMP355_b',  # PK-TMP355
+            'measurement_name' : 'PK_TMP355_b',  # PK-TMP355
             'base'            : CrystalSupport.objects.get(pk=1),
             'machine'         : Machine.objects.get(pk=1),
             'measure_date'    : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
@@ -171,7 +171,7 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
             'crystal_size_y'       : 0.13,
             'crystal_size_z'       : 0.14,
             'base'                 : 1,
-            'experiment_name'      : 'PK_TMP355',  # PK-TMP355
+            'measurement_name'      : 'PK_TMP355',  # PK-TMP355
             'exptl_special_details': 'some details',
             'machine'              : 1,
             'measurement_temp'     : 124.0,  # 123.0
@@ -195,19 +195,19 @@ class TestExperimentEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
         self.assertEqual(Measurement.objects.last().measurement_temp, 124.0)
-        self.assertEqual(Measurement.objects.last().experiment_name, 'PK_TMP355')
+        self.assertEqual(Measurement.objects.last().measurement_name, 'PK_TMP355')
         self.assertEqual(Measurement.objects.last().sum_formula, 'C5H5')
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestExperimentEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
+class TestMeasurementEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
     data = {
-        'experiment_name': 'PK_TMP355_b',  # PK-TMP355
+        'measurement_name': 'PK_TMP355_b',  # PK-TMP355
         'end_time': '2020-07-03 09:37:19',
         'number'         : 3, }
 
     def test_exp_edit_by_other_user(self):
-        """TODO: A plain user should not be allowed to edit this experiment"""
+        """TODO: A plain user should not be allowed to edit this measurement"""
         Measurement.objects.create(**self.data)
         self.assertEqual(Measurement.objects.count(), 1)
 
@@ -289,8 +289,8 @@ class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         cif_model.sha256 = generate_sha256(cif_file)
         cif_model.filesize = cif_file.size
         cif_model.cif_file_on_disk = cif_file
-        self.exp = create_experiment()
-        cif_model.experiment = self.exp
+        self.exp = create_measurement()
+        cif_model.measurement = self.exp
         cif_model.save()
         self.cif_model = cif_model
 
@@ -307,13 +307,13 @@ class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestExperimentListJsonView(DeleteFilesMixin, OperatorUserMixin, TestCase):
+class TestMeasurementListJsonView(DeleteFilesMixin, OperatorUserMixin, TestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.exp = create_experiment()
+        self.exp = create_measurement()
 
     def test_exp_list_json(self):
-        request = self.client.post(reverse('scxrd:experiments_list'), follow=True)
+        request = self.client.post(reverse('scxrd:measurements_list'), follow=True)
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.content,

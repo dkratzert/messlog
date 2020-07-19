@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse_lazy
 
-from scxrd.forms.new_experiment import ExperimentNewForm
+from scxrd.forms.new_measurement import MeasurementNewForm
 from scxrd.forms.new_sample import SubmitNewSampleForm
 from scxrd.models.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
@@ -77,11 +77,11 @@ class TestNewSampleForm(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestNewExperimentForm(DeleteFilesMixin, OperatorUserMixin, TestCase):
+class TestNewMeasurementForm(DeleteFilesMixin, OperatorUserMixin, TestCase):
     def setUp(self) -> None:
         self.data = {
             # The minimum requirements:
-            "experiment_name" : "A_test_123",
+            "measurement_name" : "A_test_123",
             "number"          : 100,
             "machine"         : 1,
             "measurement_temp": 100.15,
@@ -95,110 +95,110 @@ class TestNewExperimentForm(DeleteFilesMixin, OperatorUserMixin, TestCase):
             'user'            : 1,
         }
 
-    def test_create_new_experiment(self):
-        form = ExperimentNewForm(self.data, user=1)
+    def test_create_new_measurement(self):
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         sample: Sample = form.save()
         self.assertNotEqual('Juliana', str(sample))
         self.assertEqual('A_test_123', str(sample))
 
     def test_name_missing(self):
-        self.data['experiment_name'] = ''
-        form = ExperimentNewForm(self.data, user=1)
+        self.data['measurement_name'] = ''
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_number_missing(self):
         self.data.pop('number')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         with self.assertRaises(IntegrityError):
             form.save()
 
     def test_machine_missing(self):
         self.data.pop('machine')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_measurement_temp_missing(self):
         self.data.pop('measurement_temp')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_end_time_missing(self):
         self.data.pop('end_time')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_base_missing(self):
         self.data.pop('base')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_crystal_colour(self):
         self.data.pop('crystal_colour')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_crystal_habit(self):
         self.data.pop('crystal_habit')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_crystal_size_x(self):
         self.data.pop('crystal_size_x')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_crystal_size_y(self):
         self.data.pop('crystal_size_y')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_crystal_size_z(self):
         self.data.pop('crystal_size_z')
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(False, form.is_valid())
         with self.assertRaises(ValueError):
             form.save()
 
     def test_add_glue(self):
         self.data['glue'] = 1
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         form.save()
 
     def test_add_sum_formula(self):
         self.data['sum_formula'] = 'C2H5OH'
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         form.save()
 
     def test_add_prelim_unit_cell(self):
         self.data['prelim_unit_cell'] = '10 10 10 90 90 90'
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         form.save()
 
     def test_add_exptl_special_details(self):
         self.data['exptl_special_details'] = 'This is a test'
-        form = ExperimentNewForm(self.data, user=1)
+        form = MeasurementNewForm(self.data, user=1)
         self.assertEqual(True, form.is_valid())
         form.save()

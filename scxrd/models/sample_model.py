@@ -51,4 +51,4 @@ class Sample(models.Model):
         return self.sample_name
 
     def was_measured(self):
-        return any([x.was_measured for x in self.experiments])
+        return any([x.was_measured for x in self.measurements])

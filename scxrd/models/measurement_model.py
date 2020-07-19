@@ -16,22 +16,22 @@ from scxrd.utils import COLOUR_CHOICES, COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES
 
 
 class Measurement(models.Model):
-    # The name of the current experiment
-    experiment_name = models.CharField(verbose_name=_('experiment name'), max_length=200, blank=False, unique=True,
+    # The name of the current measurement
+    measurement_name = models.CharField(verbose_name=_('measurement name'), max_length=200, blank=False, unique=True,
                                        validators=[sample_name_validator])
-    # Makes the sample measurement status visible through the experiment status:
+    # Makes the sample measurement status visible through the measurement status:
     sample = models.ForeignKey('Sample', on_delete=models.CASCADE, null=True, blank=True,
-                               related_name='experiments')
+                               related_name='measurements')
     number = models.PositiveIntegerField(verbose_name=_('number'), unique=True, validators=[MinValueValidator(1)])
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
-                                 verbose_name=_("customer (for service only)"), related_name='customer_experiments')
+                                 verbose_name=_("customer (for service only)"), related_name='customer_measurements')
     # Operator has to be an authenticated User:
-    operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_experiments',
+    operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_measurements',
                                  on_delete=models.SET_NULL)
     machine = models.ForeignKey(Machine, verbose_name=_('diffractometer'), on_delete=models.SET_NULL,
-                                related_name='experiments', null=True, blank=True)
+                                related_name='measurements', null=True, blank=True)
     sum_formula = models.CharField(max_length=300, verbose_name=_("empirical formula"), blank=True)
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
     resolution = models.FloatField(verbose_name=_('Resolution [&#x212b;]'), null=True, blank=True,
@@ -42,8 +42,8 @@ class Measurement(models.Model):
     result_date = models.DateField(verbose_name=_('results sent date'), blank=True, null=True)
     end_time = models.DateTimeField(verbose_name=_('expected end date and time of the measurement'), blank=False)
     base = models.ForeignKey(CrystalSupport, verbose_name=_('sample base'), blank=True, null=True,
-                             on_delete=models.DO_NOTHING, related_name='experiments')
-    glue = models.ForeignKey(CrystalGlue, verbose_name=_('sample glue'), related_name='experiments', blank=True,
+                             on_delete=models.DO_NOTHING, related_name='measurements')
+    glue = models.ForeignKey(CrystalGlue, verbose_name=_('sample glue'), related_name='measurements', blank=True,
                              null=True,
                              on_delete=models.DO_NOTHING)
     # equivalent to _exptl_crystal_size_max
@@ -69,7 +69,7 @@ class Measurement(models.Model):
                                        blank=True)
     not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True,
                                           help_text=_('The cause why the sample could not be measured'))
-    # After setting final to True, the experiment is write protected:
+    # After setting final to True, the measurement is write protected:
     final = models.BooleanField(default=False, help_text=_('Structure is finished and can not be changed afterwards.'))
     history = HistoricalRecords()
 
@@ -89,7 +89,7 @@ class Measurement(models.Model):
     was_measured_recently.short_description = 'Measured recently?'
 
     def __str__(self):
-        return self.experiment_name
+        return self.measurement_name
 
     def get_absolute_url(self):
         return reverse_lazy('scxrd:edit-exp', args=(self.number,))

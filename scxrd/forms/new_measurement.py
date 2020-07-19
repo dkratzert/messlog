@@ -3,11 +3,11 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
-from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Measurement
+from scxrd.forms.forms import MeasurementFormMixin
+from scxrd.models.measurement_model import Measurement
 
 
-class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
+class MeasurementNewForm(MeasurementFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1, required=False)
 
     # customer = forms.CharField(max_length=150, required=False, label=_('Customer (for service only)'))
@@ -23,7 +23,7 @@ class ExperimentNewForm(ExperimentFormMixin, forms.ModelForm):
             # Measurement ###
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment_name', css_class='col-4'),
+                Column('measurement_name', css_class='col-4'),
                 Column('measure_date'),
                 Column('end_time', css_class='col-4'),
             ),

@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 import chromedriver_binary
 from selenium.webdriver.support.select import Select
 
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.models.models import WorkGroup
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin
 
@@ -125,7 +125,7 @@ class NewSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServer
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServerTestCase):
+class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServerTestCase):
     port = 8001
 
     def setUp(self):
@@ -158,7 +158,7 @@ class ExperimentFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stati
         self.select_choicefield(selenium, field_id='id_base', choice='glass fiber')
         self.select_choicefield(selenium, field_id='id_glue', choice='grease')
         self.assertEqual(selenium.find_element_by_id('id_sum_formula').get_attribute('value'), 'C2H5OH')
-        self.assertEqual(selenium.find_element_by_id('id_experiment_name').get_attribute('value'), 'testsample_123')
+        self.assertEqual(selenium.find_element_by_id('id_measurement_name').get_attribute('value'), 'testsample_123')
         selenium.find_element_by_id('id_crystal_habit').send_keys('block')
         selenium.find_element_by_id('id_crystal_size_z').send_keys('0.067')
         selenium.find_element_by_id('id_crystal_size_y').send_keys('0.079')

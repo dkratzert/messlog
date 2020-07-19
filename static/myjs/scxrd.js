@@ -65,7 +65,7 @@ $(document).ready(function () {
             },
             {
                 title: gettext("Project Name"),
-                name: 'experiment_name',
+                name: 'measurement_name',
                 searchable: true,
                 orderable: true,
             },

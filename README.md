@@ -18,4 +18,4 @@ More detailed documentation will follow...
 
 ![A New Measurement](https://xs3-data.uni-freiburg.de/messlog/messlog_new_exp.PNG)
 
-![My Experiments](https://xs3-data.uni-freiburg.de/messlog/messlog_exp_list.PNG)
+![My Measurements](https://xs3-data.uni-freiburg.de/messlog/messlog_exp_list.PNG)

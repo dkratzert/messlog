@@ -11,7 +11,7 @@ from simple_history.admin import SimpleHistoryAdmin
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile, CheckCifModel, ReportModel
 from scxrd.models.sample_model import Sample
 
@@ -50,31 +50,30 @@ class WorkGroupAdmin(admin.ModelAdmin):
                                           customer__profile__work_group=group).count()
 
 
-class ExperimentCIFInline(StackedInline):
+class MeasurementCIFInline(StackedInline):
     model = CifFileModel
     can_delete = True
 
 
-class ExperimentCheckCifInline(StackedInline):
+class MeasurementCheckCifInline(StackedInline):
     model = CheckCifModel
     can_delete = True
 
 
-class ExperimentReportInline(StackedInline):
     model = ReportModel
     can_delete = True
 
 
-class ExperimentAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
-    list_display = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'customer')
+class MeasurementAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
+    list_display = ('measurement_name', 'number', 'measure_date', 'machine', 'sum_formula', 'customer')
     list_filter = ['measure_date']
     history_list_display = ["status"]
-    search_fields = ['experiment_name', 'number', 'sum_formula']
+    search_fields = ['measurement_name', 'number', 'sum_formula']
     ordering = ['-number']
-    inlines = (ExperimentCIFInline, ExperimentCheckCifInline, ExperimentReportInline)
+    inlines = (MeasurementCIFInline, MeasurementCheckCifInline, MeasurementReportInline)
 
     def get_form(self, request, obj=None, **kwargs):
-        form = super(ExperimentAdmin, self).get_form(request, obj, **kwargs)
+        form = super(MeasurementAdmin, self).get_form(request, obj, **kwargs)
         try:
             form.base_fields['number'].initial = Measurement.objects.first().number + 1
         except AttributeError:
@@ -84,13 +83,13 @@ class ExperimentAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
 
 class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     model = CifFileModel
-    list_display = ['edit_file', 'data', 'related_experiment', 'number_of_atoms']
+    list_display = ['edit_file', 'data', 'related_measurement', 'number_of_atoms']
 
     def edit_file(self, obj):
         return self.model.objects.get(id=obj.id)
 
     @staticmethod
-    def related_experiment(obj):
+    def related_measurement(obj):
         return Measurement.objects.get(ciffilemodel=obj.pk)
 
     def number_of_atoms(self, obj):
@@ -111,7 +110,7 @@ class PersonInline(StackedInline):
 
 class UserAdmin(BaseUserAdmin):
     inlines = (PersonInline,)
-    list_display = ['username', 'first_name', 'last_name', 'number_of_experiments', 'work_group', 'is_staff',
+    list_display = ['username', 'first_name', 'last_name', 'number_of_measurements', 'work_group', 'is_staff',
                     'is_operator']
     list_filter = ('is_superuser', 'profile__work_group')
     fieldsets = (
@@ -129,8 +128,8 @@ class UserAdmin(BaseUserAdmin):
     def work_group(self, obj: User):
         return obj.profile.work_group
 
-    def number_of_experiments(self, obj: User):
-        return obj.operator_experiments.count()  # Measurement.objects.filter(operator=obj).count()
+    def number_of_measurements(self, obj: User):
+        return obj.operator_measurements.count()  # Measurement.objects.filter(operator=obj).count()
 
     is_operator.boolean = True
 
@@ -143,13 +142,13 @@ class GluesAdmin(admin.ModelAdmin):
         """Method to do the sorting for the admin_order_field"""
         queryset = super().get_queryset(request)
         queryset = queryset.annotate(
-            _used_by=Count('experiments', distinct=True),
+            _used_by=Count('measurements', distinct=True),
         )
         return queryset
 
     def used_by(self, obj):
-        """Returns the number of experiment that use this glue"""
-        return obj.experiments.count()
+        """Returns the number of measurement that use this glue"""
+        return obj.measurements.count()
 
     used_by.admin_order_field = '_used_by'
 
@@ -159,8 +158,8 @@ class CrystalSupportAdmin(admin.ModelAdmin):
     list_display = ['support', 'used_by']
 
     def used_by(self, obj):
-        """Returns the number of experiment that use this glue"""
-        return obj.experiments.count()
+        """Returns the number of measurement that use this glue"""
+        return obj.measurements.count()
 
 
 class MachinesAdmin(admin.ModelAdmin):
@@ -169,21 +168,21 @@ class MachinesAdmin(admin.ModelAdmin):
                     'measurements_this_year']
 
     def measurements(self, machine):
-        """Returns the number of experiment that use this machine"""
-        return machine.experiments.count()
+        """Returns the number of measurement that use this machine"""
+        return machine.measurements.count()
 
     def measurements_last_year(self, machine: Machine):
         today = datetime.now()
-        return machine.experiments.filter(measure_date__gt=str(today.year - 1) + '-1-1',
+        return machine.measurements.filter(measure_date__gt=str(today.year - 1) + '-1-1',
                                           measure_date__lt=str(today.year) + '-1-1').count()
 
     def measurements_this_year(self, machine: Machine):
         today = datetime.now()
-        return machine.experiments.filter(measure_date__gt=str(today.year) + '-1-1').count()
+        return machine.measurements.filter(measure_date__gt=str(today.year) + '-1-1').count()
 
 
 admin.site.unregister(Group)
-admin.site.register(Measurement, ExperimentAdmin)
+admin.site.register(Measurement, MeasurementAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
 admin.site.register(Sample, SimpleHistoryAdmin)

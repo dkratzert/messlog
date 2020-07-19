@@ -7,7 +7,7 @@ from django.test import Client
 
 from mysite.settings import MEDIA_ROOT
 from scxrd.models.models import Machine, WorkGroup, CrystalGlue, model_fixtures
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 
@@ -104,7 +104,7 @@ class DeleteFilesMixin():
         super().tearDownClass()
 
 
-def create_experiment(user: User = None):
+def create_measurement(user: User = None):
     """
     Create a question with the given `question_text` and published the
     given number of `days` offset to now (negative for questions published
@@ -130,7 +130,7 @@ def create_experiment(user: User = None):
     # user2.save()
     mach = Machine(diffrn_measurement_device_type='FoobarMachine')
     mach.save()
-    exp = Measurement.objects.create(experiment_name='IK_MSJg20_100K',
+    exp = Measurement.objects.create(measurement_name='IK_MSJg20_100K',
                                      number='1',
                                      sum_formula='C5H10O2',
                                      was_measured=True,

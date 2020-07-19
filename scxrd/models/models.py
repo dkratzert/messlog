@@ -13,22 +13,22 @@ from simple_history.models import HistoricalRecords
 
 """
 TODO: 
-- make sure that operators without superuser rights can only edit their own experiments
+- make sure that operators without superuser rights can only edit their own measurements
 - Not measured because: hide if no cause or sho only "not measurable"
 - on details page for sample: list files of every measurement.
 - add email notifications and password reset etc...
 - mail request of operator status: page for operators where they can send a mail and set status
 - improve admin page for user profiles
 
-- Add a "currently running experiment" page with status for everyone visible
+- Add a "currently running measurement" page with status for everyone visible
    - there should be also the end time visible and who is responsible
-   - the owner of the experiment could do modifications to this experiment by an "edit experiment" button
+   - the owner of the measurement could do modifications to this measurement by an "edit measurement" button
      owners can do changes only until the cif file is uploaded 
    - page should have a link to the google calendar (or even embedded into an iframe?)
 
 - check checksum for correctness during file upload and download
-- show wrong cif crc in "Details" of experiments list page
-- Check for existing unit cell during cif upload and measure experiment.
+- show wrong cif crc in "Details" of measurements list page
+- Check for existing unit cell during cif upload and measure measurement.
 - reminder message to take back vials?
 - for charts:
     https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html 

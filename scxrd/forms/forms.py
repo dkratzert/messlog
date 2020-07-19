@@ -9,14 +9,14 @@ from django.utils.translation import gettext_lazy as _
 from scxrd.models.cif_model import validate_cif_file_extension
 from scxrd.models.models import Machine, CrystalSupport, validate_checkcif_file_extension, \
     validate_reportdoc_file_extension
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.utils import COLOUR_MOD_CHOICES, COLOUR_LUSTRE_COICES, COLOUR_CHOICES
 
 
-class ExperimentTableForm(forms.ModelForm):
+class MeasurementTableForm(forms.ModelForm):
     class Meta:
         model = Measurement
-        fields = ('experiment_name', 'number', 'measure_date')
+        fields = ('measurement_name', 'number', 'measure_date')
 
 
 class CustomCheckbox(Field):
@@ -33,7 +33,7 @@ class MyDecimalField(forms.DecimalField):
         return attrs
 
 
-class ExperimentFormMixin(forms.ModelForm):
+class MeasurementFormMixin(forms.ModelForm):
     number = forms.IntegerField(min_value=1, required=False)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now, label=_('measure date'))

@@ -520,7 +520,7 @@ if (!Jmol._version)
                 Jmol.featureDetection._webGLtest = (
                     window.WebGLRenderingContext
                     && ((canvas = document.createElement("canvas")).getContext("webgl")
-                        || canvas.getContext("experimental-webgl")) ? 1 : -1);
+                        || canvas.getContext("measuremental-webgl")) ? 1 : -1);
             }
             return (Jmol.featureDetection._webGLtest > 0);
         };

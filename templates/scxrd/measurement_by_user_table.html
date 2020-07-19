@@ -1,0 +1,11 @@
+{# This file displays the main table with the list of measurements but only from the current user #}
+
+
+{% load static %}
+{% csrf_token %}
+<script type="text/javascript">
+
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    var table_url = "{% url 'scxrd:measurements_list_from_user' %}";
+
+</script>

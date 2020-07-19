@@ -30,7 +30,7 @@
     <div class="col-7" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
     {% comment %}
     <div class="col-5">CIF data_</div>
-    <div class="col-7" id="t_data_">  {% experiment_name.ciffilemodel.data|default:"-----"  %} </div>
+    <div class="col-7" id="t_data_">  {% measurement_name.ciffilemodel.data|default:"-----"  %} </div>
     {% endcomment %}
     <div class="col-5">{% trans "Space Group" %}</div>
     <div class="col-7" id="t_spgr">  {{ measurement.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>

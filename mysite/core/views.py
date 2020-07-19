@@ -69,7 +69,7 @@ class UserEdit(UpdateView):
 
 class OptionsView(TemplateView):
     """
-    Show details of an experiment
+    Show details of a measurement
 
     TODO: Make real options page
     """

@@ -3,11 +3,11 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
-from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Measurement
+from scxrd.forms.forms import MeasurementFormMixin
+from scxrd.models.measurement_model import Measurement
 
 
-class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
+class MeasurementEditForm(MeasurementFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.exp_title = _('Measurement')
@@ -22,7 +22,7 @@ class ExperimentEditForm(ExperimentFormMixin, forms.ModelForm):
                  '{}</div>'.format(self.exp_title, self.number, backbutton)),
 
             Row(
-                Column('experiment_name', css_class='col-4'),
+                Column('measurement_name', css_class='col-4'),
                 Column('measure_date'),
                 Column('end_time', css_class='col-4'),
             ),

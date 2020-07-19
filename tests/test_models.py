@@ -7,15 +7,15 @@ from django.test import TestCase, override_settings
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.models.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
-from tests.tests import MEDIA_ROOT, create_experiment, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \
+from tests.tests import MEDIA_ROOT, create_measurement, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \
     SuperUserMixin
 
 
-# TODO: tests for write protection of experiment, file uploads
+# TODO: tests for write protection of measurement, file uploads
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestUser(PlainUserMixin, DeleteFilesMixin, TestCase):
@@ -91,7 +91,7 @@ class TestSuperuserProfile(SuperUserMixin, DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestExperimentCreateTest(DeleteFilesMixin, TestCase):
+class TestMeasurementCreateTest(DeleteFilesMixin, TestCase):
     fixtures = model_fixtures
 
     def setUp(self) -> None:
@@ -102,8 +102,8 @@ class TestExperimentCreateTest(DeleteFilesMixin, TestCase):
         cif_model.sha256 = generate_sha256(cif_file)
         cif_model.filesize = cif_file.size
         cif_model.cif_file_on_disk = cif_file
-        self.exp = create_experiment()
-        cif_model.experiment = self.exp
+        self.exp = create_measurement()
+        cif_model.measurement = self.exp
         cif_model.save()
         self.cif_model = cif_model
 
@@ -118,19 +118,19 @@ class TestExperimentCreateTest(DeleteFilesMixin, TestCase):
         self.assertEqual('Hinterseer', str(self.exp.customer.last_name))
 
     def test_string_representation(self):
-        entry = Measurement(experiment_name="My entry title")
-        self.assertEqual(str(entry), entry.experiment_name)
+        entry = Measurement(measurement_name="My entry title")
+        self.assertEqual(str(entry), entry.measurement_name)
 
     def test_cif_model(self):
         self.assertEqual(self.cif_model.sha256, 'a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a')
         self.assertEqual(self.cif_model.data, 'p21c')
         self.assertEqual(self.cif_model.wr2_in_percent(), 4.0)
         self.assertEqual(self.cif_model.r1_in_percent(), 10.1)
-        self.assertEqual(self.cif_model.experiment.was_measured, True)
+        self.assertEqual(self.cif_model.measurement.was_measured, True)
 
     def test_cif_workgroup(self):
-        self.assertEqual(str(self.cif_model.experiment.operator.profile.work_group), 'AK Krossing')
-        self.assertEqual(str(self.cif_model.experiment.customer.profile.work_group), 'AK Hillebrecht')
+        self.assertEqual(str(self.cif_model.measurement.operator.profile.work_group), 'AK Krossing')
+        self.assertEqual(str(self.cif_model.measurement.customer.profile.work_group), 'AK Hillebrecht')
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -158,7 +158,7 @@ class TestSampleCreate(DeleteFilesMixin, TestCase):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class TestExperimentCreateCif(DeleteFilesMixin, TestCase):
+class TestMeasurementCreateCif(DeleteFilesMixin, TestCase):
 
     def test_parsecif(self):
         struct = gemmi.cif.read_file('scxrd/testfiles/p21c.cif')

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import override_settings, TestCase
 from django.urls import reverse
 
-from scxrd.models.experiment_model import Measurement
+from scxrd.models.measurement_model import Measurement
 from scxrd.models.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin
 
@@ -92,13 +92,13 @@ class TestNewExpFromSample(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, Test
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ExperimentCreateView(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, TestCase):
+class MeasurementCreateView(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, TestCase):
 
     def setUp(self) -> None:
-        super(ExperimentCreateView, self).setUp()
+        super(MeasurementCreateView, self).setUp()
         self.data2 = {
             "machine"                   : 1,
-            'experiment_name'           : "DK_ml_766",
+            'measurement_name'           : "DK_ml_766",
             'number'                    : 1,
             'base'                      : 1,
             'crystal_size_x'            : 0.1,
@@ -122,17 +122,17 @@ class ExperimentCreateView(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, Test
     def test_new_exp_view(self):
         response = self.client.get(reverse("scxrd:new_exp"), follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'scxrd/experiment_new.html')
+        self.assertTemplateUsed(response, 'scxrd/measurement_new.html')
 
     def test_new_exp_create(self):
         self.assertEqual(Measurement.objects.count(), 0)
         # Do not Follow the post request, because it goes to index page afterwards:
         response = self.client.post(reverse("scxrd:new_exp"), follow=False, data=self.data2)
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'scxrd/experiment_new.html')
+        self.assertTemplateNotUsed(response, 'scxrd/measurement_new.html')
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(str(Measurement.objects.last()), 'DK_ml_766')
-        self.assertEqual(Measurement.objects.get(pk=1).experiment_name, 'DK_ml_766')
+        self.assertEqual(Measurement.objects.get(pk=1).measurement_name, 'DK_ml_766')
         self.assertEqual(Measurement.objects.get(pk=1).measurement_temp, 100)
 
     def test_success_url(self):

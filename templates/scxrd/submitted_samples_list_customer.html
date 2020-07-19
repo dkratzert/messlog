@@ -25,19 +25,19 @@
                                     {{ sample.sample_name }}
                                 </span>
                                 <span class="ml-3 mr-3">
-                                    {% if not sample.experiments|was_measured %}
+                                    {% if not sample.measurements|was_measured %}
                                         <span class="badge badge-warning mb-1">{% trans "Awaiting measurement" %}</span>
-                                    {% elif sample.experiments|was_measured %}
+                                    {% elif sample.measurements|was_measured %}
                                         <span class="badge badge-info mb-1">{% trans "Was measured" %}</span>
                                     {% endif %}
-                                    {% if sample.experiments|was_deposited %}
+                                    {% if sample.measurements|was_deposited %}
                                         <span class="badge badge-success mb-1">{% trans "Structure Finished!" %}</span>
                                     {% endif %}
                                 </span>
                                 <span class="float">
                                     {% trans "Submitted:" %} {{ sample.submit_date }}
                                 </span>
-                            {% if not sample.experiments|was_measured %}
+                            {% if not sample.measurements|was_measured %}
                                 <form class="form-row float-right" method="POST"
                                       action="{% url "scxrd:delete_sample" sample.pk %}">
                                     {% csrf_token %}
@@ -63,11 +63,11 @@
                                         {% endif %}
                                     </div>
                                     <div class="col-2 float-right">
-                                        {% for experiment in sample.experiments.all %}
-                                            {% if experiment.ciffilemodel.ccdc_number %}
+                                        {% for measurement in sample.measurements.all %}
+                                            {% if measurement.ciffilemodel.ccdc_number %}
                                                 CCDC:
-                                                <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ experiment.ciffilemodel.ccdc_number }}">
-                                                    {{ experiment.ciffilemodel.ccdc_number }}
+                                                <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ measurement.ciffilemodel.ccdc_number }}">
+                                                    {{ measurement.ciffilemodel.ccdc_number }}
                                                 </a>
                                             {% endif %}
                                         {% endfor %}
@@ -98,16 +98,16 @@
                                         <div class="card">
                                             <div class="card-header">{% trans "Measurements:" %}</div>
                                             <div class="card-body">
-                                                {% for experiment in sample.experiments.all %}
-                                                    <div>{{ experiment }}
-                                                        {% if experiment.was_measured %}
+                                                {% for measurement in sample.measurements.all %}
+                                                    <div>{{ measurement }}
+                                                        {% if measurement.was_measured %}
                                                             <span class="text-success">{% trans "was measured" %} </span>
                                                         {% else %}
-                                                            {% if experiment.not_measured_cause %}
+                                                            {% if measurement.not_measured_cause %}
                                                                 <span class="text-danger">
                                                                     {% trans "could not be measured, because:" %}
                                                                 </span><br>
-                                                                {{ experiment.not_measured_cause }}
+                                                                {{ measurement.not_measured_cause }}
                                                             {% else %}
                                                                 <span class="text-danger">
                                                                 {% trans "could not be measured" %}

@@ -6,11 +6,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from scxrd.form_utils import card, backbutton
-from scxrd.forms.forms import ExperimentFormMixin
-from scxrd.models.experiment_model import Measurement
+from scxrd.forms.forms import MeasurementFormMixin
+from scxrd.models.measurement_model import Measurement
 
 
-class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
+class MeasurementFromSampleForm(MeasurementFormMixin, forms.ModelForm):
     number = forms.IntegerField(min_value=1, required=False)
     measure_date = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d %H:%M'), required=False,
                                        initial=timezone.now, label=_('measure date'))
@@ -40,7 +40,7 @@ class ExperimentFromSampleForm(ExperimentFormMixin, forms.ModelForm):
             # Measurement ###
             card(self.exp_title, backbutton),
             Row(
-                Column('experiment_name', css_class='col-4'),
+                Column('measurement_name', css_class='col-4'),
                 Column('measurement_temp', css_class='col-4'),
                 # Column('customer', css_class='col-4 invisible'),  # handled in the view
             ),
