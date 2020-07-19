@@ -138,7 +138,7 @@ class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
     def test_new_exp_create_not_exist(self):
         self.assertEqual(Measurement.objects.count(), 0)
         # Do not Follow the post request, because it goes to index page afterwards:
-        response = self.client.post(reverse("scxrd:edit-exp", args=(1,)), follow=True)
+        response = self.client.post(reverse("scxrd:edit-measurement", args=(1,)), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content,
                          b'\n<!doctype html>\n<html lang="en">\n<head>\n  <title>Not Found</title>\n</head>\n<body>\n  '
@@ -190,7 +190,8 @@ class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         Measurement.objects.create(**data)
         self.assertEqual(Measurement.objects.count(), 1)
         # Do not Follow the post request, because it goes to index page afterwards:
-        response = self.client.post(reverse("scxrd:edit-exp", kwargs={'pk': 1}), follow=True, data=data2)
+        # remember: we use number instead of pk:
+        response = self.client.post(reverse("scxrd:edit-measurement", kwargs={'number': 3}), follow=True, data=data2)
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
@@ -322,5 +323,5 @@ class TestMeasurementListJsonView(DeleteFilesMixin, OperatorUserMixin, TestCase)
                           b'_MSJg20_100K", "20.11.2013 21:08", "APEXII", "susi", "<span class=\\"badg'
                           b'e badge-warning ml-1\\">no</span>", '
                           b'"", '
-                          b'"<a class=\\"btn-outline-danger m-0 p-1\\" href=edit/1>Edit</a>"]], '
+                          b'"<a class=\\"btn-outline-danger m-0 p-1\\" href=\\"/scxrd/measurements/edit/1/\\">Edit</a>"]], '
                           b'"result": "ok"}'))

@@ -92,7 +92,7 @@ class Measurement(models.Model):
         return self.measurement_name
 
     def get_absolute_url(self):
-        return reverse_lazy('scxrd:edit-exp', args=(self.number,))
+        return reverse_lazy('scxrd:edit-measurement', args=(self.number,))
 
 
 @receiver(pre_delete, sender=Measurement)
