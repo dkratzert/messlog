@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 17:29+0200\n"
+"POT-Creation-Date: 2020-07-19 22:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,23 +77,23 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: scxrd/admin.py:101
+#: scxrd/admin.py:104
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
-#: scxrd/admin.py:119
+#: scxrd/admin.py:122
 msgid "Personal info"
 msgstr "Benutzerdetails"
 
-#: scxrd/admin.py:120
+#: scxrd/admin.py:123
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: scxrd/admin.py:123
+#: scxrd/admin.py:126
 msgid "Important dates"
 msgstr "Letzte Änderungen"
 
-#: scxrd/forms/edit_measurement.py:13
+#: scxrd/forms/edit_measurement.py:13 scxrd/models/measurement_model.py:78
 msgid "Measurement"
 msgstr "Messung"
 
@@ -296,8 +296,8 @@ msgid "structure is publishable"
 msgstr "Struktur ist publizierbar"
 
 #: scxrd/models/measurement_model.py:29
-msgid "customer (for service only)"
-msgstr "Kunde (nur für Servicemessung)"
+msgid "customer"
+msgstr "Kunde"
 
 #: scxrd/models/measurement_model.py:31
 msgid "operator"
@@ -320,8 +320,8 @@ msgid "Resolution [&#x212b;]"
 msgstr "Auflösung  [&#x212b;]"
 
 #: scxrd/models/measurement_model.py:39
-msgid "reaction conditions"
-msgstr "Reaktionsbedingungen"
+msgid "crystallization conditions"
+msgstr "Kristallisationsbedingungen"
 
 #: scxrd/models/measurement_model.py:40
 msgid "measurement date"
@@ -391,6 +391,14 @@ msgstr "Grund, warum die Probe nicht gemessen wurde"
 msgid "Structure is finished and can not be changed afterwards."
 msgstr ""
 "Die Struktur ist fertig gestellt und kann danach nicht mehr geändert werden."
+
+#: scxrd/models/measurement_model.py:79 scxrd/views/measurement_views.py:303
+msgid "Measurements"
+msgstr "Messungen"
+
+#: scxrd/models/measurement_model.py:91
+msgid "Measured recently?"
+msgstr "Vor kurzem gemessen?"
 
 #: scxrd/models/models.py:70
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
@@ -500,10 +508,6 @@ msgid ""
 msgstr ""
 "Die Messung kann nur abgeschlossen werden wenn CIF-, Report- und checkCIF-"
 "Datei vorhanden sind!"
-
-#: scxrd/views/measurement_views.py:303
-msgid "Measurements"
-msgstr "Messungen"
 
 #: scxrd/views/measurement_views.py:333
 msgid "Edit"
@@ -2146,6 +2150,9 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/tests/settings.py:45
 msgid "Brazilian Portuguese"
 msgstr ""
+
+#~ msgid "customer (for service only)"
+#~ msgstr "Kunde (nur für Servicemessung)"
 
 #~ msgid "The structure is of sufficient quality to publish it."
 #~ msgstr ""

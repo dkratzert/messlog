@@ -26,7 +26,7 @@ class Measurement(models.Model):
     publishable = models.BooleanField(verbose_name=_("structure is publishable"), default=False)
     # The user who submitted a respective sample
     customer = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True,
-                                 verbose_name=_("customer (for service only)"), related_name='customer_measurements')
+                                 verbose_name=_("customer"), related_name='customer_measurements')
     # Operator has to be an authenticated User:
     operator = models.ForeignKey(to=User, verbose_name=_('operator'), null=True, related_name='operator_measurements',
                                  on_delete=models.SET_NULL)
@@ -75,6 +75,8 @@ class Measurement(models.Model):
 
     class Meta:
         ordering = ["-number"]
+        verbose_name = _('Measurement')
+        verbose_name_plural = _('Measurements')
 
     def was_measured_recently(self) -> bool:
         now = timezone.now()
@@ -86,7 +88,7 @@ class Measurement(models.Model):
 
     was_measured_recently.admin_order_field = 'measure_date'
     was_measured_recently.boolean = True
-    was_measured_recently.short_description = 'Measured recently?'
+    was_measured_recently.short_description = _('Measured recently?')
 
     def __str__(self):
         return self.measurement_name

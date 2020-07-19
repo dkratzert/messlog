@@ -66,12 +66,15 @@ class MeasurementReportInline(StackedInline):
 
 
 class MeasurementAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
-    list_display = ('measurement_name', 'number', 'measure_date', 'machine', 'sum_formula', 'customer')
+    list_display = ('measurement_name', 'machine', 'measure_date', 'operator', 'sum_formula', 'customer')
     list_filter = ['measure_date']
     history_list_display = ["status"]
     search_fields = ['measurement_name', 'number', 'sum_formula']
     ordering = ['-number']
     inlines = (MeasurementCIFInline, MeasurementCheckCifInline, MeasurementReportInline)
+    #fieldsets = (
+    #    (None, {'fields': ('measurement_name', 'number', 'operator')}),
+    #)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(MeasurementAdmin, self).get_form(request, obj, **kwargs)
