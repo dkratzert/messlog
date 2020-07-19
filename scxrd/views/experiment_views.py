@@ -163,13 +163,16 @@ class ExperimentEditView(LoginRequiredMixin, UpdateView):
     form_class = ExperimentEditForm
     template_name = 'scxrd/experiment_edit.html'
     success_url = reverse_lazy('scxrd:all_experiments')
+    slug_field = 'number'
+    slug_url_kwarg = 'number'
 
     def get_initial(self) -> dict:
         """
         Initial data for the form.
         """
         pk = self.kwargs.get('pk')
-        exp = Measurement.objects.get(pk=pk)
+        number = self.kwargs.get('number')
+        exp = Measurement.objects.get(number=number)
         cif = None
         chk = None
         report = None
