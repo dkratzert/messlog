@@ -60,6 +60,7 @@ class MeasurementCheckCifInline(StackedInline):
     can_delete = True
 
 
+class MeasurementReportInline(StackedInline):
     model = ReportModel
     can_delete = True
 
