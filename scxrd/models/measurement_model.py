@@ -36,7 +36,7 @@ class Measurement(models.Model):
     prelim_unit_cell = models.CharField(max_length=250, blank=True, verbose_name=_('first unit cell'))
     resolution = models.FloatField(verbose_name=_('Resolution [&#x212b;]'), null=True, blank=True,
                                    validators=(resolution_validator,))
-    conditions = models.TextField(verbose_name=_('reaction conditions'), blank=True)
+    conditions = models.TextField(verbose_name=_('crystallization conditions'), blank=True)
     measure_date = models.DateTimeField(verbose_name=_('measurement date'), default=timezone.now, blank=False)
     submit_date = models.DateField(verbose_name=_('sample submission date'), blank=True, null=True)
     result_date = models.DateField(verbose_name=_('results sent date'), blank=True, null=True)
