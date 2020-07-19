@@ -9,6 +9,7 @@ gemmi
 django-cleanup
 django-crispy-forms
 django-robohash-svg
-#model-bakery
+django-simple-history
+
 django-webtest
 django-translation-flags

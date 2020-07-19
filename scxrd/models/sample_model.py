@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from scxrd.models.models import sample_name_validator
 
@@ -41,6 +42,7 @@ class Sample(models.Model):
     mol_file = models.TextField(verbose_name=_('MOL file of the structure'), blank=True, default='')
     special_remarks = models.TextField(verbose_name=_('special remarks'), blank=True,
                                        help_text=_('Any additional information we should know.'))
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["id"]

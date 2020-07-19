@@ -35,6 +35,11 @@ SELENIUM_WEBDRIVERS = {
         'callable': webdriver.Chrome,
         'args': (),
         'kwargs': {},
+    },
+    'firefox': {
+        'callable': webdriver.Firefox,
+        'args': (),
+        'kwargs': {},
     }
 }
 
@@ -72,6 +77,7 @@ INSTALLED_APPS = [
     'django_translation_flags',
     'django_robohash',
     # 'debug_toolbar',
+    'simple_history',
     'django_cleanup.apps.CleanupConfig',  # should be last
 ]
 
@@ -86,6 +92,7 @@ MIDDLEWARE = [
     # Use this to control iframe options:
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 # allow iframes:

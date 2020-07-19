@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 """
 TODO: 
@@ -109,6 +110,7 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=17, blank=True)
     comment = models.TextField(blank=True, default='')
     is_operator = models.BooleanField(verbose_name=_('Operator status'), default=False)
+    history = HistoricalRecords()
 
     def __str__(self):
         name = '{} {}'.format(self.user.first_name, self.user.last_name)
@@ -197,6 +199,7 @@ class CheckCifModel(models.Model):
     checkcif_on_disk = models.FileField(upload_to='checkcif_reports', null=True, blank=True, max_length=255,
                                         validators=[validate_checkcif_file_extension],
                                         verbose_name='cif file')
+    history = HistoricalRecords()
 
     @property
     def chkcif_file_path(self) -> Path:
@@ -229,6 +232,7 @@ class ReportModel(models.Model):
     reportdoc_on_disk = models.FileField(upload_to='struct_reports', null=True, blank=True,
                                          validators=[validate_reportdoc_file_extension],
                                          verbose_name='cif file')
+    history = HistoricalRecords()
 
     @property
     def report_file_path(self) -> Path:

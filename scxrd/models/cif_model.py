@@ -4,6 +4,7 @@ from pathlib import Path
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.utils import get_float
@@ -63,6 +64,7 @@ class CifFileModel(models.Model):
     cif_file_on_disk = models.FileField(upload_to='cifs', null=True, blank=True, max_length=255,
                                         validators=[validate_cif_file_extension],
                                         verbose_name='cif file')
+    history = HistoricalRecords()
 
     def __str__(self):
         try:

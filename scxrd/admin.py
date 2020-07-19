@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from django.db.models import Count
 from django.utils.datetime_safe import datetime
 from django.utils.translation import gettext_lazy as _
+from simple_history.admin import SimpleHistoryAdmin
 
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
@@ -64,9 +65,10 @@ class ExperimentReportInline(StackedInline):
     can_delete = True
 
 
-class ExperimentAdmin(admin.ModelAdmin):
+class ExperimentAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     list_display = ('experiment_name', 'number', 'measure_date', 'machine', 'sum_formula', 'customer')
     list_filter = ['measure_date']
+    history_list_display = ["status"]
     search_fields = ['experiment_name', 'number', 'sum_formula']
     ordering = ['-number']
     inlines = (ExperimentCIFInline, ExperimentCheckCifInline, ExperimentReportInline)
@@ -80,7 +82,7 @@ class ExperimentAdmin(admin.ModelAdmin):
         return form
 
 
-class CifAdmin(admin.ModelAdmin):
+class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     model = CifFileModel
     list_display = ['edit_file', 'data', 'related_experiment', 'number_of_atoms']
 
@@ -184,7 +186,7 @@ admin.site.unregister(Group)
 admin.site.register(Measurement, ExperimentAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
-admin.site.register(Sample)
+admin.site.register(Sample, SimpleHistoryAdmin)
 # admin.site.register(Person)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

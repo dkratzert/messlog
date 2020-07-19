@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-18 18:41+0200\n"
+"POT-Creation-Date: 2020-07-19 10:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,19 +77,19 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: scxrd/admin.py:89
+#: scxrd/admin.py:101
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
-#: scxrd/admin.py:107
+#: scxrd/admin.py:119
 msgid "Personal info"
 msgstr "Benutzerdetails"
 
-#: scxrd/admin.py:108
+#: scxrd/admin.py:120
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: scxrd/admin.py:111
+#: scxrd/admin.py:123
 msgid "Important dates"
 msgstr "Letzte Änderungen"
 
@@ -215,7 +215,7 @@ msgstr "Probenabgabedatum"
 msgid "Presumed sum formula"
 msgstr "vermutete Summenformel"
 
-#: scxrd/forms/new_sample.py:19 scxrd/models/sample_model.py:38
+#: scxrd/forms/new_sample.py:19 scxrd/models/sample_model.py:39
 msgid "Solvents used for crystallization, method, conditions"
 msgstr "verwendete Lösemittel zur Kristallisation, Methode, Bedingungen"
 
@@ -247,19 +247,19 @@ msgstr "gewünschte Struktur"
 msgid "New Sample"
 msgstr "neue Probe"
 
-#: scxrd/forms/new_sample.py:100
+#: scxrd/forms/new_sample.py:101
 msgid "Alternatively, draw the Molecule"
 msgstr "alternativ, Molekül zeichnen"
 
-#: scxrd/forms/new_sample.py:101
+#: scxrd/forms/new_sample.py:102
 msgid "This is an alternative to the file upload above."
 msgstr "Dies ist eine Alternative zum obigen Datei-Upload"
 
-#: scxrd/forms/new_sample.py:110
+#: scxrd/forms/new_sample.py:111
 msgid "Submit"
 msgstr "Abgeben"
 
-#: scxrd/forms/new_sample.py:131
+#: scxrd/forms/new_sample.py:132
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
@@ -267,38 +267,33 @@ msgstr ""
 "Entweder ein Dokument mit der gewünschten Struktur hochladen oder die "
 "Struktur im Feld darunter zeichnen."
 
-#: scxrd/models/cif_model.py:15
+#: scxrd/models/cif_model.py:16
 msgid "Only .cif files are allowed to upload here."
 msgstr "Hier sind nur .cif-Dateien erlaubt."
 
-#: scxrd/models/cif_model.py:30
+#: scxrd/models/cif_model.py:31
 msgid "upload date"
 msgstr "Upload-Datum"
 
-#: scxrd/models/cif_model.py:31
+#: scxrd/models/cif_model.py:32
 msgid "change date"
 msgstr "Datum ändern"
 
-#: scxrd/models/cif_model.py:62
+#: scxrd/models/cif_model.py:63
 msgid "CCDC number"
 msgstr "CCDC-Nummer"
 
-#: scxrd/models/experiment_model.py:19
+#: scxrd/models/experiment_model.py:20
 msgid "experiment name"
 msgstr "Name der Messung"
 
-#: scxrd/models/experiment_model.py:24
+#: scxrd/models/experiment_model.py:25
 msgid "number"
 msgstr "Nummer"
 
-#: scxrd/models/experiment_model.py:25
+#: scxrd/models/experiment_model.py:26
 msgid "structure is publishable"
 msgstr "Struktur ist publizierbar"
-
-#: scxrd/models/experiment_model.py:26
-msgid "The structure is of sufficient quality to publish it."
-msgstr ""
-"Die Struktur ist von ausreichender Qualität, um sie zu veröffentlichen."
 
 #: scxrd/models/experiment_model.py:29
 msgid "customer (for service only)"
@@ -332,7 +327,7 @@ msgstr "Reaktionsbedingungen"
 msgid "measurement date"
 msgstr "Datum der Messung"
 
-#: scxrd/models/experiment_model.py:41 scxrd/models/sample_model.py:21
+#: scxrd/models/experiment_model.py:41 scxrd/models/sample_model.py:22
 msgid "sample submission date"
 msgstr "Proben-Abgabedatum"
 
@@ -376,7 +371,7 @@ msgstr "Farbeigenschaften"
 msgid "crystal habit"
 msgstr "Habitus"
 
-#: scxrd/models/experiment_model.py:67 scxrd/models/sample_model.py:42
+#: scxrd/models/experiment_model.py:67 scxrd/models/sample_model.py:43
 msgid "special remarks"
 msgstr "Weitere Anmerkungen"
 
@@ -397,64 +392,64 @@ msgid "Structure is finished and can not be changed afterwards."
 msgstr ""
 "Die Struktur ist fertig gestellt und kann danach nicht mehr geändert werden."
 
-#: scxrd/models/models.py:69
+#: scxrd/models/models.py:70
 #: venv/lib/python3.8/site-packages/django/core/validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: scxrd/models/models.py:77
+#: scxrd/models/models.py:78
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: scxrd/models/models.py:85
+#: scxrd/models/models.py:86
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: scxrd/models/models.py:100
+#: scxrd/models/models.py:101
 msgid "company"
 msgstr "Firma"
 
-#: scxrd/models/models.py:111
+#: scxrd/models/models.py:112
 msgid "Operator status"
 msgstr "Operator-Status"
 
-#: scxrd/models/models.py:134
+#: scxrd/models/models.py:133
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models/models.py:149
+#: scxrd/models/models.py:148
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models/models.py:179
+#: scxrd/models/models.py:178
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models/models.py:187
+#: scxrd/models/models.py:186
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
-#: scxrd/models/sample_model.py:13
+#: scxrd/models/sample_model.py:14
 msgid "Files with this extension are not allowed to upload here."
 msgstr "Dateien mit dieser Endung können nicht hochgeladen werden."
 
-#: scxrd/models/sample_model.py:18
+#: scxrd/models/sample_model.py:19
 msgid "sample name"
 msgstr "Probenname"
 
-#: scxrd/models/sample_model.py:19
+#: scxrd/models/sample_model.py:20
 msgid "A unique name of your sample"
 msgstr "Eineindeutiger Probenname"
 
-#: scxrd/models/sample_model.py:23
+#: scxrd/models/sample_model.py:24
 msgid "Submitter"
 msgstr "Probenbesitzer/in"
 
-#: scxrd/models/sample_model.py:26
+#: scxrd/models/sample_model.py:27
 msgid "sample is sensitive (temperature, oxygen, moisture)"
 msgstr "Probe ist empfindlich (Temperatur, Sauerstoff, Feuchtigkeit)"
 
-#: scxrd/models/sample_model.py:27
+#: scxrd/models/sample_model.py:28
 msgid ""
 "Please indicate in the notes which conditions are necessary to keep the "
 "sample stable."
@@ -462,43 +457,43 @@ msgstr ""
 "Bitte in den Anmerkungen angeben welche Bedingungen nötig sind um die Probe "
 "stabil zu halten."
 
-#: scxrd/models/sample_model.py:28
+#: scxrd/models/sample_model.py:29
 msgid "I want to solve/refine by myself"
 msgstr "Ich möchte selbst lösen und verfeinern"
 
-#: scxrd/models/sample_model.py:29
+#: scxrd/models/sample_model.py:30
 msgid "assumed sum formula"
 msgstr "Angenommene Summenformel"
 
-#: scxrd/models/sample_model.py:31
+#: scxrd/models/sample_model.py:32
 msgid "Document with reaction equation and conditions"
 msgstr "Dokument mit Reaktionsgleichung und -Bedingungen"
 
-#: scxrd/models/sample_model.py:40
+#: scxrd/models/sample_model.py:41
 msgid "desired structure"
 msgstr "Gewünschte Struktur"
 
-#: scxrd/models/sample_model.py:41
+#: scxrd/models/sample_model.py:42
 msgid "MOL file of the structure"
 msgstr "MOL-Datei der Struktur"
 
-#: scxrd/models/sample_model.py:43
+#: scxrd/models/sample_model.py:44
 msgid "Any additional information we should know."
 msgstr "Beliebige weitere Information die wir wissen sollten."
 
-#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:233
+#: scxrd/views/experiment_views.py:142 scxrd/views/experiment_views.py:236
 msgid "Saved successfully."
 msgstr "Erfolgreich gespeichert."
 
-#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:239
+#: scxrd/views/experiment_views.py:148 scxrd/views/experiment_views.py:242
 msgid "Please correct the errors below."
 msgstr "Bitte korrigiere den Fehler unten."
 
-#: scxrd/views/experiment_views.py:204
+#: scxrd/views/experiment_views.py:207
 msgid "This Measurement can not be changed anymore!"
 msgstr "Dieses Measurement kann nicht mehr verändert werden!"
 
-#: scxrd/views/experiment_views.py:217
+#: scxrd/views/experiment_views.py:220
 msgid ""
 "You can only finalize a measurement after uploading a CIF, report and "
 "checkcif file!"
@@ -506,11 +501,11 @@ msgstr ""
 "Die Messung kann nur abgeschlossen werden wenn CIF-, Report- und checkCIF-"
 "Datei vorhanden sind!"
 
-#: scxrd/views/experiment_views.py:300
+#: scxrd/views/experiment_views.py:303
 msgid "Experiments"
 msgstr "Messungen"
 
-#: scxrd/views/experiment_views.py:330
+#: scxrd/views/experiment_views.py:333
 msgid "Edit"
 msgstr "ändern"
 
@@ -1267,7 +1262,7 @@ msgstr "Dateipfad"
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1676
 #, python-format
 msgid "“%(value)s” value must be a float."
-msgstr ""
+msgstr "Wert “%(value)s” muss eine Fließkommezahl sein."
 
 #: venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1678
 msgid "Floating point number"
@@ -2151,6 +2146,10 @@ msgstr ""
 #: venv/lib/python3.8/site-packages/tests/settings.py:45
 msgid "Brazilian Portuguese"
 msgstr ""
+
+#~ msgid "The structure is of sufficient quality to publish it."
+#~ msgstr ""
+#~ "Die Struktur ist von ausreichender Qualität, um sie zu veröffentlichen."
 
 #~ msgid "The user has operator rights"
 #~ msgstr "Der Benutzer ist Operator"
