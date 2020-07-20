@@ -46,9 +46,15 @@ class Sample(models.Model):
 
     class Meta:
         ordering = ["id"]
+        verbose_name = _('Sample')
+        verbose_name_plural = _('Samples')
 
     def __str__(self):
         return self.sample_name
 
     def was_measured(self):
-        return any([x.was_measured for x in self.measurements])
+        if not self.measurements:
+            return False
+        return any([x.was_measured for x in self.measurements.all()])
+
+    was_measured.boolean = True

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-19 22:42+0200\n"
+"POT-Creation-Date: 2020-07-20 08:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,21 +77,65 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: scxrd/admin.py:104
+#: scxrd/admin.py:38 scxrd/admin.py:54
+msgid "group members"
+msgstr "AK-Mitglieder"
+
+#: scxrd/admin.py:55 scxrd/admin.py:210
+msgid "measurements this year"
+msgstr "Messungen dieses Jahr"
+
+#: scxrd/admin.py:115
 msgid "no atoms found"
 msgstr "Keine Atome gefunden"
 
+#: scxrd/admin.py:120
+msgid "related measurement"
+msgstr "zugehörige Messung"
+
+#: scxrd/admin.py:121
+msgid "number of atoms"
+msgstr "Anzahl Atome"
+
 #: scxrd/admin.py:122
+msgid "edit file"
+msgstr "Datei bearbeiten"
+
+#: scxrd/admin.py:137
 msgid "Personal info"
 msgstr "Benutzerdetails"
 
-#: scxrd/admin.py:123
+#: scxrd/admin.py:138
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: scxrd/admin.py:126
+#: scxrd/admin.py:141
 msgid "Important dates"
 msgstr "Letzte Änderungen"
+
+#: scxrd/admin.py:154
+msgid "is operator"
+msgstr "ist Operator"
+
+#: scxrd/admin.py:155
+msgid "work group"
+msgstr "Arbeitsgruppe"
+
+#: scxrd/admin.py:156
+msgid "number_of_measurements"
+msgstr "Anzahl Messungen"
+
+#: scxrd/admin.py:176 scxrd/admin.py:187
+msgid "used by"
+msgstr "verwendet von"
+
+#: scxrd/admin.py:208
+msgid "measurements"
+msgstr "Messungen"
+
+#: scxrd/admin.py:209
+msgid "measurements last year"
+msgstr "Messungen letztes Jahr"
 
 #: scxrd/forms/edit_measurement.py:13 scxrd/models/measurement_model.py:78
 msgid "Measurement"
@@ -272,6 +316,10 @@ msgstr ""
 msgid "Only .cif files are allowed to upload here."
 msgstr "Hier sind nur .cif-Dateien erlaubt."
 
+#: scxrd/models/cif_model.py:30
+msgid "checksum"
+msgstr "Checksumme"
+
 #: scxrd/models/cif_model.py:31
 msgid "upload date"
 msgstr "Upload-Datum"
@@ -279,6 +327,30 @@ msgstr "Upload-Datum"
 #: scxrd/models/cif_model.py:32
 msgid "change date"
 msgstr "Datum ändern"
+
+#: scxrd/models/cif_model.py:33
+msgid "file size"
+msgstr "Dateigröße"
+
+#: scxrd/models/cif_model.py:35
+msgid "data tag"
+msgstr "data tag"
+
+#: scxrd/models/cif_model.py:44
+msgid "space group"
+msgstr "Raumgruppe"
+
+#: scxrd/models/cif_model.py:45
+msgid "space group number"
+msgstr "Raumgruppennummer"
+
+#: scxrd/models/cif_model.py:49
+msgid "sum formula"
+msgstr "Summenformel"
+
+#: scxrd/models/cif_model.py:50
+msgid "wavelength"
+msgstr "Wellenlänge"
 
 #: scxrd/models/cif_model.py:63
 msgid "CCDC number"
@@ -430,31 +502,55 @@ msgstr "Operator-Status"
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models/models.py:139 scxrd/models/models.py:140
+#: scxrd/models/models.py:139
 msgid "Work group"
 msgstr "Arbeitsgruppe"
+
+#: scxrd/models/models.py:140
+msgid "Work groups"
+msgstr "Arbeitsgruppen"
+
+#: scxrd/models/models.py:149
+msgid "machine model name"
+msgstr "Name der Maschine"
 
 #: scxrd/models/models.py:152
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models/models.py:173
+#: scxrd/models/models.py:159
+msgid "Machines"
+msgstr "Maschinen"
+
+#: scxrd/models/models.py:168
+msgid "crystal support"
+msgstr "Probenhalter"
+
+#: scxrd/models/models.py:174
 msgid "Crystal support"
 msgstr "Probenhalter"
 
-#: scxrd/models/models.py:187
+#: scxrd/models/models.py:175
+msgid "Crystal supports"
+msgstr "Probenhalter"
+
+#: scxrd/models/models.py:183
+msgid "crystal glue"
+msgstr "Kristallkleber"
+
+#: scxrd/models/models.py:189
 msgid "Crystal Glue"
 msgstr "Kristallkleber"
 
-#: scxrd/models/models.py:188
+#: scxrd/models/models.py:190
 msgid "Crystal Glues"
 msgstr "Kristallkleber"
 
-#: scxrd/models/models.py:192
+#: scxrd/models/models.py:194
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models/models.py:200
+#: scxrd/models/models.py:202
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
@@ -509,6 +605,15 @@ msgstr "MOL-Datei der Struktur"
 #: scxrd/models/sample_model.py:44
 msgid "Any additional information we should know."
 msgstr "Beliebige weitere Information die wir wissen sollten."
+
+#: scxrd/models/sample_model.py:49
+#: templates/scxrd/submitted_samples_list_operator.html:23
+msgid "Sample"
+msgstr "Probe"
+
+#: scxrd/models/sample_model.py:50
+msgid "Samples"
+msgstr "Proben"
 
 #: scxrd/views/measurement_views.py:142 scxrd/views/measurement_views.py:236
 msgid "Saved successfully."
@@ -772,23 +877,31 @@ msgstr "Probe ist stabil"
 msgid "Customer solves by himself"
 msgstr "Ich löse und verfeinere selbst"
 
-#: templates/scxrd/sample_details_operator.html:71
+#: templates/scxrd/sample_details_operator.html:66
+msgid "YES"
+msgstr "Ja"
+
+#: templates/scxrd/sample_details_operator.html:68
+msgid "NO"
+msgstr "Nein"
+
+#: templates/scxrd/sample_details_operator.html:75
 msgid "Sum formula"
 msgstr "Summenformel"
 
-#: templates/scxrd/sample_details_operator.html:81
+#: templates/scxrd/sample_details_operator.html:85
 msgid "Reaction conditions"
 msgstr "Reaktionsbedingungen"
 
-#: templates/scxrd/sample_details_operator.html:93
+#: templates/scxrd/sample_details_operator.html:97
 msgid "Crstallized from"
 msgstr "Kristallisiert aus"
 
-#: templates/scxrd/sample_details_operator.html:103
+#: templates/scxrd/sample_details_operator.html:107
 msgid "Sample drawing"
 msgstr "Strukturformel"
 
-#: templates/scxrd/sample_details_operator.html:117
+#: templates/scxrd/sample_details_operator.html:121
 msgid "Special remarks"
 msgstr "Weitere Anmerkungen"
 
@@ -913,10 +1026,6 @@ msgstr "neue Probe abgeben"
 #: templates/scxrd/submitted_samples_list_operator.html:14
 msgid "Samples from Customers"
 msgstr "Proben von Kunden"
-
-#: templates/scxrd/submitted_samples_list_operator.html:23
-msgid "Sample"
-msgstr "Probe"
 
 #: templates/scxrd/submitted_samples_list_operator.html:24
 msgid "Submitted at"
@@ -2172,6 +2281,10 @@ msgstr ""
 msgid "Brazilian Portuguese"
 msgstr ""
 
+msgid "Respective Sample"
+msgstr "zugehörige Probe"
+
+
 #~ msgid "customer (for service only)"
 #~ msgstr "Kunde (nur für Servicemessung)"
 
@@ -2191,8 +2304,6 @@ msgstr ""
 #~ msgid "Solvents"
 #~ msgstr "Lösemittel"
 
-#~ msgid "Respective Sample"
-#~ msgstr "zugehörige Probe"
 
 #~ msgid "Submit a Sample"
 #~ msgstr "Probe abgeben"

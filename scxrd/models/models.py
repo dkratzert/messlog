@@ -137,7 +137,7 @@ class WorkGroup(models.Model):
 
     class Meta:
         verbose_name = _('Work group')
-        verbose_name_plural = _('Work group')
+        verbose_name_plural = _('Work groups')
 
 
 class Machine(models.Model):
@@ -146,7 +146,7 @@ class Machine(models.Model):
     """
     fixtures = ['scxrd/fixtures/machines.json']
     # The make, model or name of the measurement device (goniometer) used:
-    diffrn_measurement_device_type = models.CharField(verbose_name="machine model name", max_length=200)
+    diffrn_measurement_device_type = models.CharField(verbose_name=_("machine model name"), max_length=200)
     # The general class of goniometer or device used to support and orient the specimen:
     # e.g. 'three-circle diffractometer'
     diffrn_measurement_device = models.CharField(verbose_name=_("machine type"), max_length=200, blank=True)
@@ -156,6 +156,7 @@ class Machine(models.Model):
 
     class Meta:
         verbose_name = _('Machine')
+        verbose_name_plural = _('Machines')
 
 
 class CrystalSupport(models.Model):
@@ -164,13 +165,14 @@ class CrystalSupport(models.Model):
     _diffrn_measurement_specimen_support e.g. 'glass capillary'
     """
     fixtures = ['scxrd/fixtures/support.json']
-    support = models.CharField(verbose_name='crystal support', max_length=200, unique=True)
+    support = models.CharField(verbose_name=_('crystal support'), max_length=200, unique=True)
 
     def __str__(self):
         return self.support
 
     class Meta:
         verbose_name = _('Crystal support')
+        verbose_name_plural = _('Crystal supports')
 
 
 class CrystalGlue(models.Model):
@@ -178,7 +180,7 @@ class CrystalGlue(models.Model):
     What kind of addhesive was used?
     """
     fixtures = ['scxrd/fixtures/glue.json']
-    glue = models.CharField(verbose_name='crystal glue', max_length=200, unique=True)
+    glue = models.CharField(verbose_name=_('crystal glue'), max_length=200, unique=True)
 
     def __str__(self):
         return self.glue

@@ -27,12 +27,12 @@ class CifFileModel(models.Model):
     """
     measurement = models.OneToOneField(to='Measurement', on_delete=models.CASCADE, verbose_name='cif file data',
                                       related_name='ciffilemodel')
-    sha256 = models.CharField(max_length=256, blank=True)
+    sha256 = models.CharField(max_length=256, blank=True, verbose_name=_('checksum'))
     date_created = models.DateTimeField(verbose_name=_('upload date'), null=True, blank=True)
     date_updated = models.DateTimeField(verbose_name=_('change date'), null=True, blank=True)
-    filesize = models.PositiveIntegerField(null=True, blank=True)
+    filesize = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('file size'))
     #########################################
-    data = models.CharField(blank=True, max_length=256)
+    data = models.CharField(blank=True, max_length=256, verbose_name=_('data tag'))
     cell_length_a = models.FloatField(null=True, blank=True)
     cell_length_b = models.FloatField(null=True, blank=True)
     cell_length_c = models.FloatField(null=True, blank=True)
@@ -41,13 +41,13 @@ class CifFileModel(models.Model):
     cell_angle_gamma = models.FloatField(null=True, blank=True)
     cell_volume = models.FloatField(null=True, blank=True)
     cell_formula_units_Z = models.PositiveIntegerField(null=True, blank=True)
-    space_group_name_H_M_alt = models.CharField(max_length=255, blank=True)
-    space_group_IT_number = models.PositiveIntegerField(null=True, blank=True)
+    space_group_name_H_M_alt = models.CharField(max_length=255, blank=True, verbose_name=_('space group'))
+    space_group_IT_number = models.PositiveIntegerField(null=True, blank=True, verbose_name=_('space group number'))
     space_group_crystal_system = models.CharField(max_length=255, blank=True)
     space_group_symop_operation_xyz = models.TextField(null=True, blank=True)
     # This is the sum formula directly from the cif key/value:
-    chemical_formula_sum = models.CharField(max_length=2048, blank=True)
-    diffrn_radiation_wavelength = models.FloatField(null=True, blank=True)
+    chemical_formula_sum = models.CharField(max_length=2048, blank=True, verbose_name=_('sum formula'))
+    diffrn_radiation_wavelength = models.FloatField(null=True, blank=True, verbose_name=_('wavelength'))
     diffrn_radiation_type = models.CharField(max_length=255, blank=True)
     diffrn_reflns_av_R_equivalents = models.FloatField(null=True, blank=True)
     diffrn_reflns_theta_min = models.FloatField(null=True, blank=True)

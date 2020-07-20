@@ -62,7 +62,11 @@
                         </div>
                     </td>
                     <td>
-                        {{ sample.solve_refine_selve }}
+                        {% if sample.solve_refine_selve %}
+                            {% trans 'YES' %}
+                        {% else %}
+                            {% trans 'NO' %}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>

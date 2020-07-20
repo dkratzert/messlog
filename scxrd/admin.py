@@ -35,6 +35,8 @@ class WorkGroupInline(TabularInline):
     def members(self, obj: WorkGroup):
         WorkGroup.objects.filter(profiles__user=obj)
 
+    members.short_description = _("group members")
+
 
 class WorkGroupAdmin(admin.ModelAdmin):
     model = WorkGroup
@@ -48,6 +50,9 @@ class WorkGroupAdmin(admin.ModelAdmin):
         today = datetime.now()
         return Measurement.objects.filter(measure_date__gt=str(today.year) + '-1-1',
                                           customer__profile__work_group=group).count()
+
+    members.short_description = _("group members")
+    measurements_this_year.short_description = _("measurements this year")
 
 
 class MeasurementCIFInline(StackedInline):
@@ -72,9 +77,10 @@ class MeasurementAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     search_fields = ['measurement_name', 'number', 'sum_formula']
     ordering = ['-number']
     inlines = (MeasurementCIFInline, MeasurementCheckCifInline, MeasurementReportInline)
-    #fieldsets = (
+
+    # fieldsets = (
     #    (None, {'fields': ('measurement_name', 'number', 'operator')}),
-    #)
+    # )
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(MeasurementAdmin, self).get_form(request, obj, **kwargs)
@@ -85,6 +91,12 @@ class MeasurementAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
         return form
 
 
+class SampleAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
+    model = Sample
+    list_display = ['sample_name', 'submit_date', 'customer_samp', 'solve_refine_selve', 'was_measured']
+
+
+
 class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     model = CifFileModel
     list_display = ['edit_file', 'data', 'related_measurement', 'number_of_atoms']
@@ -92,8 +104,7 @@ class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     def edit_file(self, obj):
         return self.model.objects.get(id=obj.id)
 
-    @staticmethod
-    def related_measurement(obj):
+    def related_measurement(self, obj):
         return Measurement.objects.get(ciffilemodel=obj.pk)
 
     def number_of_atoms(self, obj):
@@ -105,6 +116,10 @@ class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
         # Example:
         # return exp.get_cif_file_parameter('_audit_creation_method')
         return cif.natoms()
+
+    related_measurement.short_description = _("related measurement")
+    number_of_atoms.short_description = _("number of atoms")
+    edit_file.short_description = _("edit file")
 
 
 class PersonInline(StackedInline):
@@ -136,6 +151,9 @@ class UserAdmin(BaseUserAdmin):
         return obj.operator_measurements.count()  # Measurement.objects.filter(operator=obj).count()
 
     is_operator.boolean = True
+    is_operator.short_description = _("is operator")
+    work_group.short_description = _("work group")
+    number_of_measurements.short_description = _("number_of_measurements")
 
 
 class GluesAdmin(admin.ModelAdmin):
@@ -155,6 +173,7 @@ class GluesAdmin(admin.ModelAdmin):
         return obj.measurements.count()
 
     used_by.admin_order_field = '_used_by'
+    used_by.short_description = _("used by")
 
 
 class CrystalSupportAdmin(admin.ModelAdmin):
@@ -164,6 +183,8 @@ class CrystalSupportAdmin(admin.ModelAdmin):
     def used_by(self, obj):
         """Returns the number of measurement that use this glue"""
         return obj.measurements.count()
+
+    used_by.short_description = _("used by")
 
 
 class MachinesAdmin(admin.ModelAdmin):
@@ -178,18 +199,22 @@ class MachinesAdmin(admin.ModelAdmin):
     def measurements_last_year(self, machine: Machine):
         today = datetime.now()
         return machine.measurements.filter(measure_date__gt=str(today.year - 1) + '-1-1',
-                                          measure_date__lt=str(today.year) + '-1-1').count()
+                                           measure_date__lt=str(today.year) + '-1-1').count()
 
     def measurements_this_year(self, machine: Machine):
         today = datetime.now()
         return machine.measurements.filter(measure_date__gt=str(today.year) + '-1-1').count()
+
+    measurements.short_description = _("measurements")
+    measurements_last_year.short_description = _("measurements last year")
+    measurements_this_year.short_description = _("measurements this year")
 
 
 admin.site.unregister(Group)
 admin.site.register(Measurement, MeasurementAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
-admin.site.register(Sample, SimpleHistoryAdmin)
+admin.site.register(Sample, SampleAdmin)
 # admin.site.register(Person)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
