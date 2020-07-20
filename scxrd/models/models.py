@@ -114,16 +114,11 @@ class Profile(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        name = '{} {}'.format(self.user.first_name, self.user.last_name)
-        try:
-            self.work_group.group_head
-        except AttributeError:
-            return name
+        if self.user.first_name and self.user.last_name:
+            name = '{} {}'.format(self.user.first_name, self.user.last_name)
         else:
-            if self.work_group.group_head == self:
-                return name + '*'
-            else:
-                return name
+            name = self.user.username
+        return name
 
 
 class WorkGroup(models.Model):
