@@ -30,7 +30,7 @@ class MeasurementIndexView(LoginRequiredMixin, ListView):
     The view for the main scxrd page.
     """
     model = Measurement
-    template_name = 'scxrd/scxrd_index.html'
+    template_name = 'scxrd/all_measurements_table.html'
 
     def get_context_data(self, **kwargs):
         """Get a list of currently running measurements to the context"""
@@ -93,7 +93,7 @@ class MeasurementFromSampleCreateView(LoginRequiredMixin, UpdateView):
         except AttributeError as e:
             expnum = 1
         initial.update({
-            'measurement_name'      : Sample.objects.get(pk=pk).sample_name,
+            'measurement_name'     : Sample.objects.get(pk=pk).sample_name,
             'customer'             : Sample.objects.get(pk=pk).customer_samp_id,
             'number'               : expnum,
             'sum_formula'          : Sample.objects.get(pk=pk).sum_formula,
@@ -217,7 +217,8 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
                     exp.final = form.cleaned_data.get('final')
                 else:
                     messages.warning(request,
-                                     _('You can only finalize a measurement after uploading a CIF, report and checkcif file!'))
+                                     _(
+                                         'You can only finalize a measurement after uploading a CIF, report and checkcif file!'))
                     return self.form_invalid(form)
             exp.operator = request.user
             if request.POST.get('cif_file_on_disk-clear'):
@@ -288,7 +289,6 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
             return False
 
 
-
 class MeasurementListJson(LoginRequiredMixin, BaseDatatableView):
     """
     The view to show the datatabes table for the list of measurements.
@@ -335,7 +335,7 @@ class MeasurementListJson(LoginRequiredMixin, BaseDatatableView):
             return datetime.strftime(make_naive(row.measure_date), '%d.%m.%Y %H:%M')
         else:
             # no super() of parent method or every value in each row turns into a link:
-            #return super(MeasurementListJson, self).render_column(row, column)
+            # return super(MeasurementListJson, self).render_column(row, column)
             return super()._render_column(row, column)
 
 
@@ -349,3 +349,6 @@ class MeasurementsListJsonUser(MeasurementListJson):
         """Get only measurement from current user"""
         qs = super().filter_queryset(qs)
         return qs.filter(Q(operator=User.objects.get(username=self.user)))
+
+    #def render_column(self, row, column):
+    #    return super()._render_column(row, column)

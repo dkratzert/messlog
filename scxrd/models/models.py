@@ -19,6 +19,7 @@ TODO:
 - add email notifications and password reset etc...
 - mail request of operator status: page for operators where they can send a mail and set status
 - improve admin page for user profiles
+- save URI to frames dir in measurement?
 
 - Add a "currently running measurement" page with status for everyone visible
    - there should be also the end time visible and who is responsible

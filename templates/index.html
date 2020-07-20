@@ -18,7 +18,6 @@
     {% elif user.is_authenticated and user|is_operator %}
         <div class="row justify-content-center">
             <div class="col-5 mt-4">
-                {# {% include 'scxrd/buttons/my_operator_samples.html' %} #}
                 {% include 'scxrd/buttons/new_measurement.html' %}
                 {% include 'scxrd/buttons/my_op_measurements.html' %}
                 {% include 'scxrd/buttons/measure_samples.html' %}

@@ -11,15 +11,26 @@
         <!-- Left column with measurement table --------- -->
         <div class="col-8">
             <div class="card mb-3">
-                <div class="card-header pb-2 pl-3 pr-2">{% trans "Measurements List" %}
+                <div class="card-header pb-2 pl-3 pr-2">
+                    {% if user.profile and not user|is_superuser %}
+                        {% trans "Measurements List of" %}
+                        {{ user.profile }}
+                    {% elif user and not user|is_superuser %}
+                        {% trans "Measurements List of" %}
+                        {{ user }}
+                    {% else %}
+                        {% trans "Measurements List" %}
+                    {% endif %}
                     {% include 'scxrd/buttons/small_buttons/new_measurement.html' %}
                     {% include 'scxrd/buttons/small_buttons/back_to_start.html' %}
                 </div>
                 <div class="card-body p-0">
                     <div class="flex-column mr-3 ml-3 mt-3 mb-0 mr-sm-0 ml-sm-0 p-2">
                         {% if user.is_authenticated and user|is_superuser %}
+                            {# Superusers see all measurements #}
                             {% include 'scxrd/measurement_all_table.html' %}
                         {% else %}
+                            {# operators see only their own measurements #}
                             {% include 'scxrd/measurement_by_user_table.html' %}
                         {% endif %}
                         <table id="exptable" class="table table-sm table-condensed table-hover"></table>
@@ -34,6 +45,8 @@
                     {% trans "Currently running measurements:" %}
                     {% for exp in current_measures %}
                         <p>{{ exp }} -> {% trans "end time:" %} {{ exp.end_time }}</p>
+                    {% empty %}
+                        <p>No current measurements</p>
                     {% endfor %}
 
                 </div>
