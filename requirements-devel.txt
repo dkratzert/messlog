@@ -13,3 +13,5 @@ django-simple-history
 
 django-webtest
 django-translation-flags
+selenium
+chromedriver-binary

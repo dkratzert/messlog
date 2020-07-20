@@ -68,9 +68,8 @@ class AccountChromeTestCase(DeleteFilesMixin, StaticLiveServerTestCase):
 
 def submit_sample(selenium, sample_name: str = 'testsample_123'):
     # Opening the link we want to test
-    login_user(selenium, username='testuser', password='Test1234!')
     selenium.get('http://127.0.0.1:8001/scxrd/sample/submit/')
-    # time.sleep(0.5)
+    time.sleep(0.1)
     selenium.find_element_by_id('id_sample_name').send_keys(sample_name)
     selenium.find_element_by_id('id_sum_formula').send_keys('C2H5OH')
     selenium.find_element_by_id('id_reaction_path_button').click()
@@ -81,21 +80,19 @@ def submit_sample(selenium, sample_name: str = 'testsample_123'):
     selenium.switch_to.parent_frame()
     # switch back and submit
     selenium.find_element_by_id('id_special_remarks').send_keys('this is a comment')
-    selenium.find_element_by_id('id_crystallization_conditions').send_keys('From CH2CL2 by cooling to 6°C')
+    selenium.find_element_by_id('id_crystallization_conditions').send_keys(u'From CH2CL2 by cooling to 6 °C')
     selenium.find_element_by_id('submit-id-save').send_keys(Keys.RETURN)
-    # time.sleep(0.5)
+    # time.sleep(4)
     # print(selenium.page_source)
 
 
 def login_user(selenium, username='', password=''):
-    selenium.get('http://127.0.0.1:8001/scxrd/sample/submit/')
-    # time.sleep(0.5)
-    userfield = selenium.find_element_by_id('id_username')
-    passwordfield = selenium.find_element_by_id('id_password')
-    userfield.send_keys(username)
-    passwordfield.send_keys(password)
-    submit = selenium.find_element_by_id('id_submit')
-    submit.send_keys(Keys.RETURN)
+    selenium.get('http://127.0.0.1:8001/accounts/login/')
+    time.sleep(0.1)
+    selenium.find_element_by_id('id_username').send_keys(username)
+    selenium.find_element_by_id('id_password').send_keys(password)
+    selenium.find_element_by_id('id_submit').send_keys(Keys.RETURN)
+    time.sleep(0.2)
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -114,6 +111,7 @@ class NewSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, StaticLiveServer
     # @unittest.skip('')
     def test_new_sample(self):
         selenium = self.selenium
+        login_user(selenium, username='testuser', password='Test1234!')
         submit_sample(selenium, sample_name='testsample_1234')
         assert 'Probe erfolgreich abgeben' in selenium.page_source
 
@@ -129,6 +127,8 @@ class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stat
 
     def setUp(self):
         self.selenium = webdriver.Chrome()
+        #self.selenium = webdriver.Firefox()
+
         super().setUp()
 
     def tearDown(self):
@@ -139,7 +139,9 @@ class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stat
     # @unittest.skip('')
     def test_exp_from_sample(self):
         selenium = self.selenium
+        login_user(selenium, username='testuser', password='Test1234!')
         submit_sample(selenium, sample_name='testsample_123')
+        # The next lines fail if Firefox for example is unable to get the svg from ketcher:
         selenium.find_element_by_id('id_ok_button').send_keys(Keys.RETURN)
         selenium.find_element_by_id('logout_button').send_keys(Keys.RETURN)
         group = WorkGroup.objects.create(group_head='Krabäppel')
@@ -188,7 +190,7 @@ class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stat
         self.assertEqual(Measurement.objects.last().sum_formula, 'C2H5OH')
         self.assertEqual(Measurement.objects.last().prelim_unit_cell, '12.12 13.654 29.374 90 108.5 90')
         self.assertEqual(Measurement.objects.last().resolution, None)
-        self.assertEqual(Measurement.objects.last().conditions, 'From CH2CL2 by cooling to 6°C')
+        self.assertEqual(Measurement.objects.last().conditions, 'From CH2CL2 by cooling to 6 °C')
         # self.assertEqual(str(Measurement.objects.last().measure_date), '2020-07-19 16:49:51.952574+00:00')
         self.assertEqual(str(Measurement.objects.last().submit_date), '2020-07-19')
         # self.assertEqual(str(Measurement.objects.last().result_date), '2020-07-19 16:53:00+00:00')
