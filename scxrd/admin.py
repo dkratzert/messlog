@@ -96,7 +96,6 @@ class SampleAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     list_display = ['sample_name', 'submit_date', 'customer_samp', 'solve_refine_selve', 'was_measured']
 
 
-
 class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     model = CifFileModel
     list_display = ['edit_file', 'data', 'related_measurement', 'number_of_atoms']
@@ -122,15 +121,9 @@ class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     edit_file.short_description = _("edit file")
 
 
-class PersonInline(StackedInline):
-    model = Profile
-    can_delete = False
-
-
 class UserAdmin(BaseUserAdmin):
-    inlines = (PersonInline,)
-    list_display = ['username', 'first_name', 'last_name', 'number_of_measurements', 'work_group', 'is_staff',
-                    'is_operator']
+    list_display = ['username', 'profile', 'number_of_measurements',
+                    'work_group', 'is_superuser', 'is_operator']
     list_filter = ('is_superuser', 'profile__work_group')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
@@ -215,7 +208,7 @@ admin.site.register(Measurement, MeasurementAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
 admin.site.register(Sample, SampleAdmin)
-# admin.site.register(Person)
+admin.site.register(Profile)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(WorkGroup, WorkGroupAdmin)
