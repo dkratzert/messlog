@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 09:27+0200\n"
+"POT-Creation-Date: 2020-07-20 17:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,7 +185,7 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:158
+#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:159
 #: .\templates\scxrd\residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
@@ -479,80 +479,80 @@ msgstr "Messungen"
 msgid "Measured recently?"
 msgstr "Vor kurzem gemessen?"
 
-#: .\scxrd\models\models.py:70
+#: .\scxrd\models\models.py:71
 #: .\venv\Lib\site-packages\django\core\validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: .\scxrd\models\models.py:78
+#: .\scxrd\models\models.py:79
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: .\scxrd\models\models.py:86
+#: .\scxrd\models\models.py:87
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: .\scxrd\models\models.py:101
+#: .\scxrd\models\models.py:102
 msgid "company"
 msgstr "Firma"
 
-#: .\scxrd\models\models.py:112
+#: .\scxrd\models\models.py:113
 msgid "Operator status"
 msgstr "Operator-Status"
 
-#: .\scxrd\models\models.py:133
+#: .\scxrd\models\models.py:134
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: .\scxrd\models\models.py:139
+#: .\scxrd\models\models.py:140
 msgid "Work group"
 msgstr "Arbeitsgruppe"
 
-#: .\scxrd\models\models.py:140
+#: .\scxrd\models\models.py:141
 msgid "Work groups"
 msgstr "Arbeitsgruppen"
 
-#: .\scxrd\models\models.py:149
+#: .\scxrd\models\models.py:150
 msgid "machine model name"
 msgstr "Name der Maschine"
 
-#: .\scxrd\models\models.py:152
+#: .\scxrd\models\models.py:153
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: .\scxrd\models\models.py:159
+#: .\scxrd\models\models.py:160
 msgid "Machines"
 msgstr "Maschinen"
 
-#: .\scxrd\models\models.py:168
+#: .\scxrd\models\models.py:169
 msgid "crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:174
+#: .\scxrd\models\models.py:175
 msgid "Crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:175
+#: .\scxrd\models\models.py:176
 msgid "Crystal supports"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:183
+#: .\scxrd\models\models.py:184
 msgid "crystal glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:189
+#: .\scxrd\models\models.py:190
 msgid "Crystal Glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:190
+#: .\scxrd\models\models.py:191
 msgid "Crystal Glues"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:194
+#: .\scxrd\models\models.py:195
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: .\scxrd\models\models.py:202
+#: .\scxrd\models\models.py:203
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
@@ -618,12 +618,12 @@ msgid "Samples"
 msgstr "Proben"
 
 #: .\scxrd\views\measurement_views.py:142
-#: .\scxrd\views\measurement_views.py:236
+#: .\scxrd\views\measurement_views.py:237
 msgid "Saved successfully."
 msgstr "Erfolgreich gespeichert."
 
 #: .\scxrd\views\measurement_views.py:148
-#: .\scxrd\views\measurement_views.py:242
+#: .\scxrd\views\measurement_views.py:243
 msgid "Please correct the errors below."
 msgstr "Bitte korrigiere den Fehler unten."
 
@@ -631,7 +631,7 @@ msgstr "Bitte korrigiere den Fehler unten."
 msgid "This Measurement can not be changed anymore!"
 msgstr "Dieses Measurement kann nicht mehr verändert werden!"
 
-#: .\scxrd\views\measurement_views.py:220
+#: .\scxrd\views\measurement_views.py:221
 msgid ""
 "You can only finalize a measurement after uploading a CIF, report and "
 "checkcif file!"
@@ -647,31 +647,31 @@ msgstr "ändern"
 msgid "MESSLOG Admin"
 msgstr "MESSLOG Administratorseite"
 
-#: .\templates\base.html:36
+#: .\templates\base.html:37
 msgid "Main Page"
 msgstr "Hauptseite"
 
-#: .\templates\base.html:70
+#: .\templates\base.html:71
 msgid "Edit my Profile"
 msgstr "Benutzerprofil"
 
-#: .\templates\base.html:72
+#: .\templates\base.html:73
 msgid "Administration"
 msgstr "Administration"
 
-#: .\templates\base.html:74 .\templates\base.html:81
+#: .\templates\base.html:75 .\templates\base.html:82
 msgid "Log Off"
 msgstr "Abmelden"
 
-#: .\templates\base.html:79 .\templates\registration\login.html:15
+#: .\templates\base.html:80 .\templates\registration\login.html:15
 msgid "Login"
 msgstr "Anmelden"
 
-#: .\templates\base.html:83 .\templates\registration\new_user.html:10
+#: .\templates\base.html:84 .\templates\registration\new_user.html:10
 msgid "New User"
 msgstr "Neuer Benutzer"
 
-#: .\templates\index.html:37
+#: .\templates\index.html:36
 msgid "Single-Crystal X-ray diffraction Analysis"
 msgstr "Einkristall-Strukturanalyse"
 
@@ -760,7 +760,28 @@ msgstr "Eine E-Mail zum Zurücksetzen des Passworts wurde gesendet."
 msgid "Send Confirmation Link"
 msgstr "Bestätigungslink senden"
 
-#: .\templates\scxrd\buttons\all_measurements.html:13
+#: .\templates\scxrd\all_measurements_table.html:16
+#: .\templates\scxrd\all_measurements_table.html:19
+msgid "Measurements List of"
+msgstr "Liste der Messungen von"
+
+#: .\templates\scxrd\all_measurements_table.html:22
+msgid "Measurements List"
+msgstr "Liste der Messungen"
+
+#: .\templates\scxrd\all_measurements_table.html:42
+msgid "More Information"
+msgstr "Mehr Informationen"
+
+#: .\templates\scxrd\all_measurements_table.html:45
+msgid "Currently running measurements:"
+msgstr "Momentan laufende Messungen"
+
+#: .\templates\scxrd\all_measurements_table.html:47
+msgid "end time:"
+msgstr "Erwartetes Ende:"
+
+#: .\templates\scxrd\buttons\all_measurements.html:12
 msgid "All measurements"
 msgstr "Alle Messungen"
 
@@ -772,7 +793,7 @@ msgstr "Zurück"
 msgid "View Samples"
 msgstr "Abgegebene Proben"
 
-#: .\templates\scxrd\buttons\my_op_measurement.html:13
+#: .\templates\scxrd\buttons\my_op_measurements.html:13
 msgid "My Measurements"
 msgstr "Meine Messungen"
 
@@ -936,22 +957,6 @@ msgstr "Kristalle nicht trocknen und die Umgebungsbedingungen ähnlich halten."
 #: .\templates\scxrd\sample_submitted_page.html:19
 msgid "After measurement, you see the results in your samples list."
 msgstr "Nach der Messung erscheinen die Ergebnisse in der Probenliste."
-
-#: .\templates\scxrd\scxrd_index.html:14
-msgid "Measurements List"
-msgstr "Liste der Messungen"
-
-#: .\templates\scxrd\scxrd_index.html:31
-msgid "More Information"
-msgstr "Mehr Informationen"
-
-#: .\templates\scxrd\scxrd_index.html:34
-msgid "Currently running measurements:"
-msgstr "Momentan laufende Messungen"
-
-#: .\templates\scxrd\scxrd_index.html:36
-msgid "end time:"
-msgstr "Erwartetes Ende:"
 
 #: .\templates\scxrd\submitted_samples_list_customer.html:13
 msgid "My Samples List"
