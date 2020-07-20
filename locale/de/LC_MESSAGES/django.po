@@ -783,7 +783,7 @@ msgstr "Erwartetes Ende:"
 
 #: .\templates\scxrd\buttons\all_measurements.html:12
 msgid "All measurements"
-msgstr "Alle Messungen"
+msgstr "alle Messungen"
 
 #: .\templates\scxrd\buttons\back_button.html:5
 msgid "Go Back"
@@ -791,7 +791,7 @@ msgstr "Zurück"
 
 #: .\templates\scxrd\buttons\measure_samples.html:12
 msgid "View Samples"
-msgstr "Abgegebene Proben"
+msgstr "abgegebene Proben"
 
 #: .\templates\scxrd\buttons\my_op_measurements.html:13
 msgid "My Measurements"
