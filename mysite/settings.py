@@ -14,7 +14,6 @@ import os
 
 from django.contrib.messages import constants as messages
 from django.utils.translation import gettext_lazy as _
-from selenium import webdriver
 
 LANGUAGES = [
     ('de', _('German')),
