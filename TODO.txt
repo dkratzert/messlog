@@ -1,4 +1,0 @@
-
-* Add some explaining text on the main page
-* Add links to pages with help texts about measurements
-* Add machine service logbook

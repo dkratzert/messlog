@@ -14,12 +14,14 @@ from simple_history.models import HistoricalRecords
 """
 TODO: 
 - make sure that operators without superuser rights can only edit their own measurements
-- Not measured because: hide if no cause or sho only "not measurable"
+- Not measured because: In samples list of ocguy, hide if no cause or sho only "not measurable"
 - on details page for sample: list files of every measurement.
 - add email notifications and password reset etc...
 - mail request of operator status: page for operators where they can send a mail and set status
 - improve admin page for user profiles
 - save URI to frames dir in measurement?
+
+- Add machine service logbook
 
 - Add a "currently running measurement" page with status for everyone visible
    - there should be also the end time visible and who is responsible
