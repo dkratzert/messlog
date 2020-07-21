@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 20:50+0200\n"
+"POT-Creation-Date: 2020-07-21 08:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,7 +81,7 @@ msgstr "Englisch"
 msgid "group members"
 msgstr "AK-Mitglieder"
 
-#: scxrd/admin.py:55 scxrd/admin.py:203
+#: scxrd/admin.py:55 scxrd/admin.py:216
 msgid "measurements this year"
 msgstr "Messungen dieses Jahr"
 
@@ -101,39 +101,39 @@ msgstr "Anzahl Atome"
 msgid "edit file"
 msgstr "Datei bearbeiten"
 
-#: scxrd/admin.py:130
+#: scxrd/admin.py:138
 msgid "Personal info"
 msgstr "Benutzerdetails"
 
-#: scxrd/admin.py:131
+#: scxrd/admin.py:139
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: scxrd/admin.py:134
+#: scxrd/admin.py:142
 msgid "Important dates"
 msgstr "Letzte Änderungen"
 
-#: scxrd/admin.py:147
+#: scxrd/admin.py:155
 msgid "is operator"
 msgstr "ist Operator"
 
-#: scxrd/admin.py:148
+#: scxrd/admin.py:156
 msgid "work group"
 msgstr "Arbeitsgruppe"
 
-#: scxrd/admin.py:149
+#: scxrd/admin.py:157
 msgid "number_of_measurements"
 msgstr "Anzahl Messungen"
 
-#: scxrd/admin.py:169 scxrd/admin.py:180
+#: scxrd/admin.py:182 scxrd/admin.py:193
 msgid "used by"
 msgstr "verwendet von"
 
-#: scxrd/admin.py:201
+#: scxrd/admin.py:214
 msgid "measurements"
 msgstr "Messungen"
 
-#: scxrd/admin.py:202
+#: scxrd/admin.py:215
 msgid "measurements last year"
 msgstr "Messungen letztes Jahr"
 
@@ -143,7 +143,7 @@ msgstr "Messung"
 
 #: scxrd/forms/edit_measurement.py:56 scxrd/forms/edit_measurement.py:122
 #: scxrd/forms/new_measure_from_sample.py:79 scxrd/forms/new_measurement.py:61
-#: templates/registration/edit_user.html:21
+#: templates/registration/edit_user.html:25
 #: templates/registration/password_reset_confirm.html:16
 msgid "Save"
 msgstr "Speichern"
@@ -453,8 +453,8 @@ msgid "special remarks"
 msgstr "Weitere Anmerkungen"
 
 #: scxrd/models/measurement_model.py:68
-msgid "The sample was measured successfully"
-msgstr "Die Probe wurde erfolgreich gemessen"
+msgid "The sample was measured successfully."
+msgstr "Die Probe wurde erfolgreich gemessen."
 
 #: scxrd/models/measurement_model.py:70
 msgid "Not measured, because:"
@@ -639,6 +639,10 @@ msgstr ""
 msgid "Edit"
 msgstr "ändern"
 
+#: scxrd/views/sample_views.py:63
+msgid "The Sample has been deleted successfully."
+msgstr "Die Probe wurde gelöscht."
+
 #: templates/admin/base_site.html:4
 msgid "MESSLOG Admin"
 msgstr "MESSLOG Administratorseite"
@@ -671,11 +675,18 @@ msgstr "Neuer Benutzer"
 msgid "Single-Crystal X-ray diffraction Analysis"
 msgstr "Einkristall-Strukturanalyse"
 
-#: templates/registration/edit_user.html:14
+#: templates/registration/edit_user.html:13
 msgid "You only need to fill the required fields (with *)"
 msgstr "Nur die mit * gekennzeichneten Felder sind nötig"
 
-#: templates/registration/edit_user.html:22
+#: templates/registration/edit_user.html:21
+#: templates/registration/options.html:16
+#: templates/registration/password_change_done.html:9
+#: templates/registration/password_change_form.html:9
+msgid "Change Password"
+msgstr "Passwort Ändern"
+
+#: templates/registration/edit_user.html:26
 #: templates/registration/new_user.html:17
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -691,12 +702,6 @@ msgstr "Speichern"
 #: templates/registration/options.html:9
 msgid "Options"
 msgstr "Optionen"
-
-#: templates/registration/options.html:16
-#: templates/registration/password_change_done.html:9
-#: templates/registration/password_change_form.html:9
-msgid "Change Password"
-msgstr "Passwort Ändern"
 
 #: templates/registration/options.html:21
 msgid "You must login to change options"

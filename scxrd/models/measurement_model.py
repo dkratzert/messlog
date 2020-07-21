@@ -65,7 +65,7 @@ class Measurement(models.Model):
     crystal_habit = models.CharField(max_length=300, blank=True, verbose_name=_("crystal habit"))
     # _exptl_special_details:
     exptl_special_details = models.TextField(verbose_name=_('special remarks'), blank=True, default='')
-    was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully'), default=False, null=True,
+    was_measured = models.BooleanField(verbose_name=_('The sample was measured successfully.'), default=False, null=True,
                                        blank=True)
     not_measured_cause = models.TextField(verbose_name=_('Not measured, because:'), blank=True,
                                           help_text=_('The cause why the sample could not be measured'))

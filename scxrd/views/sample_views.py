@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.handlers.wsgi import WSGIRequest
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, TemplateView
 
 from scxrd.forms.new_sample import SubmitNewSampleForm
@@ -59,7 +60,7 @@ class SampleDeleteView(SuccessMessageMixin, DeleteView):
     model = Sample
     template_name = 'scxrd/delete_sample.html'
     success_url = reverse_lazy('scxrd:my_samples_page')
-    success_message = 'Your Sample has been deleted successfully.'
+    success_message = _('The Sample has been deleted successfully.')
 
     def get_queryset(self):
         qs = super().get_queryset()
