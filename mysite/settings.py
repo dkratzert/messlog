@@ -177,9 +177,11 @@ EMAIL_HOST = 'mail.uni-freiburg.de'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'daniel.kratzert@ac.uni-freiburg.de'
+DEFAULT_FROM_EMAIL = 'xray@ac.uni-freiburg.de'
+EMAIL_HOST_USER = 'xray@ac.uni-freiburg.de'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_TIMEOUT = 20
+EMAIL_SUBJECT_PREFIX = '[MESSLOG] '
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
