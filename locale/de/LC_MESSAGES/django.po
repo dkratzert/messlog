@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-21 13:05+0200\n"
+"POT-Creation-Date: 2020-07-21 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -729,9 +729,10 @@ msgid "Password changed sucessfully!"
 msgstr "Passwort erfolgreich geändert."
 
 #: .\templates\registration\password_reset_complete.html:14
-#, python-format
-msgid "You may now %(the_url)s again."
-msgstr "Du kannst dich nun wieder %(the_url)s"
+#, fuzzy, python-format
+#| msgid "You may now login again."
+msgid "You may now <a href=\"%(the_url)s\">login</a> again."
+msgstr "Du kannst dich nun wieder <a href=\"%(the_url)s\">anmelden</a>."
 
 #: .\templates\registration\password_reset_confirm.html:9
 msgid "Set new Password"
