@@ -30,19 +30,6 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: "/useredit/{:s}/".format(u.username),
 }
 
-SELENIUM_WEBDRIVERS = {
-    'default': {
-        'callable': webdriver.Chrome,
-        'args': (),
-        'kwargs': {},
-    },
-    'firefox': {
-        'callable': webdriver.Firefox,
-        'args': (),
-        'kwargs': {},
-    }
-}
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -187,7 +174,7 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
 EMAIL_HOST = 'mail.uni-freiburg.de'
-#EMAIL_PORT = 573
+# EMAIL_PORT = 573
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False

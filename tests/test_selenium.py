@@ -14,6 +14,18 @@ from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, OperatorUs
 
 chromedriver_binary.add_chromedriver_to_path()
 
+SELENIUM_WEBDRIVERS = {
+    'default': {
+        'callable': webdriver.Chrome,
+        'args': (),
+        'kwargs': {},
+    },
+    'firefox': {
+        'callable': webdriver.Firefox,
+        'args': (),
+        'kwargs': {},
+    }
+}
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class AccountChromeTestCase(DeleteFilesMixin, StaticLiveServerTestCase):
