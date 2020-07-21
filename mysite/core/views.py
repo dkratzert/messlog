@@ -67,11 +67,3 @@ class UserEdit(UpdateView):
         })
 
 
-class OptionsView(TemplateView):
-    """
-    Show details of a measurement
-
-    TODO: Make real options page
-    """
-    template_name = 'registration/options.html'
-    success_url = '/'

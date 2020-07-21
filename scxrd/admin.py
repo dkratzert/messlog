@@ -121,10 +121,18 @@ class CifAdmin(SimpleHistoryAdmin, admin.ModelAdmin):
     edit_file.short_description = _("edit file")
 
 
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = 'Profile'
+    fk_name = 'user'
+
+
 class UserAdmin(BaseUserAdmin):
-    list_display = ['username', 'profile', 'number_of_measurements',
-                    'work_group', 'is_superuser', 'is_operator']
+    inlines = (ProfileInline,)
+    list_display = ['username', 'profile', 'work_group', 'number_of_measurements', 'is_superuser', 'is_operator']
     list_filter = ('is_superuser', 'profile__work_group')
+    list_select_related = ('profile',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
@@ -147,6 +155,11 @@ class UserAdmin(BaseUserAdmin):
     is_operator.short_description = _("is operator")
     work_group.short_description = _("work group")
     number_of_measurements.short_description = _("number_of_measurements")
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super().get_inline_instances(request, obj)
 
 
 class GluesAdmin(admin.ModelAdmin):
@@ -208,7 +221,7 @@ admin.site.register(Measurement, MeasurementAdmin)
 admin.site.register(CifFileModel, CifAdmin)
 # admin.site.register(CifFileModel)
 admin.site.register(Sample, SampleAdmin)
-admin.site.register(Profile)
+# admin.site.register(Profile)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(WorkGroup, WorkGroupAdmin)

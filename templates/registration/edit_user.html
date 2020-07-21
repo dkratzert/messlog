@@ -5,18 +5,22 @@
 {% load crispy_forms_field %}
 {% load crispy_forms_filters %}
 
-{# TODO: create view for this page #}
 
 {% block inner_content %}
 
     <div class="card-header">
         <h3>User Profile</h3>
-    {% trans "You only need to fill the required fields (with *)" %}
+        {% trans "You only need to fill the required fields (with *)" %}
     </div>
     <div class="card-body mb-3">
         <form method="post">
             {% csrf_token %}
             {{ user_form |crispy }}
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-secondary mb-3 mt-3" href="{% url 'password_change' %}">{% trans "Change Password" %}</a>
+                </div>
+            </div>
             {{ profile_form |crispy }}
             <button class="btn btn-primary mr-2" type="submit">{% trans "Save" %}</button>
             <a href="{% url 'index' %}" class="btn btn-outline-danger">{% trans "Cancel" %}</a>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-20 20:28+0200\n"
+"POT-Creation-Date: 2020-07-20 20:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -184,7 +184,7 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: scxrd/forms/forms.py:47 scxrd/models/models.py:159
+#: scxrd/forms/forms.py:47 scxrd/models/models.py:154
 #: templates/scxrd/residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
@@ -498,59 +498,59 @@ msgstr "Firma"
 msgid "Operator status"
 msgstr "Operator-Status"
 
-#: scxrd/models/models.py:134
+#: scxrd/models/models.py:129
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: scxrd/models/models.py:140
+#: scxrd/models/models.py:135
 msgid "Work group"
 msgstr "Arbeitsgruppe"
 
-#: scxrd/models/models.py:141
+#: scxrd/models/models.py:136
 msgid "Work groups"
 msgstr "Arbeitsgruppen"
 
-#: scxrd/models/models.py:150
+#: scxrd/models/models.py:145
 msgid "machine model name"
 msgstr "Name der Maschine"
 
-#: scxrd/models/models.py:153
+#: scxrd/models/models.py:148
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: scxrd/models/models.py:160
+#: scxrd/models/models.py:155
 msgid "Machines"
 msgstr "Maschinen"
 
-#: scxrd/models/models.py:169
+#: scxrd/models/models.py:164
 msgid "crystal support"
 msgstr "Probenhalter"
 
-#: scxrd/models/models.py:175
+#: scxrd/models/models.py:170
 msgid "Crystal support"
 msgstr "Probenhalter"
 
-#: scxrd/models/models.py:176
+#: scxrd/models/models.py:171
 msgid "Crystal supports"
 msgstr "Probenhalter"
 
-#: scxrd/models/models.py:184
+#: scxrd/models/models.py:179
 msgid "crystal glue"
 msgstr "Kristallkleber"
 
-#: scxrd/models/models.py:190
+#: scxrd/models/models.py:185
 msgid "Crystal Glue"
 msgstr "Kristallkleber"
 
-#: scxrd/models/models.py:191
+#: scxrd/models/models.py:186
 msgid "Crystal Glues"
 msgstr "Kristallkleber"
 
-#: scxrd/models/models.py:195
+#: scxrd/models/models.py:190
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: scxrd/models/models.py:203
+#: scxrd/models/models.py:198
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 

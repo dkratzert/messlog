@@ -33,7 +33,7 @@ urlpatterns = [
     path('i18n/', include('django_translation_flags.urls')),
     path('favicon.ico', favicon_view),
     path('signup/', views.SignUp.as_view(), name='signup'),
-    path('options/', views.OptionsView.as_view(), name='options'),
+    #path('options/', views.OptionsView.as_view(), name='options'),
     path('useredit/<str:username>/', views.UserEdit.as_view(), name='useredit'),
     path('accounts/', include('django.contrib.auth.urls')),
     # path('password_change/',
