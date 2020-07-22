@@ -73,7 +73,7 @@ class CifFileModel(models.Model):
 
     def __str__(self):
         try:
-            return self.cif_file_on_disk.name
+            return self.cif_name_only
         except ValueError:
             return '# no file found #'
         # data is the cif data_ value
@@ -153,7 +153,7 @@ class CifFileModel(models.Model):
         if self.cif_exists:
             return self.cif_file_path.name
         else:
-            return ''
+            return '# No CIf file #'
 
     @property
     def cif_exists(self):

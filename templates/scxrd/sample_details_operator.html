@@ -125,6 +125,50 @@
                         {{ sample.special_remarks }}
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        {% trans "CIF File" %}
+                    </td>
+                    <td>
+                        <div>
+                            {% for measurement in sample.measurements.all %}
+                                <div>
+                                    <a href="{{ measurement.ciffilemodel.cif_file_on_disk.url }}">{{ measurement.ciffilemodel }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {% trans "checkCIF File" %}
+                    </td>
+                    <td>
+                        <div>
+                            {% for measurement in sample.measurements.all %}
+                                <div>
+                                    <a href="{{ measurement.checkcifmodel.checkcif_on_disk.url }}">{{ measurement.checkcifmodel }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {% trans "Structure Report" %}
+                    </td>
+                    <td>
+                        <div>
+                            {% for measurement in sample.measurements.all %}
+                                <div>
+                                    <a href="{{ measurement.reportmodel.reportdoc_on_disk.url }}">{{ measurement.reportmodel }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
             </table>
             <div class="mb-5">
                 {% include 'scxrd/buttons/back_button.html' %}

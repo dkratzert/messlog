@@ -214,6 +214,12 @@ class CheckCifModel(models.Model):
                                         verbose_name='cif file')
     history = HistoricalRecords()
 
+    def __str__(self):
+        try:
+            return self.chkcif_name_only
+        except ValueError:
+            return '# no file found #'
+
     @property
     def chkcif_file_path(self) -> Path:
         """The complete absolute path of the CIF file with file name and ending"""
@@ -246,6 +252,12 @@ class ReportModel(models.Model):
                                          validators=[validate_reportdoc_file_extension],
                                          verbose_name='cif file')
     history = HistoricalRecords()
+
+    def __str__(self):
+        try:
+            return self.report_name_only
+        except ValueError:
+            return '# no file found #'
 
     @property
     def report_file_path(self) -> Path:

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-21 13:15+0200\n"
+"POT-Creation-Date: 2020-07-22 15:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,7 +185,7 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:154
+#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:155
 #: .\templates\scxrd\residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
@@ -293,19 +293,19 @@ msgstr "gewünschte Struktur"
 msgid "New Sample"
 msgstr "neue Probe"
 
-#: .\scxrd\forms\new_sample.py:101
+#: .\scxrd\forms\new_sample.py:100
 msgid "Alternatively, draw the Molecule"
 msgstr "alternativ, Molekül zeichnen"
 
-#: .\scxrd\forms\new_sample.py:102
+#: .\scxrd\forms\new_sample.py:101
 msgid "This is an alternative to the file upload above."
 msgstr "Dies ist eine Alternative zum obigen Datei-Upload"
 
-#: .\scxrd\forms\new_sample.py:111
+#: .\scxrd\forms\new_sample.py:110
 msgid "Submit"
 msgstr "Abgeben"
 
-#: .\scxrd\forms\new_sample.py:132
+#: .\scxrd\forms\new_sample.py:131
 msgid ""
 "You need to either upload a document with the desired structure or draw it "
 "in the field below."
@@ -479,80 +479,80 @@ msgstr "Messungen"
 msgid "Measured recently?"
 msgstr "Vor kurzem gemessen?"
 
-#: .\scxrd\models\models.py:71
+#: .\scxrd\models\models.py:72
 #: .\venv\Lib\site-packages\django\core\validators.py:166
 msgid "Enter a valid email address."
 msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
 
-#: .\scxrd\models\models.py:79
+#: .\scxrd\models\models.py:80
 msgid "Enter a valid resolution in angstrom."
 msgstr "Geben Sie die Auflösung in Angström ein."
 
-#: .\scxrd\models\models.py:87
+#: .\scxrd\models\models.py:88
 msgid "Enter a name with characters A-Z a-z 0-9 or _"
 msgstr "Geben Sie einen Namen mit den Zeichen A-Z a-z 0-9 oder _ ein."
 
-#: .\scxrd\models\models.py:102
+#: .\scxrd\models\models.py:103
 msgid "company"
 msgstr "Firma"
 
-#: .\scxrd\models\models.py:113
+#: .\scxrd\models\models.py:114
 msgid "Operator status"
 msgstr "Operator-Status"
 
-#: .\scxrd\models\models.py:129
+#: .\scxrd\models\models.py:130
 msgid "work group head"
 msgstr "Arbeitsgruppenleiter"
 
-#: .\scxrd\models\models.py:135
+#: .\scxrd\models\models.py:136
 msgid "Work group"
 msgstr "Arbeitsgruppe"
 
-#: .\scxrd\models\models.py:136
+#: .\scxrd\models\models.py:137
 msgid "Work groups"
 msgstr "Arbeitsgruppen"
 
-#: .\scxrd\models\models.py:145
+#: .\scxrd\models\models.py:146
 msgid "machine model name"
 msgstr "Name der Maschine"
 
-#: .\scxrd\models\models.py:148
+#: .\scxrd\models\models.py:149
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: .\scxrd\models\models.py:155
+#: .\scxrd\models\models.py:156
 msgid "Machines"
 msgstr "Maschinen"
 
-#: .\scxrd\models\models.py:164
+#: .\scxrd\models\models.py:165
 msgid "crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:170
+#: .\scxrd\models\models.py:171
 msgid "Crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:171
+#: .\scxrd\models\models.py:172
 msgid "Crystal supports"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:179
+#: .\scxrd\models\models.py:180
 msgid "crystal glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:185
+#: .\scxrd\models\models.py:186
 msgid "Crystal Glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:186
+#: .\scxrd\models\models.py:187
 msgid "Crystal Glues"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:190
+#: .\scxrd\models\models.py:191
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: .\scxrd\models\models.py:198
+#: .\scxrd\models\models.py:199
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
@@ -729,8 +729,6 @@ msgid "Password changed sucessfully!"
 msgstr "Passwort erfolgreich geändert."
 
 #: .\templates\registration\password_reset_complete.html:14
-#, fuzzy, python-format
-#| msgid "You may now login again."
 msgid "You may now <a href=\"%(the_url)s\">login</a> again."
 msgstr "Du kannst dich nun wieder <a href=\"%(the_url)s\">anmelden</a>."
 
@@ -834,7 +832,7 @@ msgstr "Details"
 
 #: .\templates\scxrd\residuals_table.html:9
 msgid "Measurement Nr."
-msgstr "Measurementnummer"
+msgstr "Nummer der Messung"
 
 #: .\templates\scxrd\residuals_table.html:13
 #: .\templates\scxrd\submitted_samples_list_operator.html:25
@@ -854,6 +852,7 @@ msgid "Results sent"
 msgstr "Ergebnisse gesendet"
 
 #: .\templates\scxrd\residuals_table.html:29
+#: .\templates\scxrd\sample_details_operator.html:130
 msgid "CIF File"
 msgstr "CIF-Datei"
 
@@ -928,6 +927,14 @@ msgstr "Strukturformel"
 #: .\templates\scxrd\sample_details_operator.html:121
 msgid "Special remarks"
 msgstr "Weitere Anmerkungen"
+
+#: .\templates\scxrd\sample_details_operator.html:145
+msgid "checkCIF File"
+msgstr "checkCIF-Datei"
+
+#: .\templates\scxrd\sample_details_operator.html:160
+msgid "Structure Report"
+msgstr "Struktur-Report"
 
 #: .\templates\scxrd\sample_submitted_page.html:10
 msgid "Successfully Submitted Sample, what next?"

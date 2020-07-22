@@ -1,6 +1,5 @@
-from pathlib import Path
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.views import View
@@ -8,10 +7,10 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import DetailView
 from django_robohash.robotmaker import make_robot_svg
 
-from mysite.settings import MEDIA_ROOT
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.cif.mol_file_writer import MolFile
 from scxrd.cif.sdm import SDM
+from scxrd.models.cif_model import CifFileModel
 from scxrd.models.measurement_model import Measurement
 from scxrd.utils import randstring
 
@@ -30,21 +29,24 @@ class MoleculeView(LoginRequiredMixin, View):
     """
 
     def post(self, request: WSGIRequest, *args, **kwargs):
-        # TODO: get cif file from Measurement:
-        cif_file = request.POST.get('cif_file')
-        cifpath = Path(MEDIA_ROOT).joinpath(Path(cif_file))
         exp_id = request.POST.get('measurement_id')
-        if not cif_file or not cifpath.is_file():
-            print('Measurement with id {} has no cif file.'.format(exp_id))
-            # Show a robot where no cif is found:
-            robot = make_robot_svg(randstring(), width=300, height=300)
-            return HttpResponse(robot[1:])
+        try:
+            cif = CifFileModel.objects.get(measurement=exp_id)
+        except ObjectDoesNotExist:
+            return self.show_robot()
+        cif_path = cif.cif_file_path
+        if not cif.cif_exists:
+            return self.show_robot()
         grow = request.POST.get('grow')
-        cif = CifContainer(cifpath)
+        cif = CifContainer(cif_path)
         if cif.atoms_fract:
             return HttpResponse(self.make_molfile(cif, grow))
-        print('Cif file with id {} of measurement_name {} has no atoms!'.format(cif_file, exp_id))
         return HttpResponse('')
+
+    def show_robot(self):
+        # Show a robot where no cif is found:
+        robot = make_robot_svg(randstring(), width=300, height=300)
+        return HttpResponse(robot[1:])
 
     def make_molfile(self, cif: CifContainer, grow: str) -> str:
         """
@@ -75,5 +77,3 @@ class MoleculeView(LoginRequiredMixin, View):
     @never_cache
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-
-
