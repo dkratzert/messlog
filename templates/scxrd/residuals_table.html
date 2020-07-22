@@ -6,51 +6,51 @@
 
 {% endcomment %}
 <div class="form-row">
-    <div class="col-5">{% trans "Measurement Nr." %}</div>
-    <div class="col-7" id="t_exp">  {{ measurement.number }} </div>
-    <div class="col-5">{% trans "Machine" %}</div>
-    <div class="col-7" id="t_machine">  {{ measurement.machine }} </div>
-    <div class="col-5">{% trans "Sum Formula" %}</div>
+    <div class="col-4">{% trans "Measurement Nr." %}</div>
+    <div class="col-8" id="t_exp">  {{ measurement.number }} </div>
+    <div class="col-4">{% trans "Machine" %}</div>
+    <div class="col-8" id="t_machine">  {{ measurement.machine }} </div>
+    <div class="col-4">{% trans "Sum Formula" %}</div>
     {% if measurement.cif %}
-        <div class="col-7" id="t_sumform">  {{ measurement.ciffilemodel.chemical_formula_sum|safe }} </div>
+        <div class="col-8" id="t_sumform">  {{ measurement.ciffilemodel.chemical_formula_sum|safe }} </div>
     {% elif measurement.sum_formula %}
-        <div class="col-7" id="t_sumform">  {{ measurement.sum_formula|safe }} </div>
+        <div class="col-8" id="t_sumform">  {{ measurement.sum_formula|safe }} </div>
     {% else %}
-        <div class="col-7" id="t_sumform"> ----- </div>
+        <div class="col-8" id="t_sumform"> ----- </div>
     {% endif %}
-    <div class="col-5">{% trans "Measured by" %}</div>
-    <div class="col-7" id="t_operator">  {{ measurement.operator.get_username }} </div>
+    <div class="col-4">{% trans "Measured by" %}</div>
+    <div class="col-8" id="t_operator">  {{ measurement.operator.get_username }} </div>
     {% if measurement.customer %}
-        <div class="col-5">{% trans "Measure Date" %}</div>
-        <div class="col-7" id="t_measure_date">  {{ measurement.measure_date|date|default:"-----" }} </div>
-        <div class="col-5">{% trans "Results sent" %}</div>
-        <div class="col-7" id="t_sent">  {{ measurement.result_date|date|default:"-----" }} </div>
+        <div class="col-4">{% trans "Measure Date" %}</div>
+        <div class="col-8" id="t_measure_date">  {{ measurement.measure_date|date|default:"-----" }} </div>
+        <div class="col-4">{% trans "Results sent" %}</div>
+        <div class="col-8" id="t_sent">  {{ measurement.result_date|date|default:"-----" }} </div>
     {% endif %}
-    <div class="col-5">{% trans "CIF File" %}</div>
-    <div class="col-7" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
+    <div class="col-4">{% trans "CIF File" %}</div>
+    <div class="col-8" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
     {% comment %}
-    <div class="col-5">CIF data_</div>
-    <div class="col-7" id="t_data_">  {% measurement_name.ciffilemodel.data|default:"-----"  %} </div>
+    <div class="col-4">CIF data_</div>
+    <div class="col-8" id="t_data_">  {% measurement_name.ciffilemodel.data|default:"-----"  %} </div>
     {% endcomment %}
-    <div class="col-5">{% trans "Space Group" %}</div>
-    <div class="col-7" id="t_spgr">  {{ measurement.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>
-    <div class="col-5"><i>R</i><sub>1</sub></div>
-    <div class="col-7" id="t_r1">  {{ measurement.ciffilemodel.r1_in_percent|default:"-----" }}&nbsp;%</div>
-    <div class="col-5"><i>wR</i><sub>2</sub></div>
-    <div class="col-7" id="t_wr2">  {{ measurement.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
-    <div class="col-5">{% trans "Completeness" %}</div>
-    <div class="col-7"
+    <div class="col-4">{% trans "Space Group" %}</div>
+    <div class="col-8" id="t_spgr">  {{ measurement.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>
+    <div class="col-4"><i>R</i><sub>1</sub></div>
+    <div class="col-8" id="t_r1">  {{ measurement.ciffilemodel.r1_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-4"><i>wR</i><sub>2</sub></div>
+    <div class="col-8" id="t_wr2">  {{ measurement.ciffilemodel.wr2_in_percent|default:"-----" }}&nbsp;%</div>
+    <div class="col-4">{% trans "Completeness" %}</div>
+    <div class="col-8"
          id="t_compl">  {{ measurement.ciffilemodel.completeness_in_percent|default:"-----" }}&nbsp;%</div>
-    <div class="col-5">{% trans "Temperature" %}</div>
+    <div class="col-4">{% trans "Temperature" %}</div>
     {% if measurement.ciffilemodel.temperature %}
-        <div class="col-7" id="t_ccdc">  {{ measurement.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
+        <div class="col-8" id="t_ccdc">  {{ measurement.ciffilemodel.temperature|default:"-----" }}&nbsp;K</div>
     {% elif measurement.measurement_temp %}
-        <div class="col-7" id="t_ccdc">  {{ measurement.measurement_temp|default:"-----" }}&nbsp;K</div>
+        <div class="col-8" id="t_ccdc">  {{ measurement.measurement_temp|default:"-----" }}&nbsp;K</div>
     {% else %}
-        <div class="col-7" id="t_ccdc"> -----</div>
+        <div class="col-8" id="t_ccdc"> -----</div>
     {% endif %}
-    <div class="col-5">{% trans "CCDC Number" %}</div>
-    <div class="col-7" id="t_ccdc">
+    <div class="col-4">{% trans "CCDC Number" %}</div>
+    <div class="col-8" id="t_ccdc">
         {% if measurement.ciffilemodel.ccdc_number %}
             <a href="https://www.ccdc.cam.ac.uk/structures/Search?Ccdcid={{ measurement.ciffilemodel.ccdc_number }}"
                target="_blank">
@@ -60,6 +60,25 @@
             -----
         {% endif %}
     </div>
+    <div class="col-4">CIF File</div>
+    <div class="col-8" id="t_ciffile">
+        <div>
+            <a href="{{ measurement.ciffilemodel.cif_file_on_disk.url }}">{{ measurement.ciffilemodel }}</a>
+        </div>
+    </div>
+    <div class="col-4">checkCIF File</div>
+    <div class="col-8" id="t_ciffile">
+        <div>
+            <a href="{{ measurement.checkcifmodel.checkcif_on_disk.url }}">{{ measurement.checkcifmodel }}</a>
+        </div>
+    </div>
+    <div class="col-4">Structure Report</div>
+    <div class="col-8" id="t_ciffile">
+        <div>
+            <a href="{{ measurement.reportmodel.reportdoc_on_disk.url }}">{{ measurement.reportmodel }}</a>
+        </div>
+    </div>
 </div>
+
 
 
