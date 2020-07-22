@@ -93,8 +93,7 @@ class SubmitNewSampleForm(SubmitNewFormMixin, forms.ModelForm):
                         <input type="hidden" id="id_svg_struct_samp" value="" name="desired_struct_draw">\n
                         <input type="hidden" id="id_molfile_sample" value="" name="mol_file">\n
                         <div class="p-3 collapse" id="collapseKetcher">
-                            <iframe id="ketcher-frame" src="ketcher.html">\n
-                            </iframe>\n
+                            <iframe id="ketcher-frame" src="ketcher.html"></iframe>\n
                         </div>
                     </div>\n
                     """.format(

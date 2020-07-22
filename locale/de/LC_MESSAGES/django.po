@@ -1013,7 +1013,7 @@ msgstr "Nicht messbar"
 
 #: .\templates\scxrd\submitted_samples_list_customer.html:120
 msgid "not measured yet"
-msgstr "Nicht gemessen, weil"
+msgstr "Noch nicht gemessen"
 
 #: .\templates\scxrd\submitted_samples_list_customer.html:134
 msgid "Special remarks:"

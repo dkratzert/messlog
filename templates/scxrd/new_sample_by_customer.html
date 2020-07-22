@@ -14,16 +14,20 @@
         </div>
     </div>
     <script>
-        $(function () {
+        $(document).ready(function (e) {
             var ketcher_svg;
-            var svg_field = document.getElementById('id_svg_struct_samp');
-            var mol_field = document.getElementById('id_molfile_sample');
             var svgval;
-            var k = document.getElementById('ketcher-frame');
-            k.onload = function () {
+            // a hidden input filed for the svg file content:
+            var svg_field = document.getElementById('id_svg_struct_samp');
+            // a hidden input filed for the mol file content:
+            var mol_field = document.getElementById('id_molfile_sample');
+            var kframe = document.getElementById('ketcher-frame');
+            // I have to do onmouseenter here, because Firefox has a bug
+            // since the dawn of time where onload does not fire for iframes:
+            kframe.onmouseenter = function () {
                 var ketcher = this.contentWindow.ketcher;
-                ketcher.setMolecule(mol_field);
-                ketcher.editor.on('click', function () {
+                // ketcher.setMolecule(mol_field);
+                ketcher.editor.on('change', function () {
                     ketcher_svg = ketcher.editor.render.clientArea.getElementsByTagName('svg').item(0).outerHTML;
                     svgval = ketcher_svg.toString().replace(/<svg\sheight="[0-9]+"\sversion="1.1"\swidth="[0-9]+"/g,
                         '<svg height="100%" version="1.1" width="100%"');
