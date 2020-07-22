@@ -194,7 +194,7 @@ class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
         response = self.client.post(reverse("scxrd:edit-measurement", kwargs={'number': 3}), follow=True, data=data2)
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'scxrd/scxrd_index.html')
+        self.assertTemplateUsed(response, 'scxrd/all_measurements_table.html')
         self.assertEqual(Measurement.objects.last().measurement_temp, 124.0)
         self.assertEqual(Measurement.objects.last().measurement_name, 'PK_TMP355')
         self.assertEqual(Measurement.objects.last().sum_formula, 'C5H5')
