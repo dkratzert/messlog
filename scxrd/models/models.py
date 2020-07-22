@@ -13,25 +13,16 @@ from simple_history.models import HistoricalRecords
 
 """
 TODO: 
-- make sure that operators without superuser rights can only edit their own measurements
-- on details page for sample: list files of every measurement.
+- Jeder kann alle messungen sehen, aber auf eigene eingrenzen
 - add email notifications and password reset etc...
 - mail request of operator status: page for operators where they can send a mail and set status
-- improve admin page for user profiles
 - save URI to frames dir in measurement?
 
 - Add machine service logbook
 
-- Add a "currently running measurement" page with status for everyone visible
-   - there should be also the end time visible and who is responsible
-   - the owner of the measurement could do modifications to this measurement by an "edit measurement" button
-     owners can do changes only until the cif file is uploaded 
-   - page should have a link to the google calendar (or even embedded into an iframe?)
-
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of measurements list page
 - Check for existing unit cell during cif upload and measure measurement.
-- reminder message to take back vials?
 - for charts:
     https://simpleisbetterthancomplex.com/tutorial/2020/01/19/how-to-use-chart-js-with-django.html 
     https://www.chartjs.org/docs/latest/
@@ -41,18 +32,10 @@ TODO:
 - show success rate per person
 - http://ccbv.co.uk/projects/Django/3.0/
 
-from django.utils.text import format_lazy
-from django.utils.translation import gettext_lazy
-...
+
 name = gettext_lazy('John Lennon')
 instrument = gettext_lazy('guitar')
 result = format_lazy('{name}: {instrument}', name=name, instrument=instrument)
-
-<a href="{{ object.get_absolute_url }}">{{ object.name }}</a>
-
-def get_absolute_url(self):
-    return reverse('company_details', kwargs={'pk': self.id})
-
 """
 
 model_fixtures = ['scxrd/fixtures/glue.json',

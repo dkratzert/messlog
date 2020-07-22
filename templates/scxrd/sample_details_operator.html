@@ -86,8 +86,8 @@
                         </div>
                     </td>
                     <td>
-                        {% if sample.reaction_path %}
-                            <a href="{{ sample.reaction_path.url }}">{{ sample.reaction_path.name }}</a>
+                        {% if sample.reaction_path_file_name_only %}
+                            <a href="{{ sample.reaction_path.url }}">{{ sample.reaction_path_file_name_only }}</a>
                         {% endif %}
                     </td>
                 </tr>

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -51,6 +53,19 @@ class Sample(models.Model):
 
     def __str__(self):
         return self.sample_name
+
+    @property
+    def reaction_path_file_path(self) -> Path:
+        """The complete absolute path of the CIF file with file name and ending"""
+        try:
+            return Path(str(self.reaction_path.file))
+        except FileNotFoundError:
+            return Path()
+
+    @property
+    def reaction_path_file_name_only(self) -> str:
+        """The CIF file name without path"""
+        return self.reaction_path_file_path.name
 
     def was_measured(self):
         if not self.measurements:

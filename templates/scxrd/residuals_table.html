@@ -26,11 +26,11 @@
         <div class="col-4">{% trans "Results sent" %}</div>
         <div class="col-8" id="t_sent">  {{ measurement.result_date|date|default:"-----" }} </div>
     {% endif %}
-    <div class="col-4">{% trans "CIF File" %}</div>
-    <div class="col-8" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
     {% comment %}
-    <div class="col-4">CIF data_</div>
-    <div class="col-8" id="t_data_">  {% measurement_name.ciffilemodel.data|default:"-----"  %} </div>
+        <div class="col-4">{% trans "CIF File" %}</div>
+        <div class="col-8" id="t_filen">  {{ measurement.ciffilemodel.cif_name_only|default:"-----" }} </div>
+        <div class="col-4">CIF data_</div>
+        <div class="col-8" id="t_data_">  {% measurement_name.ciffilemodel.data|default:"-----"  %} </div>
     {% endcomment %}
     <div class="col-4">{% trans "Space Group" %}</div>
     <div class="col-8" id="t_spgr">  {{ measurement.ciffilemodel.space_group_name_H_M_alt|default:"-----" }} </div>

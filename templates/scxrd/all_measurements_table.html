@@ -43,12 +43,23 @@
                 </div>
                 <div class="card-body">
                     {% trans "Currently running measurements:" %}
+
                     {% for exp in current_measures %}
-                        <p>{{ exp }} -> {% trans "end time:" %} {{ exp.end_time }}</p>
+                        {% if user == exp.operator %}
+                            <p><b><a href="{{ exp.get_absolute_url }}">{{ exp }}</a></b> {% trans "by" %} {{ exp.operator.profile }} {% trans "at machine" %}
+                                <b>{{ exp.machine }}</b> -->
+                                {% trans "end time:" %} <b>{{ exp.end_time }}</b></p>
+                        {% else %}
+                            <p><b>{{ exp }}</b> {% trans "by" %} {{ exp.operator.profile }} {% trans "at machine" %} <b>{{ exp.machine }}</b> -->
+                                {% trans "end time:" %} <b>{{ exp.end_time }}</b></p>
+                        {% endif %}
+
                     {% empty %}
                         <p>No current measurements</p>
                     {% endfor %}
-
+                    <div>
+                        <a href="https://calendar.google.com/calendar" target="_blank">{% trans "Google Calendar" %}</a>
+                    </div>
                 </div>
             </div>
         </div>
