@@ -200,7 +200,7 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
         request.POST._mutable = True
         request.POST['number'] = self.object.number
         request.POST._mutable = False
-        #sample = self.object.sample
+        sample = self.object.sample
         final = self.object.final
         form: MeasurementEditForm = self.get_form()
         if final:
@@ -210,7 +210,9 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             print('Form is valid')
             exp: Measurement = form.save(commit=False)
-            exp.refresh_from_db()
+            exp.refresh_from_db(fields=['operator'])
+            exp.sample = sample
+            exp.measurement_temp = form.cleaned_data.get('measurement_temp')
             if form.cleaned_data.get('final'):
                 if self.all_files_there(form):
                     exp.final = form.cleaned_data.get('final')
@@ -218,7 +220,7 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
                     messages.warning(request, _('You can only finalize a measurement after uploading '
                                                 'a CIF, report and checkcif file!'))
                     return self.form_invalid(form)
-            if not exp.operator == request.user: # and not request.user.is_superuser:
+            if not exp.operator == request.user:  # and not request.user.is_superuser:
                 messages.warning(request, _('You can only edit your own measurements.'))
                 return self.form_invalid(form)
             if request.POST.get('cif_file_on_disk-clear'):
