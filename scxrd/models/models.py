@@ -118,6 +118,7 @@ class WorkGroup(models.Model):
     class Meta:
         verbose_name = _('Work group')
         verbose_name_plural = _('Work groups')
+        ordering = ['group_head']
 
 
 class Machine(models.Model):
