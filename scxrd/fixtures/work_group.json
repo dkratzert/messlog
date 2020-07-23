@@ -75,5 +75,61 @@
     "fields": {
         "group_head": "Br\u00fcckner"
     }
+}, 
+{
+    "model": "scxrd.workgroup",
+    "pk": 14,
+    "fields": {
+        "group_head": "Esser"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 15,
+    "fields": {
+        "group_head": "Plattner"
+    }
+},    
+{
+    "model": "scxrd.workgroup",
+    "pk": 16,
+    "fields": {
+        "group_head": "Andrade"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 17,
+    "fields": {
+        "group_head": "Einsle"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 18,
+    "fields": {
+        "group_head": "Friedrich"
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 19,
+    "fields": {
+        "group_head": "M\u00fclhaupt "
+    }
+},
+{
+    "model": "scxrd.workgroup",
+    "pk": 20,
+    "fields": {
+        "group_head": "Shastri"
+    }
+}, 
+{
+    "model": "scxrd.workgroup",
+    "pk": 21,
+    "fields": {
+        "group_head": "Walther"
+    }
 }
 ]
