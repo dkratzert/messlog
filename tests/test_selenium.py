@@ -10,7 +10,7 @@ from selenium.webdriver.support.select import Select
 
 from scxrd.models.measurement_model import Measurement
 from scxrd.models.models import WorkGroup
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, make_operator_user
 
 chromedriver_binary.add_chromedriver_to_path()
 
@@ -323,11 +323,10 @@ class NewMeasuremenChromeTestCase(DeleteFilesMixin, OperatorUserMixin, StaticLiv
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class NewMeasuremenFirefoxTestCase(NewMeasuremenChromeTestCase, DeleteFilesMixin, PlainUserMixin,
+class NewMeasuremenFirefoxTestCase(NewMeasuremenChromeTestCase, DeleteFilesMixin, OperatorUserMixin,
                                    StaticLiveServerTestCase):
     port = 8001
 
     def setUp(self):
-        user = User.objects.create_user(username='testuser', email='test@test.com', is_active=True, is_superuser=False,
-                                        password='Test1234!')
+        u = make_operator_user()
         self.selenium = webdriver.Firefox()
