@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-23 09:04+0200\n"
+"POT-Creation-Date: 2020-07-23 16:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,7 +185,7 @@ msgstr "Farbeigenschaften"
 msgid "Colour Lustre"
 msgstr "Glanz"
 
-#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:138
+#: .\scxrd\forms\forms.py:47 .\scxrd\models\models.py:139
 #: .\templates\scxrd\residuals_table.html:11
 msgid "Machine"
 msgstr "Maschine"
@@ -512,47 +512,47 @@ msgstr "Arbeitsgruppe"
 msgid "Work groups"
 msgstr "Arbeitsgruppen"
 
-#: .\scxrd\models\models.py:129
+#: .\scxrd\models\models.py:130
 msgid "machine model name"
 msgstr "Name der Maschine"
 
-#: .\scxrd\models\models.py:132
+#: .\scxrd\models\models.py:133
 msgid "machine type"
 msgstr "Maschinentyp"
 
-#: .\scxrd\models\models.py:139
+#: .\scxrd\models\models.py:140
 msgid "Machines"
 msgstr "Maschinen"
 
-#: .\scxrd\models\models.py:148
+#: .\scxrd\models\models.py:149
 msgid "crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:154
+#: .\scxrd\models\models.py:155
 msgid "Crystal support"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:155
+#: .\scxrd\models\models.py:156
 msgid "Crystal supports"
 msgstr "Probenhalter"
 
-#: .\scxrd\models\models.py:163
+#: .\scxrd\models\models.py:164
 msgid "crystal glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:169
+#: .\scxrd\models\models.py:170
 msgid "Crystal Glue"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:170
+#: .\scxrd\models\models.py:171
 msgid "Crystal Glues"
 msgstr "Kristallkleber"
 
-#: .\scxrd\models\models.py:174
+#: .\scxrd\models\models.py:175
 msgid "Only .html or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .html-Dateien erlaubt."
 
-#: .\scxrd\models\models.py:182
+#: .\scxrd\models\models.py:183
 msgid "Only .docx, .doc or .pdf files are allowed to upload here."
 msgstr "Hier sind nur .docx, .doc oder .pdf-Dateien erlaubt."
 
@@ -802,6 +802,10 @@ msgstr "auf Maschine"
 #: .\templates\scxrd\all_measurements_table.html:54
 msgid "end time:"
 msgstr "Erwartetes Ende:"
+
+#: .\templates\scxrd\all_measurements_table.html:58
+msgid "No current measurements"
+msgstr "Keine laufenden Messungen"
 
 #: .\templates\scxrd\all_measurements_table.html:61
 msgid "Google Calendar"
