@@ -22,8 +22,8 @@ urlpatterns = [
     path('operator/sample_detail/<int:pk>/', OperatorSampleDetail.as_view(), name='op_samples_detail'),
     # Measurements
     path('measurements/', MeasurementIndexView.as_view(), name='all_measurements'),
-    path('newexp/', MeasurementCreateView.as_view(), name='new_exp'),
-    path('newexp/<int:pk>/', MeasurementFromSampleCreateView.as_view(), name='new_exp_from_sample'),
+    path('new_measurement/', MeasurementCreateView.as_view(), name='new_exp'),
+    path('new_measurement/<int:pk>/', MeasurementFromSampleCreateView.as_view(), name='new_exp_from_sample'),
     path('measurements/edit/<int:number>/', MeasurementEditView.as_view(), name='edit-measurement'),
     path('measurements/table/<int:pk>/', ResidualsTable.as_view(), name='details_table'),
     path('measurements_list/', MeasurementListJson.as_view(), name='measurements_list'),

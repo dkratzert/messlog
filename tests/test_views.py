@@ -9,14 +9,83 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
 from scxrd.cif.cif_file_io import CifContainer
-from scxrd.models.cif_model import CifFileModel
 from scxrd.forms.edit_measurement import MeasurementEditForm
-from scxrd.models.models import CrystalSupport, Machine, WorkGroup
+from scxrd.models.cif_model import CifFileModel
 from scxrd.models.measurement_model import Measurement
+from scxrd.models.models import WorkGroup, CrystalSupport, Machine
 from scxrd.models.sample_model import Sample
 from scxrd.utils import generate_sha256
 from scxrd.views.sample_views import NewSampleByCustomer
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_measurement
+
+data_createxp_1 = {
+    'conditions'      : '',
+    'crystal_habit'   : 'block',
+    'measurement_name': 'PK_TMP355_b',  # PK-TMP355
+    'base'            : CrystalSupport.objects.get(pk=1),
+    'machine'         : Machine.objects.get(pk=1),
+    'measure_date'    : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
+    # 'end_time'        : datetime.datetime(2020, 7, 3, 9, 37, 9, tzinfo=timezone.get_current_timezone()),
+    'end_time'        : '2020-07-03 09:37:19',
+    'measurement_temp': 101.0,  # 123.0
+    'number'          : 3,
+    'crystal_size_x'  : 0.1,
+    'crystal_size_y'  : 0.1,
+    'crystal_size_z'  : 0.1,
+    'operator_id'     : 1,
+    'prelim_unit_cell': '',
+    'publishable'     : True,  # False
+    'resolution'      : 0.80,
+    'was_measured'    : True}
+
+data_modify_exp_2 = {
+    'conditions'           : 'blubb',
+    'crystal_colour'       : 1,
+    'crystal_colour_lustre': 0,
+    'crystal_colour_mod'   : 0,
+    'crystal_habit'        : 'block',
+    'crystal_size_x'       : 0.12,
+    'crystal_size_y'       : 0.13,
+    'crystal_size_z'       : 0.14,
+    'base'                 : 1,
+    'measurement_name'     : 'PK_TMP355',  # PK-TMP355
+    'exptl_special_details': 'some details',
+    'machine'              : 1,
+    'measurement_temp'     : 124.0,  # 123.0
+    'not_measured_cause'   : '',
+    'number'               : 3,
+    'operator_id'          : 1,
+    'prelim_unit_cell'     : '',
+    'publishable'          : False,  # False
+    'resolution'           : 0.79,
+    'result_date'          : '2020-7-7',
+    'end_time'             : '2020-07-03 09:37:19',
+    'submit_date'          : '',
+    'sum_formula'          : 'C5H5',
+    'was_measured'         : True}
+
+data_createxp_forms = {'Save'                 : 'Save',
+                       'base'                 : '2',
+                       'crystal_colour'       : '6',
+                       'crystal_habit'        : 'needle',
+                       'crystal_size_x'       : '0.13',
+                       'crystal_size_y'       : '0.12',
+                       'crystal_size_z'       : '0.1',
+                       'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
+                       'customer'             : '1',
+                       'measurement_name'     : 'TB_VR40_v1b',
+                       'exptl_special_details': 'blub',
+                       'glue'                 : '2',
+                       'machine'              : '1',
+                       'measure_date'         : '2020-07-03 12:53',
+                       'end_time    '         : '2020-07-03 19:33',
+                       'measurement_temp'     : '102',
+                       'number'               : '88',
+                       'prelim_unit_cell'     : '10 10 10 90 90 90',
+                       'resolution'           : '0.77',
+                       'sum_formula'          : 'C3H4O2',
+                       'cif_file_on_disk'     : 'scxrd/testfiles/p21c.cif',
+                       }
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -69,28 +138,28 @@ class HomeTests(DeleteFilesMixin, TestCase):
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class NewExpTest(DeleteFilesMixin, TestCase):
     def setUp(self):
-        self.formdata = dict({'Save'                 : 'Save',
-                              'base'                 : '2',
-                              'crystal_colour'       : '6',
-                              'crystal_habit'        : 'needle',
-                              'crystal_size_x'       : '0.13',
-                              'crystal_size_y'       : '0.12',
-                              'crystal_size_z'       : '0.1',
-                              'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
-                              'customer'             : '1',
-                              'measurement_name'      : 'TB_VR40_v1b',
-                              'exptl_special_details': 'blub',
-                              'glue'                 : '2',
-                              'machine'              : '1',
-                              'measure_date'         : '2020-07-03 12:53',
-                              'end_time    '         : '2020-07-03 19:33',
-                              'measurement_temp'     : '102',
-                              'number'               : '88',
-                              'prelim_unit_cell'     : '10 10 10 90 90 90',
-                              'resolution'           : '0.77',
-                              'sum_formula'          : 'C3H4O2',
-                              'cif_file_on_disk'     : 'scxrd/testfiles/p21c.cif',
-                              })
+        self.formdata = {'Save'                 : 'Save',
+                         'base'                 : '2',
+                         'crystal_colour'       : '6',
+                         'crystal_habit'        : 'needle',
+                         'crystal_size_x'       : '0.13',
+                         'crystal_size_y'       : '0.12',
+                         'crystal_size_z'       : '0.1',
+                         'csrfmiddlewaretoken'  : '4J3vmTSFVd9QxLy7tnu7dCwa5cealpcsvkH1w7kYG3h1cEtKkGqgZxnLwXOinwpb',
+                         'customer'             : '1',
+                         'measurement_name'     : 'TB_VR40_v1b',
+                         'exptl_special_details': 'blub',
+                         'glue'                 : '2',
+                         'machine'              : '1',
+                         'measure_date'         : '2020-07-03 12:53',
+                         'end_time    '         : '2020-07-03 19:33',
+                         'measurement_temp'     : '102',
+                         'number'               : '88',
+                         'prelim_unit_cell'     : '10 10 10 90 90 90',
+                         'resolution'           : '0.77',
+                         'sum_formula'          : 'C3H4O2',
+                         'cif_file_on_disk'     : 'scxrd/testfiles/p21c.cif',
+                         }
         # self.selenium = webdriver.Chrome()
         super().setUp()
         user = User.objects.create(username='testuser', email='test@test.com', is_active=True, is_superuser=True)
@@ -120,8 +189,8 @@ class NewExpTest(DeleteFilesMixin, TestCase):
         self.formdata['measurement_name'] = ''
         form = MeasurementEditForm(self.formdata)
         self.assertDictEqual({'measurement_name': ['This field is required.'],
-                              'end_time'       : ['This field is required.'],
-                              'customer'       : [
+                              'end_time'        : ['This field is required.'],
+                              'customer'        : [
                                   'Select a valid choice. That choice is not one of the available choices.']},
                              form.errors)
         self.assertEqual(False, form.is_valid())
@@ -144,54 +213,14 @@ class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
                          b'\n<!doctype html>\n<html lang="en">\n<head>\n  <title>Not Found</title>\n</head>\n<body>\n  '
                          b'<h1>Not Found</h1><p>The requested resource was not found on this server.</p>\n</body>\n</html>\n')
 
-    def test_new_exp_create(self):
-        data = {
-            'conditions'      : '',
-            'crystal_habit'   : 'block',
-            'measurement_name' : 'PK_TMP355_b',  # PK-TMP355
-            'base'            : CrystalSupport.objects.get(pk=1),
-            'machine'         : Machine.objects.get(pk=1),
-            'measure_date'    : datetime.datetime(2020, 7, 2, 14, 37, 9, tzinfo=timezone.get_current_timezone()),
-            # 'end_time'        : datetime.datetime(2020, 7, 3, 9, 37, 9, tzinfo=timezone.get_current_timezone()),
-            'end_time'        : '2020-07-03 09:37:19',
-            'measurement_temp': 101.0,  # 123.0
-            'number'          : 3,
-            'operator_id'     : 1,
-            'prelim_unit_cell': '',
-            'publishable'     : True,  # False
-            'resolution'      : 0.80,
-            'was_measured'    : True}
-        data2 = {
-            'conditions'           : 'blubb',
-            'crystal_colour'       : 1,
-            'crystal_colour_lustre': 0,
-            'crystal_colour_mod'   : 0,
-            'crystal_habit'        : 'block',
-            'crystal_size_x'       : 0.12,
-            'crystal_size_y'       : 0.13,
-            'crystal_size_z'       : 0.14,
-            'base'                 : 1,
-            'measurement_name'      : 'PK_TMP355',  # PK-TMP355
-            'exptl_special_details': 'some details',
-            'machine'              : 1,
-            'measurement_temp'     : 124.0,  # 123.0
-            'not_measured_cause'   : '',
-            'number'               : 3,
-            'operator_id'          : 1,
-            'prelim_unit_cell'     : '',
-            'publishable'          : False,  # False
-            'resolution'           : 0.79,
-            'result_date'          : '2020-7-7',
-            'end_time'             : '2020-07-03 09:37:19',
-            'submit_date'          : '',
-            'sum_formula'          : 'C5H5',
-            'was_measured'         : True}
+    def test_edit_measurement(self):
         self.assertEqual(Measurement.objects.count(), 0)
-        Measurement.objects.create(**data)
+        Measurement.objects.create(**data_createxp_1)
         self.assertEqual(Measurement.objects.count(), 1)
         # Do not Follow the post request, because it goes to index page afterwards:
         # remember: we use number instead of pk:
-        response = self.client.post(reverse("scxrd:edit-measurement", kwargs={'number': 3}), follow=True, data=data2)
+        response = self.client.post(reverse("scxrd:edit-measurement", kwargs={'number': 3}), follow=True,
+                                    data=data_modify_exp_2)
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'scxrd/all_measurements_table.html')
@@ -204,13 +233,28 @@ class TestMeasurementEditView(DeleteFilesMixin, OperatorUserMixin, TestCase):
 class TestMeasurementEditViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
     data = {
         'measurement_name': 'PK_TMP355_b',  # PK-TMP355
-        'end_time': '2020-07-03 09:37:19',
-        'number'         : 3, }
+        'end_time'        : '2020-07-03 09:37:19',
+        'number'          : 3, }
 
-    def test_exp_edit_by_other_user(self):
-        """TODO: A plain user should not be allowed to edit this measurement"""
-        Measurement.objects.create(**self.data)
+    def test_exp_edit_by_plain_user(self):
+        Measurement.objects.create(**data_createxp_1)
         self.assertEqual(Measurement.objects.count(), 1)
+        request = self.client.post(reverse('scxrd:edit-measurement', args=(3,)), data=data_modify_exp_2, follow=True)
+        self.assertContains(request, 'You are not allowed to edit a measurement')
+
+
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
+class TestMeasurementCreateViewPlain(DeleteFilesMixin, PlainUserMixin, TestCase):
+    data = {
+        'measurement_name': 'PK_TMP355_b',  # PK-TMP355
+        'end_time'        : '2020-07-03 09:37:19',
+        'number'          : 3, }
+
+    def test_new_measurement_by_plain_user(self):
+        self.assertEqual(Measurement.objects.count(), 0)
+        request = self.client.post(reverse('scxrd:new_exp'), data=data_createxp_forms, follow=True)
+        self.assertEqual(Measurement.objects.count(), 0)
+        self.assertContains(request, 'You are not allowed to create a measurement')
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -298,7 +342,11 @@ class TestMoleculeView(DeleteFilesMixin, OperatorUserMixin, TestCase):
     def test_molecule(self):
         # TODO: measurement_id is useless here: Use id instead of cif file path!
         request = self.client.post(reverse('scxrd:molecule'), follow=False,
-                                   data={'measurement_id': 2, 'cif_file': self.cif_model.cif_file_path})
+                                   data={'measurement_id': 1,
+                                         # This is not necessary anymore:
+                                         # 'cif_file': self.cif_model.cif_file_path
+                                         }
+                                   )
         self.assertEqual(Measurement.objects.count(), 1)
         self.assertEqual(CifFileModel.objects.count(), 1)
         self.assertEqual(request.status_code, 200)

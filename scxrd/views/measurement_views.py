@@ -44,6 +44,8 @@ class MeasurementIndexView(LoginRequiredMixin, ListView):
         return super().get_context_data(**kwargs)
 
 
+# TODO: Use UserPassesTestMixin for access control
+
 class MeasurementCreateView(LoginRequiredMixin, CreateView):
     """
     Start a new measurement
@@ -56,6 +58,10 @@ class MeasurementCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """Save the current user from the request into the measurement"""
         pprint(form.errors) if form.errors else None
+        if not any([self.request.user.profile.is_operator, self.request.user.is_superuser]):
+            messages.warning(self.request, _('You are not allowed to create a measurement!'))
+            pprint(form.errors)
+            return self.form_invalid(form)
         self.object: Measurement = form.save(commit=False)
         self.object.operator = self.request.user
         if Measurement.objects.first():
@@ -64,6 +70,11 @@ class MeasurementCreateView(LoginRequiredMixin, CreateView):
             self.object.number = 1
         self.object.save()
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        pprint(form.errors)
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_form_kwargs(self):
         """Add current user to form kwargs"""
@@ -113,7 +124,10 @@ class MeasurementFromSampleCreateView(LoginRequiredMixin, UpdateView):
         # self.object is a Sample because of the views model class:
         self.object: Sample = self.get_object()
         if form.instance.final:
-            messages.warning(request, 'This Measurement can not be changed anymore!')
+            messages.warning(request, _('This Measurement can not be changed anymore!'))
+            return self.form_invalid(form)
+        if not any([self.request.user.profile.is_operator, self.request.user.is_superuser]):
+            messages.warning(request, _('You are not allowed to create a measurement!'))
             return self.form_invalid(form)
         if form.is_valid():
             # form.instance is Measurement, because of the form class:
@@ -203,6 +217,9 @@ class MeasurementEditView(LoginRequiredMixin, UpdateView):
         sample = self.object.sample
         final = self.object.final
         form: MeasurementEditForm = self.get_form()
+        if not any([self.request.user.profile.is_operator, self.request.user.is_superuser]):
+            messages.warning(request, _('You are not allowed to edit a measurement!'))
+            return self.form_invalid(form)
         if final:
             messages.warning(request, _('This Measurement can not be changed anymore!'))
             print('This Measurement can not be changed anymore!')

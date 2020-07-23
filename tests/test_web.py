@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from scxrd.models.measurement_model import Measurement
 from scxrd.models.sample_model import Sample
-from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin
+from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, AnonUserMixin, OperatorUserMixin
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -81,7 +81,7 @@ class TestNewExpFromSample(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, Test
         url = reverse("scxrd:new_exp_from_sample", args=(1,))
         response1 = self.client.get(reverse("scxrd:submit_sample"), follow=True)
         self.assertTemplateUsed(response1, 'scxrd/new_sample_by_customer.html')
-        self.assertEqual(url, '/scxrd/newexp/1/')
+        self.assertEqual(url, '/scxrd/new_measurement/1/')
         self.assertEqual(response1.status_code, 200)
 
     def test_new_sample(self):
@@ -92,7 +92,7 @@ class TestNewExpFromSample(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, Test
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class MeasurementCreateView(DeleteFilesMixin, PlainUserMixin, AnonUserMixin, TestCase):
+class MeasurementCreateView(DeleteFilesMixin, OperatorUserMixin, AnonUserMixin, TestCase):
 
     def setUp(self) -> None:
         super(MeasurementCreateView, self).setUp()

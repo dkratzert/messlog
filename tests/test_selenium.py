@@ -178,7 +178,7 @@ class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stat
         login_user(selenium, username='testuser', password='Test1234!')
         time.sleep(0.2)
         submit_sample(selenium, sample_name='testsample_123')
-        time.sleep(0.2)
+        time.sleep(0.4)
         # The next lines fail if Firefox for example is unable to get the svg from ketcher:
         selenium.find_element_by_id('id_ok_button').send_keys(Keys.RETURN)
         time.sleep(0.2)
@@ -193,7 +193,7 @@ class MeasurementFromSampleChromeTestCase(DeleteFilesMixin, PlainUserMixin, Stat
         time.sleep(0.5)
         login_user(selenium, username='testuser_operator', password='Test1234!')
         time.sleep(0.8)
-        selenium.get('http://127.0.0.1:8001/scxrd/newexp/1/')
+        selenium.get('http://127.0.0.1:8001/scxrd/new_measurement/1/')
         time.sleep(0.8)
         # TODO: test what happens if I change the sample name
         selenium.find_element_by_id('id_measurement_temp').send_keys('101.5')
@@ -288,7 +288,7 @@ class NewMeasuremenChromeTestCase(DeleteFilesMixin, OperatorUserMixin, StaticLiv
         selenium = self.selenium
         login_user(selenium, username='testuser', password='Test1234!')
         time.sleep(0.5)
-        selenium.get('http://127.0.0.1:8001/scxrd/newexp/')
+        selenium.get('http://127.0.0.1:8001/scxrd/new_measurement/')
         time.sleep(0.5)
         selenium.find_element_by_id('id_measurement_name').send_keys('new_sample1')
         selenium.find_element_by_id('id_sum_formula').send_keys('C2H5OH')
