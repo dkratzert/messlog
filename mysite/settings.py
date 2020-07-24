@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 from django.contrib.messages import constants as messages
 from django.utils.translation import gettext_lazy as _
@@ -36,13 +37,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# TODO: change for production server:
-SECRET_KEY = 'brcm*3eote8p=hm8mo(m5#ru85aj&$)tzrv1y(osi$l6ywq*k!'
+SECRET_KEY = Path('../secret_key.txt').read_text(encoding='ascii')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', Path('../host_ip.txt').read_text(encoding='ascii')]
 
 # Storage of translations:
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
@@ -122,6 +122,19 @@ DATABASES = {
     }
 }
 
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME'  : 'messlog',
+        'USER'  : Path('../db_user.txt').read_text(encoding='ascii'),
+        'PASSWORD': Path('../psql_password.txt').read_text(encoding='ascii'),
+        'HOST' : 'localhost',
+        'PORT' : '',
+    }
+}
+"""
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -179,7 +192,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'xray@ac.uni-freiburg.de'
 EMAIL_HOST_USER = 'xray@ac.uni-freiburg.de'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = Path('../mail_password.txt').read_text(encoding='ascii'),
 EMAIL_TIMEOUT = 20
 EMAIL_SUBJECT_PREFIX = '[MESSLOG] '
 
