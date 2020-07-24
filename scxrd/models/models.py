@@ -8,6 +8,7 @@ from django.db import models
 # Create your models here.
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from simple_history.models import HistoricalRecords
 
@@ -16,10 +17,6 @@ TODO:
 - Jeder kann alle messungen sehen, aber auf eigene eingrenzen
 - add email notifications
 - mail request of operator status: page for operators where they can send a mail and set status
-- save URI to frames dir in measurement?
-
-- Add machine service logbook
-
 - check checksum for correctness during file upload and download
 - show wrong cif crc in "Details" of measurements list page
 - Check for existing unit cell during cif upload and measure measurement.
@@ -262,6 +259,21 @@ class ReportModel(models.Model):
         if self.report_file_path.exists() and self.report_file_path.is_file():
             return True
         return False
+
+
+class MachineLogbookModel(models.Model):
+    machine = models.ForeignKey(Machine, verbose_name=_('diffractometer'), on_delete=models.SET_NULL,
+                                related_name='logbooks', null=True, blank=True)
+    comments = models.TextField(blank=True, default='')
+    date = models.DateField(verbose_name=_('date of repair'), default=timezone.now)
+
+    def __str__(self):
+        return "{} {}".format(self.machine, self.date)
+
+    class Meta:
+        verbose_name = _('Machine Logbook')
+        verbose_name_plural = _('Machine Logbooks')
+        ordering = ['-date']
 
 
 @receiver(post_save, sender=User)

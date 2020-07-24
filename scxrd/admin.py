@@ -12,7 +12,8 @@ from simple_history.admin import SimpleHistoryAdmin
 from scxrd.cif.cif_file_io import CifContainer
 from scxrd.models.cif_model import CifFileModel
 from scxrd.models.measurement_model import Measurement
-from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile, CheckCifModel, ReportModel
+from scxrd.models.models import Machine, WorkGroup, CrystalSupport, CrystalGlue, Profile, CheckCifModel, ReportModel, \
+    MachineLogbookModel
 from scxrd.models.sample_model import Sample
 
 admin.site.site_header = "MESSLOG Admin"
@@ -127,6 +128,10 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = 'Profile'
     fk_name = 'user'
 
+##class LogBookAdmin(admin.ModelAdmin):
+    #model = MachineLogbookModel
+    #verbose_name_plural = 'Profile'
+
 
 class UserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
@@ -224,6 +229,7 @@ admin.site.register(Sample, SampleAdmin)
 # admin.site.register(Profile)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(MachineLogbookModel)
 admin.site.register(WorkGroup, WorkGroupAdmin)
 admin.site.register(Machine, MachinesAdmin)
 admin.site.register(CrystalSupport, CrystalSupportAdmin)

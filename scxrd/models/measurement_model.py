@@ -71,6 +71,7 @@ class Measurement(models.Model):
                                           help_text=_('The cause why the sample could not be measured'))
     # After setting final to True, the measurement is write protected:
     final = models.BooleanField(default=False, help_text=_('Structure is finished and can not be changed afterwards.'))
+    primary_data = models.CharField(blank=True, verbose_name=_('Path to the primary data'), max_length=2048)
     history = HistoricalRecords()
 
     class Meta:
