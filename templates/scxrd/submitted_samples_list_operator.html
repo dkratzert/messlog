@@ -104,8 +104,11 @@
                                             <span class="badge badge-success m-1 p-1">{% trans "Was deposited" %}</span>
                                         </td>
                                     {% else %}
-                                        <td><span
-                                                class="badge badge-warning m-1 p-1">{% trans "Awaiting Measurement" %}</span>
+                                        <td>
+                                            {% comment %}
+                                            <span
+                                                    class="badge badge-warning m-1 p-1">{% trans "Awaiting Measurement" %}
+                                            </span>{% endcomment %}
                                             {% comment %}{% if not sample.measurements|was_measured %}
                                                 <form class="form-row" method="POST"
                                                       action="{% url "scxrd:delete_sample" sample.pk %}">
