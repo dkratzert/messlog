@@ -80,6 +80,7 @@ class Profile(models.Model):
     A Person does not need to have a User account.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    myaccount_id = models.CharField(max_length=10, blank=False, unique=True)
     company = models.CharField(max_length=200, verbose_name=_('company'), blank=True)
     work_group = models.ForeignKey('WorkGroup', blank=True, null=True, on_delete=models.SET_NULL,
                                    related_name='profiles')

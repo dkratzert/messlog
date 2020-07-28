@@ -28,6 +28,7 @@ class SignUp(CreateView):
             user.refresh_from_db()  # load the profile instance created by the signal
             user.profile.phone_number = user_form.cleaned_data.get('phone_number')
             user.profile.work_group = user_form.cleaned_data.get('work_group')
+            user.profile.myaccount_id = user_form.cleaned_data.get('myaccount_id')
             # There is no comment in signup view
             # user.profile.comment = user_form.cleaned_data.get('comment')
             user.save()
