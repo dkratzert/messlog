@@ -192,7 +192,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'xray@ac.uni-freiburg.de'
 EMAIL_HOST_USER = 'xray@ac.uni-freiburg.de'
-EMAIL_HOST_PASSWORD = Path('../mail_password.txt').read_text(encoding='ascii'),
+EMAIL_HOST_PASSWORD = Path('../mail_password.txt').read_text(encoding='ascii')
 EMAIL_TIMEOUT = 20
 EMAIL_SUBJECT_PREFIX = '[MESSLOG] '
 
