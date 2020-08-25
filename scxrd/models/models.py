@@ -14,6 +14,7 @@ from simple_history.models import HistoricalRecords
 
 """
 TODO: 
+- add model for cost of experiment. Time per experiment? 
 - Jeder kann alle messungen sehen, aber auf eigene eingrenzen
 - add email notifications
 - mail request of operator status: page for operators where they can send a mail and set status
