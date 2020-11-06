@@ -8,6 +8,7 @@ git clone https://github.com/dkratzert/messlog.git
 cd messlog
 python3 -m venv venv
 pip3 install -r requirements.txt
+python manage.py runserver
 ```
 \+ You have to know how [django](https://www.djangoproject.com/) works.
 More detailed documentation will follow...
