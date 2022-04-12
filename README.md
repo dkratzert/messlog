@@ -11,7 +11,9 @@ pip3 install -r requirements.txt
 python manage.py runserver
 ```
 \+ You have to know how [django](https://www.djangoproject.com/) works.
-More detailed documentation will follow...
+
+* In order to initially start the database, you have to apply some fixtures first:
+ python manage.py loaddata "All fixtures in scxrd/fixtures/*.json"
 
 
 *This project is still in strong flux. Do not expect anything to stay as it is. Even the name might change.*
