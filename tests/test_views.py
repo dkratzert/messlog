@@ -8,14 +8,14 @@ from django.test import TestCase, override_settings, Client, RequestFactory
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
-from scxrd.cif.cif_file_io import CifContainer
-from scxrd.forms.edit_measurement import MeasurementEditForm
-from scxrd.models.cif_model import CifFileModel
-from scxrd.models.measurement_model import Measurement
-from scxrd.models.models import WorkGroup, CrystalSupport, Machine
-from scxrd.models.sample_model import Sample
-from scxrd.utils import generate_sha256
-from scxrd.views.sample_views import NewSampleByCustomer
+from apps.scxrd.cif.cif_file_io import CifContainer
+from apps.scxrd.forms import MeasurementEditForm
+from apps.scxrd.models import CifFileModel
+from apps.scxrd.models import Measurement
+from apps.scxrd.models import WorkGroup, CrystalSupport, Machine
+from apps.scxrd.models.sample_model import Sample
+from apps.scxrd.utils import generate_sha256
+from apps.scxrd.views.sample_views import NewSampleByCustomer
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin, PlainUserMixin, create_measurement
 
 data_createxp_1 = {

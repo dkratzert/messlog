@@ -7,7 +7,7 @@ import django
 
 django.setup()
 
-from scxrd.models.cif_model import CifFileModel
+from apps.scxrd.models import CifFileModel
 
 cifdblist = []
 ciffilelist = []

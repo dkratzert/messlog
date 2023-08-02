@@ -8,8 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 
-from scxrd.models.measurement_model import Measurement
-from scxrd.models.models import WorkGroup
+from apps.scxrd.models import Measurement
+from apps.scxrd.models import WorkGroup
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, make_operator_user
 
 chromedriver_binary.add_chromedriver_to_path()

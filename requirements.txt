@@ -11,3 +11,4 @@ django-crispy-forms
 django-robohash-svg
 django-translation-flags
 django-simple-history
+crispy-bootstrap4

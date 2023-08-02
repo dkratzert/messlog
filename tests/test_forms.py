@@ -1,14 +1,13 @@
-from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.test import TestCase, override_settings, Client
 from django.urls import reverse_lazy
 
-from scxrd.forms.new_measurement import MeasurementNewForm
-from scxrd.forms.new_sample import SubmitNewSampleForm
-from scxrd.models.sample_model import Sample
+from apps.scxrd.forms.new_measurement import MeasurementNewForm
+from apps.scxrd.forms.new_sample import SubmitNewSampleForm
+from apps.scxrd.models.sample_model import Sample
 from tests.tests import MEDIA_ROOT, DeleteFilesMixin, OperatorUserMixin
-
+from django.contrib.auth.models import User
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestNewSampleForm(DeleteFilesMixin, TestCase):
@@ -81,7 +80,7 @@ class TestNewMeasurementForm(DeleteFilesMixin, OperatorUserMixin, TestCase):
     def setUp(self) -> None:
         self.data = {
             # The minimum requirements:
-            "measurement_name" : "A_test_123",
+            "measurement_name": "A_test_123",
             "number"          : 100,
             "machine"         : 1,
             "measurement_temp": 100.15,

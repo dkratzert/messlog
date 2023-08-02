@@ -5,9 +5,9 @@ import tempfile
 from django.contrib.auth.models import User
 from django.test import Client
 
-from mysite.settings import MEDIA_ROOT
-from scxrd.models.models import Machine, WorkGroup, CrystalGlue, model_fixtures
-from scxrd.models.measurement_model import Measurement
+from messlog.settings import MEDIA_ROOT
+from apps.scxrd.models import Machine, WorkGroup, CrystalGlue, model_fixtures
+from apps.scxrd.models import Measurement
 
 MEDIA_ROOT = tempfile.mkdtemp(dir=MEDIA_ROOT)
 

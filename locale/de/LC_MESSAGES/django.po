@@ -17,63 +17,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\mysite\core\forms.py:10 .\mysite\core\forms.py:30
+#: .\messlog\core\forms.py:10 .\messlog\core\forms.py:30
 msgid "phone number"
 msgstr "Telefonnummer"
 
-#: .\mysite\core\forms.py:11
+#: .\messlog\core\forms.py:11
 msgid "street"
 msgstr "Straße"
 
-#: .\mysite\core\forms.py:12
+#: .\messlog\core\forms.py:12
 msgid "house number"
 msgstr "Hausnummer"
 
-#: .\mysite\core\forms.py:13
+#: .\messlog\core\forms.py:13
 msgid "building"
 msgstr "Gebäude"
 
-#: .\mysite\core\forms.py:14
+#: .\messlog\core\forms.py:14
 msgid "town"
 msgstr "Stadt"
 
-#: .\mysite\core\forms.py:15
+#: .\messlog\core\forms.py:15
 msgid "country"
 msgstr "Land"
 
-#: .\mysite\core\forms.py:16
+#: .\messlog\core\forms.py:16
 msgid "postal code"
 msgstr "Postleitzahl"
 
-#: .\mysite\core\forms.py:17 .\mysite\core\forms.py:31
+#: .\messlog\core\forms.py:17 .\messlog\core\forms.py:31
 msgid "Member of Group"
 msgstr "Arbeitsgruppe"
 
-#: .\mysite\core\forms.py:27 .\mysite\core\forms.py:39
+#: .\messlog\core\forms.py:27 .\messlog\core\forms.py:39
 msgid "email address"
 msgstr "E-Mail-Adresse"
 
-#: .\mysite\core\forms.py:28
+#: .\messlog\core\forms.py:28
 msgid "first name"
 msgstr "Vorname"
 
-#: .\mysite\core\forms.py:29
+#: .\messlog\core\forms.py:29
 msgid "last name"
 msgstr "Nachnahme"
 
-#: .\mysite\core\views.py:54
+#: .\messlog\core\views.py:54
 msgid "Your profile was successfully updated!"
 msgstr "Das Profil wurde erfolgreich gespeichert!"
 
-#: .\mysite\core\views.py:57
+#: .\messlog\core\views.py:57
 msgid "Please correct the error below."
 msgstr "Bitte den Fehler unten korrigieren."
 
-#: .\mysite\settings.py:20
+#: .\messlog\settings.py:20
 msgid "German"
 msgstr "Deutsch"
 
-#: .\mysite\settings.py:21
+#: .\messlog\settings.py:21
 msgid "English"
 msgstr "Englisch"
 

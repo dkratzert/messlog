@@ -5,12 +5,12 @@ from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 
-from scxrd.cif.cif_file_io import CifContainer
-from scxrd.models.cif_model import CifFileModel
-from scxrd.models.measurement_model import Measurement
-from scxrd.models.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
-from scxrd.models.sample_model import Sample
-from scxrd.utils import generate_sha256
+from apps.scxrd.cif.cif_file_io import CifContainer
+from apps.scxrd.models import CifFileModel
+from apps.scxrd.models import Measurement
+from apps.scxrd.models import model_fixtures, Machine, CrystalSupport, CrystalGlue, WorkGroup
+from apps.scxrd.models.sample_model import Sample
+from apps.scxrd.utils import generate_sha256
 from tests.tests import MEDIA_ROOT, create_measurement, DeleteFilesMixin, PlainUserMixin, OperatorUserMixin, \
     SuperUserMixin
 
