@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]
+
+[project]
+name = "Messlog"
+dynamic = ["version", "dependencies"]
+authors = [
+    { name = "Daniel Kratzert", email = "dkratzert@gmx.de" },
+]
+description = "Data management and planing of single-crystal X-ray measurements"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+#"Homepage" = "https://dkratzert.de/messlog.html"
+"Bug Tracker" = "https://github.com/dkratzert/messlog/issues"
+
+[tool.hatch.version]
+path = "scxrd.__init__.py"
+pattern = "VERSION\\s*=\\s*(?P<version>\\d+\\.{0,1}\\d{0,1})"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/pictures",
+    "/scripts",
+    "/setup",
+    "/tests",
+    "/manuals",
+    "/requirements-devel.txt",
+    "/requirements-cmd.txt",
+    "/make_release.sh",
+    "/venv*",
+]
+
+[project.scripts]
+#strf = "structurefinder.strf:main"
