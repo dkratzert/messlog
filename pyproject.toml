@@ -28,7 +28,7 @@ classifiers = [
 "Bug Tracker" = "https://github.com/dkratzert/messlog/issues"
 
 [tool.hatch.version]
-path = "scxrd.__init__.py"
+path = "apps.scxrd.__init__.py"
 pattern = "VERSION\\s*=\\s*(?P<version>\\d+\\.{0,1}\\d{0,1})"
 
 [tool.hatch.build.targets.sdist]
